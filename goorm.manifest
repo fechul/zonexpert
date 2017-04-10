@@ -1,0 +1,1 @@
+{"storage":"container","type":"nodejs","detailedtype":"empty","author":"nice0612_c3y3fjnre","name":"Zonexpert2","description":"","date":"2017/4/10 6:28:31","plugins":{"goorm.plugin.nodejs":{"plugin.nodejs.main":"main","plugin.nodejs.source_path":"./","plugin.nodejs.run_option":"","plugin.nodejs.run_on":"console","plugin.nodejs.log_path":"./server.log"}},"is_user_plugin":false}
