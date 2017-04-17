@@ -8,11 +8,11 @@ body {
 */
 
 #header_wrap {
-	height: 50px;
 	/* border-bottom: 1px solid #ccc; */
 	height: 70px;
 	background-color: #444;
 	/* opacity: 0.85; */
+	flex: 0 0 70px;
 }
 
 #header {
@@ -24,8 +24,7 @@ body {
 }
 
 .logo {
-	/* float: left; */
-	color: #fff; 
+	/* color: #fff; 
     text-shadow: #333 0px 2px, #333 2px 0px, #333 -2px 0px, 
     #333 0px -2px, #333 -1.4px -1.4px, #333 1.4px 1.4px, 
     #333 1.4px -1.4px, #333 -1.4px 1.4px; 
@@ -38,12 +37,17 @@ body {
 	vertical-align: middle;
 	cursor: pointer;
 	padding: 0px 20px 0px 20px;
-	font-family: Jazz LET, fantasy;
+	font-family: Jazz LET, fantasy; */
+	background: url(/image/zonexpert_logo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 #header > .logo {
-	font-size: 24px;
+	height: 70px;
 	width: 200px;
+	float: left;
 }
 
 #header > .main_menu {
@@ -131,15 +135,15 @@ body {
 
 
 /*
-	<-- BODY -->
+	<-- BODY MAIN LOGO SECTIOM-->
 */
 
+
 .main_logo_section {
-	text-align: center;
-	line-height: 400px;
-	vertical-align: middle;
-	/* border-bottom: 1px solid #ccc; */
-	/* background-color: #555; */
+	/* text-align: center; */
+	/* line-height: 300px; */
+	height: 300px;
+	/* vertical-align: middle; */
 	background:
 		linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
 		linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
@@ -151,10 +155,23 @@ body {
 	background-size: 20px 20px;
 }
 
-.main_logo_section > .logo {
-	font-size: 72px;
-	cursor: default;
+.main_logo_section > .logo_wrapper {
+	position: absolute;
+	width: 100%;
 }
+
+.main_logo_section .logo {
+	height: 180px;
+	width: 540px;
+	margin-top: 60px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+/*
+	<-- BODY MAIN SECTIOM-->
+*/
 
 .main_section {
 	background-color: #145c86;
@@ -178,6 +195,23 @@ body {
 .main_section .schedule_section {
 	width: 800px;
 	height: 800px;
+}
+
+.mydata_user {
+	border-bottom: 1px solid #aaa;
+	padding: 15px;
+	text-align: left;
+}
+
+.mydata_user > .mydata_user_id {
+	font-weight: bold;
+	font-size: 22px;
+}
+
+.mydata_user > .mydata_user_main_field {
+	/* font-weight: bold; */
+	font-size: 18px;
+	color: #555;
 }
 
 
