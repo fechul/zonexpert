@@ -184,12 +184,12 @@ body {
 	border-radius: 10px;
 	position: relative;
 	display: inline-block;
-	margin: 30px 0px 30px 0px;
+	margin: 30px 30px 30px 30px;
 }
 
 .main_section .mydata_section {
 	width: 800px;
-	height: 200px;
+	/* height: 200px; */
 }
 
 .main_section .schedule_section {
@@ -212,4 +212,50 @@ body {
 	/* font-weight: bold; */
 	font-size: 18px;
 	color: #555;
+	margin-left: 10px;
 }
+
+.mydata_statistics {
+	display: flex;
+}
+
+.mydata_statistics > .mydata_badge {
+	width: 20%;
+	border-right: 1px solid #bbb;
+	padding: 15px;
+}
+
+.mydata_statistics > .mydata_badge > img {
+	width: 120px;
+	height: 150px;
+}
+
+.mydata_statistics > .mydata_rate {
+	width: 30%;
+	border-right: 1px solid #bbb;
+	padding: 15px 15px 15px 30px;
+	text-align: left;
+}
+
+.mydata_statistics > .mydata_rate .rate_classification {
+	font-weight: bold;
+	width: 70px;
+	display: block;
+	float: left;
+}
+
+.mydata_statistics > .mydata_recent_predict {
+	width: 50%;
+	text-align: left;
+	/* padding: 15px; */
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_sub {
+	border-bottom: 1px solid #bbb;
+	padding: 10px 10px 10px 30px;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
+	padding: 15px;
+}
+
