@@ -1,16 +1,19 @@
 var nodemailer = require('nodemailer');
+var randomstring = require('randomstring');
 
-var user = require('../db/user.js');
+var db = {};
+db.user = require('../db/user.js');
 
 exports.join = function(data, callback) {
     this.validate(data, function(validation) {
         if (validation.result) {
-            var new_user = new user({
+            var auth_token = randomstring.generate(30);
+            var new_user = new db.user({
                 'id': data.id,
                 'email': data.email,
                 'password': data.password,
                 'authed': false,
-                'auth_token': '',
+                'auth_token': auth_token,
                 'join_date': new Date()
             });
 
@@ -20,7 +23,35 @@ exports.join = function(data, callback) {
                     callback(false);
                 } else {
                     console.log('user.js:join complete');
-                    callback(true);
+                    var smtpTransport = nodemailer.createTransport({
+                        'service': 'gmail',
+                        'auth': {
+                            'user': __admin_email,
+                            'pass': __admin_password
+                        }
+                    });
+
+                    var mailOptions = {
+                        'from': '존문가닷컴 <' + __admin_email + '>',
+                        'to': data.email,
+                        'subject': '존문가닷컴 회원가입 인증메일',
+                        'html': [
+                            '<div>',
+                                '안녕하세요 존문가닷컴입니다.<br>',
+                                '회원가입을 위한 이메일 인증 과정입니다.<br>',
+                                '아래의 링크를 클릭하면 인증이 완료됩니다.<br><br>',
+                                '<a href=',__url,'/auth/join?token=',auth_token,
+                                '>인증하기</a>',
+                            '</div>'
+                        ].join('')
+                    };
+
+                    console.log(mailOptions);
+
+                    smtpTransport.sendMail(mailOptions, function(err, res) {
+                        smtpTransport.close();
+                        callback(true);
+                    });
                 }
             });
         } else {
@@ -40,7 +71,7 @@ exports.validate = function(data, callback) {
         'code': 0
     };
 
-    user.find({
+    db.user.find({
         '$or': [
             {
                 'id': id
@@ -80,28 +111,6 @@ exports.validate = function(data, callback) {
             }
         }
 
-        if (validation.result) {
-            var smtpTransport = nodemailer.createTransport({
-                'service': 'gmail',
-                'auth': {
-                    'user': 'zonexpert0@gmail.com',
-                    'pass': 'whsansrk123!'
-                }
-            });
-
-            var mailOptions = {
-                'from': '존문가닷컴 <zonexpert0@gmail.com>',
-                'to': email,
-                'subject': '존문가닷컴 회원가입 인증메일',
-                'text': 'test'
-            };
-
-            smtpTransport.sendMail(mailOptions, function(err, res) {
-                smtpTransport.close();
-                callback(validation);
-            });
-        } else {
-            callback(validation);
-        }
+        callback(validation);
     });
 };

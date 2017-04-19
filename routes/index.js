@@ -1,4 +1,5 @@
 var user = require('../core/user.js');
+var auth = require('../core/auth.js');
 
 exports.index = function(req, res) {
 	var path = 'index.html';
@@ -32,4 +33,22 @@ exports.join = function(req, res) {
 	}, function(result) {
 		res.json(result);
 	});
+};
+
+exports.auth = {};
+
+exports.auth.join = function(req, res) {
+	auth.join({
+		'token': req.query.token
+	}, function(response) {
+		console.log(response);
+		if (response.result) {
+			res.redirect('/');
+		} else {
+			res.redirect('/');
+		}
+	});
+	// auth.join({
+	//
+	// });
 };

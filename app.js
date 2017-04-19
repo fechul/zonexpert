@@ -1,3 +1,9 @@
+global.__host = '127.0.0.1';
+global.__port = '3000';
+global.__url = 'http://' + __host + ':' + __port;
+global.__admin_email = 'zonexpert0@gmail.com';
+global.__admin_password = 'whsansrk123!';
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -59,6 +65,7 @@ app.use(function(err, req, res, next) {
 app.get('/', routes.index);
 
 app.post('/join', routes.join);
+app.get('/auth/join', routes.auth.join);
 // app.post('/auth/join', routes.auth.join);
 
 
