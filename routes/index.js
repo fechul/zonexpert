@@ -1,4 +1,4 @@
-exports.index = function(req, res){
+exports.index = function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -8,7 +8,7 @@ exports.index = function(req, res){
 		mydata_display: ''
 	};
 	
-	var session = true;
+	var session = false;
 	if(session) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
@@ -20,3 +20,11 @@ exports.index = function(req, res){
 	
     res.render(path, json);
 };
+
+exports.signup = function(req, res) {
+	var path = 'signup.html';
+	var json = {};
+
+	res.render(path, json);
+}
+

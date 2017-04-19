@@ -48,6 +48,7 @@ app.use(function(err, req, res, next) {
 // routing
 
 app.get('/', routes.index);
+app.get('/signup', routes.signup);
 
 
 var server = app.listen(3000, function () {

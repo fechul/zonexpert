@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Zonexpert</title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
         <link rel='stylesheet' href='/stylesheets/style.css' />
 		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
     </head>
@@ -9,7 +10,7 @@
     <body>
 		<div id="header_wrap">
 			<div id="header">
-				<div class="logo"></div>
+				<a href="/" class="logo"></a>
 				<ul class="main_menu">
 					<!-- <li class="menu_rank"><a type="button" href="/">순위</a></li>
 					<li class="menu_schedule"><a href="/">경기일정</a></li>
@@ -79,6 +80,11 @@
 		
     </body>
 	
+	<Script src="jquery/jquery.js"></Script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="modules/index.js"></script>
+	<script>
+		INDEX.init();
+	</script>
 	
 </html>
