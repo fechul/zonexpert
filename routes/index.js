@@ -1,4 +1,6 @@
-exports.index = function(req, res){
+var user = require('../core/user.js');
+
+exports.index = function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -7,7 +9,7 @@ exports.index = function(req, res){
 		signup_display: '',
 		mydata_display: ''
 	};
-	
+
 	var session = true;
 	if(session) {
 		json.login_display = 'display:none;';
@@ -17,6 +19,17 @@ exports.index = function(req, res){
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
-	
+
     res.render(path, json);
+};
+
+exports.join = function(req, res) {
+	user.join({
+		'id': req.body.id,
+		'email': req.body.email,
+		'password': req.body.password,
+		'password_check': req.body.password_check
+	}, function(result) {
+		res.json(result);
+	});
 };
