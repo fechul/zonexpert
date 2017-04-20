@@ -8,7 +8,7 @@ exports.index = function(req, res) {
 		mydata_display: ''
 	};
 	
-	var session = false;
+	var session = true;
 	if(session) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
