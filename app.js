@@ -63,6 +63,7 @@ app.use(function(err, req, res, next) {
 // routing
 
 app.get('/', routes.index);
+app.get('/signup', routes.signup);
 
 app.post('/join', routes.join);
 app.get('/auth/join', routes.auth.join);

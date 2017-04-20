@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-회원가입</title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/signup.css' />
+		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    </head>
+	
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+			</div>
+		</div>
+		
+		<section class="signup_section">
+		<div class="signup_box_wrapper">
+				<div class="logo"></div>
+				<div class="signup_box container_box">
+					<div class="row">
+						<div class="signup_row_sub">이메일</div>
+						<div class="signup_row_content"><input type="text" id="email_input" placeholder="example@example.com"></div>
+					</div>
+					<div class="row">
+						<div class="signup_row_sub">비밀번호</div>
+						<div class="signup_row_content"><input type="password" id="pw_input" placeholder="비밀번호를 입력해주세요."></div>
+					</div>
+					<div class="row">
+						<div class="signup_row_sub">비밀번호 확인</div>
+						<div class="signup_row_content"><input type="password" id="email_input" placeholder="비밀번호를 다시 입력해주세요."></div>
+					</div>
+					<div class="row">
+						<div class="signup_row_sub">닉네임</div>
+						<div class="signup_row_content"><input type="text" id="nick_input" placeholder="닉네임을 입력해주세요."></div>
+					</div>
+					<div class="row">
+						<div class="signup_row_sub">주 종목</div>
+						<div class="signup_row_content select_row">
+							<select id="main_sport_select">
+								<option value="">스포츠 선택</option>
+								<option>축구</option>
+							</select>
+							<select id="main_league_select">
+								<option value="">리그 선택</option>
+								<option>K리그</option>
+								<option>프리미어리그</option>
+								<option>라리가</option>
+								<option>분데스리가</option>
+								<option>세리에 A</option>
+								<option>리그 1</option>
+								<option>에레디비시</option>
+								<option>챔피언스리그</option>
+								<option>유로파리그</option>
+								<option>잉글랜드FA컵</option>
+								<option>EFL컵</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="signup-btns">
+					<button id="signup_cancel">돌아가기</button>
+					<button id="signup_btn">가입하기</button>
+				</div>
+			</div>
+		</section>
+		
+		
+    </body>
+	
+	<Script src="jquery/jquery.js"></Script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="modules/signup.js"></script>
+	<script>
+		SIGNUP.init();
+	</script>
+	
+</html>

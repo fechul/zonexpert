@@ -52,3 +52,10 @@ exports.auth.join = function(req, res) {
 	//
 	// });
 };
+
+exports.signup = function(req, res) {
+	var path = 'signup.html';
+	var json = {};
+
+	res.render(path, json);
+};
