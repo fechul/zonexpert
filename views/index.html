@@ -5,9 +5,8 @@
         <link rel='stylesheet' href='/stylesheets/common.css' />
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
-		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
     </head>
-	
+
     <body>
 		<div id="header_wrap">
 			<div id="header">
@@ -38,14 +37,14 @@
 				</ul>
 			</div>
 		</div>
-		
-		
+
+
 		<section class="main_logo_section">
 			<div class="logo_wrapper">
 				<div class="logo"></div>
 			</div>
 		</section>
-		
+
 		<section class="main_section">
 			<div class="mydata_wrapper">
 				<div class="mydata_section container_box" style="<%= mydata_display %>">
@@ -82,6 +81,7 @@
 						<span class="rankdata_sub">순위</span>
 					</div>
 					<div class="rankdata_league_btn">
+						<button class="league_btn total_rank">전체</button>
 						<button class="league_btn k-league">K리그</button>
 						<button class="league_btn premier-league active">프리미어리그</button>
 						<button class="league_btn laliga">라리가</button>
@@ -94,18 +94,34 @@
 						<button class="league_btn england-fa">잉글랜드FA컵</button>
 						<button class="league_btn efl-cup">EFL컵</button>
 					</div>
+
+					<div class="rank_table_section">
+						<table id="rank_table">
+							<tr><td>순위</td><td>닉네임</td><td>주종목</td><td>전적</td><td>예측률</td><td>티어</td></tr>
+							<tr><td>1</td><td>존문가1</td><td>K리그</td><td>45 / 5</td><td>90%</td><td>다이아</td></tr>
+							<tr><td>2</td><td>존문가2</td><td>프리미어리그</td><td>42 / 8</td><td>84%</td><td>다이아</td></tr>
+							<tr><td>3</td><td>존문가3</td><td>라리가</td><td>40 / 10</td><td>80%</td><td>플래티넘</td></tr>
+							<tr><td>4</td><td>존문가4</td><td>분데스리가</td><td>35 / 15</td><td>70%</td><td>플래티넘</td></tr>
+							<tr><td>5</td><td>존문가5</td><td>세리에 A</td><td>30 / 20</td><td>60%</td><td>골드</td></tr>
+							<tr><td>6</td><td>존문가6</td><td>리그 1</td><td>25 / 25</td><td>50%</td><td>골드</td></tr>
+							<tr><td>7</td><td>존문가7</td><td>에레디비시</td><td>22 / 28</td><td>44%</td><td>실버</td></tr>
+							<tr><td>8</td><td>존문가8</td><td>챔피언스리그</td><td>20 / 30</td><td>40%</td><td>실버</td></tr>
+							<tr><td>9</td><td>존문가9</td><td>유로파리그</td><td>15 / 35</td><td>30%</td><td>브론즈</td></tr>
+							<tr><td>10</td><td>존문가10</td><td>잉글랜드FA컵</td><td>10 / 40</td><td>20%</td><td>브론즈</td></tr>
+						</table>
+					</div>
 				</div>
 			</div>
 		</section>
-		
+
     </body>
 	
 	<script src="jquery/jquery.js"></script>
-	<script src="bootstrap/bootsrtap.min.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/index.js"></script>
 	<script>
 		INDEX.init();
 	</script>
-	
+
 </html>

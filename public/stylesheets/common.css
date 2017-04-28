@@ -179,3 +179,25 @@ body {
 	display: inline-block;
 	margin: 30px 30px 30px 30px;
 }	
+
+table {
+	border: 1px solid #999;
+}
+
+table > tbody > tr {
+	height: 50px;
+}
+
+table > tbody > tr:first-child {
+	background-color: #333;
+	color: #fff;
+}
+
+table > tbody > tr:not(:last-child) {
+	border-bottom: 1px solid #999;
+}
+
+t/*able > tbody > tr > td:not(:last-child) {
+	border-right: 1px solid #999;
+}*/
+

@@ -22,7 +22,7 @@
 
 .main_section .rank_section {
 	width: 800px;
-	height: 800px;
+	/*height: 800px;*/
 }
 
 .mydata_user,
@@ -116,18 +116,28 @@
 }
 
 .rankdata_league_btn {
-	margin-top: 10px;
-	text-align: center;
+	margin-top: 10px 0px 25px 25px;
 }
 
 .rankdata_league_btn > .league_btn {
 	margin-right: 5px;
 	height: 25px;
 	cursor: pointer;
+	width: 115px;
+	margin-top: 10px;
 }
 
 .rankdata_league_btn > .league_btn.active {
 	background-color: #145c86;
 	border: none;
 	color: #fff;
+}
+
+.rank_table_section {
+	padding: 25px;
+}
+
+#rank_table {
+	/*height: 500px;*/
+	width: 100%;
 }

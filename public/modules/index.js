@@ -7,5 +7,9 @@ var INDEX = {
 		$('#header .tools .signup').click(function() {
 			location.href = "/signup";
 		});
+
+		$('#header .tools .login').click(function() {
+			location.href = "/login";
+		});
 	}
 }
