@@ -45,11 +45,11 @@ app.use(function(req, res, next) {
 });
 
 // routing
-app.get('/', routes.index);
-app.get('/signup', routes.signup);
+app.get('/', view_routes.index);
+app.get('/signup', view_routes.signup);
 
-app.post('/join', view_routes.join);
-app.get('/auth/join', view_routes.auth.join);
+app.post('/join', routes.join);
+app.get('/auth/join', routes.auth.join);
 // app.post('/auth/join', routes.auth.join);
 
 // catch 404 and forward to error handler
