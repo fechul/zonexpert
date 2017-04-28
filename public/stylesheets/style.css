@@ -10,7 +10,7 @@
 }
 
 .mydata_wrapper,
-.schedule_wrapper {
+.rank_wrapper {
 	width: 1200px;
 	margin: 0 auto;
 }
@@ -20,20 +20,20 @@
 	/* height: 200px; */
 }
 
-.main_section .schedule_section {
+.main_section .rank_section {
 	width: 800px;
 	height: 800px;
 }
 
 .mydata_user,
-.scheduledata {
+.rankdata {
 	border-bottom: 1px solid #aaa;
 	padding: 15px;
 	text-align: left;
 }
 
 .mydata_user > .mydata_user_id,
-.scheduledata_sub {
+.rankdata_sub {
 	font-weight: bold;
 	font-size: 22px;
 }
@@ -83,6 +83,7 @@
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_sub {
 	border-bottom: 1px solid #bbb;
 	padding: 10px 10px 10px 30px;
+	font-weight: bold;
 }
 
 /*.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
@@ -114,3 +115,19 @@
 	float: left;
 }
 
+.rankdata_league_btn {
+	margin-top: 10px;
+	text-align: center;
+}
+
+.rankdata_league_btn > .league_btn {
+	margin-right: 5px;
+	height: 25px;
+	cursor: pointer;
+}
+
+.rankdata_league_btn > .league_btn.active {
+	background-color: #145c86;
+	border: none;
+	color: #fff;
+}

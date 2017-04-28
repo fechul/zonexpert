@@ -4,6 +4,8 @@ var SIGNUP = {
 	},
 
 	init_events: function() {
-
+		$('#signup_cancel').click(function() {
+			document.referrer ? history.back() : location.href="/";
+		});
 	}
 };
