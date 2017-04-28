@@ -9,6 +9,12 @@
 	text-align: center;
 }
 
+.mydata_wrapper,
+.schedule_wrapper {
+	width: 1200px;
+	margin: 0 auto;
+}
+
 .main_section .mydata_section {
 	width: 800px;
 	/* height: 200px; */
