@@ -1,14 +1,29 @@
+global.__host = '127.0.0.1';
+global.__port = '3000';
+global.__url = 'http://' + __host + ':' + __port;
+global.__admin_email = 'zonexpert0@gmail.com';
+global.__admin_password = 'whsansrk123!';
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 var routes = require('./routes');
 
 var index = require('./routes/index');
 
 var app = express();
+
+var db = mongoose.connection;
+db.on('error', console.error);
+db.once('open', function() {
+    console.log("Connected to mongd server");
+});
+
+mongoose.connect('mongodb://localhost');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,9 +45,12 @@ app.use(function(req, res, next) {
 });
 
 // routing
-
 app.get('/', routes.index);
 app.get('/signup', routes.signup);
+
+app.post('/join', routes.join);
+app.get('/auth/join', routes.auth.join);
+// app.post('/auth/join', routes.auth.join);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
