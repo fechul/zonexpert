@@ -11,9 +11,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var routes = require('./routes');
 
-var index = require('./routes/index');
+var routes = require('./routes/index.js');
+var view_routes = require('./routes/view.js');
 
 var app = express();
 
@@ -48,8 +48,8 @@ app.use(function(req, res, next) {
 app.get('/', routes.index);
 app.get('/signup', routes.signup);
 
-app.post('/join', routes.join);
-app.get('/auth/join', routes.auth.join);
+app.post('/join', view_routes.join);
+app.get('/auth/join', view_routes.auth.join);
 // app.post('/auth/join', routes.auth.join);
 
 // catch 404 and forward to error handler
