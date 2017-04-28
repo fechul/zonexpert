@@ -23,15 +23,22 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// mobile checker -> req.is_mobile = true | false
+app.use(function(req, res, next) {
+    req.is_mobile = /mobile/i.test(req.headers['user-agent']) || /android/i.test(req.headers['user-agent']);
+    next();
+});
+
+// routing
+
+app.get('/', routes.index);
+app.get('/signup', routes.signup);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	if (false) {
-		var err = new Error('Not Found');
-		err.status = 404;
-		next(err);
-	} else {
-		next();
-	}
+	var err = new Error('Not Found');
+	err.status = 404;
+	next(err);
 });
 
 // error handler
@@ -44,19 +51,5 @@ app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.send('error');
 });
-
-// routing
-
-app.get('/', routes.index);
-app.get('/signup', routes.signup);
-
-
-var server = app.listen(3000, function () {
-	var host = server.address().address;
-	var port = server.address().port;
-
-	console.log('앱은 http://%s:%s 에서 작동 중입니다.', host, port);
-});
-
 
 module.exports = app;
