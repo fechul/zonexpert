@@ -5,7 +5,26 @@ var RANK = {
 	},
 
 	init_events: function() {
+		$('#header .tools .signup').click(function() {
+			location.href = "/signup";
+		});
 
+		$('#header .tools .login').click(function() {
+			location.href = "/login";
+		});
+
+		$('#header .tools .logout').click(function() {
+			//로그아웃
+		});
+
+		$('#header .tools .my_page').click(function() {
+			//마이페이지
+		});
+
+		$('#header .main_menu li').click(function() {
+			var move = $(this).attr('move');
+			location.href = '/' + move;
+		});
 	},
 
 	set_rank: function() {

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Zonexpert-랭킹</title>
+        <title>Zonexpert-게시판</title>
         <link rel='stylesheet' href='/stylesheets/common.css' />
-        <link rel='stylesheet' href='/stylesheets/rank.css' />
+        <link rel='stylesheet' href='/stylesheets/board.css' />
         <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
     </head>
 
@@ -33,35 +33,18 @@
 
 		<section class="main_section">
 			<div class="page_title">
-				존문가 랭킹
+				게시판
 			</div>
-			<div class="rank_wrapper">
-				<div class="rank_section container_box">
-					<div class="rankdata_league_btn">
-						<button class="league_btn total_rank active">전체</button>
-						<button class="league_btn k-league">K리그</button>
-						<button class="league_btn premier-league">프리미어리그</button>
-						<button class="league_btn laliga">라리가</button>
-						<button class="league_btn bundesliga">분데스리가</button>
-						<button class="league_btn seria-a">세리에 A</button>
-						<button class="league_btn league-1">리그 1</button>
-						<button class="league_btn eredivisie">에레디비시</button>
-						<button class="league_btn champions-league">챔피언스리그</button>
-						<button class="league_btn europa-league">유로파리그</button>
-						<button class="league_btn england-fa">잉글랜드FA컵</button>
-						<button class="league_btn efl-cup">EFL컵</button>
-					</div>
-
-					<div class="rank_table_section">
-						<table id="rank_table">
+			<div class="board_wrapper">
+				<div class="board_section container_box">
+					<div class="board_table_section">
+						<table id="board_table">
 							<tr>
-								<td>순위</td>
-								<td>닉네임</td>
-								<td>주종목</td>
-								<td>점수</td>
-								<td>전적</td>
-								<td>예측률</td>
-								<td>티어</td>
+								<td class="board_number">번호</td>
+								<td class="writer">작성자</td>
+								<td class="title">제목</td>
+								<td class="like"><i class="fa fa-thumbs-up"></i></td>
+								<td class="date">작성일</td>
 							</tr>
 						</table>
 					</div>
@@ -74,9 +57,9 @@
 	<script src="jquery/jquery.js"></script>
 	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
-	<script src="modules/rank.js"></script>
+	<script src="modules/board.js"></script>
 	<script>
-		RANK.init();
+		BOARD.init();
 	</script>
 
 </html>

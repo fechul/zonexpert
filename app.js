@@ -49,6 +49,7 @@ app.get('/', view_routes.index);
 app.get('/signup', view_routes.signup);
 app.get('/login', view_routes.login);
 app.get('/rank', view_routes.rank);
+app.get('/board', view_routes.board);
 
 app.post('/join', routes.join);
 app.get('/auth/join', routes.auth.join);

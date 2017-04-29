@@ -18,7 +18,7 @@ var INDEX = {
 		});
 
 		$('#header .tools .my_page').click(function() {
-			//마이페이
+			//마이페이지
 		});
 
 		$('#header .main_menu li').click(function() {
