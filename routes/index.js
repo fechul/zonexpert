@@ -10,49 +10,52 @@ router.all('/ping', function(req, res) {
 
 router.post('/login', function(req, res) {
 	user.login({
-		'id': req.body.id,
+		'email': req.body.email,
 		'password': req.body.password
 	}, function(login) {
 		if (login.result) {
 			req.session.login = true;
-			req.session.id = login.id;
 			req.session.email = login.email;
+			req.session.nickname = login.nickname;
 		}
 
-		delete login.id;
 		delete login.email;
+		delete login.nickname;
 
 		res.json(login);
 	});
 });
 
 router.post('/logout', function(req, res) {
-	req.session.detroy(function(err) {
-		res.redirect('/');
+	var json = {
+		'result': true
+	};
+
+	req.session.destroy(function(err) {
+		if (err) {
+			json.result = false;
+		}
+
+		res.json(json);
 	});
 });
 
 router.post('/accounts', function(req, res) {
-	user.join({
-		'id': req.body.id,
+	user.signup({
 		'email': req.body.email,
+		'nickname': req.body.nickname,
 		'password': req.body.password,
 		'password_check': req.body.password_check
-	}, function(result) {
-		res.json(result);
+	}, function(signup) {
+		res.json(signup);
 	});
 });
 
-router.get('/auth/join', function(req, res) {
-	auth.join({
+router.get('/auth/signup', function(req, res) {
+	auth.signup({
 		'token': req.query.token
-	}, function(response) {
-		console.log(response);
-		if (response.result) {
-			res.redirect('/');
-		} else {
-			res.redirect('/');
-		}
+	}, function(signup) {
+		res.json(signup);
 	});
 });
 

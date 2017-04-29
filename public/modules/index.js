@@ -14,7 +14,13 @@ var INDEX = {
 		});
 
 		$('#header .tools .logout').click(function() {
-			//로그아웃
+			$.post('/logout', {}, function(logout) {
+				if (logout.result) {
+					location.reload();
+				} else {
+					console.log(logout);
+				}
+			});
 		});
 
 		$('#header .tools .my_page').click(function() {
@@ -169,4 +175,3 @@ var INDEX = {
 		$('#rank_table').append(table_html);
 	}
 };
-

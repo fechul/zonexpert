@@ -14,6 +14,21 @@ var SIGNUP = {
 			var sport = $(this).val();
 			self.set_league_select(sport);
 		});
+
+		$('#signup_btn').click(function() {
+			$.post('/accounts', {
+				'email': $('#email_input').val(),
+				'nickname': $('#nick_input').val(),
+				'password': $('#pw_input').val(),
+				'password_check': $('#pw_check_input').val()
+			}, function(signup) {
+				if (signup.result) {
+					location.replace('/');
+				} else {
+					console.log(signup);
+				}
+			});
+		});
 	},
 
 	set_league_select: function(sport) {
