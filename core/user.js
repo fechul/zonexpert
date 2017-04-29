@@ -9,18 +9,18 @@ exports.login = function(data, callback) {
     var json = {
         'result': false,
         'code': 0,
-        'id': '',
-        'email': ''
+        'email': '',
+        'nickname': ''
     };
 
     //  code list
     //      0 : ok
-    //      1 : id가 존재하지 않음
+    //      1 : email이 존재하지 않음
     //      2 : password가 일치하지 않음
     //      3 : 이메일 인증이 완료되지 않음
 
     db.user.find({
-        'id': data.id
+        'email': data.email
     })
     .limit(1)
     .exec(function(err, _data) {
@@ -34,29 +34,29 @@ exports.login = function(data, callback) {
                     json.code = 3;
                 } else {
                     json.result = true
-                    json.id = user_data.id;
                     json.email = user_data.email;
+                    json.nickname = user_data.nickname;
                 }
             }
         } else {
             json.code = 1;
         }
 
-        res.json(json);
+        callback(json);
     });
 };
 
-exports.join = function(data, callback) {
+exports.signup = function(data, callback) {
     this.validate(data, function(validation) {
         if (validation.result) {
-            var auth_token = randomstring.generate(30);
+            var signup_auth_token = randomstring.generate(30);
             var new_user = new db.user({
-                'id': data.id,
                 'email': data.email,
+                'nickname': data.nickname,
                 'password': md5(data.password),
                 'authed': false,
-                'auth_token': auth_token,
-                'join_date': new Date()
+                'signup_auth_token': signup_auth_token,
+                'signup_date': new Date()
             });
 
             new_user.save(function (err) {
@@ -64,7 +64,7 @@ exports.join = function(data, callback) {
                     console.log(err);
                     callback(false);
                 } else {
-                    console.log('user.js:join complete');
+                    console.log('user.js:signup complete');
                     var smtpTransport = nodemailer.createTransport({
                         'service': 'gmail',
                         'auth': {
@@ -82,17 +82,15 @@ exports.join = function(data, callback) {
                                 '안녕하세요 존문가닷컴입니다.<br>',
                                 '회원가입을 위한 이메일 인증 과정입니다.<br>',
                                 '아래의 링크를 클릭하면 인증이 완료됩니다.<br><br>',
-                                '<a href=',__url,'/auth/join?token=',auth_token,
+                                '<a href=',__url,'/auth/signup?token=',signup_auth_token,
                                 '>인증하기</a>',
                             '</div>'
                         ].join('')
                     };
 
-                    console.log(mailOptions);
-
                     smtpTransport.sendMail(mailOptions, function(err, res) {
                         smtpTransport.close();
-                        callback(true);
+                        callback(validation);
                     });
                 }
             });
@@ -103,8 +101,8 @@ exports.join = function(data, callback) {
 };
 
 exports.validate = function(data, callback) {
-    var id = data.id || '';
     var email = data.email || '';
+    var nickname = data.nickname || '';
     var password = data.password || '';
     var password_check = data.password_check || '';
 
@@ -116,10 +114,11 @@ exports.validate = function(data, callback) {
     //  code list
     //      0   :   ok
     //      1   :   db find error
-    //      11  :   id 중복
+    //      11  :   nickname 중복
     //      12  :   email 중복
-    //      21  :   id 길이가 6~16이 아님
-    //      22  :   id 양식이 맞지 않음
+    //      21  :   email 양식이 맞지 않음
+    //      31  :   nickname 길이가 2~12이 아님
+    //      32  :   nickname 양식이 맞지 않음
     //      41  :   password가 password_check과 다름
     //      42  :   password 길이가 8~20이 아님
     //      43  :   password 공백이 있음
@@ -128,7 +127,7 @@ exports.validate = function(data, callback) {
     db.user.find({
         '$or': [
             {
-                'id': id
+                'nickname': nickname
             },
             {
                 'email': email
@@ -137,21 +136,23 @@ exports.validate = function(data, callback) {
     }, function(err, find) {
         if (err) {  // 에러 체크
             validation.code = 1;
-        } else if (find.length) { // 중복 id, email
-            if (find[0].id === id) {
+        } else if (find.length) { // 중복 nickname, email
+            if (find[0].nickname === nickname) {
                 validation.code = 11;
             } else if (find[0].email === email) {
                 validation.code = 12;
             }
         } else {    // 유효성 체크
-            var reg_id = /^[a-z][a-z0-9]{5,15}$/;
+            var reg_nickname = /^[a-z가-힣0-9]{2,12}$/;
             var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
             var reg_password = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}$/;
 
-            if (id.length < 6 || id.length > 16) {
+            if (!reg_email.test(email)) {
                 validation.code = 21;
-            } else if (!reg_id.test(id)) {
-                validation.code = 22;
+            } else if (nickname.length < 2 || nickname.length > 12) {
+                validation.code = 31;
+            } else if (!reg_nickname.test(nickname)) {
+                validation.code = 32;
             } else if (password !== password_check) {
                 validation.code = 41;
             } else if (password.length < 8 || password.length > 20) {

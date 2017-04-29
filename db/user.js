@@ -6,8 +6,8 @@ var userSchema = new Schema({
     'email': String,
     'password': String,
     'authed': {'type': Boolean, 'default': false},
-    'auth_token': String,
-    'join_date': Date
+    'signup_auth_token': String,
+    'signup_date': Date
 });
 
 module.exports = mongoose.model('user', userSchema);
