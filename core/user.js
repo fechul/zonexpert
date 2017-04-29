@@ -1,8 +1,50 @@
 var nodemailer = require('nodemailer');
 var randomstring = require('randomstring');
+var md5 = require('md5');
 
 var db = {};
 db.user = require('../db/user.js');
+
+exports.login = function(data, callback) {
+    var json = {
+        'result': false,
+        'code': 0,
+        'id': '',
+        'email': ''
+    };
+
+    //  code list
+    //      0 : ok
+    //      1 : id가 존재하지 않음
+    //      2 : password가 일치하지 않음
+    //      3 : 이메일 인증이 완료되지 않음
+
+    db.user.find({
+        'id': data.id
+    })
+    .limit(1)
+    .exec(function(err, _data) {
+        if (_data.length) {
+            var user_data = _data[0];
+
+            if (user_data.password != md5(data.password)) {
+                json.code = 2;
+            } else {
+                if (!user_data.authed) {
+                    json.code = 3;
+                } else {
+                    json.result = true
+                    json.id = user_data.id;
+                    json.email = user_data.email;
+                }
+            }
+        } else {
+            json.code = 1;
+        }
+
+        res.json(json);
+    });
+};
 
 exports.join = function(data, callback) {
     this.validate(data, function(validation) {
@@ -11,7 +53,7 @@ exports.join = function(data, callback) {
             var new_user = new db.user({
                 'id': data.id,
                 'email': data.email,
-                'password': data.password,
+                'password': md5(data.password),
                 'authed': false,
                 'auth_token': auth_token,
                 'join_date': new Date()
@@ -70,6 +112,18 @@ exports.validate = function(data, callback) {
         'result': false,
         'code': 0
     };
+
+    //  code list
+    //      0   :   ok
+    //      1   :   db find error
+    //      11  :   id 중복
+    //      12  :   email 중복
+    //      21  :   id 길이가 6~16이 아님
+    //      22  :   id 양식이 맞지 않음
+    //      41  :   password가 password_check과 다름
+    //      42  :   password 길이가 8~20이 아님
+    //      43  :   password 공백이 있음
+    //      44  :   password 양식이 맞지 않음
 
     db.user.find({
         '$or': [
