@@ -97,9 +97,13 @@ body {
 	font-size: 14px;
 }
 
-.checkbox_wrapper > span,
-.checkbox_wrapper > input {
+.checkbox_wrapper > .checkbox_label {
 	float: left;
 	margin-left: 5px;
+	cursor: pointer;
+}
+
+.checkbox_wrapper > .checkbox_label > input {
+	cursor: pointer;
 }
 

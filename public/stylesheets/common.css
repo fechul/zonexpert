@@ -188,6 +188,10 @@ table > tbody > tr {
 	height: 50px;
 }
 
+table > tbody > tr > td.left {
+	text-align: left;
+}
+
 table > tbody > tr:first-child {
 	background-color: #333;
 	color: #fff;
@@ -197,7 +201,56 @@ table > tbody > tr:not(:last-child) {
 	border-bottom: 1px solid #999;
 }
 
-t/*able > tbody > tr > td:not(:last-child) {
+/*
+table > tbody > tr > td:not(:last-child) {
 	border-right: 1px solid #999;
-}*/
+}
+*/
 
+.rank_table_tier {
+	width: 20px;
+	height: 20px;
+	margin-right: 5px;
+	display: inline-block;
+	margin-bottom: -5px;
+}
+
+.badge_bronze {
+	background: url(/image/badge_bronze.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_silver {
+	background: url(/image/badge_silver.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_gold {
+	background: url(/image/badge_gold.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_platinum {
+	background: url(/image/badge_platinum.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_diamond {
+	background: url(/image/badge_diamond.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.table_tier_name {
+	display: inline-block;
+	margin-bottom: 5px;
+}
