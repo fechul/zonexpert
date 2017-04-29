@@ -1,7 +1,38 @@
+var express = require('express');
+var router = express.Router();
+
 var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 
-exports.join = function(req, res) {
+router.all('/ping', function(req, res) {
+	res.send('pong\n');
+});
+
+router.post('/login', function(req, res) {
+	user.login({
+		'id': req.body.id,
+		'password': req.body.password
+	}, function(login) {
+		if (login.result) {
+			req.session.login = true;
+			req.session.id = login.id;
+			req.session.email = login.email;
+		}
+
+		delete login.id;
+		delete login.email;
+
+		res.json(login);
+	});
+});
+
+router.post('/logout', function(req, res) {
+	req.session.detroy(function(err) {
+		res.redirect('/');
+	});
+});
+
+router.post('/accounts', function(req, res) {
 	user.join({
 		'id': req.body.id,
 		'email': req.body.email,
@@ -10,11 +41,9 @@ exports.join = function(req, res) {
 	}, function(result) {
 		res.json(result);
 	});
-};
+});
 
-exports.auth = {};
-
-exports.auth.join = function(req, res) {
+router.get('/auth/join', function(req, res) {
 	auth.join({
 		'token': req.query.token
 	}, function(response) {
@@ -25,4 +54,6 @@ exports.auth.join = function(req, res) {
 			res.redirect('/');
 		}
 	});
-};
+});
+
+module.exports = router;

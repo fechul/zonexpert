@@ -12,7 +12,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-var routes = require('./routes/index.js');
+// redis
+var session = require('express-session');
+var redis_store = require('connect-redis')(session);
+var redis = require('redis');
+var redis_client = redis.createClient();
+
+var index_routes = require('./routes/index.js');
 var view_routes = require('./routes/view.js');
 
 var app = express();
@@ -38,19 +44,32 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+    'store': new redis_store({
+        'host': 'localhost',
+        'port': 6379,
+        'client': redis_client,
+        'resave': false
+    }),
+    'secret': 'dududududu',
+    'saveUninitialized': false,
+    'resave': false
+}));
+
 // mobile checker -> req.is_mobile = true | false
 app.use(function(req, res, next) {
     req.is_mobile = /mobile/i.test(req.headers['user-agent']) || /android/i.test(req.headers['user-agent']);
     next();
 });
 
-// routing
-app.get('/', view_routes.index);
-app.get('/signup', view_routes.signup);
+app.use(function(req, res, next) {
+    // if (req.session)
+    next();
+});
 
-app.post('/join', routes.join);
-app.get('/auth/join', routes.auth.join);
-// app.post('/auth/join', routes.auth.join);
+//routing
+app.use('/', index_routes);
+app.use('/', view_routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
