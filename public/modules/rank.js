@@ -1,4 +1,4 @@
-var INDEX = {
+var RANK = {
 	init: function() {
 		this.init_events();
 		this.set_rank();
@@ -27,7 +27,6 @@ var INDEX = {
 		});
 	},
 
-	// DB에 저장된 데이터를 받아와서 rank_data로 넣으면 됨.
 	set_rank: function() {
 		var rank_data = [
 			{
@@ -136,19 +135,14 @@ var INDEX = {
 			switch(code) {
 				case 1:
 					return '<div><div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span></div>';
-					break;
 				case 2:
 					return '<div class="rank_table_tier badge_silver"></div><span class="table_tier_name">실버</span>';
-					break;
 				case 3:
 					return '<div class="rank_table_tier badge_gold"></div><span class="table_tier_name">골드</span>';
-					break;
 				case 4:
 					return '<div class="rank_table_tier badge_platinum"></div><span class="table_tier_name">플래티넘</span>';
-					break;
 				case 5:
 					return '<div><div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span></div>';
-					break;
 			}
 		};
 
@@ -169,4 +163,3 @@ var INDEX = {
 		$('#rank_table').append(table_html);
 	}
 };
-

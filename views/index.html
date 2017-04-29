@@ -4,7 +4,7 @@
         <title>Zonexpert</title>
         <link rel='stylesheet' href='/stylesheets/common.css' />
         <link rel='stylesheet' href='/stylesheets/style.css' />
-		<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
     </head>
 
     <body>
@@ -15,9 +15,9 @@
 					<!-- <li class="menu_rank"><a type="button" href="/">순위</a></li>
 					<li class="menu_schedule"><a href="/">경기일정</a></li>
 					<li class="menu_board"><a href="/">게시판</a></li> -->
-					<li class="menu_rank">순위</li>
-					<li class="menu_schedule">경기일정</li>
-					<li class="menu_board">게시판</li>
+					<li class="menu_rank" move="rank">순위</li>
+					<li class="menu_schedule" move="schedule">경기일정</li>
+					<li class="menu_board" move="board">게시판</li>
 				</ul>
 				<ul class="tools">
 					<li class="menu_search">
@@ -30,7 +30,7 @@
 					<li class="logout" style="<%= logout_display %>"><a href="/">로그아웃</a></li>
 					<li class="login" style="<%= login_display %>"><a href="/">로그인</a></li>
 					<li class="signup" style="<%= signup_display %>"><a href="/">회원가입</a></li> -->
-					<li class="my_info" style="<%= myinfo_display %>">마이페이지</li>
+					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
 					<li class="logout" style="<%= logout_display %>">로그아웃</li>
 					<li class="login" style="<%= login_display %>">로그인</li>
 					<li class="signup" style="<%= signup_display %>">회원가입</li>
@@ -53,7 +53,7 @@
 					</div>
 					<div class="mydata_statistics">
 						<div class="mydata_badge">
-							<img src="image/badge-01.png">
+							<img src="image/badge_platinum.png">
 						</div>
 						<div class="mydata_rate">
 							<p><span class="rate_classification">레이팅</span> 1800점</p>
@@ -75,25 +75,47 @@
 					</div>
 				</div>
 			</div>
-			<div class="schedule_wrapper">
-				<div class="schedule_section container_box">
-					<div class="scheduledata">
-						<span class="scheduledata_sub">경기일정</span>
+			<div class="rank_wrapper">
+				<div class="rank_section container_box">
+					<div class="rankdata">
+						<span class="rankdata_sub">존문가 TOP 10</span>
+					</div>
+					<div class="rankdata_league_btn">
+						<button class="league_btn total_rank">전체</button>
+						<button class="league_btn k-league">K리그</button>
+						<button class="league_btn premier-league active">프리미어리그</button>
+						<button class="league_btn laliga">라리가</button>
+						<button class="league_btn bundesliga">분데스리가</button>
+						<button class="league_btn seria-a">세리에 A</button>
+						<button class="league_btn league-1">리그 1</button>
+						<button class="league_btn eredivisie">에레디비시</button>
+						<button class="league_btn champions-league">챔피언스리그</button>
+						<button class="league_btn europa-league">유로파리그</button>
+						<button class="league_btn england-fa">잉글랜드FA컵</button>
+						<button class="league_btn efl-cup">EFL컵</button>
+					</div>
+
+					<div class="rank_table_section">
+						<table id="rank_table">
+							<tr>
+								<td>순위</td>
+								<td>닉네임</td>
+								<td>주종목</td>
+								<td>점수</td>
+								<td>전적</td>
+								<td>예측률</td>
+								<td>티어</td>
+							</tr>
+						</table>
 					</div>
 				</div>
 			</div>
 		</section>
 
     </body>
-
-	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-
-</html>
-
+	
 	<script src="jquery/jquery.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/index.js"></script>
 	<script>

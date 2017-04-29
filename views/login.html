@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-로그인</title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/login.css' />
+        <!-- <link rel='stylesheet' href='/bootstrap/bootstrap.css' /> -->
+    </head>
+	
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+			</div>
+		</div>
+		
+		<section class="login_section">
+		<div class="login_box_wrapper">
+				<div class="logo"></div>
+				<div class="login_box container_box">
+					<div class="row">
+						<div class="login_row_sub">이메일</div>
+						<div class="login_row_content"><input type="text" id="email_input" placeholder="example@example.com"></div>
+					</div>
+					<div class="row">
+						<div class="login_row_sub">비밀번호</div>
+						<div class="login_row_content"><input type="password" id="pw_input" placeholder="비밀번호를 입력해주세요."></div>
+					</div>
+				</div>
+				<div class="checkbox_wrapper">
+					<label class="checkbox_label"><span>이메일 기억하기</span><input type="checkbox" id="remember_email"/></label>
+				</div>
+				<div class="login-btns">
+					<button id="login_btn">로그인</button>
+				</div>
+			</div>
+		</section>
+		
+		
+    </body>
+	
+	<script src="jquery/jquery.js"></script>
+	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="modules/login.js"></script>
+	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
+	<script>
+		LOGIN.init();
+	</script>
+	
+</html>
