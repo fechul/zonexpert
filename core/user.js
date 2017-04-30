@@ -4,7 +4,7 @@ var randomstring = require('randomstring');
 var db = {};
 db.user = require('../db/user.js');
 
-exports.join = function(data, callback) {
+  exports.join = function(data, callback) {
     this.validate(data, function(validation) {
         if (validation.result) {
             var auth_token = randomstring.generate(30);

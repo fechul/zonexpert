@@ -49,8 +49,12 @@ app.get('/', view_routes.index);
 app.get('/signup', view_routes.signup);
 app.get('/login', view_routes.login);
 
+app.get('/schedule' , routes.schedule);
+
 app.post('/join', routes.join);
 app.get('/auth/join', routes.auth.join);
+
+
 // app.post('/auth/join', routes.auth.join);
 
 // catch 404 and forward to error handler

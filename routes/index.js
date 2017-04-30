@@ -1,6 +1,6 @@
 var user = require('../core/user.js');
 var auth = require('../core/auth.js');
-
+var http = require('http');
 exports.join = function(req, res) {
 	user.join({
 		'id': req.body.id,
@@ -26,3 +26,7 @@ exports.auth.join = function(req, res) {
 		}
 	});
 };
+
+exports.schedule = function(req,res){
+	var options = ''
+}

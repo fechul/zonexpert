@@ -34,3 +34,10 @@ exports.login = function(req, res) {
 
 	res.render(path, json);
 };
+
+// exports.schedule = function(req,res){
+// 		var path = 'schedule.html';
+// 		var json = {};
+//
+// 		res.render(path,json);
+// }
