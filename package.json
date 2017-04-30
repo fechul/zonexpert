@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.4.0",
     "body-parser": "~1.17.1",
     "connect-redis": "^3.2.0",
     "cookie-parser": "~1.4.3",
@@ -17,6 +18,7 @@
     "md5": "^2.2.1",
     "mongoose": "^4.9.5",
     "morgan": "~1.8.1",
+    "node-schedule": "^1.2.1",
     "nodemailer": "^4.0.1",
     "randomstring": "^1.1.5",
     "redis": "^2.7.1",
