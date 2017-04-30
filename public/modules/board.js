@@ -14,7 +14,13 @@ var BOARD = {
 		});
 
 		$('#header .tools .logout').click(function() {
-			//로그아웃
+			$.post('/logout', {}, function(logout) {
+				if (logout.result) {
+					location.href = "/";
+				} else {
+					console.log(logout);
+				}
+			});
 		});
 
 		$('#header .tools .my_page').click(function() {

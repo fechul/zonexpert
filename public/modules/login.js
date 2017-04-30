@@ -16,5 +16,17 @@ var LOGIN = {
 				}
 			});
 		});
+
+		$('#email_input').keydown(function(e) {
+			if(e.keyCode === 13) {
+				$('#login_btn').click();
+			}
+		});
+
+		$('#pw_input').keydown(function(e) {
+			if(e.keyCode === 13) {
+				$('#login_btn').click();
+			}
+		});
 	}
 };
