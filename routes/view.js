@@ -29,7 +29,7 @@ router.get('/', function(req, res) {
 		signup_display: '',
 		mydata_display: ''
 	};
-	
+
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
@@ -54,6 +54,7 @@ router.get('/login', no_login, function(req, res) {
 	var json = {};
 
 	res.render(path, json);
+
 });
 
 router.get('/rank', function(req, res) {
