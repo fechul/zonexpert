@@ -1,4 +1,6 @@
 var express = require('express');
+var http = require('http');
+var schedule = require('node-schedule');
 var router = express.Router();
 
 var user = require('../core/user.js');
@@ -57,6 +59,10 @@ router.get('/auth/signup', function(req, res) {
 	}, function(signup) {
 		res.json(signup);
 	});
+});
+
+var j = schedule.scheduleJob('0 17 ? * 0,4-6', function(){
+  console.log('Today is recognized by Rebecca Black!');
 });
 
 module.exports = router;
