@@ -1,6 +1,4 @@
-var db = {};
 var async = require('async');
-db.schedule = require('../db/schedule.js');
 
 exports.update_schedule = function(data, callback) {
     if(data && data.length) {

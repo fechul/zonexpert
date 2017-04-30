@@ -23,13 +23,15 @@ var view_routes = require('./routes/view.js');
 
 var app = express();
 
-var db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function() {
+var mongoose_db = mongoose.connection;
+mongoose_db.on('error', console.error);
+mongoose_db.once('open', function() {
     console.log("Connected to mongd server");
 });
 
 mongoose.connect('mongodb://localhost');
+
+global.db = require('./db/schema.js');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

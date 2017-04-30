@@ -1,6 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var userSchema = new Schema({
+    'id': String,
+    'email': String,
+    'password': String,
+    'authed': {'type': Boolean, 'default': false},
+    'signup_auth_token': String,
+    'signup_date': Date
+});
 
 var leagueSchema = new Schema({
   'id' : Number,
@@ -41,19 +49,14 @@ var fixtureSchema = new Schema({
   }
 });
 
-
-
-
+var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
 var fixture = mongoose.model('fixture' , fixtureSchema);
 var team = mongoose.model('team' , teamSchema);
 
 module.exports = {
-  league : league,
-  fixture : fixture,
-  team : team
+  'user' : user,
+  'league': league,
+  'fixture' : fixture,
+  'team' : team
 };
-
-// var models = require('./schema');
-// ...
-// models.User.findOne(.

@@ -1,6 +1,3 @@
-var db = {};
-db.user = require('../db/user.js');
-
 exports.signup = function(data, callback) {
     var auth_signup = {
         'result': false,

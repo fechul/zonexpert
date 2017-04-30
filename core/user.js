@@ -2,9 +2,6 @@ var nodemailer = require('nodemailer');
 var randomstring = require('randomstring');
 var md5 = require('md5');
 
-var db = {};
-db.user = require('../db/user.js');
-
 exports.login = function(data, callback) {
     var json = {
         'result': false,
