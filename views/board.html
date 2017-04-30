@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-게시판</title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/board.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+    </head>
+
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+				<ul class="main_menu">
+					<li class="menu_rank" move="rank">순위</li>
+					<li class="menu_schedule" move="schedule">경기일정</li>
+					<li class="menu_board" move="board">게시판</li>
+				</ul>
+				<ul class="tools">
+					<li class="menu_search">
+						<input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+						<button type="button" class="user_search_btn">
+							<i class="fa fa-search"></i>
+						</button>
+					</li>
+					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+					<li class="logout" style="<%= logout_display %>">로그아웃</li>
+					<li class="login" style="<%= login_display %>">로그인</li>
+					<li class="signup" style="<%= signup_display %>">회원가입</li>
+				</ul>
+			</div>
+		</div>
+
+		<section class="main_section">
+			<div class="page_title">
+				게시판
+			</div>
+			<div class="board_wrapper">
+				<div class="board_section container_box">
+					<div class="board_table_section">
+						<table id="board_table">
+							<tr>
+								<td class="board_number">번호</td>
+								<td class="writer">작성자</td>
+								<td class="title">제목</td>
+								<td class="like"><i class="fa fa-thumbs-up"></i></td>
+								<td class="date">작성일</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+    </body>
+	
+	<script src="jquery/jquery.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="modules/board.js"></script>
+	<script>
+		BOARD.init();
+	</script>
+
+</html>

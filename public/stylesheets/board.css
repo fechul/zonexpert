@@ -1,0 +1,56 @@
+.main_section {
+	background-color: #145c86;
+	opacity: 0.85;
+	text-align: center;
+}
+
+.board_wrapper {
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.main_section .board_section {
+	width: 800px;
+
+	margin-bottom: 1000px;
+}
+
+.board_table_section {
+	padding: 25px;
+}
+
+#board_table {
+	width: 100%;
+}
+
+#board_table .board_number {
+	width: 10%;
+}
+
+#board_table .writer {
+	width: 20%;
+}
+
+#board_table .title {
+	width: 35%;
+}
+
+#board_table .like {
+	width: 10%;
+}
+
+#board_table .date {
+	width: 25%;
+}
+
+#board_table tr:not(:first-child) {
+	cursor: pointer;
+}
+
+#board_table tr:hover {
+	background-color: #ccc;
+}
+
+
+
+
