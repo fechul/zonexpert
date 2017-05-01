@@ -1,18 +1,16 @@
 .main_section {
-	background-color: #145c86;
+	/*background-color: #145c86;*/
 	opacity: 0.85;
 	text-align: center;
 }
 
 .board_wrapper {
-	width: 1200px;
+	max-width: 1200px;
 	margin: 0 auto;
 }
 
 .main_section .board_section {
 	width: 800px;
-
-	margin-bottom: 1000px;
 }
 
 .board_table_section {
@@ -47,7 +45,7 @@
 	cursor: pointer;
 }
 
-#board_table tr:hover {
+#board_table tr:not(:first-child):hover {
 	background-color: #ccc;
 }
 

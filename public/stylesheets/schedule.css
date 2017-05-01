@@ -1,0 +1,54 @@
+.main_section {
+	/*background-color: #145c86;*/
+	opacity: 0.85;
+	text-align: center;
+}
+
+.schedule_wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.main_section .schedule_section {
+	width: 800px;
+}
+
+.schedule_table_section {
+	padding: 25px;
+}
+
+#schedule_table {
+	width: 100%;
+}
+
+#schedule_table .schedule_number {
+	width: 10%;
+}
+
+#schedule_table .writer {
+	width: 20%;
+}
+
+#schedule_table .title {
+	width: 35%;
+}
+
+#schedule_table .like {
+	width: 10%;
+}
+
+#schedule_table .date {
+	width: 25%;
+}
+
+#schedule_table tr:not(:first-child) {
+	cursor: pointer;
+}
+
+#schedule_table tr:not(:first-child):hover {
+	background-color: #ccc;
+}
+
+
+
+

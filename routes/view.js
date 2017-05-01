@@ -42,7 +42,7 @@ router.get('/', function(req, res) {
     res.render(path, json);
 });
 
-router.get('/signup', function(req, res) {
+router.get('/signup', no_login, function(req, res) {
 	var path = 'signup.html';
 	var json = {};
 
@@ -67,8 +67,7 @@ router.get('/rank', function(req, res) {
 		mydata_display: ''
 	};
 
-	var session = true;
-	if(session) {
+	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
 	} else {
@@ -90,8 +89,29 @@ router.get('/board', function(req, res) {
 		mydata_display: ''
 	};
 
-	var session = true;
-	if(session) {
+	if(req.session.login) {
+		json.login_display = 'display:none;';
+		json.signup_display = 'display:none;';
+	} else {
+		json.myinfo_display = 'disp정lay:none;';
+		json.logout_display = 'display:none;';
+		json.mydata_display = 'display:none;';
+	}
+
+	res.render(path, json);
+});
+
+router.get('/schedule', function(req, res) {
+	var path = 'schedule.html';
+	var json = {
+		myinfo_display: '',
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
+		mydata_display: ''
+	};
+
+	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
 	} else {
