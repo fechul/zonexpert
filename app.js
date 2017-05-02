@@ -99,7 +99,7 @@ app.use(function(err, req, res, next) {
 
 // request schedule
 var rule = new node_schedule.RecurrenceRule();
-rule.minute = 39;
+rule.minute = 30;
 var rule1 = new node_schedule.RecurrenceRule();
 rule1.minute = 00;
 
