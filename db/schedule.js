@@ -20,23 +20,23 @@ var teamSchema = new Schema({
   'goalDifference' : Number
 });
 
-var fixtureSchema = new Schema({
-  'competitionId' : Number,
-  'id' : Number,
+var matchSchema = new Schema({
+  'leagueId' : String,
+  'id' : String,
   'date' : Date,
-  'matchday' : Number,
+  'matchday' : String,
   'homeTeamName' : String,
-  'homeTeamId' : Number,
+  'homeTeamId' : String,
   'awayTeamName' : String,
-  'awayTeamId' : Number,
+  'awayTeamId' : String,
   'result' : {
       'homeTeam' : {
-        'goalsHomeTeam' : Number,
-        'default' : Number
+        'goalsHomeTeam' : String,
+        'default' : 0
       },
       'awayTeam' : {
-        'goalsAwayTeam' : Number,
-        'default' : Number
+        'goalsAwayTeam' : String,
+        'default' : 0
       }
   }
 });
@@ -45,12 +45,10 @@ var fixtureSchema = new Schema({
 
 
 var league = mongoose.model('league' , leagueSchema);
-var fixture = mongoose.model('fixture' , fixtureSchema);
 var team = mongoose.model('team' , teamSchema);
 
 module.exports = {
   league : league,
-  fixture : fixture,
   team : team
 };
 
