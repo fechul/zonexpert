@@ -86,6 +86,29 @@ router.get('/board', function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
+		mydata_display: '',
+		user_email: req.session.email
+	};
+
+	if(req.session.login) {
+		json.login_display = 'display:none;';
+		json.signup_display = 'display:none;';
+	} else {
+		json.myinfo_display = 'display:none;';
+		json.logout_display = 'display:none;';
+		json.mydata_display = 'display:none;';
+	}
+
+	res.render(path, json);
+});
+
+router.get('/board/write', function(req, res) {
+	var path = 'board_write.html';
+	var json = {
+		myinfo_display: '',
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
 		mydata_display: ''
 	};
 
@@ -93,7 +116,7 @@ router.get('/board', function(req, res) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
 	} else {
-		json.myinfo_display = 'disp정lay:none;';
+		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}

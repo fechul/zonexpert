@@ -7,7 +7,10 @@ var userSchema = new Schema({
     'password': String,
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
-    'signup_date': Date
+    'signup_date': Date,
+    'like_board': Array,
+    'tier_code': Number,
+    'nickname': String
 });
 
 var leagueSchema = new Schema({
@@ -49,14 +52,25 @@ var fixtureSchema = new Schema({
   }
 });
 
+var boardSchema = new Schema({
+  'boardNo': Number,
+  'writer' : String,
+  'date' : Date,
+  'title': String,
+  'content': String,
+  'like': Number
+});
+
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
 var fixture = mongoose.model('fixture' , fixtureSchema);
 var team = mongoose.model('team' , teamSchema);
+var board = mongoose.model('board', boardSchema);
 
 module.exports = {
   'user' : user,
   'league': league,
   'fixture' : fixture,
-  'team' : team
+  'team' : team,
+  'board': board
 };
