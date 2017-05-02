@@ -1,8 +1,9 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body {
-	margin: 0px;
-	font-family: "Nanum Gothic", sans-serif;
+	margin: 0px !important;
+	font-family: "Nanum Gothic", sans-serif !important;
+	background-color: #145c86 !important;
 }
 
 
@@ -19,7 +20,7 @@ body {
 }
 
 #header {
-	max-width: 1200px;
+	/*max-width: 1200px;*/
 	margin-left: auto;
 	margin-right: auto;
 	/* height: 100%; */
@@ -261,7 +262,7 @@ table > tbody > tr > td:not(:last-child) {
 
 .page_title {
 	font-size: 48px;
-	width: 1200px;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding-top: 50px;
 	color: #fff;
