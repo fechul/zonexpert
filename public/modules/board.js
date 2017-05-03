@@ -56,7 +56,7 @@ var BOARD = {
 			var boardNo = $(button).parents('.board_content').prev('tr').attr('boardNo');
 			
 			if($(button).hasClass('update')) {
-				// location.href = "/board/write/~~~~";
+				location.href = "/board/write?no=" + boardNo;
 			} else if($(button).hasClass('delete')) {
 				$.post('/board/del', {
 					'boardNo': boardNo

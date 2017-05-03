@@ -108,7 +108,40 @@ exports.del = function(data, callback) {
 };
 
 exports.update = function(data, callback) {
+	var boardNo = data.boardNo;
 
+	db.board.find({
+		'boardNo': boardNo
+	}, {
+		'writer': 1
+	}).limit(1).exec(function(err, board_data) {
+		if(board_data && board_data.length) {
+			board_data = board_data[0];
+
+			if(data.user == board_data.writer) {
+				db.board.update({
+					'boardNo': boardNo
+				}, {
+					$set: {
+						'title': data.title,
+						'content': data.content,
+						'date': new Date()
+					}
+				}, function(update_err) {
+					if(update_err) {
+						console.log("board update db err: ", update_err);
+						callback(false);
+					} else {
+						callback(true);
+					}
+				});
+			} else {
+				callback(false);
+			}
+		} else {
+			callback(false);
+		}
+	});
 };
 
 exports.like = function(data, callback) {
@@ -179,6 +212,23 @@ exports.like = function(data, callback) {
 			} else {
 				callback(false);
 			}
+		}
+	});
+};
+
+exports.get_content = function(boardNo, callback) {
+	db.board.find({
+		'boardNo': boardNo
+	}, {
+		'writer': 1,
+		'title': 1,
+		'content': 1
+	}, function(err, data) {
+		if(data && data.length) {
+			data = data[0];
+			callback(data);
+		} else {
+			callback(null);
 		}
 	});
 };

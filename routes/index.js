@@ -79,6 +79,17 @@ router.post('/board/write', function(req, res) {
 	});
 });
 
+router.post('/board/update', function(req, res) {
+	board.update({
+		title: req.body.title,
+		content: req.body.content,
+		boardNo: req.body.boardNo,
+		user: req.session.email
+	}, function(result) {
+		res.json(result);
+	});
+});
+
 router.post('/board/del', function(req, res) {
 	board.del({
 		'boardNo': req.body.boardNo,

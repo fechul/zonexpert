@@ -1,6 +1,7 @@
 var BOARD_WRITE = {
-	init: function() {
-		this.init_events();
+	init: function(options) {
+		this.isUpdate = options.isUpdate;
+		this.boardNo = options.boardNo;
 
 		$('#summernote').summernote({
 			minHeight: 300,
@@ -13,11 +14,23 @@ var BOARD_WRITE = {
 			    ['height', ['height']],
 			    ['insert', ['table']]
 			],
-			placeholder: '내용을 입력해주세요.'
+			placeholder: '내용을 입력해주세요.',
+			callbacks: {
+				onInit: function() {
+					if(options.isUpdate) {
+						$('.board_section .board_title').val(options.board_title);
+						$('#summernote').summernote('code', options.board_content);
+					}
+				}
+			}
 		});
+
+		this.init_events();
 	},
 
 	init_events: function() {
+		var self = this;
+
 		$('#header .tools .signup').click(function() {
 			location.href = "/signup";
 		});
@@ -55,23 +68,44 @@ var BOARD_WRITE = {
 
 		$('.board_btns > .write').click(function() {
 			var title = $('.board_title').val();
-			var content = $('.board_section .note-editable').html();
+			var content = $('#summernote').summernote('code');
+			console.log(content);
 
 			if(!title || title.length == 0) {
 				console.log("no title");
 				return false;
 			}
 
-			$.post('/board/write', {
-				'title': title,
-				'content': content
-			}, function(result) {
-				if(result) {
-					location.href = "/board";
+			if(self.isUpdate) {
+				console.log(self.boardNo)
+				if(self.boardNo > 0) {
+					$.post('/board/update', {
+						'title': title,
+						'content': content,
+						'boardNo': self.boardNo
+					}, function(result) {
+						console.log("resultc: ", result);
+						if(result) {
+							location.href = "/board";
+						} else {
+							console.log(result);
+						}
+					});
 				} else {
-					console.log(result);
+					return false;
 				}
-			});
+			} else {
+				$.post('/board/write', {
+					'title': title,
+					'content': content
+				}, function(result) {
+					if(result) {
+						location.href = "/board";
+					} else {
+						console.log(result);
+					}
+				});
+			}
 		});
 	}
 };

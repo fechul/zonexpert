@@ -39,7 +39,7 @@
 					<div class="board_content" id="summernote"></div>
 					<div class="board_btns">
 						<button type="button" class="btn btn-default cancel">취소</button>
-						<button type="button" class="btn btn-primary write">작성하기</button>
+						<button type="button" class="btn btn-primary write"><%= write_btn_name %></button>
 					</div>
 				</div>
 			</div>
@@ -53,7 +53,17 @@
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="/modules/board_write.js"></script>
 	<script>
-		BOARD_WRITE.init();
+		var board_title = '<%= board_title %>';
+		var board_content = '<%- board_content %>';
+		var boardNo = <%- boardNo %>;
+		var isUpdate = <%- isUpdate %>;
+
+		BOARD_WRITE.init({
+			'board_title': board_title,
+			'board_content': board_content,
+			'isUpdate': isUpdate,
+			'boardNo': boardNo
+		});
 	</script>
 
 </html>
