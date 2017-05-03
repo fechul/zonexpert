@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-    'id': String,
     'email': String,
+    'nickname': String,
     'password': String,
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
@@ -47,6 +47,17 @@ var fixtureSchema = new Schema({
         'default' : Number
       }
   }
+});
+
+var prediectionSchema = new Schema({
+    'user_email': String,
+    'create_time': Date,
+    'match_id': String,
+    'league_id': String,
+    'pick': String, // home || draw || away
+    'result': {type: String, default: 'wait'}, // true, false, wait
+    'before_rating': Number,
+    'after_rating': Number
 });
 
 var user = mongoose.model('user', userSchema);
