@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-게시판 작성</title>
+        <!-- <link rel='stylesheet' href='/stylesheets/common.css' /> -->
+        <link rel='stylesheet' href='/stylesheets/board_content.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+        <link rel='stylesheet' href='/summernote/summernote.css' />
+    </head>
+
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+				<ul class="main_menu">
+					<li class="menu_rank" move="rank">순위</li>
+					<li class="menu_schedule" move="schedule">경기일정</li>
+					<li class="menu_board" move="board">게시판</li>
+				</ul>
+				<ul class="tools">
+					<li class="menu_search">
+						<input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+						<button type="button" class="user_search_btn">
+							<i class="fa fa-search"></i>
+						</button>
+					</li>
+					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+					<li class="logout" style="<%= logout_display %>">로그아웃</li>
+					<li class="login" style="<%= login_display %>">로그인</li>
+					<li class="signup" style="<%= signup_display %>">회원가입</li>
+				</ul>
+			</div>
+		</div>
+
+		<section class="main_section" style="text-align:inherit;">
+			<div class="board_wrapper" style="display:table;">
+				<div class="board_section container_box" style="padding:20px;">
+					<input type="text" class="form-control board_title" placeholder="제목을 입력해주세요."></input>
+					<div class="board_content" id="summernote"></div>
+					<div class="board_btns">
+						<button type="button" class="btn btn-default cancel">취소</button>
+						<button type="button" class="btn btn-primary write">작성하기</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
+    </body>
+	
+	<script src="/jquery/jquery.js"></script>
+	<script src="/bootstrap/bootstrap.min.js"></script>
+	<script src="/summernote/summernote.min.js"></script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="/modules/board_write.js"></script>
+	<script>
+		BOARD_WRITE.init();
+	</script>
+
+</html>

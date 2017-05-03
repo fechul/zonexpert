@@ -5,7 +5,8 @@ var router = express.Router();
 
 var user = require('../core/user.js');
 var auth = require('../core/auth.js');
-
+var schedule = require('../core/schedule.js');
+var board = require('../core/board.js');
 
 router.all('/ping', function(req, res) {
 	res.send('pong\n');
@@ -62,8 +63,71 @@ router.get('/auth/signup', function(req, res) {
 	});
 });
 
+router.get('/board/get', function(req, res) {
+	board.get(req.session.email, function(data) {
+		res.json(data);
+	});
+});
 
+router.post('/board/write', function(req, res) {
+	board.write({
+		title: req.body.title,
+		content: req.body.content,
+		writer: req.session.email
+	}, function(result) {
+		res.json(result);
+	});
+});
 
+router.post('/board/del', function(req, res) {
+	board.del({
+		'boardNo': req.body.boardNo,
+		'user_email': req.session.email
+	}, function(result) {
+		res.json(result);
+	});
+});
+
+router.post('/board/like', function(req, res) {
+	board.like({
+		'boardNo': req.body.boardNo,
+		'user_email': req.session.email
+	}, function(result) {
+		res.json(result);
+	});
+});
+
+var rule = new node_schedule.RecurrenceRule();
+rule.minute = 14;
+var rule1 = new node_schedule.RecurrenceRule();
+rule1.minute = 00;
+
+var scheduleJob = node_schedule.scheduleJob(rule, function(){
+	var options = {
+	  host: 'api.football-data.org',
+	  path: '/v1/fixtures/'
+	};
+
+	callback = function(response) {
+	  var str = '';
+
+	  //another chunk of data has been recieved, so append  it to `str`
+	  response.on('data', function (chunk) {
+	    str += chunk;
+	  });
+
+	  //the whole response has been recieved, so we just print it out here
+	  response.on('end', function () {
+	    // console.log(str);
+			schedule.update_schedule(str, function() {
+
+			});
+	  });
+	}
+
+	http.request(options, callback).end();
+
+});
 
 
 module.exports = router;

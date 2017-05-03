@@ -141,7 +141,7 @@ var INDEX = {
 		var get_tier_info = function(code) {
 			switch(code) {
 				case 1:
-					return '<div><div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span></div>';
+					return '<div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span>';
 					break;
 				case 2:
 					return '<div class="rank_table_tier badge_silver"></div><span class="table_tier_name">실버</span>';
@@ -153,7 +153,7 @@ var INDEX = {
 					return '<div class="rank_table_tier badge_platinum"></div><span class="table_tier_name">플래티넘</span>';
 					break;
 				case 5:
-					return '<div><div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span></div>';
+					return '<div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span>';
 					break;
 			}
 		};

@@ -37,6 +37,15 @@
 			</div>
 			<div class="board_wrapper">
 				<div class="board_section container_box">
+					<div class="board_menu">
+						<div class="board_search_menu">
+							<input type="text" class="board_search_input" placeholder="게시판 검색" autocomplete="off">
+							<button type="button" class="board_search_btn">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
+						<button type="button" class="btn btn-default write"><i class="fa fa-pencil"></i></button>
+					</div>
 					<div class="board_table_section">
 						<table id="board_table">
 							<tr>
@@ -59,7 +68,9 @@
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/board.js"></script>
 	<script>
-		BOARD.init();
+		BOARD.init({
+			'user_email': '<%= user_email %>'
+		});
 	</script>
 
 </html>

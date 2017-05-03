@@ -1,9 +1,33 @@
+
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 body {
 	margin: 0px !important;
 	font-family: "Nanum Gothic", sans-serif !important;
 	background-color: #145c86 !important;
+}
+
+.main_section {
+	/*background-color: #145c86;*/
+	opacity: 0.85;
+	text-align: center;
+}
+
+.board_wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.main_section .board_section {
+	width: 800px;
+}
+
+.container_box {
+	background-color: #ddd;
+	border-radius: 10px;
+	position: relative;
+	display: inline-block;
+	margin: 30px 30px 30px 30px;
 }
 
 
@@ -133,132 +157,19 @@ body {
 	border: 1px solid #ccc;
 }
 
-/* #header a {
-	color: #fff;
-	text-decoration: none;
-} */
-
-
-/*
-	<-- BODY MAIN LOGO SECTIOM-->
-*/
-
-
-.main_logo_section {
-	/* text-align: center; */
-	/* line-height: 300px; */
-	height: 300px;
-	/* vertical-align: middle; */
-	background:
-		linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
-		linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
-		linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
-		linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
-		linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
-		linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
-	background-color: #131313;
-	background-size: 20px 20px;
+.modal-backdrop, .modal-backdrop.in {
+    display: none;
 }
 
-.main_logo_section > .logo_wrapper {
-	position: absolute;
-	width: 100%;
+.board_title {
+	margin-bottom: 10px;
 }
 
-.main_logo_section .logo {
-	height: 180px;
-	width: 540px;
-	margin-top: 60px;
-	margin-left: auto;
-	margin-right: auto;
+.board_btns {
+	text-align: center;
 }
 
-/*
-	<-- CONTAINER_BOX -->
-*/
-
-.container_box {
-	background-color: #ddd;
-	border-radius: 10px;
-	position: relative;
-	display: inline-block;
-	margin: 30px 30px 30px 30px;
-}
-
-table {
-	border: 1px solid #999;
-}
-
-table > tbody > tr {
-	height: 50px;
-}
-
-table > tbody > tr > td.left {
-	text-align: left;
-}
-
-table > tbody > tr:first-child {
-	background-color: #333;
-	color: #fff;
-}
-
-table > tbody > tr:not(:last-child) {
-	border-bottom: 1px solid #999;
-}
-
-.rank_table_tier {
-	width: 20px;
-	height: 20px;
-	margin-right: 5px;
-	display: inline-block;
-	margin-bottom: -5px;
-}
-
-.badge_bronze {
-	background: url(/image/badge_bronze.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-
-.badge_silver {
-	background: url(/image/badge_silver.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-
-.badge_gold {
-	background: url(/image/badge_gold.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-
-.badge_platinum {
-	background: url(/image/badge_platinum.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-
-.badge_diamond {
-	background: url(/image/badge_diamond.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
-}
-
-.table_tier_name {
-	display: inline-block;
-	margin-bottom: 5px;
-}
-
-.page_title {
-	font-size: 48px;
-	max-width: 1200px;
-	margin: 0 auto;
-	padding-top: 50px;
-	color: #fff;
+.board_btns > .cancel {
+	margin-right: 10px;
 }
 
