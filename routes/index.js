@@ -97,37 +97,40 @@ router.post('/board/like', function(req, res) {
 	});
 });
 
-var rule = new node_schedule.RecurrenceRule();
-rule.minute = 14;
-var rule1 = new node_schedule.RecurrenceRule();
-rule1.minute = 00;
-
-var scheduleJob = node_schedule.scheduleJob(rule, function(){
+router.all('/test', function(req, res) {
+	var leaguesObject = {};
+	var leagueIdArray = [426, 429, 430, 433, 434, 438, 439, 440];
 	var options = {
 	  host: 'api.football-data.org',
-	  path: '/v1/fixtures/'
+	  // path: '/v1/fixtures/'
 	};
-
-	callback = function(response) {
-	  var str = '';
-
-	  //another chunk of data has been recieved, so append  it to `str`
-	  response.on('data', function (chunk) {
-	    str += chunk;
-	  });
-
-	  //the whole response has been recieved, so we just print it out here
-	  response.on('end', function () {
-	    // console.log(str);
-			schedule.update_schedule(str, function() {
-
+	async.each(leagueIdArray, function(league, async_cb) {
+	 	options.path =  '/v1/competitions/' + league + '/fixtures';
+		callback = function(response) {
+			response.on('data', function (chunk) {
+				leaguesObject[league] += chunk;
 			});
-	  });
-	}
 
-	http.request(options, callback).end();
+			response.on('end', function () {
+				//console.log(leaguesObject[league]);
+				async_cb();
+				// console.log(leaguesObject);
+				// schedule.update_schedule(leaguesObject[league], function() {
+				// });
+			});
+		}
 
+		http.request(options, callback).end();
+
+	}, function(async_err) {
+		if(async_err) {
+
+		} else {
+
+		}
+
+		res.json(leaguesObject);
+	});
 });
-
 
 module.exports = router;

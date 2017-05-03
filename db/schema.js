@@ -63,6 +63,7 @@ var boardSchema = new Schema({
 
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
+var match = mongoose.model('match', matchSchema);
 var team = mongoose.model('team' , teamSchema);
 var board = mongoose.model('board', boardSchema);
 
@@ -70,7 +71,7 @@ module.exports = {
 
   'user' : user,
   'league': league,
-  'fixture' : fixture,
+  'match' : match,
   'team' : team,
   'board': board
 };
