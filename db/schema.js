@@ -14,40 +14,40 @@ var userSchema = new Schema({
 });
 
 var leagueSchema = new Schema({
-  'id' : Number,
+  'id' : String,
   'name' : String,
 
 });
 
 var teamSchema = new Schema({
-  'id' : Number,
-  'rank' : Number,
+  'id' : String,
+  'rank' : String,
   'team' : String,
-  'playedGames' : Number,
+  'playedGames' : String,
   'imageURI' : String,
-  'points' : Number,
-  'goals' : Number,
-  'goalsAgainst' : Number,
-  'goalDifference' : Number
+  'points' : String,
+  'goals' : String,
+  'goalsAgainst' : String,
+  'goalDifference' : String
 });
 
-var fixtureSchema = new Schema({
-  'competitionId' : Number,
-  'id' : Number,
+var matchSchema = new Schema({
+  'leagueId' : String,
+  'id' : String,
   'date' : Date,
-  'matchday' : Number,
+  'matchday' : String,
   'homeTeamName' : String,
-  'homeTeamId' : Number,
+  'homeTeamId' : String,
   'awayTeamName' : String,
-  'awayTeamId' : Number,
+  'awayTeamId' : String,
   'result' : {
       'homeTeam' : {
-        'goalsHomeTeam' : Number,
-        'default' : Number
+        'goalsHomeTeam' : String,
+        'default' : 0
       },
       'awayTeam' : {
-        'goalsAwayTeam' : Number,
-        'default' : Number
+        'goalsAwayTeam' : String,
+        'default' : 0
       }
   }
 });
@@ -63,11 +63,11 @@ var boardSchema = new Schema({
 
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
-var fixture = mongoose.model('fixture' , fixtureSchema);
 var team = mongoose.model('team' , teamSchema);
 var board = mongoose.model('board', boardSchema);
 
 module.exports = {
+
   'user' : user,
   'league': league,
   'fixture' : fixture,

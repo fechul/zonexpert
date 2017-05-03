@@ -1,6 +1,6 @@
 var express = require('express');
 var http = require('http');
-var node_schedule = require('node-schedule');
+
 var router = express.Router();
 
 var user = require('../core/user.js');
@@ -96,7 +96,6 @@ router.post('/board/like', function(req, res) {
 		res.json(result);
 	});
 });
-
 
 var rule = new node_schedule.RecurrenceRule();
 rule.minute = 14;
