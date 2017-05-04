@@ -43,6 +43,7 @@ var matchSchema = new Schema({
   'homeTeamId' : String,
   'awayTeamName' : String,
   'awayTeamId' : String,
+  'status': String,
   'result' : {
       'homeTeam' : {
         'goalsHomeTeam' : String,

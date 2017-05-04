@@ -1,5 +1,6 @@
 var express = require('express');
 var http = require('http');
+var async = require('async');
 
 var router = express.Router();
 
@@ -108,26 +109,42 @@ router.post('/board/like', function(req, res) {
 	});
 });
 
-router.all('/test', function(req, res) {
+router.get('/schedule/league', function(req, res) {
+	console.log(req.query.leagueId);
+	schedule.getLeagueMatches({
+		'leagueId': req.query.leagueId
+	}, function(matches) {
+		res.json(matches);
+	});
+});
+
+router.all('/test/schedule_initialize', function(req, res) {
 	var leaguesObject = {};
-	var leagueIdArray = [426, 429, 430, 433, 434, 438, 439, 440];
+	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];
+	// 프리미어리그 426   FA컵 429   분데스리가 430   포칼컵 432
+	// 에레디비지에 433   리그앙 434   라리가 436   세리에 438
+	// 포르투갈 439   챔스 440
 	var options = {
-	  host: 'api.football-data.org',
-	  // path: '/v1/fixtures/'
+	  'host': 'api.football-data.org'
 	};
-	async.each(leagueIdArray, function(league, async_cb) {
+
+	async.eachSeries(leagueIdArray, function(league, async_cb) {
 	 	options.path =  '/v1/competitions/' + league + '/fixtures';
+		leaguesObject[league] = '';
 		callback = function(response) {
 			response.on('data', function (chunk) {
 				leaguesObject[league] += chunk;
 			});
 
 			response.on('end', function () {
-				//console.log(leaguesObject[league]);
-				async_cb();
-				// console.log(leaguesObject);
-				// schedule.update_schedule(leaguesObject[league], function() {
-				// });
+				leaguesObject[league] = JSON.parse(leaguesObject[league]);
+
+				schedule.initialize({
+					'leagueId': league,
+					'schedules': leaguesObject[league].fixtures
+				}, function() {
+					async_cb();
+				});
 			});
 		}
 
@@ -140,7 +157,7 @@ router.all('/test', function(req, res) {
 
 		}
 
-		res.json(leaguesObject);
+		res.json(true);
 	});
 });
 
