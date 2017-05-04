@@ -42,7 +42,7 @@
 	/* font-weight: bold; */
 	font-size: 18px;
 	color: #555;
-	margin-left: 10px;
+	/*margin-left: 10px;*/
 }
 
 .mydata_statistics {
@@ -115,11 +115,11 @@
 	float: left;
 }
 
-.rankdata_league_btn {
+.rankdata_type_btn {
 	margin-top: 10px 0px 25px 25px;
 }
 
-.rankdata_league_btn > .league_btn {
+.rankdata_type_btn > .type_btn {
 	margin-right: 5px;
 	height: 25px;
 	cursor: pointer;
@@ -127,7 +127,7 @@
 	margin-top: 10px;
 }
 
-.rankdata_league_btn > .league_btn.active {
+.rankdata_type_btn > .type_btn.active {
 	background-color: #145c86;
 	border: none;
 	color: #fff;

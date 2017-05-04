@@ -42,6 +42,8 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		mydata_display: ''
 	};
 
+	json.prediction_shortcut = req.predictionShortcut;
+
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
@@ -51,9 +53,7 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		json.mydata_display = 'display:none;';
 	}
 
-	json.prediction_shortcut = req.predictionShortcut;
-
-    res.render(path, json);
+	res.render(path, json);
 });
 
 router.get('/signup', no_login, function(req, res) {
@@ -92,6 +92,8 @@ router.get('/rank', function(req, res) {
 	}
 
 	var key = 'rating_rank';
+	// var key = 'game_cnt_rank';
+	// var key = 'predict_rate_rank';
 
 	var get_rank_range = function(start, search_target) {
     	var start = start;

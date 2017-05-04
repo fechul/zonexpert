@@ -190,6 +190,7 @@ exports.get_rank_data = function(users, callback) {
                     'nickname': userdata.nickname,
                     'rating': userdata.rating,
                     'record': userdata.record,
+                    'main_sport': userdata.main_sport,
                     'main_league': userdata.main_league
                 });
             }
