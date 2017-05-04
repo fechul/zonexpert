@@ -122,23 +122,19 @@ var BOARD = {
 			return date_html;
 		};
 
-		var get_tier_img = function(code) {
-			switch(code) {
-				case 1:
-					return '<div class="rank_table_tier badge_bronze"></div>';
-					break;
-				case 2:
-					return '<div class="rank_table_tier badge_silver"></div>';
-					break;
-				case 3:
-					return '<div class="rank_table_tier badge_gold"></div>';
-					break;
-				case 4:
-					return '<div class="rank_table_tier badge_platinum"></div>';
-					break;
-				case 5:
-					return '<div class="rank_table_tier badge_diamond"></div>';
-					break;
+		var get_tier_img = function(rating) {
+			rating = parseInt(rating);
+
+			if(rating < 1200) {
+				return '<div class="rank_table_tier badge_bronze"></div>';
+			} else if(1200 <= rating && rating < 1400) {
+				return '<div class="rank_table_tier badge_silver"></div>';
+			} else if(1400 <= rating && rating < 1600) {
+				return '<div class="rank_table_tier badge_gold"></div>';
+			} else if(1600 <= rating && rating < 1800) {
+				return '<div class="rank_table_tier badge_platinum"></div>';
+			} else if(1800 <= rating) {
+				return '<div class="rank_table_tier badge_diamond"></div>';
 			}
 		};
 
@@ -150,7 +146,7 @@ var BOARD = {
 			for(i = 0; i < board_data.length; i++) {
 				board_html += '<tr boardNo=' + board_data[i].boardNo + '>';
 				board_html += '<td>' + board_data[i].boardNo + '</td>';
-				board_html += '<td>' + get_tier_img(board_data[i].tier_code) + board_data[i].nickname + '</td>';
+				board_html += '<td>' + get_tier_img(board_data[i].rating) + board_data[i].nickname + '</td>';
 				board_html += '<td>' + board_data[i].title + '</td>';
 				board_html += '<td class="current_like">' + board_data[i].like + '</td>';
 				board_html += '<td>' + make_date(board_data[i].date) + '</td>';

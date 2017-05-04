@@ -1,7 +1,9 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 
 var board = require('../core/board.js');
+var user = require('../core/user.js');
 
 // 로그인 상태에서만 접속 가능한 페이지 체크
 // router.get('/url', need_login, function(req, res) {}) 형식으로 사용
@@ -66,7 +68,8 @@ router.get('/rank', function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		rank_html: ''
 	};
 
 	if(req.session.login) {
@@ -78,7 +81,166 @@ router.get('/rank', function(req, res) {
 		json.mydata_display = 'display:none;';
 	}
 
-	res.render(path, json);
+	var key = 'rating_rank';
+
+	var get_rank_range = function(start, search_target) {
+    	var start = start;
+    	var end = start + 99;
+
+    	start -= 1;
+		end -= 1;
+
+    	var rank_array = [];
+
+	    // add rank to redis server
+		// var score = 1750;
+		// var id = "zonexpert104@zonexpert.com"; 
+		// redis_client.zadd(key, score, id, function(err, reply) {
+		//     if(err){
+		//         console.log("error");
+		//         return;
+		//     } else{
+		//         console.log("ranking : " + reply);
+		//     }
+		// });
+
+		//get rank from redis server
+
+	    redis_client.zrevrange(key, start, end, function(err, data) {
+	        if(err) {
+	            console.log("redis get rank err: ", err);
+	            res.render(path, json);
+	        } else {
+	            async.mapSeries(data, function(info, async_cb) {
+	                rank_array.push(info);
+	                async_cb();
+	            }, function(async_err) {
+	            	user.get_rank_data(rank_array, function(userdata) {
+	            		var rank_table_html = '';
+
+	            		var get_tier_img = function(rating) {
+							rating = parseInt(rating);
+
+							if(rating < 1200) {
+								return '<div><div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span></div>';
+							} else if(1200 <= rating && rating < 1400) {
+								return '<div><div class="rank_table_tier badge_silver"></div><span class="table_tier_name">실버</span></div>';
+							} else if(1400 <= rating && rating < 1600) {
+								return '<div><div class="rank_table_tier badge_gold"></div><span class="table_tier_name">골드</span></div>';
+							} else if(1600 <= rating && rating < 1800) {
+								return '<div><div class="rank_table_tier badge_platinum"></div><span class="table_tier_name">플래티넘</span></div>';
+							} else if(1800 <= rating) {
+								return '<div><div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span></div>';
+							}
+						};
+
+						var get_league_name = function(code) {
+							switch(code) {
+								case 426:
+									return '프리미어리그';
+									break;
+								case 429:
+									return '잉글랜드FA컵';
+									break;
+								case 430:
+									return '분데스리가';
+									break;
+								case 432:
+									return '포칼컵';
+									break;
+								case 433:
+									return '에레디비시';
+									break;
+								case 434:
+									return '리그 1';
+									break;
+								case 436:
+									return '라리가';
+									break;
+								case 438:
+									return '세리에 A';
+									break;
+								case 439:
+									return '포르투갈';
+									break;
+								case 440:
+									return '챔피언스리그';
+									break;
+								default:
+									return '-';
+									break;
+							}
+						};
+
+						var rank = 1;
+						var type = 'total';
+						if(req.query.type) {
+							type = req.query.type;
+						}
+
+						async.mapSeries(userdata, function(user, _async_cb) {
+							rank_table_html += '<tr id="' + (search_target == rank ? 'target_row' : '') + '">';
+							rank_table_html += '<td>' + rank + '</td>';
+							rank_table_html += '<td>' + user.nickname + '</td>';
+							rank_table_html += '<td>' + get_league_name(user.main_league) + '</td>';
+							rank_table_html += '<td>' + user.rating + '</td>';
+
+							if(user.record) {
+								if(user.record[type]) {
+									rank_table_html += '<td>' + (user.record[type].hit || 0) + ' / ' + (user.record[type].fail || 0) + '</td>';
+									if(!user.record[type].fail) {
+										rank_table_html += '<td>-</td>';
+									} else {
+										rank_table_html += '<td>' + ((user.record[type].hit/(user.record[type].hit + user.record[type].fail))*100).toFixed(2) + '%</td>';
+									}
+								} else {
+									rank_table_html += '<td>0 / 0</td>';
+									rank_table_html += '<td>-</td>';
+								}
+							} else {
+								rank_table_html += '<td>0 / 0</td>';
+								rank_table_html += '<td>-</td>';
+							}
+
+							rank_table_html += '<td class="tier_cell left">' + get_tier_img(user.rating) + '</td>';
+							rank_table_html += '</tr>';
+							rank++;
+							_async_cb();
+						}, function(_async_err) {
+							json.rank_html = rank_table_html;
+
+	            			res.render(path, json);
+						});
+	            	});
+	            });
+	        }
+	    });
+    };
+
+    var search_id = req.query.search_id;
+    if(search_id) {
+    	search_id = search_id.replace(/ /g, '');
+    	user.get_email(search_id, function(email) {
+    		if(email) {
+    			redis_client.zrevrank(key, email, function(search_err, search_data) {
+    				if(search_data) {
+	    				var target_rank = search_data + 1;
+						var start_range = Math.floor(target_rank/100) * 100;
+						start_range += 1;
+						get_rank_range(start_range, target_rank);
+    				} else {
+    					json.rank_html = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
+    					res.render(path, json);
+    				}
+				});
+    		} else {
+    			json.rank_html = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
+    			res.render(path, json);
+    		}
+    	});
+	} else {
+		get_rank_range(1, null);
+	}
 });
 
 router.get('/board', function(req, res) {
