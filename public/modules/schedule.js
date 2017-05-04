@@ -41,13 +41,13 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', 'td.schedule_basket_toggle', function() {
+		$('#schedule_table').on('click', 'td.schedule_basket_toggle:not(.disable) i', function() {
 			var $this = $(this);
 			var row = $(this).closest('tr');
 			var toggle = row.data('toggle');
 
 			$.ajax({
-				'url': '/basket',
+				'url': '/prediction/basket',
 				'type': toggle ? 'DELETE' : 'POST',
 				'data': {
 					'matchId': row.data('matchId'),
@@ -57,13 +57,24 @@ var SCHEDULE = {
 				'success': function(result) {
 					if (result) {
 						row.data('toggle', !toggle);
-						$this.find('i').eq(0).removeClass('fa-toggle-' + (toggle ? 'on' : 'off')).addClass('fa-toggle-' + (toggle ? 'off' : 'on'));
+						$this.removeClass('fa-toggle-' + (toggle ? 'on' : 'off')).addClass('fa-toggle-' + (toggle ? 'off' : 'on'));
+						PREDICTION_SHORTCUT.getBaskets();
+						$('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
+																		.animate({right: '-=6px'}, 40)
+																		.animate({right: '+=6px'}, 40)
+																		.animate({right: '-=6px'}, 40)
+																		.animate({right: '+=6px'}, 40)
+																		.animate({right: '-=3px'}, 40);
 					} else {
 						console.log('err');
 					}
 
 				}
 			});
+		});
+
+		$('#schedule_table').on('click', 'td.schedule_chatting i', function() {
+			location.href = '/chat/' + $(this).closest('tr').data('matchId');
 		});
 
 		$('#schedule_table').on('click', 'td.schedule_chatting', function() {
@@ -84,16 +95,22 @@ var SCHEDULE = {
 		minutes = minutes >= 10 ? minutes : '0' + minutes;
 
 		var dateString = year + '.' + month + '.' + day + ' ' + hours + ':' + minutes;
-		
+
 		return dateString;
 	},
 
 	get_schedule: function(leagueId, callback) {
 		var self = this;
 
-		$.get('/basket', {
+		$.get('/prediction', {
 			'leagueId': leagueId || '426'
 		}, function(baskets) {
+			baskets = JSON.parse(baskets);
+			var basketIdList = [];
+			for (var i in baskets) {
+				basketIdList.push(baskets[i].matchId);
+			}
+
 			$.get('/schedule/league', {
 				'leagueId': leagueId || '426'
 			}, function(matches) {
@@ -102,14 +119,21 @@ var SCHEDULE = {
 				$('#schedule_table').empty();
 
 				for (var i in matches) {
-					var toggle = baskets.indexOf(matches[i].id) > -1;
+					var toggle = basketIdList.indexOf(matches[i].id) > -1;
+					var toggleDisable = false;
+					var currentDate = new Date();
+
+					if ((new Date(matches[i].date) < currentDate) || (toggle && (baskets[basketIdList.indexOf(matches[i].id)].confirmed == true))) {
+						toggleDisable = true;
+					}
+
 					$('#schedule_table').append([
 						'<tr', is_odd ? ' class="odd"' : '', '>',
 							'<td class="schedule_date">', self.getDateString(matches[i].date), '</td>',
 							'<td class="schedule_home_team">', matches[i].homeTeamName, '</td>',
 							'<td class="schedule_vs">VS</td>',
 							'<td class="schedule_away_team">', matches[i].awayTeamName, '</td>',
-							'<td class="schedule_basket_toggle"><span><i class="fa fa-toggle-', toggle ? 'on' : 'off', '"></i></span></td>',
+							'<td class="schedule_basket_toggle ', toggleDisable ? 'disable' : '', '"><span><i class="fa fa-toggle-', toggle ? 'on' : 'off', '"></i></span></td>',
 							'<td class="schedule_chatting"><span><i class="fa fa-commenting-o"></i></span></td>',
 						'</tr>'
 					].join(''));
@@ -120,6 +144,10 @@ var SCHEDULE = {
 
 					is_odd = !is_odd;
 				}
+
+				$(document).ready(function() {
+					$('body').animate({'scrollTop': $('#schedule_table tr .schedule_basket_toggle:not(.disable)').first().offset().top - window.innerHeight / 2}, 800);
+				});
 
 				if (callback && typeof(callback) == 'function') {
 					callback();
