@@ -1,7 +1,9 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 
 var board = require('../core/board.js');
+var user = require('../core/user.js');
 
 // 로그인 상태에서만 접속 가능한 페이지 체크
 // router.get('/url', need_login, function(req, res) {}) 형식으로 사용
@@ -66,7 +68,8 @@ router.get('/rank', function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		userdata: []
 	};
 
 	if(req.session.login) {
@@ -78,7 +81,40 @@ router.get('/rank', function(req, res) {
 		json.mydata_display = 'display:none;';
 	}
 
-	res.render(path, json);
+	var key = 'rating_rank';
+    var start= 0;
+    var end = 99;
+
+    var rank_array = [];
+
+	// var score = 1500;
+	// var id = "nice0612@gmail.com"; 
+	// redis_client.zadd(key, score, id, function(err, reply){
+	//     if(err){
+	//         console.log("error");
+	//         return;
+	//     }else{
+	//         console.log("ranking : " + reply);
+	//     }
+	// });
+
+    redis_client.zrevrange(key, start, end, function(err, data) {
+        if(err) {
+            console.log("redis get rank err: ", err);
+            res.render(path, json);
+        } else {
+            async.each(data, function(info, async_cb) {
+                rank_array.push(info);
+                async_cb();
+            }, function(async_err) {
+            	user.get(rank_array, function(userdata) {
+            		console.log(userdata)
+
+            		res.render(path, json);
+            	});
+            });
+        }
+    });
 });
 
 router.get('/board', function(req, res) {

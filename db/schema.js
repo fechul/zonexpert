@@ -8,9 +8,12 @@ var userSchema = new Schema({
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
     'signup_date': Date,
-    'like_board': Array,
-    'tier_code': Number,
-    'nickname': String
+    'nickname': String,
+    
+    'rating': {'type': Number, 'default': 1500},
+    'record': Object,
+
+    'like_board': Array
 });
 
 var leagueSchema = new Schema({

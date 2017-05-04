@@ -20,7 +20,7 @@ var node_schedule = require('node-schedule');
 var session = require('express-session');
 var redis_store = require('connect-redis')(session);
 var redis = require('redis');
-var redis_client = redis.createClient();
+global.redis_client = redis.createClient();
 
 var index_routes = require('./routes/index.js');
 var view_routes = require('./routes/view.js');
@@ -76,6 +76,29 @@ app.use(function(req, res, next) {
 //routing
 app.use('/', index_routes);
 app.use('/', view_routes);
+
+// app.get('/rank', function(req, res, next) {
+//     var key = 'rating_rank';
+//     var start= 0;
+//     var end = 99;
+
+//     var rank_array = [];
+
+//     redis_client.zrevrange(key, start, end, function(err, data) {
+//         if(err) {
+//             console.log("redis get rank err: ", err);
+//             next();
+//         } else {
+//             async.each(data, function(info, async_cb) {
+//                 rank_array.push(info);
+//                 async_cb();
+//             }, function(async_err) {
+//                 console.log(rank_array)
+//                 next();
+//             });
+//         }
+//     });
+// }, view_routes.rank);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,6 +1,7 @@
 var nodemailer = require('nodemailer');
 var randomstring = require('randomstring');
 var md5 = require('md5');
+var async = require('async');
 
 exports.login = function(data, callback) {
     var json = {
@@ -164,5 +165,32 @@ exports.validate = function(data, callback) {
         }
 
         callback(validation);
+    });
+};
+
+exports.get = function(users, callback) {
+    var userdata_array = [];
+
+    async.map(users, function(user, async_cb) {
+        db.user.find({
+            'email': user
+        }, {
+            'nickname': 1,
+            'rating': 1,
+            'record': 1
+        }).limit(1).exec(function(err, userdata) {
+            if(userdata && userdata.length) {
+                userdata = userdata[0];
+
+                userdata_array.push({
+                    'nickname': userdata.nickname,
+                    'rating': userdata.rating,
+                    'record': userdata.record
+                });
+            }
+            async_cb();
+        });
+    }, function(async_err) {
+        callback(userdata_array);
     });
 };
