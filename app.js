@@ -113,8 +113,6 @@ app.use(function(err, req, res, next) {
 	res.send('error');
 });
 
-
-
 // request schedule
 // var rule = new node_schedule.RecurrenceRule();
 // rule.minute = 30;
