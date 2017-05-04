@@ -59,7 +59,9 @@ router.post('/accounts', function(req, res) {
 		'email': req.body.email,
 		'nickname': req.body.nickname,
 		'password': req.body.password,
-		'password_check': req.body.password_check
+		'password_check': req.body.password_check,
+		'main_sport': req.body.main_sport,
+		'main_league': req.body.main_league
 	}, function(signup) {
 		res.json(signup);
 	});
