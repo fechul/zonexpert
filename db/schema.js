@@ -9,6 +9,8 @@ var userSchema = new Schema({
     'signup_auth_token': String,
     'signup_date': Date,
     'nickname': String,
+    'main_sport': Number, // soccer 1
+    'main_league': Number,
     
     'rating': {'type': Number, 'default': 1500},
     'record': Object,
@@ -16,10 +18,40 @@ var userSchema = new Schema({
     'like_board': Array
 });
 
+// user - record
+// {
+//   total: {
+//     hit: Number,
+//     fail: Number
+//   },
+//   1: {
+//     total: {
+//       hit: Number,
+//       fail: Number
+//     },
+//     426: {
+//       hit: Number,
+//       fail: Number
+//     },
+//     429: {
+//       hit: Number,
+//       fail: Number
+//     }
+//   },
+//   2: {
+    
+//   },
+// }
+
+
+// league
+// 프리미어리그 426   FA컵 429   분데스리가 430   포칼컵 432
+// 에레디비지에 433   리그앙 434   라리가 436   세리에 438
+// 포르투갈 439   챔스 440
+
 var leagueSchema = new Schema({
   'id' : String,
-  'name' : String,
-
+  'name' : String
 });
 
 var teamSchema = new Schema({
