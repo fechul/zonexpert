@@ -7,8 +7,8 @@ var router = express.Router();
 var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 var schedule = require('../core/schedule.js');
-var basket = require('../core/basket.js');
 var board = require('../core/board.js');
+var prediction = require('../core/prediction.js');
 
 var need_login = function(req, res, next) {
 	if (req.session.login) {
@@ -75,26 +75,6 @@ router.get('/auth/signup', function(req, res) {
 	});
 });
 
-router.post('/prediction', function(req, res) {
-	var predictions = JSON.parse(req.body.predictions);
-
-	prediction.add({
-		'user_email': req.session.email,
-		'before_rating': 1500,
-		'predictions': predictions
-	}, function(add) {
-		res.json(add);
-	});
-});
-
-router.get('/prediction', function(req, res) {
-	prediction.get({
-		'user_email': req.session.email
-	}, function(prediction) {
-		res.json(JSON.stringify(prediction));
-	});
-});
-
 router.get('/board/get', function(req, res) {
 	board.get(req.session.email, function(data) {
 		res.json(data);
@@ -148,33 +128,92 @@ router.get('/schedule/league', function(req, res) {
 	});
 });
 
-router.post('/basket', need_login, function(req, res) {
-	basket.add({
+router.post('/prediction', function(req, res) {
+	var predictions = JSON.parse(req.body.predictions);
+
+	prediction.confirm({
 		'userEmail': req.session.email,
-		'matchId': req.body.matchId,
-		'leagueId': req.body.leagueId,
-		'pick': req.body.pick
+		'beforeRating': 1500,
+		'predictions': predictions
 	}, function(add) {
 		res.json(add);
 	});
 });
 
-router.delete('/basket', need_login, function(req, res) {
-	basket.del({
+router.get('/prediction', function(req, res) {
+	prediction.get({
 		'userEmail': req.session.email,
-		'matchId': req.body.matchId,
+		'leagueId': req.query.leagueId
+	}, function(prediction) {
+		res.json(JSON.stringify(prediction));
+	});
+});
+
+router.get('/prediction/basket', need_login, function(req, res) {
+	prediction.getBasketList({
+		'userEmail': req.session.email,
 		'leagueId': req.body.leagueId
+	}, function(baskets) {
+		var basketIdList = [];
+
+		for (var i in baskets) {
+			basketIdList.push(baskets[i].matchId);
+		}
+
+		schedule.getMatches({
+			'idList': basketIdList
+		}, function(matches) {
+			res.json(JSON.stringify(matches));
+		});
+	});
+});
+
+router.post('/prediction/basket', need_login, function(req, res) {
+	prediction.add({
+		'userEmail': req.session.email,
+		'matchId': req.body.matchId
+	}, function(add) {
+		res.json(add);
+	});
+});
+
+router.delete('/prediction/basket', need_login, function(req, res) {
+	prediction.del({
+		'userEmail': req.session.email,
+		'matchId': req.body.matchId
 	}, function(del) {
 		res.json(del);
 	});
 });
 
-router.get('/basket', need_login, function(req, res) {
-	basket.get({
-		'userEmail': req.session.email,
-		'leagueId': req.body.leagueId
+router.get('/prediction/basket/unconfirmed', need_login, function(req, res) {
+	prediction.getUnconfirmedBasketList({
+		'userEmail': req.session.email
 	}, function(baskets) {
-		res.json(baskets);
+        var basketIdList = [];
+        for (var i in baskets) {
+            basketIdList.push(baskets[i].matchId);
+        }
+
+		schedule.getMatches({
+			'idList': basketIdList
+		}, function(matches) {
+			var result = [];
+			for (var i in matches) {
+				result[i] = {};
+				result[i].id = matches[i].id;
+				result[i].date = matches[i].date;
+				result[i].homeTeamName = matches[i].homeTeamName;
+				result[i].awayTeamName = matches[i].awayTeamName;
+
+				var basketIndex = basketIdList.indexOf(matches[i].id);
+				if (basketIndex > -1) {
+					result[i].pick = baskets[basketIndex].pick;
+				}
+			}
+
+			res.json(JSON.stringify(result));
+		});
 	});
 });
 
