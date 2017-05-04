@@ -216,3 +216,16 @@ exports.get_email = function(user, callback) {
     });
 };
 
+exports.get = function(nick, callback) {
+    db.user.find({
+        'nickname': nick
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            callback(data);
+        } else {
+            callback(null);
+        }
+    });
+};
+

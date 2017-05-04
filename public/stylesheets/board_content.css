@@ -173,3 +173,85 @@ body {
 	margin-right: 10px;
 }
 
+.prediction_shortcut_container {
+	display: none;
+    height: 300px;
+    width: 500px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+	background-color: #ffa500;
+	border-radius: 5px;
+	border: 2px solid #ffdfa4;
+}
+
+.prediction_shortcut_close {
+    position: absolute;
+    right: 6px;
+    top: 0px;
+    font-size: 20px;
+    color: #674403;
+    cursor: pointer;
+}
+
+.prediction_shortcut_close:hover {
+	color: #3a2500;
+}
+
+.prediction_shortcut_title {
+	height: 30px;
+}
+
+.prediction_shortcut_list {
+	max-height: 230px;
+	overflow-y: scroll;
+}
+
+.prediction_shortcut_list table {
+	width: 100%;
+}
+
+.prediction_shortcut_button_container {
+    height: 100px;
+    width: 100px;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+}
+
+.prediction_shortcut_button {
+    height: 70px;
+    width: 70px;
+    background-color: #ffa500;
+    text-align: center;
+    border: 2px solid #ffdfa4;
+	border-radius: 50px;
+    font-size: 50px;
+    cursor: pointer;
+    color: #674403;
+}
+
+.prediction_shortcut_icon {
+	margin-left: 4px;
+}
+
+.prediction_shortcut_button:hover {
+	background-color: #e69500;
+	border-color: #ffdfa4;
+	color: #3a2500
+}
+
+.prediction_shortcut_preview_number {
+    position: absolute;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    top: 0px;
+    right: 21px;
+}
+
+

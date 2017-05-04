@@ -71,7 +71,7 @@ router.get('/login', no_login, function(req, res) {
 
 });
 
-router.get('/rank', function(req, res) {
+router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 	var path = 'rank.html';
 	var json = {
 		myinfo_display: '',
@@ -229,6 +229,7 @@ router.get('/rank', function(req, res) {
 	    });
     };
 
+    json.prediction_shortcut = req.predictionShortcut;
     var search_id = req.query.search_id;
     if(search_id) {
     	search_id = search_id.replace(/ /g, '');
@@ -255,7 +256,7 @@ router.get('/rank', function(req, res) {
 	}
 });
 
-router.get('/board', function(req, res) {
+router.get('/board', readPredictionShortcutHTML, function(req, res) {
 	var path = 'board.html';
 	var json = {
 		myinfo_display: '',
@@ -274,11 +275,12 @@ router.get('/board', function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+	json.prediction_shortcut = req.predictionShortcut;
 
 	res.render(path, json);
 });
 
-router.get('/board/write', need_login, function(req, res) {
+router.get('/board/write', need_login, readPredictionShortcutHTML, function(req, res) {
 	var boardNo = req.query.no;
 	var path = 'board_write.html';
 
@@ -303,6 +305,8 @@ router.get('/board/write', need_login, function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+
+	json.prediction_shortcut = req.predictionShortcut;
 
 	if(boardNo) {	//update
 		json.write_btn_name = '수정하기';
@@ -344,6 +348,43 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 	json.prediction_shortcut = req.predictionShortcut;
 
 	res.render(path, json);
+});
+
+router.get('/search', readPredictionShortcutHTML, function(req, res) {
+	var path = 'search.html';
+	var id = req.query.search_id;
+
+	var json = {
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
+		myinfo_display: '',
+
+		searchdata_user_id: id,
+		search_show: '',
+		no_search_show: ''
+	};
+
+	if(req.session.login) {
+		json.login_display = 'display:none;';
+		json.signup_display = 'display:none;';
+	} else {
+		json.myinfo_display = 'display:none;';
+		json.logout_display = 'display:none;';
+	}
+
+	json.prediction_shortcut = req.predictionShortcut;
+
+	user.get(id, function(userdata) {
+		console.log("asdf: ", userdata)
+		if(!userdata) {
+			json.search_show = 'display:none;';
+		} else {
+			json.no_search_show = 'display:none;';
+		}
+
+		res.render(path, json);
+	});
 });
 
 module.exports = router;
