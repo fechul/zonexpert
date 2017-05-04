@@ -68,11 +68,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(function(req, res, next) {
-    // if (req.session)
-    next();
-});
-
 //routing
 app.use('/', index_routes);
 app.use('/', view_routes);
