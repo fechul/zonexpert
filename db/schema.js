@@ -88,23 +88,18 @@ var matchSchema = new Schema({
     }
 });
 
-var prediectionSchema = new Schema({
-    'user_email': String,
-    'create_time': Date,
-    'match_id': String,
-    'league_id': String,
-    'pick': String, // home || draw || away
-    'result': {type: String, default: 'wait'}, // true, false, wait
-    'before_rating': Number,
-    'after_rating': Number
-});
-
-var basketSchema = new Schema({
+var predictionSchema = new Schema({
     'userEmail': String,
     'createTime': Date,
     'matchId': String,
     'leagueId': String,
-    'pick': String
+    'teamList': Array,
+    'confirmed': {type: Boolean, default: false},
+    'confirmedTime': Date,
+    'pick': String, // home || draw || away
+    'result': String, // true, false, wait
+    'beforeRating': Number,
+    'afterRating': Number,
 });
 
 var boardSchema = new Schema({
@@ -119,15 +114,15 @@ var boardSchema = new Schema({
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
 var match = mongoose.model('match', matchSchema);
-var basket = mongoose.model('basket', basketSchema);
 var team = mongoose.model('team' , teamSchema);
 var board = mongoose.model('board', boardSchema);
+var prediction = mongoose.model('prediction', predictionSchema);
 
 module.exports = {
   'user' : user,
   'league': league,
   'match' : match,
-  'basket': basket,
   'team' : team,
-  'board': board
+  'board': board,
+  'prediction': prediction
 };
