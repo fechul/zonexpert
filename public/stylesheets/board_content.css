@@ -1,0 +1,175 @@
+
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+body {
+	margin: 0px !important;
+	font-family: "Nanum Gothic", sans-serif !important;
+	background-color: #145c86 !important;
+}
+
+.main_section {
+	/*background-color: #145c86;*/
+	opacity: 0.85;
+	text-align: center;
+}
+
+.board_wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.main_section .board_section {
+	width: 800px;
+}
+
+.container_box {
+	background-color: #ddd;
+	border-radius: 10px;
+	position: relative;
+	display: inline-block;
+	margin: 30px 30px 30px 30px;
+}
+
+
+/*
+	<-- HEADER -->
+*/
+
+#header_wrap {
+	/* border-bottom: 1px solid #ccc; */
+	height: 70px;
+	background-color: #444;
+	/* opacity: 0.85; */
+	flex: 0 0 70px;
+}
+
+#header {
+	/*max-width: 1200px;*/
+	margin-left: auto;
+	margin-right: auto;
+	/* height: 100%; */
+	/* padding-top: 10px; */
+}
+
+.logo {
+	/* color: #fff; 
+    text-shadow: #333 0px 2px, #333 2px 0px, #333 -2px 0px, 
+    #333 0px -2px, #333 -1.4px -1.4px, #333 1.4px 1.4px, 
+    #333 1.4px -1.4px, #333 -1.4px 1.4px; 
+	font-size: 40px;
+	
+	position: relative;
+	display: inline-block;
+	
+	line-height: 70px;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 0px 20px 0px 20px;
+	font-family: Jazz LET, fantasy; */
+	background: url(/image/zonexpert_logo.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+#header > .logo {
+	height: 70px;
+	width: 200px;
+	float: left;
+}
+
+#header > .main_menu {
+	display: inline-block;
+	line-height: 70px;
+	vertical-align: middle;
+	margin: 0px;
+}
+
+#header > .tools {
+	float: right;
+	display: inline-block;
+	line-height: 70px;
+	vertical-align: middle;
+	margin: 0px;
+}
+
+#header > .tools > .my_page,
+#header > .tools > .logout,
+#header > .tools > .login,
+#header > .tools > .signup,
+#header > .main_menu > .menu_rank,
+#header > .main_menu > .menu_schedule,
+#header > .main_menu > .menu_board {
+	/* float: right;
+	text-align: center;
+	border-left: 1px solid #ccc;
+	height: 100%;
+	width: 70px; */
+	/* float: right; */
+	display: inline-block;
+	position: relative;
+	/* height: 50px; */
+	padding: 0px 20px 0px 20px;
+	color: #fff;
+	cursor: pointer;
+}
+
+#header > .tools > .my_page:hover,
+#header > .tools > .logout:hover,
+#header > .tools > .login:hover,
+#header > .tools > .signup:hover,
+#header > .main_menu > .menu_rank:hover,
+#header > .main_menu > .menu_schedule:hover,
+#header > .main_menu > .menu_board:hover {
+ 	background-color: #333;
+}
+
+#header > .tools > .menu_search {
+	display: inline-block;
+	position: relative;
+	margin-right: 30px;
+}
+
+#header > .tools > .menu_search > button {
+	position: absolute;
+	right: 0;
+	top: 0;
+	border: none;
+	background: none;
+	padding: 11px;
+	cursor: pointer;
+	line-height: 0px;
+}
+
+#header > .tools > .menu_search > button:hover {
+	background-color: #ccc;
+}
+
+#header > .tools > .menu_search > input {
+	display: block;
+	box-sizing: border-box;
+	width: 100%;
+	height: 35px;
+	padding: 5px 30px 5px 5px;
+	font-size: 14px;
+	border-radius: 5px;
+	outline: none;
+	border: 1px solid #ccc;
+}
+
+.modal-backdrop, .modal-backdrop.in {
+    display: none;
+}
+
+.board_title {
+	margin-bottom: 10px;
+}
+
+.board_btns {
+	text-align: center;
+}
+
+.board_btns > .cancel {
+	margin-right: 10px;
+}
+

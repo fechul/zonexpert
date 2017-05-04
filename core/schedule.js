@@ -1,16 +1,37 @@
 var async = require('async');
 
-exports.update_schedule = function(data, callback) {
-    if(data && data.length) {
-      data = JSON.parse(data);
+exports.initialize = function(data, callback) {
+    async.eachSeries(data.schedules, function(schedule, async_cb) {
+        var newMatchJson = {
+            'leagueId' : schedule._links.competition.href.split('/').pop(),
+            'id' : schedule._links.self.href.split('/').pop(),
+            'date' : new Date(schedule.date),
+            'matchday' : schedule.matchday,
+            'homeTeamName' : schedule.homeTeamName,
+            'homeTeamId' : schedule._links.homeTeam.href.split('/').pop(),
+            'awayTeamName' : schedule.awayTeamName,
+            'awayTeamId' : schedule._links.awayTeam.href.split('/').pop(),
+            'status': schedule.status
+        };
 
-      //db업데이트
-      async.each(data, function(schedule, async_cb) {
-        console.log("schedule: ",schedule);
-      }, function(async_err) {
-        async_cb();
-      });
-    } else {
-      callback(null);
-    }
+        if (schedule.result) {
+            newMatchJson.result = schedule.result;
+        }
+
+        var newMatch = new db.match(newMatchJson);
+
+        newMatch.save(function(err) {
+            async_cb();
+        });
+    }, function(async_err) {
+        callback(true);
+    });
+};
+
+exports.getLeagueMatches = function(data, callback) {
+    db.match.find({
+        'leagueId': data.leagueId
+    }).exec(function(err, matches) {
+        callback(matches);
+    });
 };

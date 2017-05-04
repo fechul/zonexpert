@@ -7,44 +7,48 @@ var userSchema = new Schema({
     'password': String,
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
-    'signup_date': Date
+    'signup_date': Date,
+    'like_board': Array,
+    'tier_code': Number,
+    'nickname': String
 });
 
 var leagueSchema = new Schema({
-  'id' : Number,
+  'id' : String,
   'name' : String,
 
 });
 
 var teamSchema = new Schema({
-  'id' : Number,
-  'rank' : Number,
+  'id' : String,
+  'rank' : String,
   'team' : String,
-  'playedGames' : Number,
+  'playedGames' : String,
   'imageURI' : String,
-  'points' : Number,
-  'goals' : Number,
-  'goalsAgainst' : Number,
-  'goalDifference' : Number
+  'points' : String,
+  'goals' : String,
+  'goalsAgainst' : String,
+  'goalDifference' : String
 });
 
-var fixtureSchema = new Schema({
-  'competitionId' : Number,
-  'id' : Number,
+var matchSchema = new Schema({
+  'leagueId' : String,
+  'id' : String,
   'date' : Date,
-  'matchday' : Number,
+  'matchday' : String,
   'homeTeamName' : String,
-  'homeTeamId' : Number,
+  'homeTeamId' : String,
   'awayTeamName' : String,
-  'awayTeamId' : Number,
+  'awayTeamId' : String,
+  'status': String,
   'result' : {
       'homeTeam' : {
-        'goalsHomeTeam' : Number,
-        'default' : Number
+        'goalsHomeTeam' : String,
+        'default' : 0
       },
       'awayTeam' : {
-        'goalsAwayTeam' : Number,
-        'default' : Number
+        'goalsAwayTeam' : String,
+        'default' : 0
       }
   }
 });
@@ -60,14 +64,26 @@ var prediectionSchema = new Schema({
     'after_rating': Number
 });
 
+var boardSchema = new Schema({
+  'boardNo': Number,
+  'writer' : String,
+  'date' : Date,
+  'title': String,
+  'content': String,
+  'like': Number
+});
+
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
-var fixture = mongoose.model('fixture' , fixtureSchema);
+var match = mongoose.model('match', matchSchema);
 var team = mongoose.model('team' , teamSchema);
+var board = mongoose.model('board', boardSchema);
 
 module.exports = {
+
   'user' : user,
   'league': league,
-  'fixture' : fixture,
-  'team' : team
+  'match' : match,
+  'team' : team,
+  'board': board
 };
