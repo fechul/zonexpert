@@ -47,7 +47,7 @@ var RANK = {
 	scrollToTarget: function() {
 		var windowHeight = window.innerHeight;
 
-		if($('#target_row')) {
+		if($('#target_row').length) {
 			var offset = $('#target_row').offset();
 			$('body').animate({scrollTop: offset.top - (windowHeight/2)}, 400);
 		}
