@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var router = express.Router();
 
 var board = require('../core/board.js');
@@ -20,9 +21,16 @@ var no_login = function(req, res, next) {
 	} else {
 		next();
 	}
-}
+};
 
-router.get('/', function(req, res) {
+var readPredictionShortcutHTML = function(req, res, next) {
+	fs.readFile('./views/prediction_shortcut.html', function(err, data) {
+		req.predictionShortcut = data;
+		next();
+	});
+};
+
+router.get('/', readPredictionShortcutHTML, function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -40,6 +48,8 @@ router.get('/', function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+
+	json.prediction_shortcut = req.predictionShortcut;
 
     res.render(path, json);
 });
@@ -148,7 +158,7 @@ router.get('/board/write', need_login, function(req, res) {
 	}
 });
 
-router.get('/schedule', function(req, res) {
+router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 	var path = 'schedule.html';
 	var json = {
 		myinfo_display: '',
@@ -166,6 +176,8 @@ router.get('/schedule', function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+
+	json.prediction_shortcut = req.predictionShortcut;
 
 	res.render(path, json);
 });
