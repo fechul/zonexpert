@@ -2,7 +2,7 @@ var async = require('async');
 
 exports.update_schedule = function(data, callback) {
     if(data && data.length) {
-      data = JSON.parse(data);
+      //data = JSON.parse(data);
 
 
       //db업데이트
