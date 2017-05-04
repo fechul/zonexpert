@@ -13,6 +13,24 @@
 	width: 800px;
 }
 
+.scheduledata_league_btn {
+	margin-top: 10px 0px 25px 25px;
+}
+
+.scheduledata_league_btn > .league_btn {
+	margin-right: 5px;
+	height: 25px;
+	cursor: pointer;
+	width: 115px;
+	margin-top: 10px;
+}
+
+.scheduledata_league_btn > .league_btn.active {
+	background-color: #145c86;
+	border: none;
+	color: #fff;
+}
+
 .schedule_table_section {
 	padding: 25px;
 }
@@ -21,27 +39,7 @@
 	width: 100%;
 }
 
-#schedule_table .schedule_number {
-	width: 10%;
-}
-
-#schedule_table .writer {
-	width: 20%;
-}
-
-#schedule_table .title {
-	width: 35%;
-}
-
-#schedule_table .like {
-	width: 10%;
-}
-
-#schedule_table .date {
-	width: 25%;
-}
-
-#schedule_table tr:not(:first-child) {
+#schedule_table tr {
 	cursor: pointer;
 }
 
@@ -49,6 +47,31 @@
 	background-color: #ccc;
 }
 
+#schedule_table tr.odd {
+	background-color: #eee;
+	color: #333 !important;
+}
 
+#schedule_table tr td:nth-child(1) {
+	width: 15%;
+}
 
+#schedule_table tr td:nth-child(2) {
+	width: 25%;
+}
 
+#schedule_table tr td:nth-child(3) {
+	width: 5%;
+}
+
+#schedule_table tr td:nth-child(4) {
+	width: 25%;
+}
+
+#schedule_table tr td:nth-child(5) {
+	width: 7.5%;
+}
+
+#schedule_table tr td:nth-child(6) {
+	width: 7.5%;
+}
