@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zonexpert-채팅방</title>
+    <link rel='stylesheet' href='/stylesheets/common.css'/>
+    <link rel='stylesheet' href='/stylesheets/chat.css'/>
+    <link rel='stylesheet' href='/bootstrap/bootstrap.css'/>
+</head>
+<body>
+<div id="header_wrap">
+    <div id="header">
+        <a href="/" class="logo"></a>
+        <ul class="main_menu">
+            <li class="menu_rank" move="rank">순위</li>
+            <li class="menu_schedule" move="schedule">경기일정</li>
+            <li class="menu_board" move="board">게시판</li>
+        </ul>
+        <ul class="tools">
+            <li class="menu_search">
+                <input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+                <button type="button" class="user_search_btn">
+                    <i class="fa fa-search"></i>
+                </button>
+            </li>
+            <li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+            <li class="logout" style="<%= logout_display %>">로그아웃</li>
+            <li class="login" style="<%= login_display %>">로그인</li>
+            <li class="signup" style="<%= signup_display %>">회원가입</li>
+        </ul>
+    </div>
+</div>
+
+<section class="main_section">
+    <div class="page_title">
+        채팅방
+    </div>
+    <div class="chat_rapper">
+        <div class="chat_section container_box">
+            <div class="chat_header">
+                <text type="text" class="chat_header_text">
+                    <i class="fa fa-search"></i>
+                </text>
+            </div>
+            <div class="chat_table_section">
+                <div id='users'>접속자</div>
+                <div class='j-message'>
+                </div>
+                <div class='j-footer'>
+                    <table>
+                        <tr>
+                            <td width='100%'>
+                                <input id='message-input' type='text'>
+                            </td>
+                            <td width='20%'>
+                                <button id='message-button' type='submit'> 전송</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    var name = 'userNamed';
+    var room = 'matchId';
+    
+    function writeMessage(type, name, message) {
+        var html = '<div>{MESSAGE}</div>';
+        var printName = '';
+        if (type == 'me') {
+            printName = name + '(나) : ';
+            printName.bold();
+        } else if (type == 'other') {
+            printName = name + ' : ';
+        }
+        html = html.replace('{MESSAGE}', printName + message);
+        $(html).appendTo('.j-message');
+        $('body').stop();
+        $('body').animate({scrollTop: $('body').height()}, 500);
+        $('#message-input').val("");
+
+
+    }
+
+
+    $(document).ready(function () {
+        var socket = io();
+
+        socket.on('connection', function (data) {
+            if (data.type == 'connected') {
+                socket.emit('connection', {
+                    type: 'join',
+                    name: name,
+                    room: room,
+                });
+            }
+        });
+        console.log('room', room);
+        socket.on('system', function (data) {
+            writeMessage('system', 'system', data.message);
+        });
+        socket.on('message', function (data) {
+            writeMessage('other', data.name, data.message);
+        });
+
+        socket.on('updateusers', function (data) {
+            $('#users').empty();
+
+            $('#users').append('<div>' + '접속자 수 : ' + data.length + '명' + '</div>');
+            for (var i = 0; i < data.length; i++) {
+                $('#users').append('<div>' + data[i] + '</div>');
+            }
+            //            $.each(data, function(key, value) {
+            //                $('.users').append('<div>' + key + '</div>');
+            //                console.log("username" , key);
+            //            });
+        });
+        $('#message-button').click(function () {
+            var msg = $('#message-input').val();
+            socket.emit('sendchat', {name: name, message: msg});
+            if (msg != '')
+                writeMessage('me', name, msg);
+            $('#message-input').focus();
+        });
+        $('#message-input').keypress(function (e) {
+            if (e.which == 13) {
+                $('#message-button').focus().click();
+            }
+        });
+
+
+    });
+
+
+</script>
+
+</body>
+
+
+<script>
+    //CHAT.init();
+</script>
+
+</html>

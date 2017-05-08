@@ -8,6 +8,8 @@ var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 var schedule = require('../core/schedule.js');
 var board = require('../core/board.js');
+var chat = require('../core/chat.js');
+
 
 router.all('/ping', function(req, res) {
 	res.send('pong\n');
@@ -44,6 +46,9 @@ router.post('/logout', function(req, res) {
 		res.json(json);
 	});
 });
+
+
+
 
 router.post('/accounts', function(req, res) {
 	user.signup({

@@ -62,6 +62,12 @@ var boardSchema = new Schema({
   'like': Number
 });
 
+var chatLogSchema = new Schema({
+    'id' : String,
+    'log' : String,
+    'date' : String
+});
+
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
 var match = mongoose.model('match', matchSchema);
@@ -74,5 +80,6 @@ module.exports = {
   'league': league,
   'match' : match,
   'team' : team,
-  'board': board
+  'board': board,
+
 };
