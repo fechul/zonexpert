@@ -58,11 +58,9 @@ chat.init = function (server) {
             if(usernames.indexOf(socket.username) > -1) {
                 usernames.splice(usernames.indexOf(socket.username), 1);
             }
-            for(var i =0 ; i < usernames.length ; i++){
-                console.log('user list' , usernames[i]);
-            }
+
             io.sockets.emit('updateusers', usernames);
-            console.log('user disconnected: ', socket.id);
+
         });
 
     });

@@ -352,7 +352,9 @@ router.get('/chat/:matchId',function(req, res){
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		my_nickname: req.session.nickname,
+		matchId: req.params.matchId
 	};
 
 	if(req.session.login) {
