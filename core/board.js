@@ -10,7 +10,7 @@ exports.get = function(user_email, callback) {
 					'email': board.writer
 				}, {
 					'nickname': 1,
-					'tier_code': 1
+					'rating': 1
 				}).limit(1).exec(function(_err, userdata) {
 					if(_err) {
 						console.log("board get list err: ", _err);
@@ -19,7 +19,7 @@ exports.get = function(user_email, callback) {
 							userdata = userdata[0];
 						}
 						board.nickname = userdata.nickname;
-						board.tier_code = userdata.tier_code;
+						board.rating = userdata.rating;
 						
 						db.user.find({
 							'email': user_email

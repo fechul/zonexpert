@@ -1,6 +1,7 @@
 var nodemailer = require('nodemailer');
 var randomstring = require('randomstring');
 var md5 = require('md5');
+var async = require('async');
 
 exports.login = function(data, callback) {
     var json = {
@@ -53,7 +54,9 @@ exports.signup = function(data, callback) {
                 'password': md5(data.password),
                 'authed': false,
                 'signup_auth_token': signup_auth_token,
-                'signup_date': new Date()
+                'signup_date': new Date(),
+                'main_sport': data.main_sport,
+                'main_league': data.main_league
             });
 
             new_user.save(function (err) {
@@ -166,3 +169,50 @@ exports.validate = function(data, callback) {
         callback(validation);
     });
 };
+
+exports.get_rank_data = function(users, callback) {
+    var userdata_array = [];
+
+    async.mapSeries(users, function(user, async_cb) {
+        db.user.find({
+            'email': user
+        }, {
+            'nickname': 1,
+            'rating': 1,
+            'record': 1,
+            'main_sport': 1,
+            'main_league': 1
+        }).limit(1).exec(function(err, userdata) {
+            if(userdata && userdata.length) {
+                userdata = userdata[0];
+
+                userdata_array.push({
+                    'nickname': userdata.nickname,
+                    'rating': userdata.rating,
+                    'record': userdata.record,
+                    'main_sport': userdata.main_sport,
+                    'main_league': userdata.main_league
+                });
+            }
+            async_cb();
+        });
+    }, function(async_err) {
+        callback(userdata_array);
+    });
+};
+
+exports.get_email = function(user, callback) {
+    db.user.find({
+        'nickname': user
+    }, {
+        'email': 1
+    }, function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            callback(data.email);
+        } else {
+            callback(null);
+        }
+    });
+};
+

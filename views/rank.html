@@ -37,21 +37,14 @@
 			</div>
 			<div class="rank_wrapper">
 				<div class="rank_section container_box">
-					<div class="rankdata_league_btn">
-						<button class="league_btn total_rank active">전체</button>
-						<button class="league_btn k-league">K리그</button>
-						<button class="league_btn premier-league">프리미어리그</button>
-						<button class="league_btn laliga">라리가</button>
-						<button class="league_btn bundesliga">분데스리가</button>
-						<button class="league_btn seria-a">세리에 A</button>
-						<button class="league_btn league-1">리그 1</button>
-						<button class="league_btn eredivisie">에레디비시</button>
-						<button class="league_btn champions-league">챔피언스리그</button>
-						<button class="league_btn europa-league">유로파리그</button>
-						<button class="league_btn england-fa">잉글랜드FA컵</button>
-						<button class="league_btn efl-cup">EFL컵</button>
+					<div class="rank_search_wrapper">
+						<div class="rank_search">
+							<input type="text" class="rank_search_input" placeholder="순위 검색" autocomplete="off">
+							<button type="button" class="rank_search_btn">
+								<i class="fa fa-search"></i>
+							</button>
+						</div>
 					</div>
-
 					<div class="rank_table_section">
 						<table id="rank_table">
 							<tr>
@@ -63,6 +56,7 @@
 								<td>예측률</td>
 								<td>티어</td>
 							</tr>
+							<%- rank_html %>
 						</table>
 					</div>
 				</div>

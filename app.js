@@ -68,11 +68,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.use(function(req, res, next) {
-    // if (req.session)
-    next();
-});
-
 //routing
 app.use('/', index_routes);
 app.use('/', view_routes);
@@ -117,8 +112,6 @@ app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.send('error');
 });
-
-
 
 // request schedule
 // var rule = new node_schedule.RecurrenceRule();

@@ -37,3 +37,15 @@ exports.getLeagueMatches = function(data, callback) {
         callback(matches);
     });
 };
+
+exports.getMatches = function(data, callback) {
+    db.match.find({
+        'id': {
+            '$in': data.idList
+        }
+    })
+    .sort('date')
+    .exec(function(err, matches) {
+        callback(matches || []);
+    });
+};
