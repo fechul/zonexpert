@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-<%= searchdata_user_id %></title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/search.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+    </head>
+
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+				<ul class="main_menu">
+					<li class="menu_rank" move="rank">순위</li>
+					<li class="menu_schedule" move="schedule">경기일정</li>
+					<li class="menu_board" move="board">게시판</li>
+				</ul>
+				<ul class="tools">
+					<li class="menu_search">
+						<input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
+						<button type="button" class="user_search_btn">
+							<i class="fa fa-search"></i>
+						</button>
+					</li>
+					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+					<li class="logout" style="<%= logout_display %>">로그아웃</li>
+					<li class="login" style="<%= login_display %>">로그인</li>
+					<li class="signup" style="<%= signup_display %>">회원가입</li>
+				</ul>
+			</div>
+		</div>
+
+		<section class="main_section">
+			<div class="no_searchdata_wrapper" style="<%= no_search_show %>">
+				<div class="no_searchdata_section container_box">
+					<p>검색 결과가 없습니다.</p>
+					<p>ID를 확인하신 후 다시 검색해주세요.</p>
+				</div>
+			</div>
+
+			<div class="searchdata_wrapper" style="<%= search_show %>">
+				<div class="searchdata_section container_box">
+					<div class="searchdata_user">
+						<span class="searchdata_user_id"><%= searchdata_user_id %></span>
+					</div>
+					<div class="mydata_statistics">
+						<div class="mydata_badge">
+							<img id="my_tier_img" src="<%= searchdata_tier_img %>">
+						</div>
+						<div class="mydata_rate">
+							<p><span class="rate_classification">레이팅</span><span id="my_rating"><%= searchdata_rating %></span>점</p>
+							<p><span class="rate_classification">등&nbsp&nbsp&nbsp급</span> <span id="my_tier_name"><%= searchdata_tier_name %></span></p>
+							<p><span class="rate_classification">랭&nbsp&nbsp&nbsp킹</span> <span id="my_rank"><%= searchdata_rank %> 위 (상위 <%= myTotalRate %>%)</span></p>
+							<p><span class="rate_classification">전&nbsp&nbsp&nbsp적</span> <span id="my_total_hit"><%= searchdata_total_hit %></span> / <span id="my_total_fail"><%= searchdata_total_fail %></span></p>
+							<p><span class="rate_classification">적중률</span> <span id="my_predict_rate"><%= searchdata_predict_rate %></span>%</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="my_record_data_wrapper" style="<%= search_show %>">
+				<div class="my_record_data_section container_box">
+					<ul class="nav nav-tabs">
+					    <li class="tab_statistics active"><a data-toggle="tab" href="#statistics_field">통계</a></li>
+					    <li class="tab_record"><a data-toggle="tab" href="#record_field">전적</a></li>
+					</ul>
+
+					<div class="tab-content">
+					  	<div id="statistics_field" class="tab-pane fade in active">
+					  		<div class="record_menus">
+					  			<button type="button" class="active" id="by_league" value="league">리그별</button>
+					  			<button type="button" id="by_club" value="club">클럽별</button>
+					  		</div>
+					  		<div id="pie_record">
+					  			
+					  		</div>
+					  		<div class="no_statistics_field">통계 결과가 없습니다.</div>   	
+					  	</div>
+					  	<div id="record_field" class="tab-pane fade">
+					   		<canvas id="myChart"></canvas>
+					  	</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="my_statistics_data_wrapper" style="<%= search_show %>">
+				<div class="my_statistics_data_section container_box">
+					<table id="statistics_table">
+						<tr>
+							<td>순위</td>
+							<td>리그</td>
+							<td>적중</td>
+							<td>실패</td>
+							<td>예측 횟수</td>
+							<td>적중률</td>
+						</tr>
+						<tr class="no_statistics_field">
+							<td colspan="6">통계 결과가 없습니다.</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="my_recent_predict_wrapper" style="<%= search_show %>">
+				<div class="my_recent_predict_section container_box">
+					asdfas
+				</div>
+			</div>
+
+		</section>
+		<%- prediction_shortcut %>
+    </body>
+	
+	<script src="jquery/jquery.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
+	<script src="chart/Chart.min.js"></script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="modules/search.js"></script>
+	<script src="modules/prediction_shortcut.js"></script>
+	<script>
+		SEARCH.init({
+			'search_id': '<%= searchdata_user_id %>'
+		});
+		PREDICTION_SHORTCUT.init();
+	</script>
+
+</html>

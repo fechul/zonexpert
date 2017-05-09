@@ -56,14 +56,12 @@ var leagueSchema = new Schema({
 
 var teamSchema = new Schema({
     'id' : String,
-    'rank' : String,
-    'team' : String,
-    'playedGames' : String,
-    'imageURI' : String,
-    'points' : String,
-    'goals' : String,
-    'goalsAgainst' : String,
-    'goalDifference' : String
+    'leagueId': String,
+    'name': String,
+    'code': String,
+    'shortName': String,
+    'squadMarketValue': Number,
+    'crestUrl': String
 });
 
 var matchSchema = new Schema({
@@ -99,7 +97,7 @@ var predictionSchema = new Schema({
     'pick': String, // home || draw || away
     'result': String, // true, false, wait
     'beforeRating': Number,
-    'afterRating': Number,
+    'afterRating': Number
 });
 
 var boardSchema = new Schema({

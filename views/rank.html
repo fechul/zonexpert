@@ -18,7 +18,7 @@
 				</ul>
 				<ul class="tools">
 					<li class="menu_search">
-						<input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+						<input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
 						<button type="button" class="user_search_btn">
 							<i class="fa fa-search"></i>
 						</button>
@@ -62,15 +62,17 @@
 				</div>
 			</div>
 		</section>
-
+		<%- prediction_shortcut %>
     </body>
 	
 	<script src="jquery/jquery.js"></script>
 	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/rank.js"></script>
+	<script src="modules/prediction_shortcut.js"></script>
 	<script>
 		RANK.init();
+		PREDICTION_SHORTCUT.init();
 	</script>
 
 </html>
