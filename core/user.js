@@ -224,8 +224,24 @@ exports.get = function(nick, callback) {
             data = data[0];
             callback(data);
         } else {
-            callback(null);
+            db.user.find({
+                'email': nick
+            }).limit(1).exec(function(err, _data) {
+                if(_data && _data.length) {
+                    _data = _data[0];
+
+                    callback(_data);
+                } else {
+                    callback(null);
+                }
+            });
         }
+    });
+};
+
+exports.countAllUsers = function(callback) {
+    db.user.count({}, function(err, length) {
+        callback(length);
     });
 };
 

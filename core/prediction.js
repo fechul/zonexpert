@@ -124,3 +124,133 @@ exports.getBasketList = function(data, callback) {
         callback(result);
     });
 };
+
+exports.getRatingChange = function(dates, callback) {
+    async.map(dates, function(date, async_cb) {
+
+
+        async_cb();
+    }, function(async_err) {
+        callback(null);
+    });
+};
+
+exports.getMatchesStatistics = function(data, callback) {
+    var nick = data.nick;
+    var type = data.type;
+
+    var userStatistics = {};
+
+    db.user.find({
+        'nickname': nick
+    }, {
+        'email': 1
+    }).limit(1).exec(function(userErr, userData) {
+        if(userErr) {
+            callback(null);
+        } else {
+            if(userData && userData.length) {
+                userData = userData[0];
+
+                var email = userData.email;
+
+                db.prediction.find({
+                    'userEmail': email
+                }, function(predictErr, predictData) {
+                    if(predictErr) {
+                        callback(null);
+                    } else {
+                        if(predictData && predictData.length) {
+                            if(type == 'league') {
+                                async.each(predictData, function(eachData, async_cb) {
+                                    if(!userStatistics[eachData.leagueId]) {
+                                        userStatistics[eachData.leagueId] = {
+                                            'hit': 0,
+                                            'fail': 0,
+                                            'game_cnt': 0,
+                                            'leagueId': eachData.leagueId
+                                        };
+                                    }
+
+                                    if(eachData.result == 'true') {
+                                        userStatistics[eachData.leagueId].hit++;
+                                        userStatistics[eachData.leagueId].game_cnt++;
+                                    } else if(eachData.result == 'false') {
+                                        userStatistics[eachData.leagueId].fail++;
+                                        userStatistics[eachData.leagueId].game_cnt++;
+                                    }
+
+                                    async_cb();
+                                }, function(async_err) {
+                                    if(async_err) {
+                                        callback(null);
+                                    } else {
+                                        for(var key in userStatistics) {
+                                            userStatistics[key].rate = ((userStatistics[key].hit/userStatistics[key].game_cnt)*100).toFixed(2);
+                                        }
+                                        callback(userStatistics);
+                                    }
+                                });
+                            } else {    //club
+                                async.each(predictData, function(eachData, async_cb) {
+                                    var teamList = eachData.teamList;
+                                    async.each(teamList, function(team, _async_cb) {
+                                        if(!userStatistics[team]) {
+                                            userStatistics[team] = {
+                                                'hit': 0,
+                                                'fail': 0,
+                                                'game_cnt': 0,
+                                                'teamId': team,
+                                                'teamName': null
+                                            };
+                                        }
+
+                                        if(eachData.result == 'true') {
+                                            userStatistics[team].hit++;
+                                            userStatistics[team].game_cnt++;
+                                        } else if(eachData.result == 'false') {
+                                            userStatistics[team].fail++;
+                                            userStatistics[team].game_cnt++;
+                                        }
+
+                                        if(userStatistics[team].teamName) {
+                                            _async_cb();
+                                        } else {
+                                            db.team.find({
+                                                'id': team
+                                            }, {
+                                                'name': 1
+                                            }).limit(1).exec(function(teamErr, teamData) {
+                                                if(teamData && teamData.length) {
+                                                    teamData = teamData[0];
+
+                                                    userStatistics[team].teamName = teamData.name;
+                                                    _async_cb();
+                                                }
+                                            });
+                                        }
+                                    }, function(_async_err) {
+                                        async_cb();
+                                    });
+                                }, function(async_err) {
+                                    if(async_err) {
+                                        callback(null);
+                                    } else {
+                                        for(var key in userStatistics) {
+                                            userStatistics[key].rate = ((userStatistics[key].hit/userStatistics[key].game_cnt)*100).toFixed(2);
+                                        }
+                                        callback(userStatistics);
+                                    }
+                                });
+                            }
+                        } else {
+                            callback(null);
+                        }
+                    }
+                });
+            } else {
+                callback(null);
+            }
+        }
+    });
+};

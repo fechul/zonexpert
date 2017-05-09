@@ -236,7 +236,7 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
     	user.get_email(search_id, function(email) {
     		if(email) {
     			redis_client.zrevrank(key, email, function(search_err, search_data) {
-    				if(search_data) {
+    				if(search_data || search_data == 0) {
 	    				var target_rank = search_data + 1;
 						var start_range = Math.floor(target_rank/100) * 100;
 						start_range += 1;
@@ -352,7 +352,7 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 
 router.get('/search', readPredictionShortcutHTML, function(req, res) {
 	var path = 'search.html';
-	var id = req.query.search_id;
+	var id = req.query.id;
 
 	var json = {
 		logout_display: '',
@@ -360,9 +360,20 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 		signup_display: '',
 		myinfo_display: '',
 
-		searchdata_user_id: id,
 		search_show: '',
-		no_search_show: ''
+		no_search_show: '',
+
+		//search data
+		searchdata_user_id: id,
+		searchdata_tier_img: '',
+		searchdata_rating: '-',
+		searchdata_tier_name: '-',
+		searchdata_total_hit: 0,
+		searchdata_total_fail: 0,
+		searchdata_predict_rate: '-',
+		searchdata_rank: '-',
+
+		myTotalRate: '-'
 	};
 
 	if(req.session.login) {
@@ -375,15 +386,60 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 
 	json.prediction_shortcut = req.predictionShortcut;
 
-	user.get(id, function(userdata) {
-		console.log("asdf: ", userdata)
-		if(!userdata) {
-			json.search_show = 'display:none;';
-		} else {
-			json.no_search_show = 'display:none;';
-		}
+	user.countAllUsers(function(userCount) {
+		user.get(id, function(userdata) {
+			if(!userdata) {
+				json.search_show = 'display:none;';
+				res.render(path, json);
+			} else {
+				json.searchdata_user_id = userdata.nickname;
 
-		res.render(path, json);
+				var rating = userdata.rating;
+				json.searchdata_rating = rating;
+
+				if(rating < 1200) {
+					json.searchdata_tier_img = 'image/badge_bronze.png';
+					json.searchdata_tier_name = '브론즈';
+				} else if(1200 <= rating && rating < 1400) {
+					json.searchdata_tier_img = 'image/badge_silver.png';
+					json.searchdata_tier_name = '실버';
+				} else if(1400 <= rating && rating < 1600) {
+					json.searchdata_tier_img = 'image/badge_gold.png';
+					json.searchdata_tier_name = '골드';
+				} else if(1600 <= rating && rating < 1800) {
+					json.searchdata_tier_img = 'image/badge_platinum.png';
+					json.searchdata_tier_name = '플래티넘';
+				} else if(1800 <= rating) {
+					json.searchdata_tier_img = 'image/badge_diamond.png';
+					json.searchdata_tier_name = '다이아몬드';
+				}
+
+				var total_hit = 0;
+				var total_fail = 0;
+				if(userdata.record) {
+					if(userdata.record.total) {
+						var total_hit = userdata.record.total.hit || 0;
+						var total_fail = userdata.record.total.fail || 0;		
+					}
+				}
+
+				json.searchdata_total_hit = total_hit;
+				json.searchdata_total_fail = total_fail;
+
+				json.searchdata_predict_rate = (total_fail == 0 ? 0 : ((total_hit/(total_hit + total_fail))*100).toFixed(2));
+
+				json.no_search_show = 'display:none;';
+
+				var key = 'rating_rank';
+				redis_client.zrevrank(key, userdata.email, function(err, data) {
+		        	if(!err) {
+		        		json.searchdata_rank = data+1;
+		        		json.myTotalRate = (((data+1) / userCount)*100).toFixed(2);
+		        	}
+		        	res.render(path, json);
+		        });
+			}
+		});
 	});
 });
 

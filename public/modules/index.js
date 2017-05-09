@@ -43,7 +43,7 @@ var INDEX = {
 			self.set_rank(type);
 		});
 
-		$(document).on('keydown', '.tools .user_search_input', function(e) {
+		$('.tools .user_search_input').keydown(function(e) {
 			if(e.keyCode == 13) {
 				$('.tools .user_search_btn').click();
 			}
@@ -52,7 +52,7 @@ var INDEX = {
 		$('.tools .user_search_btn').click(function() {
 			var id = $('.tools .user_search_input').val();
 
-			location.href = "/search?search_id=" + id;
+			location.href = "/search?id=" + id;
 		});
 	},
 

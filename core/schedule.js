@@ -28,6 +28,40 @@ exports.initialize = function(data, callback) {
     });
 };
 
+exports.team_initialize = function(data, callback) {
+    for(var key in data) {
+        for(var i = 0; i < data[key].teams.length; i++) {
+            var id = data[key].teams[i]._links.self.href.split('/').pop();
+            var newTeamJson = {
+                'id' : id,
+                'leagueId': key.toString(),
+                'name': data[key].teams[i].name,
+                'code': data[key].teams[i].code,
+                'shortName': data[key].teams[i].shortName,
+                'squadMarketValue': data[key].teams[i].squadMarketValue,
+                'crestUrl': data[key].teams[i].crestUrl
+            };
+
+            db.team.find({
+                'id': id,
+                'leagueId': key.toString()
+            }).limit(1).exec(function(teamData) {
+                if(teamData && teamData.length) {
+                    
+                } else {
+                    var newTeam = new db.team(newTeamJson);
+                }
+            });
+
+            newTeam.save(function(err) {
+
+            });
+        }
+    }
+
+    callback(true);
+};
+
 exports.getLeagueMatches = function(data, callback) {
     db.match.find({
         'leagueId': data.leagueId

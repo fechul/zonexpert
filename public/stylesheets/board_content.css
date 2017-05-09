@@ -176,7 +176,7 @@ body {
 .prediction_shortcut_container {
 	display: none;
     height: 300px;
-    width: 500px;
+    width: 800px;
     position: fixed;
     right: 30px;
     bottom: 30px;
@@ -185,7 +185,7 @@ body {
 	border: 2px solid #ffdfa4;
 }
 
-.prediction_shortcut_close {
+/*.prediction_shortcut_close {
     position: absolute;
     right: 6px;
     top: 0px;
@@ -196,14 +196,14 @@ body {
 
 .prediction_shortcut_close:hover {
 	color: #3a2500;
-}
+}*/
 
 .prediction_shortcut_title {
 	height: 30px;
 }
 
 .prediction_shortcut_list {
-	max-height: 230px;
+	height: 230px;
 	overflow-y: scroll;
 }
 
@@ -242,6 +242,7 @@ body {
 }
 
 .prediction_shortcut_preview_number {
+	display: none;
     position: absolute;
     border-radius: 50px;
     background-color: #ff5200;
@@ -254,4 +255,57 @@ body {
     right: 21px;
 }
 
+.prediction_shortcut_list td:nth-child(1) {
+	width: 15%;
+}
 
+.prediction_shortcut_list td:nth-child(2) {
+	text-align: center;
+	width: 25%;
+}
+
+.prediction_shortcut_list td:nth-child(3) {
+	width: 5%;
+}
+
+.prediction_shortcut_list td:nth-child(4) {
+	text-align: center;
+	width: 25%;
+}
+
+.prediction_shortcut_list td:nth-child(5) {
+	text-align: right;
+	width: 30%;
+}
+
+.prediction_shortcut_list label {
+	cursor: pointer;
+	font-weight: normal;
+	margin: 0px 5px 0px 0px;
+}
+
+.prediction_shortcut_list label:hover {
+	font-weight: bold;
+}
+
+.prediction_shortcut_list label input {
+    cursor: pointer;
+    margin: 0px 10px 0px 5px !important;
+    vertical-align: text-bottom;
+}
+
+.prediction_shortcut_container table {
+	border: 1px solid #999;
+}
+
+.prediction_shortcut_container table > tbody > tr {
+	height: 50px;
+}
+
+.prediction_shortcut_container table > tbody > tr > td.left {
+	text-align: left;
+}
+
+.prediction_shortcut_container table > tbody > tr:not(:last-child) {
+	border-bottom: 1px solid #999;
+}

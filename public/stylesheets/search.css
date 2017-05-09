@@ -1,0 +1,182 @@
+
+/*
+	<-- BODY MAIN SECTIOM-->
+*/
+
+.main_section {
+	background-color: #145c86;
+	opacity: 0.85;
+	text-align: center;
+}
+
+.no_searchdata_wrapper,
+.searchdata_wrapper,
+.my_record_data_wrapper,
+.my_statistics_data_wrapper,
+.my_recent_predict_wrapper {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.main_section .searchdata_section {
+	width: 500px;
+	margin-right: 330px;
+	border-radius: 0px;
+	/* height: 200px; */
+}
+
+.main_section .no_searchdata_section {
+	width: 800px;
+}
+
+.my_record_data_section {
+	width: 800px;
+	border-radius: 0px;
+	margin-top: 0px;
+}
+
+.my_statistics_data_section,
+.my_recent_predict_section {
+	width: 800px;
+	border-radius: 0px;
+	margin-top: 0px;
+	padding: 10px;
+}
+
+.searchdata_user {
+	border-bottom: 1px solid #aaa;
+	padding: 15px;
+	text-align: left;
+	font-size: 22px;
+	font-weight: bold;
+}
+
+.searchdata_user > .mydata_user_main_field {
+	/* font-weight: bold; */
+	font-size: 18px;
+	color: #555;
+	/*margin-left: 10px;*/
+}
+
+#record_field {
+	padding: 15px;
+}
+
+
+
+
+.mydata_statistics {
+	display: flex;
+}
+
+.mydata_statistics > .mydata_badge {
+	/*width: 20%;*/
+	border-right: 1px solid #bbb;
+	padding: 15px;
+}
+
+.mydata_statistics > .mydata_badge > img {
+	width: 120px;
+	height: 150px;
+}
+
+.mydata_statistics > .mydata_rate {
+	/*width: 30%;*/
+	/*border-right: 1px solid #bbb;*/
+	padding: 15px 15px 15px 30px;
+	text-align: left;
+}
+
+.mydata_statistics > .mydata_rate .rate_classification {
+	font-weight: bold;
+	width: 70px;
+	display: block;
+	float: left;
+}
+
+.mydata_statistics > .mydata_recent_predict {
+	width: 50%;
+	text-align: left;
+	/* padding: 15px; */
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_sub {
+	border-bottom: 1px solid #bbb;
+	padding: 10px 10px 10px 30px;
+	font-weight: bold;
+}
+
+/*.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
+	padding: 10px;
+	height: 100px;
+}*/
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content > .predict_content_row {
+	padding: 15px;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
+	width: 80px;
+	float: left;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
+	width: 180px;
+	float: left;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.success {
+	color: #056f05;
+	float: left;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.fail {
+	color: #d22323;
+	float: left;
+}
+
+.no_searchdata_section {
+	height: 300px;
+	font-size: 24px;
+	padding-top: 100px;
+}
+
+#statistics_field .record_menus {
+	text-align: left;
+	padding: 10px 20px 10px 20px;
+	border-bottom: 1px solid #ccc;
+}
+
+#statistics_field .record_menus > button.active {
+	background-color: #145c86;
+	color: #fff;
+}
+
+.no_statistics_field {
+	padding: 20px;
+	font-size: 16px;
+}
+
+#pie_record {
+	float: left;
+	padding-bottom: 10px;
+}
+
+.pie_field {
+	position: relative;
+	width: 198px;
+	display: inline-block;
+}
+
+.pieLeagueName {
+	margin-top: 8px;
+}
+
+.piePercentage {
+	position: absolute;
+	left: 85px;
+	top: 105px;
+}
+
+canvas{position:relative; z-index:9999;}
+
