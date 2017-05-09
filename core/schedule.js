@@ -1,5 +1,6 @@
 var async = require('async');
 
+
 exports.initialize = function(data, callback) {
     async.eachSeries(data.schedules, function(schedule, async_cb) {
         var newMatchJson = {
@@ -13,6 +14,7 @@ exports.initialize = function(data, callback) {
             'awayTeamId' : schedule._links.awayTeam.href.split('/').pop(),
             'status': schedule.status
         };
+
 
         if (schedule.result) {
             newMatchJson.result = schedule.result;
@@ -45,5 +47,25 @@ exports.getMatches = function(data, callback) {
     .sort('date')
     .exec(function(err, matches) {
         callback(matches || []);
+    });
+};
+
+exports.getMatchTeamsName = function(data, callback) {
+    var query = db.match.findOne({'id' : data.matchId});
+    query.select('homeTeamName');
+    query.select('awayTeamName');
+
+    query.exec(function (err, data) {
+        if (err) {
+            console.log('err',err);
+        } else {
+            console.log(data);
+            // json.homeTeamName = data;
+        }
+
+        callback({
+            'homeTeamName': data.homeTeamName,
+            'awayTeamName': data.awayTeamName
+        });
     });
 };
