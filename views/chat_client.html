@@ -34,7 +34,7 @@
 
 <section class="main_section">
     <div class="page_title">
-        홈팀 VS 어웨이팀
+        <%= homeTeamName %> VS <%= awayTeamName %>
     </div>
     <div class="window-wrapper">
         <div class="window-title">
@@ -57,8 +57,8 @@
                         <div class="image" style="float:left">
                             <img src="https://secure.gravatar.com/avatar/de76e03aa6b5b0bf675c1e8a990da52f?s=64" >
                         </div>
-                        <div class="name">
-                            <span>간식먹자</span>
+                        <div class="name" >
+                            <span >간식먹자</span>
                         </div>
                     </div>
                     <div class="input-wrapper" style="float:left;width:60%">
@@ -95,6 +95,7 @@
     CHAT.init({
         nickname: '<%= my_nickname %>',
         roomId: parseInt('<%= matchId %>', 10)
+
     });
 </script>
 </body>

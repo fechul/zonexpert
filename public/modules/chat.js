@@ -2,10 +2,11 @@ var CHAT = {
     init: function(options) {
         this.name = options.nickname;
         this.room = options.roomId;
-
         this.init_events();
         this.connect_socket();
-    },
+        },
+
+
 
     init_events: function() {
         var self = this;

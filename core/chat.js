@@ -5,7 +5,7 @@ var usernames = [];
 chat.init = function (server) {
     io = require('socket.io').listen(server);
 
-
+    var matchId ='' ;
     io.on('connection', function (socket) {
         socket.emit('connection', {
             type: 'connected'
@@ -13,6 +13,18 @@ chat.init = function (server) {
 
 
         socket.on('connection', function (data) {
+
+            // db.match.find({
+            //     'matchId' : data.room
+            // }),function(err, data){
+            //     if(data && data.length){
+            //         console.log('match', data);
+            //     }else{
+            //         console.log('err',err);
+            //     }
+            //
+            // };
+
             if (data.type == 'join') {
                 socket.join(data.room);
                 socket.room = data.room;
@@ -64,6 +76,7 @@ chat.init = function (server) {
         });
 
     });
+
 };
 
 module.exports = chat;

@@ -50,4 +50,22 @@ exports.getMatches = function(data, callback) {
     });
 };
 
-exports.get
+exports.getMatchTeamsName = function(data, callback) {
+    var query = db.match.findOne({'id' : data.matchId});
+    query.select('homeTeamName');
+    query.select('awayTeamName');
+
+    query.exec(function (err, data) {
+        if (err) {
+            console.log('err',err);
+        } else {
+            console.log(data);
+            // json.homeTeamName = data;
+        }
+
+        callback({
+            'homeTeamName': data.homeTeamName,
+            'awayTeamName': data.awayTeamName
+        });
+    });
+};

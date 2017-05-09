@@ -5,6 +5,7 @@ var router = express.Router();
 
 var board = require('../core/board.js');
 var user = require('../core/user.js');
+var schedule = require('../core/schedule.js');
 
 // 로그인 상태에서만 접속 가능한 페이지 체크
 // router.get('/url', need_login, function(req, res) {}) 형식으로 사용
@@ -347,6 +348,7 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 });
 router.get('/chat/:matchId',function(req, res){
 	var path = 'chat_client.html';
+	var matchId = req.params.matchId;
 	var json = {
 		myinfo_display: '',
 		logout_display: '',
@@ -366,7 +368,14 @@ router.get('/chat/:matchId',function(req, res){
 		json.mydata_display = 'display:none;';
 	}
 
-	res.render(path, json);
+	schedule.getMatchTeamsName({
+		'matchId': matchId
+	}, function(result) {
+		json.homeTeamName = result.homeTeamName;
+		json.awayTeamName = result.awayTeamName;
+
+        res.render(path, json);
+	});
 });
 
 module.exports = router;
