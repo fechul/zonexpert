@@ -47,7 +47,7 @@ var PREDICTION_SHORTCUT = {
 
     getBaskets: function() {
         var self = this;
-		$.get('prediction/basket', {}, function(data) {
+		$.get('/prediction/basket', {}, function(data) {
             data = JSON.parse(data);
             
             if (data.length) {

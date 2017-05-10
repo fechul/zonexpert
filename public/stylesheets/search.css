@@ -9,48 +9,68 @@
 	text-align: center;
 }
 
+.no_searchdata_wrapper,
 .searchdata_wrapper,
-.rank_wrapper {
+.my_record_data_wrapper,
+.my_statistics_data_wrapper,
+.my_recent_predict_wrapper {
 	max-width: 1200px;
 	margin: 0 auto;
 }
 
-.main_section .mydata_section {
-	width: 800px;
+.main_section .searchdata_section {
+	width: 500px;
+	margin-right: 330px;
+	border-radius: 0px;
 	/* height: 200px; */
 }
 
-.main_section .rank_section {
+.main_section .no_searchdata_section {
 	width: 800px;
-	/*height: 800px;*/
 }
 
-.mydata_user,
-.rankdata {
+.my_record_data_section {
+	width: 800px;
+	border-radius: 0px;
+	margin-top: 0px;
+}
+
+.my_statistics_data_section,
+.my_recent_predict_section {
+	width: 800px;
+	border-radius: 0px;
+	margin-top: 0px;
+	padding: 10px;
+}
+
+.searchdata_user {
 	border-bottom: 1px solid #aaa;
 	padding: 15px;
 	text-align: left;
-}
-
-.mydata_user > .mydata_user_id,
-.rankdata_sub {
-	font-weight: bold;
 	font-size: 22px;
+	font-weight: bold;
 }
 
-.mydata_user > .mydata_user_main_field {
+.searchdata_user > .mydata_user_main_field {
 	/* font-weight: bold; */
 	font-size: 18px;
 	color: #555;
 	/*margin-left: 10px;*/
 }
 
+#record_field {
+	padding: 15px;
+}
+
+
+
+
 .mydata_statistics {
 	display: flex;
 }
 
 .mydata_statistics > .mydata_badge {
-	width: 20%;
+	/*width: 20%;*/
 	border-right: 1px solid #bbb;
 	padding: 15px;
 }
@@ -61,8 +81,8 @@
 }
 
 .mydata_statistics > .mydata_rate {
-	width: 30%;
-	border-right: 1px solid #bbb;
+	/*width: 30%;*/
+	/*border-right: 1px solid #bbb;*/
 	padding: 15px 15px 15px 30px;
 	text-align: left;
 }
@@ -115,37 +135,64 @@
 	float: left;
 }
 
-.rankdata_type_btn {
-	margin-top: 10px 0px 25px 25px;
+.no_searchdata_section {
+	height: 300px;
+	font-size: 24px;
+	padding-top: 100px;
 }
 
-.rankdata_type_btn > .type_btn {
-	margin-right: 5px;
-	height: 25px;
-	cursor: pointer;
-	width: 115px;
-	margin-top: 10px;
+#statistics_field .record_menus {
+	text-align: left;
+	padding: 10px 20px 10px 20px;
+	border-bottom: 1px solid #ccc;
 }
 
-.rankdata_type_btn > .type_btn.active {
+#statistics_field .record_menus > button.active {
 	background-color: #145c86;
-	border: none;
 	color: #fff;
 }
 
-.rank_table_section {
-	padding: 25px;
+.no_statistics_field {
+	padding: 20px;
+	font-size: 16px;
 }
 
-#rank_table {
-	/*height: 500px;*/
-	width: 100%;
+#pie_record {
+	float: left;
+	padding-bottom: 10px;
 }
 
-.tier_cell {
-	width: 135px;
+.pie_field {
+	position: relative;
+	width: 198px;
+	display: inline-block;
 }
 
-.tier_cell > div{
-	margin-left: 30px;
+.pieLeagueName {
+	margin-top: 8px;
+}
+
+.piePercentage {
+	position: absolute;
+	left: 85px;
+	top: 105px;
+}
+
+canvas{position:relative; z-index:9999;}
+
+.my_recent_predict_section .recent_predict_data_row {
+	max-height: 80px;
+	font-size: 16px;
+	border: 1px solid #bbb;
+	margin-bottom: 15px;
+	padding: 15px;
+}
+
+.my_recent_predict_section .recent_predict_data_row > img {
+	width: 40px;
+	height: 40px;
+}
+
+.my_recent_predict_section .recent_predict_data_row > span {
+	margin-right: 10px;
 }

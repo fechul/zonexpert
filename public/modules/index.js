@@ -42,11 +42,22 @@ var INDEX = {
 			var type = $(this).attr('type');
 			self.set_rank(type);
 		});
+
+		$('.tools .user_search_input').keydown(function(e) {
+			if(e.keyCode == 13) {
+				$('.tools .user_search_btn').click();
+			}
+		});
+
+		$('.tools .user_search_btn').click(function() {
+			var id = $('.tools .user_search_input').val();
+
+			location.href = "/search?id=" + id;
+		});
 	},
 
 	set_mydata: function() {
 		$.get('/getMyData', function(data) {
-			console.log(data)
 			if(data) {
 				$('.mydata_user_id').html(data.mydata_user_id);
 				$('.mydata_user_main_field').html(data.mydata_user_main_field);

@@ -173,3 +173,139 @@ body {
 	margin-right: 10px;
 }
 
+.prediction_shortcut_container {
+	display: none;
+    height: 300px;
+    width: 800px;
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+	background-color: #ffa500;
+	border-radius: 5px;
+	border: 2px solid #ffdfa4;
+}
+
+/*.prediction_shortcut_close {
+    position: absolute;
+    right: 6px;
+    top: 0px;
+    font-size: 20px;
+    color: #674403;
+    cursor: pointer;
+}
+
+.prediction_shortcut_close:hover {
+	color: #3a2500;
+}*/
+
+.prediction_shortcut_title {
+	height: 30px;
+}
+
+.prediction_shortcut_list {
+	height: 230px;
+	overflow-y: scroll;
+}
+
+.prediction_shortcut_list table {
+	width: 100%;
+}
+
+.prediction_shortcut_button_container {
+    height: 100px;
+    width: 100px;
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+}
+
+.prediction_shortcut_button {
+    height: 70px;
+    width: 70px;
+    background-color: #ffa500;
+    text-align: center;
+    border: 2px solid #ffdfa4;
+	border-radius: 50px;
+    font-size: 50px;
+    cursor: pointer;
+    color: #674403;
+}
+
+.prediction_shortcut_icon {
+	margin-left: 4px;
+}
+
+.prediction_shortcut_button:hover {
+	background-color: #e69500;
+	border-color: #ffdfa4;
+	color: #3a2500
+}
+
+.prediction_shortcut_preview_number {
+	display: none;
+    position: absolute;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    top: 0px;
+    right: 21px;
+}
+
+.prediction_shortcut_list td:nth-child(1) {
+	width: 15%;
+}
+
+.prediction_shortcut_list td:nth-child(2) {
+	text-align: center;
+	width: 25%;
+}
+
+.prediction_shortcut_list td:nth-child(3) {
+	width: 5%;
+}
+
+.prediction_shortcut_list td:nth-child(4) {
+	text-align: center;
+	width: 25%;
+}
+
+.prediction_shortcut_list td:nth-child(5) {
+	text-align: right;
+	width: 30%;
+}
+
+.prediction_shortcut_list label {
+	cursor: pointer;
+	font-weight: normal;
+	margin: 0px 5px 0px 0px;
+}
+
+.prediction_shortcut_list label:hover {
+	font-weight: bold;
+}
+
+.prediction_shortcut_list label input {
+    cursor: pointer;
+    margin: 0px 10px 0px 5px !important;
+    vertical-align: text-bottom;
+}
+
+.prediction_shortcut_container table {
+	border: 1px solid #999;
+}
+
+.prediction_shortcut_container table > tbody > tr {
+	height: 50px;
+}
+
+.prediction_shortcut_container table > tbody > tr > td.left {
+	text-align: left;
+}
+
+.prediction_shortcut_container table > tbody > tr:not(:last-child) {
+	border-bottom: 1px solid #999;
+}
