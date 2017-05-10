@@ -15,11 +15,11 @@
                 <div class="teamTitleSection">
                     <div class="teamNameTitle homeTeamSection">
                         <img class="teamImg" src="<%= homeTeamImg %>"></img><%= homeTeamName %><br>
-                        0
+                        <span id="homeTeamGoals">0</span>
                     </div>
                     <div class="teamNameTitle awayTeamSection">
                         <img class="teamImg" src="<%= awayTeamImg %>"></img><%= awayTeamName %><br>
-                        0
+                        <span id="awayTeamGoals">0</span>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                         <div class="input-area">
                             <div class="my-account" style="float:left;width:25%">
                                 <div class="image" style="float:left">
-                                    <img src="https://secure.gravatar.com/avatar/de76e03aa6b5b0bf675c1e8a990da52f?s=64" >
+                                    <img src="<%= myBadgeSrc %>">
                                 </div>
                                 <div class="name" >
                                     <span ><%= my_nickname %></span>
@@ -74,7 +74,8 @@
         <script>
             CHAT.init({
                 nickname: '<%= my_nickname %>',
-                roomId: parseInt('<%= matchId %>', 10)
+                roomId: parseInt('<%= matchId %>', 10),
+                myBadge: '<%= myBadge %>'
             });
         </script>
     </body>

@@ -2,6 +2,8 @@ var CHAT = {
     init: function(options) {
         this.name = options.nickname;
         this.room = options.roomId;
+        this.badge = options.myBadge;
+
         this.init_events();
         this.connect_socket();
     },
@@ -50,9 +52,10 @@ var CHAT = {
 
         $('#message-button').click(function () {
             var msg = $('#message-input').val();
-            self.socket.emit('sendchat', {name: self.name, message: msg});
-            if (msg != '')
-                self.writeMessage('me', self.name, msg);
+            if (msg != '') {
+                self.socket.emit('sendchat', {name: self.name, message: msg, badge: self.badge});
+                self.writeMessage('me', self.name, msg, self.badge);
+            }
             $('#message-input').focus();
         });
 
@@ -75,6 +78,7 @@ var CHAT = {
                     type: 'join',
                     name: self.name,
                     room: self.room,
+                    badge: self.badge
                 });
             }
         });
@@ -83,20 +87,22 @@ var CHAT = {
             self.writeMessage('system', 'system', data.message);
         });
         socket.on('message', function (data) {
-            self.writeMessage('other', data.name, data.message);
+            console.log("message: ", data)
+            self.writeMessage('other', data.name, data.message, data.badge);
         });
 
         socket.on('updateusers', function (data) {
+            console.log("dat: ", data)
             $('.member-list').empty();
 
             $('.member-list').append('<li>' + '접속자 수 : ' + data.length + '명' + '</li>');
             for (var i = 0; i < data.length; i++) {
-                $('.member-list').append('<li>' + data[i] + '</li>');
+                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div>' + data[i].name + '</li>');
             }
         });
     },
 
-    writeMessage: function(type, name, message) {
+    writeMessage: function(type, name, message, badge) {
         var html = '';
 
         var time = new Date();
@@ -112,10 +118,10 @@ var CHAT = {
         time = hour + ':' + minutes + ':' + seconds;
 
         if (type == 'me') {
-            html = '<li class="me">' +  name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
+            html = '<li class="me"><div class="badge_' + badge + '"></div>' + name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
             $('#message-input').val("");
         } else if (type == 'other') {
-            html = '<li>' +  name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
+            html = '<li><div class="badge_' + badge + '"></div>' +  name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
         } else {
             html = '<div style="padding:5px;">'+message+'</div>';
         }

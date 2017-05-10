@@ -36,7 +36,10 @@ chat.init = function (server) {
                 // });
             }
             socket.username = data.name;
-            usernames.push(data.name);
+            usernames.push({
+                name: data.name,
+                badge: data.badge
+            });
             io.sockets.emit('updateusers', usernames);
             for(var i =0 ; i < usernames.length ; i++){
                 console.log('user list' , usernames[i]);
@@ -67,8 +70,14 @@ chat.init = function (server) {
 //         });
         socket.on('disconnect', function () {
 
-            if(usernames.indexOf(socket.username) > -1) {
-                usernames.splice(usernames.indexOf(socket.username), 1);
+            // if(usernames.indexOf(socket.username) > -1) {
+            //     usernames.splice(usernames.indexOf(socket.username), 1);
+            // }
+            for(var i = 0; i < usernames.length; i++) {
+                if(usernames[i].name == socket.username) {
+                    usernames.splice(i, 1);
+                    break;
+                }
             }
 
             io.sockets.emit('updateusers', usernames);

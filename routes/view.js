@@ -378,7 +378,9 @@ router.get('/chat/:matchId', need_login, function(req, res){
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		my_nickname: req.session.nickname,
+		my_nickname: '',
+		myBadge: 'ready',
+		myBadgeSrc: 'image/badge_ready.png',
 		matchId: req.params.matchId,
 		headerHideMenu: ''
 	};
@@ -392,15 +394,41 @@ router.get('/chat/:matchId', need_login, function(req, res){
 		json.mydata_display = 'display:none;';
 	}
 
-	schedule.getMatchTeamsName({
-		'matchId': matchId
-	}, function(result) {
-		json.homeTeamName = result.homeTeamName;
-		json.awayTeamName = result.awayTeamName;
-		json.homeTeamImg = result.homeTeamImg;
-		json.awayTeamImg = result.awayTeamImg;
+	user.get(req.session.email, function(userData) {
+		if(userData) {
+			json.my_nickname = userData.nickname;
+			if(!userData.readyGameCnt || userData.readyGameCnt <= 0) {
+				var rating = userData.rating;
+				if(rating < 1200) {
+					json.myBadge = 'bronze';
+					json.myBadgeSrc = '/image/badge_bronze.png';
+				} else if(1200 <= rating && rating < 1400) {
+					json.myBadge = 'silver';
+					json.myBadgeSrc = '/image/badge_silver.png';
+				} else if(1400 <= rating && rating < 1600) {
+					json.myBadge = 'gold';
+					json.myBadgeSrc = '/image/badge_gold.png';
+				} else if(1600 <= rating && rating < 1800) {
+					json.myBadge = 'platinum';
+					json.myBadgeSrc = '/image/badge_platinum.png';
+				} else if(1800 <= rating) {
+					json.myBadge = 'diamond';
+					json.myBadgeSrc = '/image/badge_diamond.png';
+				}
+			}
+			schedule.getMatchTeamsName({
+				'matchId': matchId
+			}, function(result) {
+				json.homeTeamName = result.homeTeamName;
+				json.awayTeamName = result.awayTeamName;
+				json.homeTeamImg = result.homeTeamImg;
+				json.awayTeamImg = result.awayTeamImg;
 
-        res.render(path, json);
+		        res.render(path, json);
+			});
+		} else {
+			res.redirect('/');
+		}
 	});
 });
 

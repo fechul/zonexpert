@@ -8,7 +8,7 @@ var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 var schedule = require('../core/schedule.js');
 var board = require('../core/board.js');
-var chat = require('../core/chat.js');
+// var chat = require('../core/chat.js');
 var prediction = require('../core/prediction.js');
 
 var need_login = function(req, res, next) {

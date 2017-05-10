@@ -307,3 +307,15 @@ ul.users-container {
     height: 50px;
     margin-right: 10px;
 }
+
+li .badge_bronze,
+li .badge_silver,
+li .badge_gold,
+li .badge_platinum,
+li .badge_diamond,
+li .badge_ready {
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 5px;
+}
