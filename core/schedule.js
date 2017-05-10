@@ -186,21 +186,57 @@ exports.setComingUpMatch = function(callback) {
 };
 
 exports.getMatchTeamsName = function(data, callback) {
-    var query = db.match.findOne({'id' : data.matchId});
-    query.select('homeTeamName');
-    query.select('awayTeamName');
+    var homeTeamName = '';
+    var awayTeamName = '';
+    var homeTeamImg = '';
+    var awayTeamImg = '';
 
-    query.exec(function (err, data) {
-        if (err) {
-            console.log('err',err);
+    db.match.find({
+        'id': data.matchId
+    }, {
+        'homeTeamName': 1,
+        'awayTeamName': 1,
+        'homeTeamId': 1,
+        'awayTeamId': 1,
+        'leagueId': 1
+    }).limit(1).exec(function(err, data) {
+        if(err) {
+            console.log('schedule getMatchTeamsName Err: ', err);
         } else {
-            console.log(data);
-            // json.homeTeamName = data;
-        }
+            if(data && data.length) {
+                data = data[0];
+                homeTeamName = data.homeTeamName;
+                awayTeamName = data.awayTeamName;
 
-        callback({
-            'homeTeamName': data.homeTeamName,
-            'awayTeamName': data.awayTeamName
-        });
+                db.team.find({
+                    'id': data.homeTeamId,
+                    'leagueId': data.leagueId
+                }, {
+                    'crestUrl': 1
+                }).limit(1).exec(function(homeErr, homeData) {
+                    db.team.find({
+                        'id': data.awayTeamId,
+                        'leagueId': data.leagueId
+                    }, {
+                        'crestUrl': 1
+                    }).limit(1).exec(function(awayErr, awayData) {
+                        if(homeData && homeData.length) {
+                            homeTeamImg = homeData[0].crestUrl;
+                        }
+
+                        if(awayData && awayData.length) {
+                            awayTeamImg = awayData[0].crestUrl;
+                        }
+
+                        callback({
+                            'homeTeamName': homeTeamName,
+                            'awayTeamName': awayTeamName,
+                            'homeTeamImg': homeTeamImg,
+                            'awayTeamImg': awayTeamImg
+                        });
+                    });
+                });
+            }
+        }
     });
 };

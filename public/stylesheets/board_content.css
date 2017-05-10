@@ -4,12 +4,17 @@
 body {
 	margin: 0px !important;
 	font-family: "Nanum Gothic", sans-serif !important;
-	background-color: #145c86 !important;
+	/*background-color: #145c86 !important;*/
+
+	background-image: url(http://i.imgur.com/MQB99sg.jpg);	
+	background-repeat: repeat;
+	background-size: 100% 100vh;
+	background-attachment: fixed;
 }
 
 .main_section {
 	/*background-color: #145c86;*/
-	opacity: 0.85;
+	/*opacity: 0.85;*/
 	text-align: center;
 }
 

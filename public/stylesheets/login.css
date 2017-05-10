@@ -23,8 +23,8 @@ body {
 
 .login_section .logo {
 	margin: 0 auto;
-	width: 250px;
-	height: 100px;
+	width: 350px;
+	height: 155px;
 	margin-top: 60px;
 }
 
@@ -85,9 +85,12 @@ body {
 }
 
 #login_btn {
-	background-color: #145c86;
+	/*background-color: #145c86;*/
+	background-color: #2b8cc5;
 	border: none;
 	color: #fff;
+	font-size: 16px;
+	border-radius: 5px;
 }
 
 .checkbox_wrapper {
@@ -101,6 +104,7 @@ body {
 	float: left;
 	margin-left: 5px;
 	cursor: pointer;
+	color: #fff;
 }
 
 .checkbox_wrapper > .checkbox_label > input {
