@@ -40,7 +40,8 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		headerHideMenu: ''
 	};
 
 	json.prediction_shortcut = req.predictionShortcut;
@@ -59,14 +60,26 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 
 router.get('/signup', no_login, function(req, res) {
 	var path = 'signup.html';
-	var json = {};
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;'
+	};
 
 	res.render(path, json);
 });
 
 router.get('/login', no_login, function(req, res) {
 	var path = 'login.html';
-	var json = {};
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;'
+	};
 
 	res.render(path, json);
 
@@ -80,7 +93,8 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		rank_html: ''
+		rank_html: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -266,7 +280,8 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		user_email: req.session.email
+		user_email: req.session.email,
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -296,7 +311,8 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, function(req,
 		board_title: '',
 		board_content: '',
 		isUpdate: false,
-		write_btn_name: ''
+		write_btn_name: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -335,7 +351,8 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -351,7 +368,8 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 
 	res.render(path, json);
 });
-router.get('/chat/:matchId',function(req, res){
+
+router.get('/chat/:matchId', need_login, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 	var json = {
@@ -361,7 +379,8 @@ router.get('/chat/:matchId',function(req, res){
 		signup_display: '',
 		mydata_display: '',
 		my_nickname: req.session.nickname,
-		matchId: req.params.matchId
+		matchId: req.params.matchId,
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -408,7 +427,8 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 		searchdata_predict_rate: '-',
 		searchdata_rank: '-',
 
-		myTotalRate: '-'
+		myTotalRate: '-',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -498,7 +518,8 @@ router.get('/my_page', function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		user_email: req.session.email
+		user_email: req.session.email,
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
