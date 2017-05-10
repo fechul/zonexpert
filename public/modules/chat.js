@@ -4,9 +4,7 @@ var CHAT = {
         this.room = options.roomId;
         this.init_events();
         this.connect_socket();
-        },
-
-
+    },
 
     init_events: function() {
         var self = this;
@@ -38,6 +36,18 @@ var CHAT = {
             location.href = '/' + move;
         });
 
+        $('.tools .user_search_input').keydown(function(e) {
+            if(e.keyCode == 13) {
+                $('.tools .user_search_btn').click();
+            }
+        });
+
+        $('.tools .user_search_btn').click(function() {
+            var id = $('.tools .user_search_input').val();
+
+            location.href = "/search?id=" + id;
+        });
+
         $('#message-button').click(function () {
             var msg = $('#message-input').val();
             self.socket.emit('sendchat', {name: self.name, message: msg});
@@ -51,8 +61,6 @@ var CHAT = {
                 $('#message-button').focus().click();
             }
         });
-
-
     },
 
     connect_socket: function() {
@@ -85,15 +93,12 @@ var CHAT = {
             for (var i = 0; i < data.length; i++) {
                 $('.member-list').append('<li>' + data[i] + '</li>');
             }
-            //            $.each(data, function(key, value) {
-            //                $('.users').append('<div>' + key + '</div>');
-            //                console.log("username" , key);
-            //            });
         });
     },
 
     writeMessage: function(type, name, message) {
         var html = '';
+
         var time = new Date();
         var hour = time.getHours();
         var minutes = time.getMinutes();
@@ -104,42 +109,28 @@ var CHAT = {
             minutes = '0' + minutes;
         if(seconds < 10)
             seconds = '0' + seconds;
-        time = hour + ' : ' + minutes + ' : ' + seconds;
+        time = hour + ':' + minutes + ':' + seconds;
+
         if (type == 'me') {
-            html = '<li class="me">' +  name + ' : ' +  message + '<span>' + time +'</span>'+ '</li>';
-
-            // html = '<li class="me"><div class="name"><span class="">'+name+'</span></div>' +
-            //     '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
-
+            html = '<li class="me">' +  name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
+            $('#message-input').val("");
         } else if (type == 'other') {
-            html = '<li class="">' + name + ':' + message +'</li>';
-            // html = '<li class=""><div class="name"><span class="">'+name+'+</span></div>' +
-            //     '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
+            html = '<li>' +  name + ' : ' +  message + '<span class="chatTime">' + time +'</span>'+ '</li>';
         } else {
-            html = '<div>'+message+'</div>';
+            html = '<div style="padding:5px;">'+message+'</div>';
         }
-        //html = html.replace('{MESSAGE}', printName + message);
-        $(html).appendTo('#chat-content');
-        $('body').stop();
-        $('body').animate({scrollTop: $('body').height()}, 500);
-        $('#message-input').val("");
 
+        var chatContentHeight = $('#chat-content').height();
+        var chatListHeight = $('.chat-list').height();
+        var scrollListScrollTop = $('.chat-list').scrollTop();
+
+        $(html).appendTo('#chat-content');
+
+        if((chatContentHeight - chatListHeight)*0.95 <= scrollListScrollTop) {
+            $('.chat-list').stop();
+            $('.chat-list').animate({scrollTop: chatContentHeight}, 100);
+        } else {
+            $('.chat-list').stop();
+        }
     }
-    //
-    // writeMessage: function(type, name, message) {
-    //     var html = '<div>{MESSAGE}</div>';
-    //     var printName = '';
-    //     if (type == 'me') {
-    //         printName = name + '(나) : ';
-    //         printName.bold();
-    //     } else if (type == 'other') {
-    //         printName = name + ' : ';
-    //     }
-    //     html = html.replace('{MESSAGE}', printName + message);
-    //     $(html).appendTo('.j-message');
-    //     $('body').stop();
-    //     $('body').animate({scrollTop: $('body').height()}, 500);
-    //     $('#message-input').val("");
-    //
-    // }
 };

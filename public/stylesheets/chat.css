@@ -1,6 +1,5 @@
 .main_section {
-
-    opacity: 0.85;
+    /*opacity: 0.85;*/
     text-align: center;
 }
 
@@ -31,6 +30,11 @@ section {
 
 body {
     margin-bottom: 120px;
+    line-height: 1;
+    background: url(http://i.imgur.com/MQB99sg.jpg);
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 12px;
+    color: #333f4d;
 }
 
 .chat-wrapper{
@@ -55,9 +59,7 @@ body {
 footer, header, hgroup, menu, nav, section {
     display: block;
 }
-body {
-    line-height: 1;
-}
+
 ol, ul {
     list-style: none;
 }
@@ -69,24 +71,15 @@ q:before, q:after {
     content: '';
     content: none;
 }
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
 
-body{
-    background: url(http://i.imgur.com/MQB99sg.jpg) #a9b89e;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 12px;
-    color: #333f4d;
-}
 b{
     font-weight: bold;
 }
 .window-wrapper{
     background: #fff;
     width: 780px;
-    margin: 30px auto;
+    margin: 100px auto;
+    margin-top: 0px;
     border-radius: 6px;
     box-shadow: 0 0 6px rgba(0,0,0,0.3);
     overflow: hidden;
@@ -106,22 +99,16 @@ b{
 }
 
 #chat-content{
-    margin : 0;
+    margin : 0px;
+    padding: 0px;
 }
 #chat-content li{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 20px;
+    padding: 10px 15px 10px 15px;
 }
-/*#chat-content span{*/
-    /*float:right;*/
-    /*color: #738ba3;*/
-    /*font-size: 9px;*/
-/*}*/
-#chat-content >
 
 .chat-area {
     border-top: 1px solid #cfdae1;
+    border-right: 1px solid #cfdae1;
 
     box-shadow: inset 0 1px 3px rgba(207, 218, 225, 0.42);
 }
@@ -130,18 +117,12 @@ b{
     overflow: hidden;
     line-height: 15px;
 }
-.fa-search{
-    font-size: 14px;
-    float: right;
-    color: #a8bbc6;
-    cursor: pointer;
 
-
-}
 .chat-area .chat-list{
     height: 432px;
-    border-top: 1px solid #cfdae1;
+    /*border-top: 1px solid #cfdae1;*/
     border-bottom: 1px solid #cfdae1;
+    /*border-right: 1px solid #cfdae1;*/
     overflow-y: auto;
     outline: none;
 }
@@ -239,8 +220,9 @@ b{
 }
 .right-tabs{
     width: 175px;
-    float: right;
-    border-left: 1px solid #cfdae1;
+    height: 498px;
+    overflow: auto;
+    float: left;
     border-top: 1px solid #cfdae1;
 
 }
@@ -262,19 +244,20 @@ b{
     transition: background 0.2s linear;
 }
 
-.right-tabs > ul.tabs > li > a >i{
+.right-tabs > ul.tabs > li > a >i {
     font-size: 18px
 }
-ul.users-container{
+ul.users-container {
     padding: 10px;
     color: #6e7f91;
 
 }
 
-.member-list{
-    padding-left: 10px;
+.member-list {
+    padding: 10px;
 }
-.member-list > li{
+
+.member-list > li {
     padding: 5px 0;
     text-align: left;
 }
@@ -294,4 +277,33 @@ ul.users-container{
     width:50px;
     height:50px;
     border-radius: 30px;
+}
+
+.chatTime {
+    float: right;
+    font-size: 11px;
+}
+
+.page_title .teamTitleSection {
+    width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    display: inline-block;
+    font-size: 28px;
+}
+
+.page_title .teamNameTitle.homeTeamSection {
+    width: 350px;
+    float: left;
+}
+
+.page_title .teamNameTitle.awayTeamSection {
+    width: 350px;
+    float: right;
+}
+
+.page_title .teamImg {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
 }

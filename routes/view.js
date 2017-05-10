@@ -378,6 +378,8 @@ router.get('/chat/:matchId',function(req, res){
 	}, function(result) {
 		json.homeTeamName = result.homeTeamName;
 		json.awayTeamName = result.awayTeamName;
+		json.homeTeamImg = result.homeTeamImg;
+		json.awayTeamImg = result.awayTeamImg;
 
         res.render(path, json);
 	});
@@ -430,21 +432,26 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 				var rating = userdata.rating;
 				json.searchdata_rating = rating;
 
-				if(rating < 1200) {
-					json.searchdata_tier_img = 'image/badge_bronze.png';
-					json.searchdata_tier_name = '브론즈';
-				} else if(1200 <= rating && rating < 1400) {
-					json.searchdata_tier_img = 'image/badge_silver.png';
-					json.searchdata_tier_name = '실버';
-				} else if(1400 <= rating && rating < 1600) {
-					json.searchdata_tier_img = 'image/badge_gold.png';
-					json.searchdata_tier_name = '골드';
-				} else if(1600 <= rating && rating < 1800) {
-					json.searchdata_tier_img = 'image/badge_platinum.png';
-					json.searchdata_tier_name = '플래티넘';
-				} else if(1800 <= rating) {
-					json.searchdata_tier_img = 'image/badge_diamond.png';
-					json.searchdata_tier_name = '다이아몬드';
+				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
+					json.searchdata_tier_img = 'image/badge_ready.png';
+					json.searchdata_tier_name = '배치중';
+				} else {
+					if(rating < 1200) {
+						json.searchdata_tier_img = 'image/badge_bronze.png';
+						json.searchdata_tier_name = '브론즈';
+					} else if(1200 <= rating && rating < 1400) {
+						json.searchdata_tier_img = 'image/badge_silver.png';
+						json.searchdata_tier_name = '실버';
+					} else if(1400 <= rating && rating < 1600) {
+						json.searchdata_tier_img = 'image/badge_gold.png';
+						json.searchdata_tier_name = '골드';
+					} else if(1600 <= rating && rating < 1800) {
+						json.searchdata_tier_img = 'image/badge_platinum.png';
+						json.searchdata_tier_name = '플래티넘';
+					} else if(1800 <= rating) {
+						json.searchdata_tier_img = 'image/badge_diamond.png';
+						json.searchdata_tier_name = '다이아몬드';
+					}
 				}
 
 				var total_hit = 0;
@@ -464,13 +471,20 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 				json.no_search_show = 'display:none;';
 
 				var key = 'rating_rank';
-				redis_client.zrevrank(key, userdata.email, function(err, data) {
-		        	if(!err) {
-		        		json.searchdata_rank = data+1;
-		        		json.myTotalRate = (((data+1) / userCount)*100).toFixed(2);
-		        	}
+
+				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
+	        		json.searchdata_rank = '-';
+	        		json.myTotalRate = '-';
 		        	res.render(path, json);
-		        });
+				} else {
+					redis_client.zrevrank(key, userdata.email, function(err, data) {
+			        	if(!err) {
+			        		json.searchdata_rank = data+1;
+			        		json.myTotalRate = (((data+1) / userCount)*100).toFixed(2);
+			        	}
+			        	res.render(path, json);
+			        });
+				}
 			}
 		});
 	});

@@ -3,7 +3,11 @@
 body {
 	margin: 0px !important;
 	font-family: "Nanum Gothic", sans-serif !important;
-	background-color: #145c86 !important;
+	/*background-color: #145c86 !important;*/
+	background-image: url(http://i.imgur.com/MQB99sg.jpg);	
+	background-repeat: repeat;
+	background-size: 100% 100vh;
+	background-attachment: fixed;
 }
 
 
@@ -119,6 +123,8 @@ body {
 
 #header > .tools > .menu_search > button:hover {
 	background-color: #ccc;
+	height: 100%;
+	border-radius: 0px 5px 5px 0px;
 }
 
 #header > .tools > .menu_search > input {
@@ -178,7 +184,7 @@ body {
 */
 
 .container_box {
-	background-color: #ddd;
+	background-color: #eee;
 	border-radius: 10px;
 	position: relative;
 	display: inline-block;
@@ -213,6 +219,13 @@ table > tbody > tr:not(:last-child) {
 	margin-right: 5px;
 	display: inline-block;
 	margin-bottom: -5px;
+}
+
+.badge_ready {
+	background: url(/image/badge_ready.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 .badge_bronze {
