@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-마이페이지</title>
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/my_page.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+    </head>
+
+    <body>
+		<div id="header_wrap">
+			<div id="header">
+				<a href="/" class="logo"></a>
+				<ul class="main_menu">
+					<li class="menu_rank" move="rank">순위</li>
+					<li class="menu_schedule" move="schedule">경기일정</li>
+					<li class="menu_board" move="board">게시판</li>
+				</ul>
+				<ul class="tools">
+					<li class="menu_search">
+						<input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+						<button type="button" class="user_search_btn">
+							<i class="fa fa-search"></i>
+						</button>
+					</li>
+					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+					<li class="logout" style="<%= logout_display %>">로그아웃</li>
+					<li class="login" style="<%= login_display %>">로그인</li>
+					<li class="signup" style="<%= signup_display %>">회원가입</li>
+				</ul>
+			</div>
+		</div>
+
+		<section class="main_section">
+			<section id ="mypage_section">
+				<div style = "padding:30px 0 0 30px">
+					<span class ="mypage_st1">○○○님의 MYPAGE</span>
+				</div>
+				
+				<div class="mypage_pd1"></div>
+				
+				<div class ="mypage_info">
+					<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<span class ="mypage_st2">Email 주소</span>
+					</div>
+					<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<span class ="mypage_st2">이름</span>
+					</div>
+					<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<span class ="mypage_st2">닉네임</span>
+					</div>
+					<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<span class ="mypage_st2">가입일</span>
+					</div>
+					<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<span class ="mypage_st2">최근 로그인</span>
+					</div>
+				
+				
+				<div class= "changeinfo_wrap">
+					<div class = "changeinfo">
+						<div style="text-align:center;">
+							<button type="button" class="btn btn-default" onclick="location.href='/buylist'">회원정보 변경</button>
+						</div>
+					</div>
+						
+					<div class = "changeinfo">
+						<div style="text-align:center;">
+								<button type="button" class="btn btn-default" onclick="location.href='/buylist'">회원 탈퇴</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			
+			<section id="changeinfo_unfold_wrap">
+				
+					<div class="header">회원정보 변경</div>
+                    <hr class="divider">        
+					<form class="form-horizontal">
+					 	<div class="form-group">
+							<label for="inputEmail" class="col-sm-2 control-label">Email 주소</label>
+							<div class="col-sm-10">
+						  		<input type="email" class="form-control" id="inputEmail" placeholder="Email">
+							</div>
+					  	</div>
+					  	<div class="form-group">
+							<label for="nickname" class="col-sm-2 control-label">닉네임</label>
+							<div class="col-sm-10">
+						  		<input type="password" class="form-control" id="nickname" placeholder="닉네임을 입력해 주세요.">
+							</div>
+					  	</div>
+						<div class="form-group">
+							<label for="inputNewPassword" class="col-sm-2 control-label">새 비밀번호</label>
+							<div class="col-sm-10">
+						  		<input type="password" class="form-control" id="inputNewPassword" placeholder="새 비밀번호를 입력해주세요.">
+							</div>
+					  	</div>
+						<div class="form-group">
+							<label for="inputConfirmPassword" class="col-sm-2 control-label">비밀번호 확인</label>
+							<div class="col-sm-10">
+						  		<input type="password" class="form-control" id="inputConfirmPassword" placeholder="비밀번호를 확인해주세요.">
+							</div>
+					  	</div>
+						
+					  	
+					  	<div class="form-group">
+							<div class="col-sm-offset-1 col-sm-10">
+						  		<button type="submit" class="btn btn-default">회원정보 변경</button>
+							</div>
+					  	</div>
+					</form>
+			
+			</section>
+			
+			<section class="mypage_article_wrap">
+				<article class="mypage_article">
+					<div style="text-align:center;">
+						<span class="mypage-ti-fo">내역</span></div>
+					<div style="text-align:center;">
+						<i class="fa fa-shopping-cart" style="font-size:90px;padding-top:10px;color:#f49f6b;"></i>
+					</div>
+					<div class="mypage_menu_div">
+						<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
+							<li><i class="fa fa-caret-right"></i> 구매건수 : 0</li>
+							
+							<li><i class="fa fa-caret-right"></i> 구매완료 : 0</li>
+							<li><i class="fa fa-caret-right"></i> 구매금액 : 0</li>
+						</ul>
+					</div>
+					<div style="text-align:center;">
+						<button type="button" class="btn btn-default btn-sm" onclick="location.href='/buylist'">구매 내역 자세히 보기</button></div>
+				</article>
+
+				<article class="mypage_article">
+					<div style="text-align:center;">
+						<span class="mypage-ti-fo">판매내역</span></div>
+					<div style="text-align:center;">
+						<i class="fa fa-graduation-cap" style="font-size:90px;padding-top:10px;color:#f49f6b;"></i></div>
+					<div class="mypage-menu-div">
+						<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
+							<li><i class="fa fa-caret-right"></i> 판매건수 : 0</li>
+							<li><i class="fa fa-caret-right"></i> 판매완료 : 0</li>
+							<li><i class="fa fa-caret-right"></i> 판매금액 : 0</li>
+						</ul></div>
+					<div style="text-align:center;">
+						<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+				</article>
+				
+				<article class="mypage_article">
+					<div style="text-align:center;">
+						<span class="mypage-ti-fo">잔고</span></div>
+					<div style="text-align:center;">
+						<i class="fa fa-krw" style="font-size:90px;padding-top:10px;color:#f49f6b;"></i></div>
+					<div class="mypage-menu-div">
+						<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
+							<li><i class="fa fa-caret-right"></i> 잔고금액 : 0</li>
+						</ul></div>
+					<div style="text-align:center;padding-bottom:10px;">
+						<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">잔고 충전하기</button></div>
+					<div style="text-align:center;">
+						<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+				</article>
+				
+				<article class="mypage_article">
+					<div style="text-align:center;">
+						<span class="mypage-ti-fo">정산/수익관리</span></div>
+					<div style="text-align:center;"><i class="fa fa-database" style="font-size:90px;padding-top:10px;color:#f49f6b;"></i></div>
+					<div class="mypage-menu-div">
+						<ul class="mypage-menu-ul" style="list-style:none; padding-left:0;">
+							<li><i class="fa fa-caret-right"></i> 판매 수수료율 : 
+												0
+
+							</li>
+							<li><i class="fa fa-caret-right"></i> 판매수익 : 0</li>
+							<li><i class="fa fa-caret-right"></i> 정산중 : 0</li>
+							<li><i class="fa fa-caret-right"></i> 출금 가능 : 0</li>
+						</ul>
+					</div>
+					<div style="text-align:center;">
+						<button type="button" class="btn btn-default btn-sm" onclick="location.href='/index.php?act=dispCommunicationMessages&amp;mid=mypage'">정산/수익관리 자세히 보기</button></div>
+				</article>
+				</section>
+		</section>
+			
+
+    </body>
+	
+	<script src="jquery/jquery.js"></script>
+	<script src="bootstrap/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	 <!-- <script src="modules/rank.js"></script>
+	 <script> 
+		RANK.init();
+	</script>  -->
+
+</html>

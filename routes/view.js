@@ -490,4 +490,27 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 	});
 });
 
+router.get('/my_page', function(req, res) {
+	var path = 'my_page.html';
+	var json = {
+		myinfo_display: '',
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
+		mydata_display: '',
+		user_email: req.session.email
+	};
+
+	if(req.session.login) {
+		json.login_display = 'display:none;';
+		json.signup_display = 'display:none;';
+	} else {
+		json.myinfo_display = 'display:none;';
+		json.logout_display = 'display:none;';
+		json.mydata_display = 'display:none;';
+	}
+
+	res.render(path, json);
+});
+
 module.exports = router;
