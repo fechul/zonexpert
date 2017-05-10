@@ -75,7 +75,7 @@
 					  		<div id="pie_record">
 					  			
 					  		</div>
-					  		<div class="no_statistics_field">통계 결과가 없습니다.</div>   	
+					  		<div class="no_statistics_field">통계 결과가 없습니다.</div>
 					  	</div>
 					  	<div id="record_field" class="tab-pane fade">
 					   		<canvas id="myChart"></canvas>
@@ -89,7 +89,7 @@
 					<table id="statistics_table">
 						<tr>
 							<td>순위</td>
-							<td>리그</td>
+							<td><span class="statistics_table_type_name">리그</span></td>
 							<td>적중</td>
 							<td>실패</td>
 							<td>예측 횟수</td>
@@ -104,7 +104,7 @@
 
 			<div class="my_recent_predict_wrapper" style="<%= search_show %>">
 				<div class="my_recent_predict_section container_box">
-					asdfas
+					<div class="no_record_field">통계 결과가 없습니다.</div>
 				</div>
 			</div>
 
@@ -120,7 +120,8 @@
 	<script src="modules/prediction_shortcut.js"></script>
 	<script>
 		SEARCH.init({
-			'search_id': '<%= searchdata_user_id %>'
+			'search_id': '<%= searchdata_user_id %>',
+			'search_rating': '<%= searchdata_rating %>'
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>
