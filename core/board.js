@@ -1,6 +1,6 @@
 var async = require('async');
 
-exports.get = function(user_email, callback) {
+exports.get = function(callback) {
 	db.board.find({}).sort({boardNo: -1}).lean().exec(function(err, data) {
 		data = JSON.stringify(data);
 		data = JSON.parse(data);
@@ -22,9 +22,10 @@ exports.get = function(user_email, callback) {
 						board.rating = userdata.rating;
 						
 						db.user.find({
-							'email': user_email
+							'email': board.writer
 						}, {
-							'like_board': 1
+							'like_board': 1,
+							'readyGameCnt': 1
 						}).limit(1).exec(function(myerr, mydata) {
 							if(mydata && mydata.length) {
 								mydata = mydata[0]
@@ -33,6 +34,8 @@ exports.get = function(user_email, callback) {
 								} else {
 									board.i_like = false;
 								}
+
+								board.readyGameCnt = mydata.readyGameCnt;
 							}
 							async_cb();
 						});

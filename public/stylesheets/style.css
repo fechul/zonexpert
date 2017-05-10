@@ -61,7 +61,7 @@
 }
 
 .mydata_statistics > .mydata_rate {
-	width: 30%;
+	width: 25%;
 	border-right: 1px solid #bbb;
 	padding: 15px 15px 15px 30px;
 	text-align: left;
@@ -75,7 +75,7 @@
 }
 
 .mydata_statistics > .mydata_recent_predict {
-	width: 50%;
+	width: 55%;
 	text-align: left;
 	/* padding: 15px; */
 }
@@ -101,8 +101,18 @@
 }
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
-	width: 180px;
 	float: left;
+	margin-right: 25px;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_team {
+	width: 110px;
+	display: inline-block;
+	text-align: center;
+}
+
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_score {
+	margin: 0px 8px 0px 8px;
 }
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.success {

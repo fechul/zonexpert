@@ -215,6 +215,13 @@ table > tbody > tr:not(:last-child) {
 	margin-bottom: -5px;
 }
 
+.badge_ready {
+	background: url(/image/badge_ready.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
 .badge_bronze {
 	background: url(/image/badge_bronze.png);
 	background-repeat: no-repeat;
