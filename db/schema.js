@@ -48,6 +48,7 @@ var userSchema = new Schema({
 // 프리미어리그 426   FA컵 429   분데스리가 430   포칼컵 432
 // 에레디비지에 433   리그앙 434   라리가 436   세리에 438
 // 포르투갈 439   챔스 440
+// PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL
 
 var leagueSchema = new Schema({
     'id' : String,
@@ -85,6 +86,11 @@ var matchSchema = new Schema({
             'goalsAwayTeam' : String,
             'default' : 0
         }
+    },
+    'pickCount': {
+        'home': {'type': Number, 'default': 0},
+        'draw': {'type': Number, 'default': 0},
+        'away': {'type': Number, 'default': 0}
     }
 });
 
@@ -110,6 +116,13 @@ var boardSchema = new Schema({
     'content': String,
     'like': Number
 });
+//
+// var ratingSchema = new Schema({
+//     'comingUpMatch': [{
+//         'date': Date,
+//         ''
+//     }]
+// });
 
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);

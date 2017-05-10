@@ -238,7 +238,7 @@ router.all('/test/schedule_initialize', function(req, res) {
 			response.on('end', function () {
 				leaguesObject[league] = JSON.parse(leaguesObject[league]);
 
-				schedule.initialize({
+				schedule.update({
 					'leagueId': league,
 					'schedules': leaguesObject[league].fixtures
 				}, function() {

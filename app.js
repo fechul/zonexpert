@@ -3,6 +3,10 @@ global.__port = '3000';
 global.__url = 'http://' + __host + ':' + __port;
 global.__admin_email = 'zonexpert0@gmail.com';
 global.__admin_password = 'whsansrk123!';
+global.__matchList = {
+    'TIMED': [],
+    'IN_PLAY': []
+};
 
 var express = require('express');
 var path = require('path');
@@ -12,10 +16,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var http = require('http');
-
-var schedule = require('./core/schedule.js');
 var async = require('async');
-var node_schedule = require('node-schedule');
+
 // redis
 var session = require('express-session');
 var redis_store = require('connect-redis')(session);
@@ -36,6 +38,10 @@ mongoose_db.once('open', function() {
 mongoose.connect('mongodb://localhost');
 
 global.db = require('./db/schema.js');
+
+var daemon = require('./core/daemon.js');
+
+// daemon.start();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -72,29 +78,6 @@ app.use(function(req, res, next) {
 app.use('/', index_routes);
 app.use('/', view_routes);
 
-// app.get('/rank', function(req, res, next) {
-//     var key = 'rating_rank';
-//     var start= 0;
-//     var end = 99;
-
-//     var rank_array = [];
-
-//     redis_client.zrevrange(key, start, end, function(err, data) {
-//         if(err) {
-//             console.log("redis get rank err: ", err);
-//             next();
-//         } else {
-//             async.each(data, function(info, async_cb) {
-//                 rank_array.push(info);
-//                 async_cb();
-//             }, function(async_err) {
-//                 console.log(rank_array)
-//                 next();
-//             });
-//         }
-//     });
-// }, view_routes.rank);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
 	var err = new Error('Not Found');
@@ -112,50 +95,5 @@ app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
 	res.send('error');
 });
-
-// request schedule
-// var rule = new node_schedule.RecurrenceRule();
-// rule.minute = 30;
-// var rule1 = new node_schedule.RecurrenceRule();
-// rule1.minute = 00;
-//
-// var scheduleJob = node_schedule.scheduleJob(rule, function(){
-// 	var leaguesObject = {};
-// 	var leagueIdArray = [426, 429, 430, 433, 434, 438, 439, 440];
-// 	var options = {
-// 	  host: 'api.football-data.org',
-// 	  // path: '/v1/fixtures/'
-// 	};
-// 	async.each(leagueIdArray, function(league, async_cb) {
-// 	 	options.path =  '/v1/competitions/' + league + '/fixtures';
-// 		callback = function(response) {
-// 		  //var str = '';
-//
-// 		  //another chunk of data has been recieved, so append  it to `str`
-// 		  response.on('data', function (chunk) {
-// 		    leaguesObject[league] += chunk;
-// 		  });
-//
-// 		  //the whole response has been recieved, so we just print it out here
-// 		  response.on('end', function () {
-// 		     //console.log(leaguesObject[league]);
-// 				 async_cb();
-// 				schedule.update_schedule(leaguesObject[league], function() {
-//
-// 				});
-// 		  });
-// 		}
-//
-// 		http.request(options, callback).end();
-//
-// 	}, function(async_err) {
-// 		if(async_err) {
-//
-// 		} else {
-//
-// 		}
-//
-// 	});
-// });
 
 module.exports = app;
