@@ -99,26 +99,30 @@ b{
 
 
 .window-area{
-    position: absolute;
-    top: 40px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding-left: 176px;
+    width: 605px;
+    float: left;
+
+
 }
 
 #chat-content{
-    padding-left: 10px;
-    padding-right: 10px;
+    margin : 0;
 }
+#chat-content li{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+}
+/*#chat-content span{*/
+    /*float:right;*/
+    /*color: #738ba3;*/
+    /*font-size: 9px;*/
+/*}*/
+#chat-content >
 
 .chat-area {
     border-top: 1px solid #cfdae1;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 175px;
+
     box-shadow: inset 0 1px 3px rgba(207, 218, 225, 0.42);
 }
 .title {
@@ -135,13 +139,9 @@ b{
 
 }
 .chat-area .chat-list{
+    height: 432px;
     border-top: 1px solid #cfdae1;
     border-bottom: 1px solid #cfdae1;
-    position: absolute;
-    left: 0;
-    top: 35px;
-    right: 0;
-    bottom: 44px;
     overflow-y: auto;
     outline: none;
 }
@@ -152,6 +152,7 @@ b{
     border-top: 1px solid #cfdae1;
     overflow: hidden;
     position: relative;
+    text-align: left;
 }
 .chat-area ul > li.me{
     background: #e4eaee;
@@ -195,10 +196,6 @@ b{
     background: #e4eaee;
     padding: 6px;
     overflow: hidden;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
     border-top: 1px solid #cfdae1;
 }
 .input-area .input-wrapper{
@@ -241,22 +238,19 @@ b{
     outline: none;
 }
 .right-tabs{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
+    width: 175px;
+    float: right;
     border-left: 1px solid #cfdae1;
     border-top: 1px solid #cfdae1;
-    width: 175px;
+
 }
 .right-tabs > ul.tabs{
     overflow: hidden;
 }
 .right-tabs > ul.tabs > li{
     float: left;
-    width: 33.3%;
     text-align: center;
+    border-left:1px solid #cfdae1;
     border-bottom: 1px solid #cfdae1;
 }
 .right-tabs > ul.tabs > li > a{
@@ -296,7 +290,6 @@ ul.users-container{
     color: #5d7185;
 }
 .my-account .image >img{
-    position:absolute;
     float: left;
     width:50px;
     height:50px;

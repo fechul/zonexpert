@@ -8,10 +8,8 @@ var userSchema = new Schema({
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
     'signup_date': Date,
-    'nickname': String,
     'main_sport': Number, // soccer 1
     'main_league': Number,
-
     'rating': {'type': Number, 'default': 1500},
     'record': Object,
 
