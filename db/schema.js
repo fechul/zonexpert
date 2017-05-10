@@ -15,7 +15,8 @@ var userSchema = new Schema({
     'rating': {'type': Number, 'default': 1500},
     'record': Object,
 
-    'like_board': Array
+    'like_board': Array,
+    'readyGameCnt': {'type': Number, 'default': 5}
 });
 
 // user - record

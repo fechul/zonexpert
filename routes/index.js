@@ -55,9 +55,6 @@ router.post('/logout', function(req, res) {
 	});
 });
 
-
-
-
 router.post('/accounts', function(req, res) {
 	user.signup({
 		'email': req.body.email,
@@ -75,12 +72,12 @@ router.get('/auth/signup', function(req, res) {
 	auth.signup({
 		'token': req.query.token
 	}, function(signup) {
-		res.json(signup);
+		res.json("회원가입 인증이 완료되었습니다.");
 	});
 });
 
 router.get('/board/get', function(req, res) {
-	board.get(req.session.email, function(data) {
+	board.get(function(data) {
 		res.json(data);
 	});
 });
@@ -382,8 +379,8 @@ router.get('/getMyData', function(req, res) {
 			mydata_obj.mydata_user_id = mydata.nickname;
 			mydata_obj.mydata_user_main_field = get_sport_name(mydata.main_sport) + '/' + get_league_name(mydata.main_league);
 			mydata_obj.my_rating = mydata.rating;
-			mydata_obj.my_tier_name = get_tier_info(mydata.rating).name;
-			mydata_obj.my_tier_img = get_tier_info(mydata.rating).img;
+			mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
+			mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
 
 			if(mydata.record) {
 				if(mydata.record.total) {
@@ -398,6 +395,16 @@ router.get('/getMyData', function(req, res) {
 		}
 
 		res.json(mydata_obj);
+	});
+});
+
+router.get('/getMyRecentPredict', function(req, res) {
+	var email = req.session.email;
+
+	prediction.getRecentPredict({
+		'email': email
+	}, function(data) {
+		res.json(data);
 	});
 });
 

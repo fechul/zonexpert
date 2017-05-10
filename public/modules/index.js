@@ -2,6 +2,7 @@ var INDEX = {
 	init: function() {
 		this.init_events();
 		this.set_mydata();
+		this.setRecentPredict();
 		this.set_rank('rating');
 	},
 
@@ -67,6 +68,41 @@ var INDEX = {
 				$('#my_total_hit').html(data.my_total_hit);
 				$('#my_total_fail').html(data.my_total_fail);
 				$('#my_predict_rate').html(data.my_predict_rate);
+			}
+		});
+	},
+
+	setRecentPredict: function() {
+		$.get('/getMyRecentPredict', function(data) {
+			if(data && data.length) {
+				$('.predict_content_row.no_data').hide();
+
+				var recentPredictHtml = '';
+
+				for(var i = 0; i < data.length; i++) {
+					data[i].date = new Date(data[i].date);
+					var year = data[i].date.getFullYear()%100;
+					var month = data[i].date.getMonth()+1;
+					if(month < 10) {
+						month = '0' + month;
+					}
+					var day = data[i].date.getDate();
+					if(day < 10) {
+						day = '0' + day;
+					}
+					recentPredictHtml += '<div class="predict_content_row">';
+					recentPredictHtml += '<div class="predict_date">' + year + '/' + month + '/' + day + '</div>';
+					recentPredictHtml += '<div class="match_result"><span class="match_result_team">' + data[i].homeTeamName + '</span><span class="match_result_score">' + data[i].homeTeamGoals +  ' : ' +  data[i].awayTeamGoals + '</span><span class="match_result_team">' + data[i].awayTeamName + '</span></div>';
+					if(data[i].predictResult == 'true') {
+						recentPredictHtml += '<div class="predict_result success">성공</div>';
+					} else {
+						recentPredictHtml += '<div class="predict_result fail">실패</div>';
+					}
+					recentPredictHtml += '</div>';
+				}
+				$('.mydata_recent_predict_content').append(recentPredictHtml);
+			} else {
+				$('.predict_content_row.no_data').show();
 			}
 		});
 	},

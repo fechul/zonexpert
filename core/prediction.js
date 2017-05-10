@@ -353,3 +353,67 @@ exports.getMatchesRecord = function(data, callback) {
         }
     });
 };
+
+exports.getRecentPredict = function(options, callback) {
+    var email = options.email;
+    var recentPredictData = [];
+
+    db.prediction.find({
+        'userEmail': email,
+        'result': {
+            $in: ['true', 'false']
+        }
+    }).sort({'createTime': -1}).limit(4).exec(function(err, data) {   // sorting하는 time 바꿔야 함
+        if(data && data.length) {
+            async.mapSeries(data, function(predict, async_cb) {
+                db.match.find({
+                    'id': predict.matchId
+                }, {
+                    'homeTeamId': 1,
+                    'awayTeamId': 1,
+                    'homeTeamName': 1,
+                    'awayTeamName': 1,
+                    'result': 1,
+                    'leagueId': 1
+                }).limit(1).exec(function(_err, matchData) {
+                    if(matchData && matchData.length) {
+                        matchData = matchData[0];
+
+                        db.team.find({
+                            'id': matchData.homeTeamId
+                        }, {
+                            'crestUrl': 1,
+                            'shortName': 1
+                        }).limit(1).exec(function(homeErr, homeData) {
+                            db.team.find({
+                                'id': matchData.awayTeamId,
+                                'leagueId': matchData.leagueId
+                            }, {
+                                'crestUrl': 1,
+                                'shortName': 1
+                            }).limit(1).exec(function(awayErr, awayData) {
+                                recentPredictData.push({
+                                    'homeTeamName': homeData[0].shortName,
+                                    'awayTeamName': awayData[0].shortName,
+                                    'homeTeamImg': (homeData && homeData.length ? homeData[0].crestUrl : ''),
+                                    'awayTeamImg': (awayData && awayData.length ? awayData[0].crestUrl : ''),
+                                    'homeTeamGoals': (matchData.result.homeTeam.goalsHomeTeam ? matchData.result.homeTeam.goalsHomeTeam : '-'),
+                                    'awayTeamGoals': (matchData.result.awayTeam.goalsAwayTeam ? matchData.result.awayTeam.goalsAwayTeam : '-'),
+                                    'date': predict.createTime,
+                                    'predictResult': predict.result
+                                });
+                                async_cb();
+                            });
+                        });
+                    } else {
+                        async_cb();
+                    }
+                });
+            }, function(async_err) {
+                callback(recentPredictData);
+            });
+        } else {
+            callback(null);
+        }
+    });
+};
