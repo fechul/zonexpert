@@ -8,14 +8,13 @@ var userSchema = new Schema({
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
     'signup_date': Date,
-    'nickname': String,
     'main_sport': Number, // soccer 1
     'main_league': Number,
-
     'rating': {'type': Number, 'default': 1500},
     'record': Object,
 
-    'like_board': Array
+    'like_board': Array,
+    'readyGameCnt': {'type': Number, 'default': 5}
 });
 
 // user - record
@@ -57,14 +56,12 @@ var leagueSchema = new Schema({
 
 var teamSchema = new Schema({
     'id' : String,
-    'rank' : String,
-    'team' : String,
-    'playedGames' : String,
-    'imageURI' : String,
-    'points' : String,
-    'goals' : String,
-    'goalsAgainst' : String,
-    'goalDifference' : String
+    'leagueId': String,
+    'name': String,
+    'code': String,
+    'shortName': String,
+    'squadMarketValue': Number,
+    'crestUrl': String
 });
 
 var matchSchema = new Schema({
@@ -105,7 +102,7 @@ var predictionSchema = new Schema({
     'pick': String, // home || draw || away
     'result': String, // true, false, wait
     'beforeRating': Number,
-    'afterRating': Number,
+    'afterRating': Number
 });
 
 var boardSchema = new Schema({

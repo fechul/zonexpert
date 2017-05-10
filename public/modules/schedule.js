@@ -80,6 +80,18 @@ var SCHEDULE = {
 		$('#schedule_table').on('click', 'td.schedule_chatting', function() {
 			console.log('go chatting');
 		});
+
+		$('.tools .user_search_input').keydown(function(e) {
+			if(e.keyCode == 13) {
+				$('.tools .user_search_btn').click();
+			}
+		});
+
+		$('.tools .user_search_btn').click(function() {
+			var id = $('.tools .user_search_input').val();
+
+			location.href = "/search?id=" + id;
+		});
 	},
 
 	getDateString: function(date) {

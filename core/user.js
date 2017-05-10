@@ -181,7 +181,8 @@ exports.get_rank_data = function(users, callback) {
             'rating': 1,
             'record': 1,
             'main_sport': 1,
-            'main_league': 1
+            'main_league': 1,
+            'readyGameCnt': 1
         }).limit(1).exec(function(err, userdata) {
             if(userdata && userdata.length) {
                 userdata = userdata[0];
@@ -191,7 +192,8 @@ exports.get_rank_data = function(users, callback) {
                     'rating': userdata.rating,
                     'record': userdata.record,
                     'main_sport': userdata.main_sport,
-                    'main_league': userdata.main_league
+                    'main_league': userdata.main_league,
+                    'readyGameCnt': userdata.readyGameCnt
                 });
             }
             async_cb();
@@ -213,6 +215,35 @@ exports.get_email = function(user, callback) {
         } else {
             callback(null);
         }
+    });
+};
+
+exports.get = function(nick, callback) {
+    db.user.find({
+        'nickname': nick
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            callback(data);
+        } else {
+            db.user.find({
+                'email': nick
+            }).limit(1).exec(function(err, _data) {
+                if(_data && _data.length) {
+                    _data = _data[0];
+
+                    callback(_data);
+                } else {
+                    callback(null);
+                }
+            });
+        }
+    });
+};
+
+exports.countAllUsers = function(callback) {
+    db.user.count({}, function(err, length) {
+        callback(length);
     });
 };
 

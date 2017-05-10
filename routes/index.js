@@ -8,6 +8,7 @@ var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 var schedule = require('../core/schedule.js');
 var board = require('../core/board.js');
+var chat = require('../core/chat.js');
 var prediction = require('../core/prediction.js');
 
 var need_login = function(req, res, next) {
@@ -71,12 +72,12 @@ router.get('/auth/signup', function(req, res) {
 	auth.signup({
 		'token': req.query.token
 	}, function(signup) {
-		res.json(signup);
+		res.json("회원가입 인증이 완료되었습니다.");
 	});
 });
 
 router.get('/board/get', function(req, res) {
-	board.get(req.session.email, function(data) {
+	board.get(function(data) {
 		res.json(data);
 	});
 });
@@ -217,6 +218,39 @@ router.get('/prediction/basket/unconfirmed', need_login, function(req, res) {
 	});
 });
 
+router.get('/prediction/getRatingChange', function(req, res) {
+	var dates = req.query.dates;
+	prediction.getRatingChange(dates, function(ratings) {
+		if(ratings && ratings.length) {
+			res.json(ratings);
+		} else {
+			res.json(null);
+		}
+	});
+});
+
+router.get('/prediction/getMatchesStatistics', function(req, res) {
+	var nick = req.query.search_id;
+	var type = req.query.type;
+
+	prediction.getMatchesStatistics({
+		'nick': nick,
+		'type': type
+	}, function(data) {
+		res.json(data);
+	});
+});
+
+router.get('/prediction/getMatchesRecord', function(req, res) {
+	var nick = req.query.search_id;
+
+	prediction.getMatchesRecord({
+		'nick': nick
+	}, function(data) {
+		res.json(data);
+	});
+});
+
 router.all('/test/schedule_initialize', function(req, res) {
 	var leaguesObject = {};
 	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];
@@ -224,7 +258,8 @@ router.all('/test/schedule_initialize', function(req, res) {
 	// 에레디비지에 433   리그앙 434   라리가 436   세리에 438
 	// 포르투갈 439   챔스 440
 	var options = {
-	  'host': 'api.football-data.org'
+	  'host': 'api.football-data.org',
+
 	};
 
 	async.eachSeries(leagueIdArray, function(league, async_cb) {
@@ -344,8 +379,8 @@ router.get('/getMyData', function(req, res) {
 			mydata_obj.mydata_user_id = mydata.nickname;
 			mydata_obj.mydata_user_main_field = get_sport_name(mydata.main_sport) + '/' + get_league_name(mydata.main_league);
 			mydata_obj.my_rating = mydata.rating;
-			mydata_obj.my_tier_name = get_tier_info(mydata.rating).name;
-			mydata_obj.my_tier_img = get_tier_info(mydata.rating).img;
+			mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
+			mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
 
 			if(mydata.record) {
 				if(mydata.record.total) {
@@ -360,6 +395,16 @@ router.get('/getMyData', function(req, res) {
 		}
 
 		res.json(mydata_obj);
+	});
+});
+
+router.get('/getMyRecentPredict', function(req, res) {
+	var email = req.session.email;
+
+	prediction.getRecentPredict({
+		'email': email
+	}, function(data) {
+		res.json(data);
 	});
 });
 
@@ -381,6 +426,43 @@ router.get('/getTopTen', function(req, res) {
 			});
 		} else {
 			res.json(null);
+		}
+	});
+});
+
+router.all('/test/team_initialize', function(req, res) {
+	var leaguesObject = {};
+	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];
+	// 프리미어리그 426   FA컵 429   분데스리가 430   포칼컵 432
+	// 에레디비지에 433   리그앙 434   라리가 436   세리에 438
+	// 포르투갈 439   챔스 440
+	var options = {
+	  'host': 'api.football-data.org'
+	};
+
+	async.each(leagueIdArray, function(league, async_cb) {
+	 	options.path =  '/v1/competitions/' + league + '/teams';
+		leaguesObject[league] = '';
+		callback = function(response) {
+			response.on('data', function (chunk) {
+				leaguesObject[league] += chunk;
+			});
+
+			response.on('end', function () {
+				leaguesObject[league] = JSON.parse(leaguesObject[league]);
+				async_cb();
+			});
+		}
+
+		http.request(options, callback).end();
+
+	}, function(async_err) {
+		if(async_err) {
+			res.json(false);
+		} else {
+			schedule.team_initialize(leaguesObject, function() {
+				res.json(true);
+			});
 		}
 	});
 });

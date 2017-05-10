@@ -86,6 +86,18 @@ var BOARD = {
 				});
 			}
 		});
+
+		$('.tools .user_search_input').keydown(function(e) {
+			if(e.keyCode == 13) {
+				$('.tools .user_search_btn').click();
+			}
+		});
+
+		$('.tools .user_search_btn').click(function() {
+			var id = $('.tools .user_search_input').val();
+
+			location.href = "/search?id=" + id;
+		});
 	},
 
 	set_board: function() {
@@ -146,7 +158,7 @@ var BOARD = {
 			for(i = 0; i < board_data.length; i++) {
 				board_html += '<tr boardNo=' + board_data[i].boardNo + '>';
 				board_html += '<td>' + board_data[i].boardNo + '</td>';
-				board_html += '<td>' + get_tier_img(board_data[i].rating) + board_data[i].nickname + '</td>';
+				board_html += '<td>' + ((board_data[i].readyGameCnt && board_data[i].readyGameCnt > 0) ? '<div class="rank_table_tier badge_ready"></div>' : get_tier_img(board_data[i].rating)) + board_data[i].nickname + '</td>';
 				board_html += '<td>' + board_data[i].title + '</td>';
 				board_html += '<td class="current_like">' + board_data[i].like + '</td>';
 				board_html += '<td>' + make_date(board_data[i].date) + '</td>';

@@ -187,6 +187,7 @@ body {
 
 table {
 	border: 1px solid #999;
+	width: 100%;
 }
 
 table > tbody > tr {
@@ -212,6 +213,13 @@ table > tbody > tr:not(:last-child) {
 	margin-right: 5px;
 	display: inline-block;
 	margin-bottom: -5px;
+}
+
+.badge_ready {
+	background: url(/image/badge_ready.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 .badge_bronze {
@@ -381,4 +389,9 @@ table > tbody > tr:not(:last-child) {
     cursor: pointer;
     margin: 0px 10px 0px 5px !important;
     vertical-align: text-bottom;
+}
+
+.prediction_shortcut_list tr {
+	background-color: #ffa500 !important;
+	color: #333 !important;
 }

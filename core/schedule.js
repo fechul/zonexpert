@@ -28,7 +28,7 @@ exports.updateMatches = function(data, callback) {
                         }
                     }).exec(function(_err) {
                         if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
-                            // 경기 시작 - 예측 못하게 막기, 장바구니에 있는거 뺴기, 실시간 점수 소켓 연결 
+                            // 경기 시작 - 예측 못하게 막기, 장바구니에 있는거 뺴기, 실시간 점수 소켓 연결
                         } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
                             // 경기 종료 - 레이팅 계산하기, 채팅서버 닫기
                         }
@@ -63,6 +63,40 @@ exports.updateMatches = function(data, callback) {
     }, function(async_err) {
         callback(true);
     });
+};
+
+exports.team_initialize = function(data, callback) {
+    for(var key in data) {
+        for(var i = 0; i < data[key].teams.length; i++) {
+            var id = data[key].teams[i]._links.self.href.split('/').pop();
+            var newTeamJson = {
+                'id' : id,
+                'leagueId': key.toString(),
+                'name': data[key].teams[i].name,
+                'code': data[key].teams[i].code,
+                'shortName': data[key].teams[i].shortName,
+                'squadMarketValue': data[key].teams[i].squadMarketValue,
+                'crestUrl': data[key].teams[i].crestUrl
+            };
+
+            db.team.find({
+                'id': id,
+                'leagueId': key.toString()
+            }).limit(1).exec(function(teamData) {
+                if(teamData && teamData.length) {
+
+                } else {
+                    var newTeam = new db.team(newTeamJson);
+                }
+            });
+
+            newTeam.save(function(err) {
+
+            });
+        }
+    }
+
+    callback(true);
 };
 
 exports.getLeagueMatches = function(data, callback) {
@@ -127,5 +161,25 @@ exports.setComingUpMatch = function(callback) {
         if (callback && (typeof(callback) == 'function')) {
             callback(true);
         }
+    });
+};
+
+exports.getMatchTeamsName = function(data, callback) {
+    var query = db.match.findOne({'id' : data.matchId});
+    query.select('homeTeamName');
+    query.select('awayTeamName');
+
+    query.exec(function (err, data) {
+        if (err) {
+            console.log('err',err);
+        } else {
+            console.log(data);
+            // json.homeTeamName = data;
+        }
+
+        callback({
+            'homeTeamName': data.homeTeamName,
+            'awayTeamName': data.awayTeamName
+        });
     });
 };

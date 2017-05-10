@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zonexpert-채팅방</title>
+    <link rel='stylesheet' href='/stylesheets/common.css'/>
+    <link rel='stylesheet' href='/stylesheets/chat.css'/>
+    <link rel='stylesheet' href='/bootstrap/bootstrap.css'/>
+</head>
+<body>
+
+<div id="header_wrap">
+    <div id="header">
+        <a href="/" class="logo"></a>
+        <ul class="main_menu">
+            <li class="menu_rank" move="rank">순위</li>
+            <li class="menu_schedule" move="schedule">경기일정</li>
+            <li class="menu_board" move="board">게시판</li>
+        </ul>
+        <ul class="tools">
+            <li class="menu_search">
+                <input type="text" class="user_serach_input" placeholder="ID 검색" autocomplete="off">
+                <button type="button" class="user_search_btn">
+                    <i class="fa fa-search"></i>
+                </button>
+            </li>
+            <li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+            <li class="logout" style="<%= logout_display %>">로그아웃</li>
+            <li class="login" style="<%= login_display %>">로그인</li>
+            <li class="signup" style="<%= signup_display %>">회원가입</li>
+        </ul>
+    </div>
+</div>
+
+
+<section class="main_section">
+    <div class="page_title">
+        <%= homeTeamName %> VS <%= awayTeamName %>
+    </div>
+    <div class="window-wrapper">
+        <div class="window-title">
+            <div class="title">
+                <span>ZONEXPERT CHAT</span>
+            </div>
+
+        </div>
+        <div class="window-area">
+            <div class="chat-area">
+
+                <div class="chat-list">
+                    <ul id="chat-content">
+
+                    </ul>
+                </div>
+
+                <div class="input-area">
+                    <div class="my-account" style="float:left;width:25%">
+                        <div class="image" style="float:left">
+                            <img src="https://secure.gravatar.com/avatar/de76e03aa6b5b0bf675c1e8a990da52f?s=64" >
+                        </div>
+                        <div class="name" >
+                            <span ><%= my_nickname %></span>
+                        </div>
+                    </div>
+                    <div class="input-wrapper" style="float:left;width:60%">
+                        <input id="message-input"type="text" value="">
+                    </div>
+                    <input id="message-button" type="button" value="전송" class="send-btn" style="float:right;width:10%" >
+                </div>
+
+
+            </div>
+
+
+        </div>
+            <div class="right-tabs">
+
+                <ul class="users-container">
+                    <li class="active">
+                        <ul class="member-list">
+
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+    </div>
+
+
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/modules/chat.js"></script>
+<script>
+    CHAT.init({
+        nickname: '<%= my_nickname %>',
+        roomId: parseInt('<%= matchId %>', 10)
+
+    });
+</script>
+</body>
+
+
+<script>
+
+</script>
+
+</html>
