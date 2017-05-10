@@ -120,6 +120,7 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 		//get rank from redis server
 
 	    redis_client.zrevrange(key, start, end, function(err, data) {
+			console.log('rank_data' , data);
 	        if(err) {
 	            console.log("redis get rank err: ", err);
 	            res.render(path, json);

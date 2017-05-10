@@ -95,13 +95,26 @@ var CHAT = {
     writeMessage: function(type, name, message) {
         var html = '';
         var time = new Date();
+        var hour = time.getHours();
+        var minutes = time.getMinutes();
+        var seconds = time.getSeconds();
+        if(hour <10)
+            hour = '0'+hour;
+        if(minutes < 10)
+            minutes = '0' + minutes;
+        if(seconds < 10)
+            seconds = '0' + seconds;
+        time = hour + ' : ' + minutes + ' : ' + seconds;
         if (type == 'me') {
-            html = '<li class="me"><div class="name"><span class="">'+name+'</span></div>' +
-                '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
+            html = '<li class="me">' +  name + ' : ' +  message + '<span>' + time +'</span>'+ '</li>';
+
+            // html = '<li class="me"><div class="name"><span class="">'+name+'</span></div>' +
+            //     '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
 
         } else if (type == 'other') {
-            html = '<li class=""><div class="name"><span class="">'+name+'+</span></div>' +
-                '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
+            html = '<li class="">' + name + ':' + message +'</li>';
+            // html = '<li class=""><div class="name"><span class="">'+name+'+</span></div>' +
+            //     '<div class="message"><p>'+message+'</p><span class="msg-time">'+time+'</span></div></li>';
         } else {
             html = '<div>'+message+'</div>';
         }
