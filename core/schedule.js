@@ -49,14 +49,13 @@ exports.team_initialize = function(data, callback) {
                 'leagueId': key.toString()
             }).limit(1).exec(function(teamData) {
                 if(teamData && teamData.length) {
-                    
+
                 } else {
                     var newTeam = new db.team(newTeamJson);
+                    newTeam.save(function(err) {
+
+                    });
                 }
-            });
-
-            newTeam.save(function(err) {
-
             });
         }
     }
