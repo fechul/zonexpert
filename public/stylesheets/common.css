@@ -401,3 +401,45 @@ table > tbody > tr:not(:last-child) {
 	background-color: #ffa500 !important;
 	color: #333 !important;
 }
+
+#notice {
+	position: fixed;
+	top: 80px;
+	/*right: -230px;*/
+	right: 10px;
+	padding: 10px;
+	border: 1px solid #999;
+	display: none;
+	width: 180px;
+	height: 60px;
+	overflow: auto;
+	border-radius: 10px;
+	background-color: #fff;
+	cursor: pointer;
+	/*margin: 10px 10px 0px 0px;*/
+}
+
+#notice-icon {
+	float: left;
+	width: 20px;
+	height: 100%;
+	font-size: 20px;
+}
+
+#notice-icon.alert {
+	color: #c14040;
+}
+
+#notice-icon.success {
+	color: #3d9e20;
+}
+
+#notice-content {
+	padding: 0px 5px;
+	color: #333;
+	float: left;
+	width: 150px;
+	font-size: 13px;
+	height: 100%;
+	overflow: auto;
+}

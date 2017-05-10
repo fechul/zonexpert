@@ -105,6 +105,8 @@ exports.validate = function(data, callback) {
     var nickname = data.nickname || '';
     var password = data.password || '';
     var password_check = data.password_check || '';
+    var main_sport = data.main_sport;
+    var main_league = data.main_league;
 
     var validation = {
         'result': false,
@@ -161,6 +163,10 @@ exports.validate = function(data, callback) {
                 validation.code = 43;
             } else if (!reg_password.test(password)) {
                 validation.code = 44;
+            } else if(!main_sport || main_sport == 'none' || isNaN(parseInt(main_sport))) {
+                validation.code = 51;
+            } else if(!main_league || main_league == 'none' || isNaN(parseInt(main_league))) {
+                validation.code = 52;
             } else {
                 validation.result = true;
             }
