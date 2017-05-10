@@ -31,9 +31,9 @@ chat.init = function (server) {
                 socket.emit('system', {
                     message: '채팅방에 오신 것을 환영합니다.'
                 });
-                socket.emit('system', {
-                    message: data.name + '님이 접속하셨습니다.'
-                });
+                // socket.emit('system', {
+                //     message: data.name + '님이 접속하셨습니다.'
+                // });
             }
             socket.username = data.name;
             usernames.push(data.name);

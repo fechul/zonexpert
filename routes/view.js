@@ -378,6 +378,8 @@ router.get('/chat/:matchId',function(req, res){
 	}, function(result) {
 		json.homeTeamName = result.homeTeamName;
 		json.awayTeamName = result.awayTeamName;
+		json.homeTeamImg = result.homeTeamImg;
+		json.awayTeamImg = result.awayTeamImg;
 
         res.render(path, json);
 	});
