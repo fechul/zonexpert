@@ -244,6 +244,16 @@ router.get('/prediction/getMatchesStatistics', function(req, res) {
 	});
 });
 
+router.get('/prediction/getMatchesRecord', function(req, res) {
+	var nick = req.query.search_id;
+
+	prediction.getMatchesRecord({
+		'nick': nick
+	}, function(data) {
+		res.json(data);
+	});
+});
+
 router.all('/test/schedule_initialize', function(req, res) {
 	var leaguesObject = {};
 	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];

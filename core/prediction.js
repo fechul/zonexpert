@@ -142,7 +142,11 @@ exports.getMatchesStatistics = function(data, callback) {
     var userStatistics = {};
 
     db.user.find({
-        'nickname': nick
+        $or: [{
+            'nickname': nick
+        }, {
+            'email': nick
+        }]
     }, {
         'email': 1
     }).limit(1).exec(function(userErr, userData) {
@@ -243,6 +247,101 @@ exports.getMatchesStatistics = function(data, callback) {
                                     }
                                 });
                             }
+                        } else {
+                            callback(null);
+                        }
+                    }
+                });
+            } else {
+                callback(null);
+            }
+        }
+    });
+};
+
+exports.getMatchesRecord = function(data, callback) {
+    var nick = data.nick;
+
+    var matchDataArray = [];
+
+    db.user.find({
+        $or: [{
+            'nickname': nick
+        }, {
+            'email': nick
+        }]
+    }, {
+        'email': 1
+    }).limit(1).exec(function(userErr, userData) {
+        if(userErr) {
+            callback(null);
+        } else {
+            if(userData && userData.length) {
+                userData = userData[0];
+
+                var email = userData.email;
+
+                db.prediction.find({
+                    'userEmail': email,
+                    'confirmed': true,
+                    'result': {
+                        $in: ['true', 'false']
+                    }
+                }, function(predictErr, predictData) {
+                    if(predictErr) {
+                        callback(null);
+                    } else {
+                        if(predictData && predictData.length) {
+                            async.each(predictData, function(predict, async_cb) {
+                                db.match.find({
+                                    'id': predict.matchId
+                                }).limit(1).exec(function(matchErr, matchData) {
+                                    if(matchData && matchData.length) {
+                                        matchData = matchData[0];
+
+                                        if(matchData.status == 'FINISHED' && matchData.result) {
+                                            db.team.find({
+                                                'id': matchData.homeTeamId,
+                                                'leagueId': matchData.leagueId
+                                            }, {
+                                                'crestUrl': 1
+                                            }).limit(1).exec(function(homeErr, homeTeam) {
+                                                db.team.find({
+                                                    'id': matchData.awayTeamId,
+                                                    'leagueId': matchData.leagueId
+                                                }, {
+                                                    'crestUrl': 1
+                                                }).limit(1).exec(function(awayErr, awayTeam) {
+                                                    matchDataArray.push({
+                                                        'homeTeamName': matchData.homeTeamName || '-',
+                                                        'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
+                                                        'homeTeamGoals': matchData.result.homeTeam.goalsHomeTeam || 0,
+                                                        'awayTeamName': matchData.awayTeamName || '-',
+                                                        'awayTeamImg': (awayTeam && awayTeam.length ? awayTeam[0].crestUrl : ''),
+                                                        'awayTeamGoals': matchData.result.awayTeam.goalsAwayTeam || 0,
+                                                        'afterRating': matchData.afterRating,
+                                                        'beforeRating': matchData.beforeRating,
+                                                        'myPredict': predictData.result,
+                                                        'date': new Date()  // date has to be updated
+                                                    });
+
+                                                    async_cb();
+                                                });
+                                            });
+                                        } else {
+                                            async_cb();
+                                        }
+                                    } else {
+                                        async_cb();
+                                    }
+                                });
+                            }, function(async_err) {
+                                if(async_err) {
+                                    callback(null);
+                                } else {
+                                    callback(matchDataArray);
+                                }
+                            });
                         } else {
                             callback(null);
                         }

@@ -3,15 +3,21 @@ var SEARCH = {
 		var self = this;
 
 		this.search_id = options.search_id;
+		this.search_rating = parseInt(options.search_rating, 10);
 		this.targetStatistics_league = [];
 		this.targetStatistics_club = [];
+
+		this.recentRates = [];
+		this.recentMatches = [];
+
 		$('.my_recent_predict_wrapper').hide();
 
 		this.init_events();
-		this.getMatchesData('league', function() {
-
-			self.setRecordField();
+		this.getMatchesStatistics('league', function() {
 			self.setStatisticsField('league');
+			self.getMatchesRecord(function() {
+				self.setRecordField();
+			});
 		});
 	},
 
@@ -77,11 +83,13 @@ var SEARCH = {
 
 			var value = $(this).attr('value');
 			if(value == 'league') {
-				self.getMatchesData('league', function() {
+				$('.statistics_table_type_name').html('리그');
+				self.getMatchesStatistics('league', function() {
 					self.setStatisticsField('league');
 				});
 			} else {
-				self.getMatchesData('club', function() {
+				$('.statistics_table_type_name').html('클럽');
+				self.getMatchesStatistics('club', function() {
 					self.setStatisticsField('club');
 				});
 			}
@@ -90,18 +98,76 @@ var SEARCH = {
 
 	//chart
 	setRecordField: function() {
+		var self = this;
+
+		var recentMatches = this.recentMatches;
+		var list_html = '';
+
+		if(recentMatches && recentMatches.length) {
+			for(var i = 0; i < recentMatches.length; i++) {
+				list_html += '<div class="recent_predict_data_row">';
+
+				var date = recentMatches[i].date;
+				list_html += '<span class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</span>';
+				list_html += '<span class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</span>';
+				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
+				list_html += '<span class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</span>';
+				list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
+				list_html += '<span class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</span>';
+
+				if(recentMatches[i].myPredict == 'true') {
+					list_html += '적중';
+				} else {
+					list_html += '실패';
+				}
+
+				var afterRating = parseInt(recentMatches[i].afterRating, 10);
+				var ratingChange = recentMatches[i].afterRating - parseInt(recentMatches[i].beforeRating, 10);
+				if(ratingChange > 0) {
+					ratingChange = '+' + ratingChange;
+				}
+				list_html += '<span class="recent_predict_data_row_rating">' + afterRating + '(' + ratingChange + ')</span>';
+				list_html += '</div>';
+			}
+			$('.my_recent_predict_section').append(list_html);
+		}
+
 		var ctx = $("#myChart");
 		ctx.attr('height', 150);
-		var labels =this.getDateList();
 
-		// $.get('/prediction/getRatingChange', labels, function(ratings) {
-		// 	var ratings = ratings;
+		var labels = this.getDateList();
+		var datelist = [];
+		var ratelist = [];
 
-
-		// });
+		if(recentMatches && recentMatches.length) {
+			for(var d = labels.length-1; d >= 0 ; d--) {
+				datelist[d] = (labels[d].month + '/' + labels[d].day);
+				var found = false;
+				var max = -9999;
+				for(var r = 0; r < recentMatches.length; r++) {
+					var matchDate = new Date(recentMatches[r].date);
+					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
+						if(recentMatches[r].afterRating > max) {
+							max = recentMatches[r].afterRating;
+							ratelist[d] = max;
+							found = true;
+						}
+					}
+				}
+				if(!found && d == labels.length-1) {
+					ratelist[d] = self.search_rating;
+				} else if(!found) {
+					ratelist[d] = ratelist[d+1];
+				}
+			}
+		} else {
+			for(var d = labels.length-1; d >= 0 ; d--) {
+				ratelist.push(self.search_rating);
+			}
+		}
 
 		var data = {
-		    labels: labels,
+		    labels: datelist,
 		    datasets: [
 		        {
 		            label: "Rating",
@@ -109,7 +175,7 @@ var SEARCH = {
 		            lineTension: 0.0,
 		            borderColor: "rgba(75,192,192,1)",
 		            pointBackgroundColor: "#fff",
-		            data: [1500, 1480, 1502, 1517, 1540, 1577, 1600, 1580, 1604, 1633],
+		            data: ratelist,
 		            spanGaps: false
 		        }
 		    ]
@@ -268,7 +334,7 @@ var SEARCH = {
 		}
 	},
 
-	getMatchesData: function(type, callback) {
+	getMatchesStatistics: function(type, callback) {
 		var self = this;
 
 		var alreadyHas = false;
@@ -321,6 +387,24 @@ var SEARCH = {
 		}
 	},
 
+	getMatchesRecord: function(callback) {
+		var self = this;
+
+		$.get('/prediction/getMatchesRecord', {
+			'search_id': self.search_id
+		}, function(recordData) {
+			if(recordData && recordData.length) {
+				$('.no_record_field').hide();
+				recordData.sort(function(a, b) {
+					return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0);
+				});
+			}
+
+			self.recentMatches = recordData;
+			callback();
+		});
+	},
+
 	getDateList: function() {
 		var now = new Date();
 		var month = now.getMonth() + 1;
@@ -331,7 +415,10 @@ var SEARCH = {
 		if(date > 9) {
 			var start = date-9;
 			for(var i = start; i < date+1; i++) {
-				datelist.push(i);
+				datelist.push({
+					month: month,
+					day: i
+				});
 			}
 		} else {
 			if(month == 1) {
@@ -343,26 +430,44 @@ var SEARCH = {
 			if([1,3,5,7,8,10,12].indexOf(month) > -1) {
 				var start = (31 - (10-date) + 1);
 				for(var i = start; i < 32; i++) {
-					datelist.push(month + '/' + i);
+					datelist.push({
+						month: month,
+						day: i
+					});
 				}
 				for(var i = 1; i < date+1; i++) {
-					datelist.push((month+1) + '/' + i);
+					datelist.push({
+						month: month+1,
+						day: i
+					});
 				}
 			} else if([4,6,9,11].indexOf(month) > -1) {
 				var start = (30 - (10-date) + 1);
 				for(var i = start; i < 31; i++) {
-					datelist.push(month + '/' + i);
+					datelist.push({
+						month: month,
+						day: i
+					});
 				}
 				for(var i = 1; i < date+1; i++) {
-					datelist.push((month+1) + '/' + i);
+					datelist.push({
+						month: month+1,
+						day: i
+					});
 				}
 			} else {
 				var start = (28 - (10-date) + 1);
 				for(var i = start; i < 29; i++) {
-					datelist.push(month + '/' + i);
+					datelist.push({
+						month: month,
+						day: i
+					});
 				}
 				for(var i = 1; i < date+1; i++) {
-					datelist.push((month+1) + '/' + i);
+					datelist.push({
+						month: month+1,
+						day: i
+					});
 				}
 			}
 		}

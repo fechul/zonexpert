@@ -180,3 +180,19 @@
 
 canvas{position:relative; z-index:9999;}
 
+.my_recent_predict_section .recent_predict_data_row {
+	max-height: 80px;
+	font-size: 16px;
+	border: 1px solid #bbb;
+	margin-bottom: 15px;
+	padding: 15px;
+}
+
+.my_recent_predict_section .recent_predict_data_row > img {
+	width: 40px;
+	height: 40px;
+}
+
+.my_recent_predict_section .recent_predict_data_row > span {
+	margin-right: 10px;
+}
