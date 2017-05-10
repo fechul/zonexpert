@@ -8,7 +8,7 @@ var schedule = require('./schedule.js');
 var leagueIdArray = [426];
 
 var getAllMatches = function(callback) {
-    console.log('start getAllMatches...');
+    console.log('getAllMatches start...');
     var leaguesObject = {};
     var options = {
       'host': 'api.football-data.org'
@@ -36,7 +36,7 @@ var getAllMatches = function(callback) {
 
         http.request(options, requestCallback).end();
     }, function(async_err) {
-        console.log('end getAllMatches');
+        console.log('getAllMatches finished...');
         callback();
     });
 };
@@ -111,7 +111,7 @@ exports.start = function() {
 
         doFunction(function() {
             schedule.setComingUpMatch(function() {
-                
+
             });
         });
     });

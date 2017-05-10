@@ -28,12 +28,15 @@ exports.updateMatches = function(data, callback) {
                         }
                     }).exec(function(_err) {
                         if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
-                            // 경기 시작 - 예측 못하게 막기, 장바구니에 있는거 뺴기, 실시간 점수 소켓 연결
+                            schedule.deleteExpiredBasket(function() {
+                                async_callback();
+                            });
+                            // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기, 채팅 서버 열기
                         } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
                             // 경기 종료 - 레이팅 계산하기, 채팅서버 닫기
-                        }
 
-                        async_cb();
+                            async_cb();
+                        }
                     });
                 }
             } else {
@@ -146,12 +149,30 @@ exports.setComingUpMatch = function(callback) {
                         }
                     }
                 ]
+            },
+            {
+                '$and': [
+                    {
+                        'status': 'FINISHED'
+                    },{
+                        'date': {
+                            '$gte': new Date(currentTime.getTime() - 1000 * 60 * 10)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': currentTime
+                        }
+                    }
+                ]
             }
         ]
     }).exec(function(err, matches) {
         if (matches.length) {
             for (var i in matches) {
-                tempMatchList.count++;
+                if (matches[i].status != 'FINISHED') {
+                    tempMatchList.count++;
+                }
+
                 tempMatchList[matches[i].status].push(matches[i].id);
             }
         }
