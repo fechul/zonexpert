@@ -1,47 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Zonexpert-채팅방</title>
+        <title>Zonexpert-채팅</title>
         <link rel='stylesheet' href='/stylesheets/common.css'/>
         <link rel='stylesheet' href='/stylesheets/chat.css'/>
         <link rel='stylesheet' href='/bootstrap/bootstrap.css'/>
         <script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
     </head>
     <body>
-
-        <div id="header_wrap">
-            <div id="header">
-                <a href="/" class="logo"></a>
-                <ul class="main_menu">
-                    <li class="menu_rank" move="rank">순위</li>
-                    <li class="menu_schedule" move="schedule">경기일정</li>
-                    <li class="menu_board" move="board">게시판</li>
-                </ul>
-                <ul class="tools">
-                    <li class="menu_search">
-                        <input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
-                        <button type="button" class="user_search_btn">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </li>
-                    <li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
-                    <li class="logout" style="<%= logout_display %>">로그아웃</li>
-                    <li class="login" style="<%= login_display %>">로그인</li>
-                    <li class="signup" style="<%= signup_display %>">회원가입</li>
-                </ul>
-            </div>
-        </div>
+        <%- include header.html %>
 
         <section class="main_section">
             <div class="page_title">
                 <div class="teamTitleSection">
                     <div class="teamNameTitle homeTeamSection">
                         <img class="teamImg" src="<%= homeTeamImg %>"></img><%= homeTeamName %><br>
-                        0
+                        <span id="homeTeamGoals">0</span>
                     </div>
                     <div class="teamNameTitle awayTeamSection">
                         <img class="teamImg" src="<%= awayTeamImg %>"></img><%= awayTeamName %><br>
-                        0
+                        <span id="awayTeamGoals">0</span>
                     </div>
                 </div>
             </div>
@@ -64,7 +42,7 @@
                         <div class="input-area">
                             <div class="my-account" style="float:left;width:25%">
                                 <div class="image" style="float:left">
-                                    <img src="https://secure.gravatar.com/avatar/de76e03aa6b5b0bf675c1e8a990da52f?s=64" >
+                                    <img src="<%= myBadgeSrc %>">
                                 </div>
                                 <div class="name" >
                                     <span ><%= my_nickname %></span>
@@ -96,7 +74,8 @@
         <script>
             CHAT.init({
                 nickname: '<%= my_nickname %>',
-                roomId: parseInt('<%= matchId %>', 10)
+                roomId: parseInt('<%= matchId %>', 10),
+                myBadge: '<%= myBadge %>'
             });
         </script>
     </body>

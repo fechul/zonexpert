@@ -6,7 +6,7 @@ var router = express.Router();
 var board = require('../core/board.js');
 var user = require('../core/user.js');
 var schedule = require('../core/schedule.js');
-
+// 체크
 // 로그인 상태에서만 접속 가능한 페이지 체크
 // router.get('/url', need_login, function(req, res) {}) 형식으로 사용
 var need_login = function(req, res, next) {
@@ -40,7 +40,8 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		headerHideMenu: ''
 	};
 
 	json.prediction_shortcut = req.predictionShortcut;
@@ -59,14 +60,26 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 
 router.get('/signup', no_login, function(req, res) {
 	var path = 'signup.html';
-	var json = {};
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;'
+	};
 
 	res.render(path, json);
 });
 
 router.get('/login', no_login, function(req, res) {
 	var path = 'login.html';
-	var json = {};
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;'
+	};
 
 	res.render(path, json);
 
@@ -80,7 +93,8 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		rank_html: ''
+		rank_html: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -266,8 +280,10 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		board_html: '',
-		user_email: req.session.email
+
+		user_email: req.session.email,
+		headerHideMenu: ''
+
 	};
 
 	if(req.session.login) {
@@ -325,7 +341,8 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, function(req,
 		board_title: '',
 		board_content: '',
 		isUpdate: false,
-		write_btn_name: ''
+		write_btn_name: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -364,7 +381,8 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: ''
+		mydata_display: '',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -380,18 +398,11 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 
 	res.render(path, json);
 });
-router.get('/chat/:matchId',function(req, res){
+
+router.get('/chat/:matchId', function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
-	var json = {
-		myinfo_display: '',
-		logout_display: '',
-		login_display: '',
-		signup_display: '',
-		mydata_display: '',
-		my_nickname: req.session.nickname,
-		matchId: req.params.matchId
-	};
+
 
 
 	if(req.session.login) {
@@ -403,15 +414,73 @@ router.get('/chat/:matchId',function(req, res){
 		json.mydata_display = 'display:none;';
 	}
 
-	schedule.getMatchTeamsName({
+	schedule.getMatch({
 		'matchId': matchId
-	}, function(result) {
-		json.homeTeamName = result.homeTeamName;
-		json.awayTeamName = result.awayTeamName;
-		json.homeTeamImg = result.homeTeamImg;
-		json.awayTeamImg = result.awayTeamImg;
+	}, function(matchData) {
+		if (matchData && matchData.roomOpen) {
+			var json = {
+				myinfo_display: '',
+				logout_display: '',
+				login_display: '',
+				signup_display: '',
+				mydata_display: '',
+				my_nickname: req.session.nickname,
+				matchId: req.params.matchId,
+				myBadge: 'ready',
+				myBadgeSrc: 'image/badge_ready.png',
+				matchId: req.params.matchId,
+				headerHideMenu: ''
+			};
 
-        res.render(path, json);
+			if(req.session.login) {
+				json.login_display = 'display:none;';
+				json.signup_display = 'display:none;';
+			} else {
+				json.myinfo_display = 'display:none;';
+				json.logout_display = 'display:none;';
+				json.mydata_display = 'display:none;';
+			}
+
+			user.get(req.session.email, function(userData) {
+				if(userData) {
+					json.my_nickname = userData.nickname;
+					if(!userData.readyGameCnt || userData.readyGameCnt <= 0) {
+						var rating = userData.rating;
+						if(rating < 1200) {
+							json.myBadge = 'bronze';
+							json.myBadgeSrc = '/image/badge_bronze.png';
+						} else if(1200 <= rating && rating < 1400) {
+							json.myBadge = 'silver';
+							json.myBadgeSrc = '/image/badge_silver.png';
+						} else if(1400 <= rating && rating < 1600) {
+							json.myBadge = 'gold';
+							json.myBadgeSrc = '/image/badge_gold.png';
+						} else if(1600 <= rating && rating < 1800) {
+							json.myBadge = 'platinum';
+							json.myBadgeSrc = '/image/badge_platinum.png';
+						} else if(1800 <= rating) {
+							json.myBadge = 'diamond';
+							json.myBadgeSrc = '/image/badge_diamond.png';
+						}
+					}
+
+					schedule.getMatchTeamsName({
+						'matchId': matchId
+					}, function(result) {
+						json.homeTeamName = result.homeTeamName;
+						json.awayTeamName = result.awayTeamName;
+						json.homeTeamImg = result.homeTeamImg;
+						json.awayTeamImg = result.awayTeamImg;
+
+				        res.render(path, json);
+					});
+				} else {
+					res.redirect('/schedule');
+				}
+			});
+		} else {
+			res.redirect('/schedule');
+		}
 	});
 });
 
@@ -438,7 +507,8 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 		searchdata_predict_rate: '-',
 		searchdata_rank: '-',
 
-		myTotalRate: '-'
+		myTotalRate: '-',
+		headerHideMenu: ''
 	};
 
 	if(req.session.login) {
@@ -489,7 +559,7 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 				if(userdata.record) {
 					if(userdata.record.total) {
 						var total_hit = userdata.record.total.hit || 0;
-						var total_fail = userdata.record.total.fail || 0;		
+						var total_fail = userdata.record.total.fail || 0;
 					}
 				}
 
@@ -517,6 +587,45 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 				}
 			}
 		});
+	});
+});
+
+router.get('/my_page', need_login, function(req, res) {
+	var path = 'my_page.html';
+	var json = {
+		myinfo_display: '',
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
+		myEmail: req.session.email,
+		myNickName: '-',
+		signupDate: '-',
+		headerHideMenu: ''
+	};
+
+	if(req.session.login) {
+		json.login_display = 'display:none;';
+		json.signup_display = 'display:none;';
+	} else {
+		json.myinfo_display = 'display:none;';
+		json.logout_display = 'display:none;';
+		json.mydata_display = 'display:none;';
+	}
+
+	user.get(req.session.email, function(userData) {
+		if(userData) {
+			json.myNickName = userData.nickname;
+			var signupDate = new Date(userData.signup_date);
+			var year = signupDate.getFullYear();
+			var month = signupDate.getMonth()+1;
+			var day = signupDate.getDate();
+
+			json.signupDate = year + '년 ' + month + '월 ' + day + '일';
+			json.mainSport = userData.main_sport;
+			json.mainLeague = userData.main_league;
+		}
+
+		res.render(path, json);
 	});
 });
 

@@ -8,36 +8,7 @@
     </head>
 
     <body>
-		<div id="header_wrap">
-			<div id="header">
-				<a href="/" class="logo"></a>
-				<ul class="main_menu">
-					<!-- <li class="menu_rank"><a type="button" href="/">순위</a></li>
-					<li class="menu_schedule"><a href="/">경기일정</a></li>
-					<li class="menu_board"><a href="/">게시판</a></li> -->
-					<li class="menu_rank" move="rank">순위</li>
-					<li class="menu_schedule" move="schedule">경기일정</li>
-					<li class="menu_board" move="board">게시판</li>
-				</ul>
-				<ul class="tools">
-					<li class="menu_search">
-						<input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
-						<button type="button" class="user_search_btn">
-							<i class="fa fa-search"></i>
-						</button>
-					</li>
-					<!-- <li class="my_info" style="<%= myinfo_display %>"><a href="/">마이페이지</a></li>
-					<li class="logout" style="<%= logout_display %>"><a href="/">로그아웃</a></li>
-					<li class="login" style="<%= login_display %>"><a href="/">로그인</a></li>
-					<li class="signup" style="<%= signup_display %>"><a href="/">회원가입</a></li> -->
-					<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
-					<li class="logout" style="<%= logout_display %>">로그아웃</li>
-					<li class="login" style="<%= login_display %>">로그인</li>
-					<li class="signup" style="<%= signup_display %>">회원가입</li>
-				</ul>
-			</div>
-		</div>
-
+		<%- include header.html %>
 
 		<section class="main_logo_section">
 			<div class="logo_wrapper">

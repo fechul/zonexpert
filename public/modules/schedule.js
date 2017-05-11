@@ -25,7 +25,7 @@ var SCHEDULE = {
 		});
 
 		$('#header .tools .my_page').click(function() {
-			//마이페이지
+			location.href = '/my_page';
 		});
 
 		$('#header .main_menu li').click(function() {
@@ -73,7 +73,7 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', 'td.schedule_chatting i', function() {
+		$('#schedule_table').on('click', 'td.schedule_chatting:not(.disable) i', function() {
 			location.href = '/chat/' + $(this).closest('tr').data('matchId');
 		});
 
@@ -146,7 +146,7 @@ var SCHEDULE = {
 							'<td class="schedule_vs">VS</td>',
 							'<td class="schedule_away_team">', matches[i].awayTeamName, '</td>',
 							'<td class="schedule_basket_toggle ', toggleDisable ? 'disable' : '', '"><span><i class="fa fa-toggle-', toggle ? 'on' : 'off', '"></i></span></td>',
-							'<td class="schedule_chatting"><span><i class="fa fa-commenting-o"></i></span></td>',
+							'<td class="schedule_chatting ', matches[i].roomOpen ? '' : 'disable', '"><span><i class="fa fa-commenting-o"></i></span></td>',
 						'</tr>'
 					].join(''));
 
@@ -158,7 +158,7 @@ var SCHEDULE = {
 				}
 
 				$(document).ready(function() {
-					$('body').animate({'scrollTop': $('#schedule_table tr .schedule_basket_toggle:not(.disable)').first().offset().top - window.innerHeight / 2}, 800);
+					// $('body').animate({'scrollTop': $('#schedule_table tr .schedule_basket_toggle:not(.disable)').first().offset().top - window.innerHeight / 2}, 800);
 				});
 
 				if (callback && typeof(callback) == 'function') {
