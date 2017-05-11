@@ -48,7 +48,6 @@ exports.del = function(data, callback) {
 
 exports.confirm = function(data, callback) {
     var userEmail = data.userEmail;
-    var beforeRating = data.beforeRating;
 
     async.each(data.predictions, function(prediction, async_callback) {
         db.match.find({
@@ -61,27 +60,45 @@ exports.confirm = function(data, callback) {
 
                 db.prediction.find({
                     'userEmail': userEmail,
-                    'matchId': matchData.id,
-                }, function(_err, predictionData) {
-                    if (predictionData.length == 1) {
-                        db.prediction.update({
-                            'userEmail': userEmail,
-                            'matchId': matchData.id
-                        }, {
-                            '$set': {
-                                'confirmed': true,
-                                'pick': prediction.pick,
-                                'result': 'wait',
-                                'beforeRating': beforeRating
-                            }
-                        }).exec(function(err) {
+                    'matchId': matchData.id
+                })
+                .limit(1)
+                .exec(function(_err, predictionData) {
+                    if (predictionData.length) {
+                        predictionData = predictionData[0];
+                        if (predictionData.confirmed == true) {
+                            // 이미 예측 한 데이터
                             async_callback();
-                        });
+                        } else if ((matchData.status == 'IN_PLAY') || (matchData.status == 'FINISHED')) {
+                            // 이미 시작한 경기
+                            db.prediction.remove({
+                                'userEmail': userEmail,
+                                'matchId': matchData.matchId
+                            }, function(result) {
+                                async_callback();
+                            });
+                        } else {
+                            // 업데이트 가능
+                            db.prediction.update({
+                                'userEmail': userEmail,
+                                'matchId': matchData.id
+                            }, {
+                                '$set': {
+                                    'confirmed': true,
+                                    'pick': prediction.pick,
+                                    'result': 'wait'
+                                }
+                            }).exec(function(err) {
+                                async_callback();
+                            });
+                        }
                     } else {
+                        // 존재하지 않는 장바구니
                         async_callback();
                     }
                 });
             } else {
+                // 존재하지 않는 경기
                 async_callback();
             }
         });
@@ -415,5 +432,19 @@ exports.getRecentPredict = function(options, callback) {
         } else {
             callback(null);
         }
+    });
+};
+
+exports.deleteExpiredBasket = function(params, callback) {
+    var query = {
+        'matchId': params.matchId,
+        'confirmed': false
+    };
+
+    if (params.userEmail) {
+        query.userEmail = params.userEmail;
+    }
+    db.prediction.remove(query, function(err) {
+        callback();
     });
 };

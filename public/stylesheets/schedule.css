@@ -48,7 +48,7 @@
 	cursor: pointer;
 }
 
-#schedule_table tr .schedule_basket_toggle.disable i {
+#schedule_table tr .disable i {
 	cursor: default;
 	color: #aaa;
 }

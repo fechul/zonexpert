@@ -1,29 +1,80 @@
 var async = require('async');
 
+var schedule = require('./schedule.js');
+var rating = require('./rating.js');
+var prediction = require('./prediction.js');
 
-exports.initialize = function(data, callback) {
-    async.eachSeries(data.schedules, function(schedule, async_cb) {
-        var newMatchJson = {
-            'leagueId' : schedule._links.competition.href.split('/').pop(),
-            'id' : schedule._links.self.href.split('/').pop(),
-            'date' : new Date(schedule.date),
-            'matchday' : schedule.matchday,
-            'homeTeamName' : schedule.homeTeamName,
-            'homeTeamId' : schedule._links.homeTeam.href.split('/').pop(),
-            'awayTeamName' : schedule.awayTeamName,
-            'awayTeamId' : schedule._links.awayTeam.href.split('/').pop(),
-            'status': schedule.status
-        };
+exports.updateMatches = function(data, callback) {
+    async.eachSeries(data.matches, function(match, async_cb) {
+        db.match.find({
+            'id': match._links.self.href.split('/').pop()
+        })
+        .limit(1)
+        .exec(function(err, matchData) {
+            if (matchData.length) {
+                matchData = matchData[0];
 
+                var currentStatus = matchData.status;
+                var newStatus = match.status;
 
-        if (schedule.result) {
-            newMatchJson.result = schedule.result;
-        }
+                var currentTime = new Date(matchData.date).getTime();
+                var newTime = new Date(match.date).getTime();
 
-        var newMatch = new db.match(newMatchJson);
+                db.match.update({
+                    'id': matchData.id
+                }, {
+                    '$set': {
+                        'date': new Date(match.date),
+                        'status': match.status,
+                        'result': match.result
+                    }
+                }).exec(function(_err) {
+                    if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
+                        prediction.deleteExpiredBasket({
+                            'matchId': matchData.id
+                        }, function() {
+                            async_cb();
+                        });
+                        // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기
+                    } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
+                        // 경기 종료 - 레이팅 계산하기,
+                        rating.addQueue({
+                            'matchId': matchData.id
+                        }, function(result) {
+                            async_cb();
+                        });
+                        // async_cb();
+                    } else {
+                        async_cb();
+                    }
+                });
+            } else {
+                var newMatchJson = {
+                    'leagueId' : match._links.competition.href.split('/').pop(),
+                    'id' : match._links.self.href.split('/').pop(),
+                    'date' : new Date(match.date),
+                    'matchday' : match.matchday,
+                    'homeTeamName' : match.homeTeamName,
+                    'homeTeamId' : match._links.homeTeam.href.split('/').pop(),
+                    'awayTeamName' : match.awayTeamName,
+                    'awayTeamId' : match._links.awayTeam.href.split('/').pop(),
+                    'status': match.status,
+                    'result': match.result || {
+                        'goalsHomeTeam': 0,
+                        'goalsAwayTeam': 0
+                    }
+                };
 
-        newMatch.save(function(err) {
-            async_cb();
+                if (match.result) {
+                    newMatchJson.result = match.result;
+                }
+
+                var newMatch = new db.match(newMatchJson);
+
+                newMatch.save(function(err) {
+                    async_cb();
+                });
+            }
         });
     }, function(async_err) {
         callback(true);
@@ -44,16 +95,16 @@ exports.team_initialize = function(data, callback) {
                 'crestUrl': data[key].teams[i].crestUrl
             };
 
-            db.team.find({
-                'id': id,
-                'leagueId': key.toString()
-            }).limit(1).exec(function(teamData) {
-                if(teamData && teamData.length) {
-                    
-                } else {
+            // db.team.find({
+            //     'id': id,
+            //     'leagueId': key.toString()
+            // }).limit(1).exec(function(teamData) {
+            //     if(teamData && teamData.length) {
+            //
+            //     } else {
                     var newTeam = new db.team(newTeamJson);
-                }
-            });
+            //     }
+            // });
 
             newTeam.save(function(err) {
 
@@ -67,8 +118,25 @@ exports.team_initialize = function(data, callback) {
 exports.getLeagueMatches = function(data, callback) {
     db.match.find({
         'leagueId': data.leagueId
-    }).exec(function(err, matches) {
+    })
+    .sort('date')
+    .exec(function(err, matches) {
         callback(matches);
+    });
+};
+
+exports.getMatch = function(params, callback) {
+    var matchId = params.matchId;
+    db.match.find({
+        'id': matchId
+    })
+    .limit(1)
+    .exec(function(err, data) {
+        if (data && data.length) {
+            callback(data[0]);
+        } else {
+            callback(null);
+        }
     });
 };
 
@@ -81,6 +149,74 @@ exports.getMatches = function(data, callback) {
     .sort('date')
     .exec(function(err, matches) {
         callback(matches || []);
+    });
+};
+
+exports.setLiveMatch = function(callback) {
+    var currentTime = new Date();
+    var tempMatchList = {
+        'count': 0,
+        'TIMED': [],
+        'IN_PLAY': [],
+        'FINISHED': []
+    };
+
+    db.match.find({
+        '$or': [
+            {
+                'status': 'IN_PLAY'
+            },
+            {
+                '$and': [
+                    {
+                        'status': 'TIMED'
+                    },{
+                        'date': {
+                            '$gte': currentTime
+                        }
+                    }, {
+                        'date': {
+                            '$lte': new Date(currentTime.getTime() + 1000 * 60 * 10)
+                        }
+                    }
+                ]
+            },
+            {
+                '$and': [
+                    {
+                        'status': 'FINISHED'
+                    },{
+                        'date': {
+                            '$gte': new Date(currentTime.getTime() - 1000 * 60 * 10)
+                        }
+                    }, {
+                        'date': {
+                            '$lte': currentTime
+                        }
+                    }
+                ]
+            }
+        ]
+    }).exec(function(err, matches) {
+        if (matches.length) {
+            for (var i = 0; i < matches.length; i++) {
+                if (matches[i].status != 'FINISHED') {
+                    tempMatchList.count++;
+                }
+
+                if (tempMatchList[matches[i].status]) {
+                    tempMatchList[matches[i].status].push(matches[i].id);
+                }
+            }
+        }
+
+        __matchList = tempMatchList;
+
+        // console.log(__matchList.FINISHED);
+
+        if (callback && (typeof(callback) == 'function')) {
+            callback(true);
+        }
     });
 };
 
