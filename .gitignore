@@ -1,3 +1,4 @@
 *.log
 configs.json
 dump.rdb
+public/football-data.events
