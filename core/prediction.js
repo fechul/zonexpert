@@ -118,7 +118,8 @@ exports.get = function(data, callback) {
 
     db.prediction.find(findJson, {
         'matchId': 1,
-        'confirmed': 1
+        'confirmed': 1,
+        'result': 1
     }).exec(function(err, result) {
         callback(result);
     });

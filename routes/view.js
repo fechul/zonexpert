@@ -378,7 +378,15 @@ router.get('/chat/:matchId', function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
-
+	var json = {
+		myinfo_display: '',
+		logout_display: '',
+		login_display: '',
+		signup_display: '',
+		mydata_display: '',
+		my_nickname: req.session.nickname,
+		matchId: req.params.matchId
+	};
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
