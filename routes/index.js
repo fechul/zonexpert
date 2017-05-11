@@ -19,7 +19,7 @@ var need_login = function(req, res, next) {
 	}
 };
 
-router.pos('/football-data.events', function(req, res) {
+router.post('/football-data.events', function(req, res) {
 	console.log(req.body);
 	console.log(req.params);
 	res.json(true);
