@@ -87,7 +87,7 @@ var BOARD = {
 					}
 				});
 			}
-		})
+		});
 
         $('.board_search_menu .board_search_input').keydown(function(e) {
             if(e.keyCode == 13) {

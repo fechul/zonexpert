@@ -274,16 +274,16 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 
 router.get('/board', readPredictionShortcutHTML, function(req, res) {
 	var path = 'board.html';
+	console.log('email : ', req.session.email);
 	var json = {
 		myinfo_display: '',
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-
 		user_email: req.session.email,
-		headerHideMenu: ''
-
+		headerHideMenu: '',
+		board_html:''
 	};
 
 	if(req.session.login) {
@@ -300,31 +300,6 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 
     res.render(path, json);
 
-	// var search_value = req.query.search_value;
-    //
-	// if(search_value){
-	// 	search_value = search_value.replace(/ /g,'');
-     //    board.get_search(search_value, function (search_data) {
-     //    	console.log('board' , search_data);
-	// 		if(search_data){
-     //            for(i = 0; i < search_data.length; i++) {
-     //                json.board_html += '<tr boardNo=' + search_data[i].boardNo + '>';
-     //                json.board_html += '<td>' + search_data[i].boardNo + '</td>';
-     //                json.board_html += '<td>' + search_data[i].writer + '</td>';
-     //                json.board_html += '<td>' + search_data[i].title + '</td>';
-     //                json.board_html += '<td class="current_like">' + search_data[i].like + '</td>';
-     //                json.board_html += '<td>' + search_data[i].date + '</td>';
-     //                json.board_html += '</tr>';
-    //
-     //            }
-     //            res.render(path, json);
-	// 		}
-	// 		else{
-     //            json.board_html = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
-     //            res.render(path, json);
-	// 		}
-     //    });
-	// }
 });
 
 router.get('/board/write', need_login, readPredictionShortcutHTML, function(req, res) {

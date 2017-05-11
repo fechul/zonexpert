@@ -154,16 +154,16 @@ exports.start = function() {
 
                 skipMinutes = 6;
                 doFunction = getAllMatches;
-                console.log('getAllMatches');
+                // console.log('getAllMatches');
             } else {
                 skipMinutes = skipMinutes > 0 ? skipMinutes - 1 : skipMinutes;
                 doFunction = liveChekcer;
-                console.log('liveChekcer');
+                // console.log('liveChekcer');
             }
         }
 
         doFunction(function() {
-            console.log('doFunction end...');
+            // console.log('doFunction end...');
             schedule.setLiveMatch(function() {
                 chat.controlRoom();
             });
