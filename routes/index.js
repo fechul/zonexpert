@@ -77,9 +77,15 @@ router.get('/auth/signup', function(req, res) {
 });
 
 router.get('/board/get', function(req, res) {
-	board.get(function(data) {
+	var value = req.query.value || '';
+	var type = req.query.type || '';
+
+	board.get({
+		'value': value,
+		'type': type
+	}, function(data) {
 		res.json(data);
-	});
+    });
 });
 
 router.post('/board/write', function(req, res) {

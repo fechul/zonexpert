@@ -266,6 +266,7 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
+		board_html: '',
 		user_email: req.session.email
 	};
 
@@ -277,9 +278,37 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+
+
 	json.prediction_shortcut = req.predictionShortcut;
 
-	res.render(path, json);
+    res.render(path, json);
+
+	// var search_value = req.query.search_value;
+    //
+	// if(search_value){
+	// 	search_value = search_value.replace(/ /g,'');
+     //    board.get_search(search_value, function (search_data) {
+     //    	console.log('board' , search_data);
+	// 		if(search_data){
+     //            for(i = 0; i < search_data.length; i++) {
+     //                json.board_html += '<tr boardNo=' + search_data[i].boardNo + '>';
+     //                json.board_html += '<td>' + search_data[i].boardNo + '</td>';
+     //                json.board_html += '<td>' + search_data[i].writer + '</td>';
+     //                json.board_html += '<td>' + search_data[i].title + '</td>';
+     //                json.board_html += '<td class="current_like">' + search_data[i].like + '</td>';
+     //                json.board_html += '<td>' + search_data[i].date + '</td>';
+     //                json.board_html += '</tr>';
+    //
+     //            }
+     //            res.render(path, json);
+	// 		}
+	// 		else{
+     //            json.board_html = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
+     //            res.render(path, json);
+	// 		}
+     //    });
+	// }
 });
 
 router.get('/board/write', need_login, readPredictionShortcutHTML, function(req, res) {
@@ -363,6 +392,7 @@ router.get('/chat/:matchId',function(req, res){
 		my_nickname: req.session.nickname,
 		matchId: req.params.matchId
 	};
+
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
