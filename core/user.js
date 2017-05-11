@@ -100,6 +100,74 @@ exports.signup = function(data, callback) {
     });
 };
 
+exports.changeInfo = function(options, callback) {
+    var email = options.email;
+    var nickname = options.nickname;
+    var password = options.password;
+    var password_check = options.password_check;
+
+    var validation = {
+        'result': false,
+        'code': 0
+    };
+
+    db.user.find({
+        'email': email
+    }, {
+        nickname: 1
+    }).limit(1).exec(function(prevErr, prevData) {
+        db.user.find({
+            'nickname': nickname
+        }, function(err, find) {
+            if(err) {
+                validation.code = 1;
+            } else {
+                if(find && find.length && prevData[0].nickname != nickname) {
+                    validation.code == 11;
+                } else {
+                    var reg_nickname = /^[A-Za-z가-힣0-9]{2,12}$/;
+                    var reg_password = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}$/;
+
+                    if (nickname.length < 2 || nickname.length > 12) {
+                        validation.code = 31;
+                    } else if (!reg_nickname.test(nickname)) {
+                        validation.code = 32;
+                    } else if (password !== password_check) {
+                        validation.code = 41;
+                    } else if (password.length < 8 || password.length > 20) {
+                        validation.code = 42;
+                    } else if (password.search(/\s/) != -1) {
+                        validation.code = 43;
+                    } else if (!reg_password.test(password)) {
+                        validation.code = 44;
+                    } else {
+                        validation.result = true;
+                    }
+                }
+            }
+
+            if(validation.result) {
+                db.user.update({
+                    'email': email
+                }, {
+                    $set: {
+                        'nickname': nickname,
+                        'password': md5(password)
+                    }
+                }, function(updateErr) {
+                    if(updateErr) {
+                        validation.result = false;
+                        validation.code = 1;
+                    }
+                    callback(validation);
+                });
+            } else {
+                callback(validation);
+            }
+        });
+    });
+};
+
 exports.validate = function(data, callback) {
     var email = data.email || '';
     var nickname = data.nickname || '';

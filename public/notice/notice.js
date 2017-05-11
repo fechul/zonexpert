@@ -1,7 +1,7 @@
 var NOTICE = {
 	init: function() {
 		$('#notice').click(function() {
-			$(this).fadeOut(5000);
+			$(this).fadeOut(500);
 		});
 	},
 	show: function(type, msg) {
@@ -21,9 +21,9 @@ var NOTICE = {
 
 					notice.fadeIn(500);
 
-					setTimeout(function() {
-						notice.fadeOut(500);
-					}, 5000);
+					// setTimeout(function() {
+					// 	notice.fadeOut(500);
+					// }, 5000);
 				}
 			}
 		} else if(type == 'success') {

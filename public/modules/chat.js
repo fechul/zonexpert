@@ -30,7 +30,7 @@ var CHAT = {
         });
 
         $('#header .tools .my_page').click(function() {
-            //마이페이지
+            location.href = '/my_page';
         });
 
         $('#header .main_menu li').click(function() {
