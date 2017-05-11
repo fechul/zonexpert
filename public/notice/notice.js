@@ -21,9 +21,9 @@ var NOTICE = {
 
 					notice.fadeIn(500);
 
-					// setTimeout(function() {
-					// 	notice.fadeOut(500);
-					// }, 5000);
+					setTimeout(function() {
+						notice.fadeOut(500);
+					}, 5000);
 				}
 			}
 		} else if(type == 'success') {
