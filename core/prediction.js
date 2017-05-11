@@ -48,7 +48,6 @@ exports.del = function(data, callback) {
 
 exports.confirm = function(data, callback) {
     var userEmail = data.userEmail;
-    var beforeRating = data.beforeRating;
 
     async.each(data.predictions, function(prediction, async_callback) {
         db.match.find({
@@ -87,8 +86,7 @@ exports.confirm = function(data, callback) {
                                 '$set': {
                                     'confirmed': true,
                                     'pick': prediction.pick,
-                                    'result': 'wait',
-                                    'beforeRating': beforeRating
+                                    'result': 'wait'
                                 }
                             }).exec(function(err) {
                                 async_callback();

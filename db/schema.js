@@ -75,20 +75,27 @@ var matchSchema = new Schema({
     'awayTeamId' : String,
     'status': String,
     'result' : {
-        'homeTeam' : {
-            'goalsHomeTeam' : String,
-            'default' : 0
+        'goalsHomeTeam' : Number,
+        'goalsAwayTeam' : Number,
+        'halfTime': {
+            'goalsHomeTeam' : Number,
+            'goalsAwayTeam' : Number
         },
-        'awayTeam' : {
-            'goalsAwayTeam' : String,
-            'default' : 0
+        'extraTime': {
+            'goalsHomeTeam' : Number,
+            'goalsAwayTeam' : Number
+        },
+        'penaltyShootout': {
+            'goalsHomeTeam' : Number,
+            'goalsAwayTeam' : Number
         }
     },
     'pickCount': {
         'home': {'type': Number, 'default': 0},
         'draw': {'type': Number, 'default': 0},
         'away': {'type': Number, 'default': 0}
-    }
+    },
+    'roomOpen': {'type': Boolean, 'default': false}
 });
 
 var predictionSchema = new Schema({

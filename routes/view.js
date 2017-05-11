@@ -351,37 +351,47 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 
 	res.render(path, json);
 });
-router.get('/chat/:matchId',function(req, res){
+
+router.get('/chat/:matchId', function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
-	var json = {
-		myinfo_display: '',
-		logout_display: '',
-		login_display: '',
-		signup_display: '',
-		mydata_display: '',
-		my_nickname: req.session.nickname,
-		matchId: req.params.matchId
-	};
 
-	if(req.session.login) {
-		json.login_display = 'display:none;';
-		json.signup_display = 'display:none;';
-	} else {
-		json.myinfo_display = 'display:none;';
-		json.logout_display = 'display:none;';
-		json.mydata_display = 'display:none;';
-	}
-
-	schedule.getMatchTeamsName({
+	schedule.getMatch({
 		'matchId': matchId
-	}, function(result) {
-		json.homeTeamName = result.homeTeamName;
-		json.awayTeamName = result.awayTeamName;
-		json.homeTeamImg = result.homeTeamImg;
-		json.awayTeamImg = result.awayTeamImg;
+	}, function(matchData) {
+		if (matchData && matchData.roomOpen) {
+			var json = {
+				myinfo_display: '',
+				logout_display: '',
+				login_display: '',
+				signup_display: '',
+				mydata_display: '',
+				my_nickname: req.session.nickname,
+				matchId: req.params.matchId
+			};
 
-        res.render(path, json);
+			if(req.session.login) {
+				json.login_display = 'display:none;';
+				json.signup_display = 'display:none;';
+			} else {
+				json.myinfo_display = 'display:none;';
+				json.logout_display = 'display:none;';
+				json.mydata_display = 'display:none;';
+			}
+
+			schedule.getMatchTeamsName({
+				'matchId': matchId
+			}, function(result) {
+				json.homeTeamName = result.homeTeamName;
+				json.awayTeamName = result.awayTeamName;
+				json.homeTeamImg = result.homeTeamImg;
+				json.awayTeamImg = result.awayTeamImg;
+
+		        res.render(path, json);
+			});
+		} else {
+			res.redirect('/schedule');
+		}
 	});
 });
 
@@ -459,7 +469,7 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 				if(userdata.record) {
 					if(userdata.record.total) {
 						var total_hit = userdata.record.total.hit || 0;
-						var total_fail = userdata.record.total.fail || 0;		
+						var total_fail = userdata.record.total.fail || 0;
 					}
 				}
 

@@ -4,9 +4,13 @@ global.__url = 'http://' + __host + ':' + __port;
 global.__admin_email = 'zonexpert0@gmail.com';
 global.__admin_password = 'whsansrk123!';
 global.__matchList = {
+    'count': 0,
     'TIMED': [],
-    'IN_PLAY': []
+    'IN_PLAY': [],
+    'FINISHED': []
 };
+global.__run_first = true;
+global.__do_daemon = false;
 
 var express = require('express');
 var path = require('path');
@@ -41,7 +45,9 @@ global.db = require('./db/schema.js');
 
 var daemon = require('./core/daemon.js');
 
-// daemon.start();
+if (__do_daemon) {
+    daemon.start();
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

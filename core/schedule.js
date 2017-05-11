@@ -1,5 +1,9 @@
 var async = require('async');
 
+var schedule = require('./schedule.js');
+var rating = require('./rating.js');
+var prediction = require('./prediction.js');
+
 exports.updateMatches = function(data, callback) {
     async.eachSeries(data.matches, function(match, async_cb) {
         db.match.find({
@@ -16,29 +20,34 @@ exports.updateMatches = function(data, callback) {
                 var currentTime = new Date(matchData.date).getTime();
                 var newTime = new Date(match.date).getTime();
 
-                if ((currentStatus == newStatus) && (currentTime == newTime)) {
-                    async_cb();
-                } else {
-                    db.match.update({
-                        'id': match._links.self.href.split('/').pop()
-                    }, {
-                        '$set': {
-                            'date': new Date(match.date),
-                            'status': match.status
-                        }
-                    }).exec(function(_err) {
-                        if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
-                            schedule.deleteExpiredBasket(function() {
-                                async_callback();
-                            });
-                            // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기, 채팅 서버 열기
-                        } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
-                            // 경기 종료 - 레이팅 계산하기, 채팅서버 닫기
-
+                db.match.update({
+                    'id': matchData.id
+                }, {
+                    '$set': {
+                        'date': new Date(match.date),
+                        'status': match.status,
+                        'result': match.result
+                    }
+                }).exec(function(_err) {
+                    if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
+                        prediction.deleteExpiredBasket({
+                            'matchId': matchData.id
+                        }, function() {
                             async_cb();
-                        }
-                    });
-                }
+                        });
+                        // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기
+                    } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
+                        // 경기 종료 - 레이팅 계산하기,
+                        rating.addQueue({
+                            'matchId': matchData.id
+                        }, function(result) {
+                            async_cb();
+                        });
+                        // async_cb();
+                    } else {
+                        async_cb();
+                    }
+                });
             } else {
                 var newMatchJson = {
                     'leagueId' : match._links.competition.href.split('/').pop(),
@@ -49,7 +58,11 @@ exports.updateMatches = function(data, callback) {
                     'homeTeamId' : match._links.homeTeam.href.split('/').pop(),
                     'awayTeamName' : match.awayTeamName,
                     'awayTeamId' : match._links.awayTeam.href.split('/').pop(),
-                    'status': match.status
+                    'status': match.status,
+                    'result': match.result || {
+                        'goalsHomeTeam': 0,
+                        'goalsAwayTeam': 0
+                    }
                 };
 
                 if (match.result) {
@@ -105,8 +118,25 @@ exports.team_initialize = function(data, callback) {
 exports.getLeagueMatches = function(data, callback) {
     db.match.find({
         'leagueId': data.leagueId
-    }).exec(function(err, matches) {
+    })
+    .sort('date')
+    .exec(function(err, matches) {
         callback(matches);
+    });
+};
+
+exports.getMatch = function(params, callback) {
+    var matchId = params.matchId;
+    db.match.find({
+        'id': matchId
+    })
+    .limit(1)
+    .exec(function(err, data) {
+        if (data && data.length) {
+            callback(data[0]);
+        } else {
+            callback(null);
+        }
     });
 };
 
@@ -122,12 +152,13 @@ exports.getMatches = function(data, callback) {
     });
 };
 
-exports.setComingUpMatch = function(callback) {
+exports.setLiveMatch = function(callback) {
     var currentTime = new Date();
     var tempMatchList = {
         'count': 0,
         'TIMED': [],
-        'IN_PLAY': []
+        'IN_PLAY': [],
+        'FINISHED': []
     };
 
     db.match.find({
@@ -168,16 +199,20 @@ exports.setComingUpMatch = function(callback) {
         ]
     }).exec(function(err, matches) {
         if (matches.length) {
-            for (var i in matches) {
+            for (var i = 0; i < matches.length; i++) {
                 if (matches[i].status != 'FINISHED') {
                     tempMatchList.count++;
                 }
 
-                tempMatchList[matches[i].status].push(matches[i].id);
+                if (tempMatchList[matches[i].status]) {
+                    tempMatchList[matches[i].status].push(matches[i].id);
+                }
             }
         }
 
         __matchList = tempMatchList;
+
+        // console.log(__matchList.FINISHED);
 
         if (callback && (typeof(callback) == 'function')) {
             callback(true);
