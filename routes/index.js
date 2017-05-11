@@ -8,7 +8,7 @@ var user = require('../core/user.js');
 var auth = require('../core/auth.js');
 var schedule = require('../core/schedule.js');
 var board = require('../core/board.js');
-var chat = require('../core/chat.js');
+// var chat = require('../core/chat.js');
 var prediction = require('../core/prediction.js');
 
 var need_login = function(req, res, next) {
@@ -73,6 +73,17 @@ router.get('/auth/signup', function(req, res) {
 		'token': req.query.token
 	}, function(signup) {
 		res.json("회원가입 인증이 완료되었습니다.");
+	});
+});
+
+router.post('/accounts/change', function(req, res) {
+	user.changeInfo({
+		'email': req.session.email,
+		'nickname': req.body.nickname,
+		'password': req.body.password,
+		'password_check': req.body.password_check
+	}, function(changeInfo) {
+		res.json(changeInfo);
 	});
 });
 

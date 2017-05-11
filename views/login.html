@@ -8,11 +8,7 @@
     </head>
 	
     <body>
-		<div id="header_wrap">
-			<div id="header">
-				<a href="/" class="logo"></a>
-			</div>
-		</div>
+		<%- include header.html %>
 		
 		<section class="login_section">
 		<div class="login_box_wrapper">
@@ -38,13 +34,19 @@
 		
 		
     </body>
+
+    <div id="notice">
+		<div id="notice-icon"></div><div id="notice-content"></div>
+	</div>
 	
 	<script src="jquery/jquery.js"></script>
 	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/login.js"></script>
 	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
+	<script src="notice/notice.js"></script>
 	<script>
+		var notice = NOTICE;
 		LOGIN.init();
 	</script>
 	

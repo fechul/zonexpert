@@ -1,6 +1,7 @@
 var SIGNUP = {
 	init: function() {
 		this.init_events();
+		notice.init();
 	},
 
 	init_events: function() {
@@ -19,18 +20,6 @@ var SIGNUP = {
 			var main_sport = $('#main_sport_select').val();
 			var main_league = $('#main_league_select').val();
 
-			if(main_sport == 'none') {
-				return false;
-			}
-
-			if(main_league == 'none') {
-				return false;
-			}
-
-			if(isNaN(parseInt(main_league))) {
-				return false;
-			}
-
 			$.post('/accounts', {
 				'email': $('#email_input').val(),
 				'nickname': $('#nick_input').val(),
@@ -42,7 +31,33 @@ var SIGNUP = {
 				if (signup.result) {
 					location.replace('/');
 				} else {
-					console.log(signup);
+		    		if(signup.code == 1) {
+		    			notice.show('alert', '회원가입에 실패했습니다. 잠시후 다시 시도해주세요.');
+		    		} else if(signup.code == 11) {
+		    			notice.show('alert', '이미 존재하는 닉네임입니다.');
+					} else if(signup.code == 12) {
+						notice.show('alert', '이미 가입된 이메일입니다.');
+					} else if(signup.code == 21) {
+						notice.show('alert', '이메일이 형식에 맞지 않습니다.');
+					} else if(signup.code == 31) {
+						notice.show('alert', '닉네임 길이를 2자~12자 사이로 입력해주세요.');
+					} else if(signup.code == 32) {
+						notice.show('alert', '닉네임이 형식에 맞지 않습니다.');
+					} else if(signup.code == 41) {
+						notice.show('alert', '비밀번호 확인이 틀렸습니다.');
+					} else if(signup.code == 42) {
+						notice.show('alert', '비밀번호를 8자~20자 사이로 입력해주세요.');
+					} else if(signup.code == 43) {
+						notice.show('alert', '비밀번호에 공백이 들어갈 수 없습니다.');
+					} else if(signup.code == 44) {
+						notice.show('alert', '비밀번호가 형식에 맞지 않습니다.');
+					} else if(signup.code == 51) {
+						notice.show('alert', '메인 스포츠를 선택해주세요.');
+					} else if(signup.code == 52) {
+						notice.show('alert', '메인 리그를 선택해주세요.');
+					} else {
+						notice.show('alert', '회원가입에 실패했습니다. 잠시후 다시 시도해주세요.');
+					}
 				}
 			});
 		});

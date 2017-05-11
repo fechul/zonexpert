@@ -10,7 +10,7 @@ global.__matchList = {
     'FINISHED': []
 };
 global.__run_first = true;
-global.__do_daemon = false;
+global.__do_test_mode = true;
 
 var express = require('express');
 var path = require('path');
@@ -45,9 +45,7 @@ global.db = require('./db/schema.js');
 
 var daemon = require('./core/daemon.js');
 
-if (__do_daemon) {
-    daemon.start();
-}
+daemon.start();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

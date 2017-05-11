@@ -144,23 +144,23 @@ exports.start = function() {
 
         var doFunction;
 
-        if (__run_first || ((currentMinutes == 0) && (currentSeconds == 0))) {
-            if (__run_first) {
-                __run_first = false;
-                chat.closeRoomAll();
-            }
-
-            skipMinutes = 6;
-            doFunction = getAllMatches;
-            console.log('getAllMatches');
+        if (__do_test_mode) {
+            doFunction = tester;
         } else {
-            skipMinutes = skipMinutes > 0 ? skipMinutes - 1 : skipMinutes;
-            doFunction = liveChekcer;
-            console.log('liveChekcer');
-        }
+            if (__run_first || ((currentMinutes == 0) && (currentSeconds == 0))) {
+                if (__run_first) {
+                    __run_first = false;
+                }
 
-        // chat.closeRoomAll();
-        // doFunction = tester;
+                skipMinutes = 6;
+                doFunction = getAllMatches;
+                console.log('getAllMatches');
+            } else {
+                skipMinutes = skipMinutes > 0 ? skipMinutes - 1 : skipMinutes;
+                doFunction = liveChekcer;
+                console.log('liveChekcer');
+            }
+        }
 
         doFunction(function() {
             console.log('doFunction end...');
