@@ -538,15 +538,16 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 	});
 });
 
-router.get('/my_page', function(req, res) {
+router.get('/my_page', need_login, function(req, res) {
 	var path = 'my_page.html';
 	var json = {
 		myinfo_display: '',
 		logout_display: '',
 		login_display: '',
 		signup_display: '',
-		mydata_display: '',
-		user_email: req.session.email,
+		myEmail: req.session.email,
+		myNickName: '-',
+		signupDate: '-',
 		headerHideMenu: ''
 	};
 
@@ -559,7 +560,21 @@ router.get('/my_page', function(req, res) {
 		json.mydata_display = 'display:none;';
 	}
 
-	res.render(path, json);
+	user.get(req.session.email, function(userData) {
+		if(userData) {
+			json.myNickName = userData.nickname;
+			var signupDate = new Date(userData.signup_date);
+			var year = signupDate.getFullYear();
+			var month = signupDate.getMonth()+1;
+			var day = signupDate.getDate();
+
+			json.signupDate = year + '년 ' + month + '월 ' + day + '일';
+			json.mainSport = userData.main_sport;
+			json.mainLeague = userData.main_league;
+		}
+		
+		res.render(path, json);
+	});
 });
 
 module.exports = router;

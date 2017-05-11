@@ -417,6 +417,7 @@ table > tbody > tr:not(:last-child) {
 	background-color: #fff;
 	cursor: pointer;
 	/*margin: 10px 10px 0px 0px;*/
+	box-sizing: initial !important;
 }
 
 #notice-icon {
@@ -428,6 +429,10 @@ table > tbody > tr:not(:last-child) {
 
 #notice-icon.alert {
 	color: #c14040;
+	padding: 0px !important;
+	margin-bottom: 0px !important;
+	border: 0px !important;
+	border-radius: 0px !important;
 }
 
 #notice-icon.success {

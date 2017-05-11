@@ -76,6 +76,17 @@ router.get('/auth/signup', function(req, res) {
 	});
 });
 
+router.post('/accounts/change', function(req, res) {
+	user.changeInfo({
+		'email': req.session.email,
+		'nickname': req.body.nickname,
+		'password': req.body.password,
+		'password_check': req.body.password_check
+	}, function(changeInfo) {
+		res.json(changeInfo);
+	});
+});
+
 router.get('/board/get', function(req, res) {
 	board.get(function(data) {
 		res.json(data);
