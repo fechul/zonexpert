@@ -1,7 +1,7 @@
 var async = require('async');
 
 exports.get = function(params, callback) {
-	var query = {};
+	var _query = {};
     var _get = function(query){
         db.board.find(query).sort({boardNo: -1}).lean().exec(function(err, data) {
             console.log('data', data);
@@ -56,8 +56,8 @@ exports.get = function(params, callback) {
 
 	if (params.value && params.type) {
 		if (params.type == 'title') {
-            query[params.type] = {$regex : ".*" + params.value + ".*"};
-            _get(query);
+            _query[params.type] = {$regex : ".*" + params.value + ".*"};
+            _get(_query);
 		} else {
             db.user.find({
                 'nickname': params.value
@@ -65,8 +65,8 @@ exports.get = function(params, callback) {
             	'email': 1
             }).limit(1).exec(function(err , data){
 				if(data && data.length){
-					query[params.type] = data[0].email;
-					_get(query);
+					_query[params.type] = data[0].email;
+					_get(_query);
 				} else{
 					callback(null);
 				}
@@ -74,7 +74,7 @@ exports.get = function(params, callback) {
 
 		}
 	} else{
-		_get();
+		_get(_query);
 	}
 
 
