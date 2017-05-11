@@ -95,6 +95,7 @@ exports.team_initialize = function(data, callback) {
                 'crestUrl': data[key].teams[i].crestUrl
             };
 
+
             // db.team.find({
             //     'id': id,
             //     'leagueId': key.toString()
@@ -106,9 +107,23 @@ exports.team_initialize = function(data, callback) {
             //     }
             // });
 
+
             newTeam.save(function(err) {
 
             });
+            // db.team.find({
+            //     'id': id,
+            //     'leagueId': key.toString()
+            // }).limit(1).exec(function(teamData) {
+            //     if(teamData && teamData.length) {
+            //
+            //     } else {
+            //         var newTeam = new db.team(newTeamJson);
+            //         newTeam.save(function(err) {
+            //
+            //         });
+            //     }
+            // });
         }
     }
 
