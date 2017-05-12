@@ -410,13 +410,14 @@ exports.getRecentPredict = function(options, callback) {
                                 'crestUrl': 1,
                                 'shortName': 1
                             }).limit(1).exec(function(awayErr, awayData) {
+                                console.log(matchData.result)
                                 recentPredictData.push({
                                     'homeTeamName': homeData[0].shortName,
                                     'awayTeamName': awayData[0].shortName,
                                     'homeTeamImg': (homeData && homeData.length ? homeData[0].crestUrl : ''),
                                     'awayTeamImg': (awayData && awayData.length ? awayData[0].crestUrl : ''),
-                                    'homeTeamGoals': (matchData.result.homeTeam.goalsHomeTeam ? matchData.result.homeTeam.goalsHomeTeam : '-'),
-                                    'awayTeamGoals': (matchData.result.awayTeam.goalsAwayTeam ? matchData.result.awayTeam.goalsAwayTeam : '-'),
+                                    'homeTeamGoals': (matchData.result && matchData.result.homeTeam ? matchData.result.homeTeam.goalsHomeTeam : '-'),
+                                    'awayTeamGoals': (matchData.result && matchData.result.awayTeam ? matchData.result.awayTeam.goalsAwayTeam : '-'),
                                     'date': predict.createTime,
                                     'predictResult': predict.result
                                 });
