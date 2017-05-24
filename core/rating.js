@@ -43,6 +43,7 @@ var rating = {
         .limit(1)
         .exec(function(err, matchData) {
             matchData = matchData[0];
+            console.log(matchData);
             if (matchData.result.goalsHomeTeam > matchData.result.goalsAwayTeam) {
                 matchResult = 'home'
             } else if (matchData.result.goalsHomeTeam < matchData.result.goalsAwayTeam) {
@@ -50,10 +51,12 @@ var rating = {
             } else {
                 matchResult = 'draw';
             }
+            console.log(matchResult);
 
             db.prediction.find({
                 'matchId':matchId,
-                'confirmed': true
+                'confirmed': true,
+                'result': 'wait'
             }).exec(function(findPredictionErr, predictions) {
                 async.each(predictions, function(prediction, async_cb) {
                     pickList[prediction.pick]++;
@@ -110,7 +113,7 @@ var rating = {
 
                         db.prediction.update({
                             'userEmail': user.email,
-                            'matchId': user.matchId
+                            'matchId': matchId
                         }, {
                             '$set': {
                                 'beforeRating': user.beforeRating,

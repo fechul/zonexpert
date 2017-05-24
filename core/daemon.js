@@ -28,6 +28,7 @@ var getAllMatches = function(callback) {
             response.on('end', function () {
                 leaguesObject[league] = JSON.parse(leaguesObject[league]);
 
+                console.log('updateMathces : ', league);
                 schedule.updateMatches({
                     'matches': leaguesObject[league].fixtures
                 }, function(result) {

@@ -330,16 +330,18 @@ exports.getMatchesRecord = function(data, callback) {
                                                 }, {
                                                     'crestUrl': 1
                                                 }).limit(1).exec(function(awayErr, awayTeam) {
+                                                    console.log(predictData);
+                                                    console.log('000000000000000000000000000000000');
                                                     matchDataArray.push({
                                                         'homeTeamName': matchData.homeTeamName || '-',
                                                         'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
-                                                        'homeTeamGoals': matchData.result.homeTeam.goalsHomeTeam || 0,
+                                                        'homeTeamGoals': matchData.result.goalsHomeTeam || 0,
                                                         'awayTeamName': matchData.awayTeamName || '-',
                                                         'awayTeamImg': (awayTeam && awayTeam.length ? awayTeam[0].crestUrl : ''),
-                                                        'awayTeamGoals': matchData.result.awayTeam.goalsAwayTeam || 0,
-                                                        'afterRating': matchData.afterRating,
-                                                        'beforeRating': matchData.beforeRating,
-                                                        'myPredict': predictData.result,
+                                                        'awayTeamGoals': matchData.result.goalsAwayTeam || 0,
+                                                        'afterRating': predict.afterRating,
+                                                        'beforeRating': predict.beforeRating,
+                                                        'myPredict': predict.result,
                                                         'date': new Date()  // date has to be updated
                                                     });
 

@@ -50,7 +50,7 @@ var SEARCH = {
 			var move = $(this).attr('move');
 			location.href = '/' + move;
 		});
-		
+
 		$('.tools .user_search_input').keydown(function(e) {
 			if(e.keyCode == 13) {
 				$('.tools .user_search_btn').click();
@@ -107,7 +107,7 @@ var SEARCH = {
 			for(var i = 0; i < recentMatches.length; i++) {
 				list_html += '<div class="recent_predict_data_row">';
 
-				var date = recentMatches[i].date;
+				var date = new Date(recentMatches[i].date);
 				list_html += '<span class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</span>';
 				list_html += '<span class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</span>';
 				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
@@ -224,6 +224,7 @@ var SEARCH = {
 					var leagueFail = statisticsData[i].leagueFail;
 					var leagueGameCnt = statisticsData[i].leagueGameCnt;
 					var leagueRate = Math.floor(statisticsData[i].leagueRate);
+					leagueRate = isNaN(leagueRate) ? '-' : leagueRate;
 
 					if(pieCnt < 4) {
 						var html = '<div class="pie_field"><canvas width="200" height="200" style="width:150px; height:150px" id="' + leagueId + '_pie"></canvas><label class="pieLeagueName">(' + leagueName + ')</label><label class="piePercentage">' + leagueRate + '%</label></div>';
@@ -279,6 +280,7 @@ var SEARCH = {
 					var teamFail = statisticsData[i].teamFail;
 					var teamGameCnt = statisticsData[i].teamGameCnt;
 					var teamRate = Math.floor(statisticsData[i].teamRate);
+					teamRate = isNaN(teamRate) ? '-' : teamRate;
 
 					if(pieCnt < 4) {
 						var html = '<div class="pie_field"><canvas width="200" height="200" style="width:150px; height:150px" id="' + teamId + '_pie"></canvas><label class="pieLeagueName">(' + teamName + ')</label><label class="piePercentage">' + teamRate + '%</label></div>';
