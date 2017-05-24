@@ -22,7 +22,11 @@ var set_configs = function() {
     console.log('set configs complete');
 }();
 
-global.__url = 'http://' + __host + ':' + __port;
+if (__port.length > 0) {
+    global.__url = 'http://' + __host + ':' + __port;
+} else {
+    global.__url = 'http://' + __host;
+}
 global.__matchList = {
     'count': 0,
     'TIMED': [],
