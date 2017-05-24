@@ -144,9 +144,7 @@ exports.start = function() {
 
         var doFunction;
 
-        if (__do_test_mode) {
-            doFunction = tester;
-        } else {
+        if (__service_mode) {
             if (__run_first || ((currentMinutes == 0) && (currentSeconds == 0))) {
                 if (__run_first) {
                     __run_first = false;
@@ -160,6 +158,8 @@ exports.start = function() {
                 doFunction = liveChekcer;
                 // console.log('liveChekcer');
             }
+        } else {
+            doFunction = tester;
         }
 
         doFunction(function() {
