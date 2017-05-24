@@ -10,6 +10,7 @@ var schedule = require('../core/schedule.js');
 var board = require('../core/board.js');
 // var chat = require('../core/chat.js');
 var prediction = require('../core/prediction.js');
+var rating = require('../core/rating.js');
 
 var need_login = function(req, res, next) {
 	if (req.session.login) {
@@ -487,6 +488,17 @@ router.all('/test/team_initialize', function(req, res) {
 				res.json(true);
 			});
 		}
+	});
+});
+
+router.post('/ratingUpdate', function(req, res) {
+	var matchId = req.body.matchId;
+	console.log(matchId);
+
+	rating.addQueue({
+		'matchId': matchId
+	}, function() {
+		res.json(true);
 	});
 });
 
