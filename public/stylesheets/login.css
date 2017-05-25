@@ -124,7 +124,7 @@ body {
 	/*height: 38px;*/
 	/*}*/
 	.login_box > .row > .login_row_content > input {
-		font-size: 16px;
+		font-size: 16px;x
 		border: none;
 		width: 90%;
 	}
@@ -136,7 +136,6 @@ body {
 		width: 80%;
 		height: 50px;
 		font-size: 16px;
-
 	}
 	.login_row_sub{
 		display: none;
