@@ -78,10 +78,10 @@ body {
 }
 
 .login-btns > button {
-	width: 120px;
+	width: 100%;
 	height: 40px;
 	cursor: pointer;
-	margin: 0px 10px 0px 10px;
+
 }
 
 #login_btn {
@@ -111,3 +111,81 @@ body {
 	cursor: pointer;
 }
 
+/* browswer */
+@media (max-width: 562px){
+	.login_box{
+		width: 80%;
+	}
+	.login_section .logo{
+		width: 200px;
+		height: 90px;
+	}
+	/*.login_box > .row{*/
+	/*height: 38px;*/
+	/*}*/
+	.login_box > .row > .login_row_content > input {
+		font-size: 16px;
+		border: none;
+		width: 90%;
+	}
+
+	.login-btns{
+		width: auto;
+	}
+	#login_btn{
+		width: 80%;
+		height: 50px;
+		font-size: 16px;
+
+	}
+	.login_row_sub{
+		display: none;
+	}
+	.checkbox_wrapper{
+		width: 80%;
+		font-size: 16px;
+	}
+	.checkbox_wrapper > .checkbox_label > input {
+		cursor: pointer;
+
+	}
+}
+/* device */
+@media (max-device-width: 768px) {
+	.login_box{
+		width: 80%;
+	}
+	.login_section .logo{
+		width: 200px;
+		height: 90px;
+	}
+	/*.login_box > .row{*/
+		/*height: 38px;*/
+	/*}*/
+	.login_box > .row > .login_row_content > input {
+		font-size: 16px;
+		border: none;
+		width: 90%;
+	}
+
+	.login-btns{
+		width: auto;
+	}
+	#login_btn{
+		width: 80%;
+		height: 50px;
+		font-size: 16px;
+
+	}
+	.login_row_sub{
+		display: none;
+	}
+	.checkbox_wrapper{
+		width: 80%;
+		font-size: 16px;
+	}
+	.checkbox_wrapper > .checkbox_label > input {
+		cursor: pointer;
+
+	}
+}
