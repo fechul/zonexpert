@@ -14,7 +14,13 @@ var userSchema = new Schema({
     'record': Object,
 
     'like_board': Array,
-    'readyGameCnt': {'type': Number, 'default': 5}
+    'readyGameCnt': {'type': Number, 'default': 5},
+    'point': {'type': Number, 'default': 0},
+    'pointLog': [{
+        'amount': Number,
+        'classification': String, // charge, use, earn,
+        'time': Date
+    }]
 });
 
 // user - record

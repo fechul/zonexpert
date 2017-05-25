@@ -77,6 +77,7 @@ exports.updateMatches = function(data, callback) {
             }
         });
     }, function(async_err) {
+        console.log('update complete');
         callback(true);
     });
 };

@@ -57,7 +57,7 @@
 
 .mydata_statistics > .mydata_badge > img {
 	width: 120px;
-	height: 150px;
+	/*height: 150px;*/
 }
 
 .mydata_statistics > .mydata_rate {
