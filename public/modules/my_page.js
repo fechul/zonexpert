@@ -32,17 +32,17 @@ var MYPAGE = {
             location.href = '/' + move;
         });
 
-        $('.tools .user_search_input').keydown(function(e) {
-            if(e.keyCode == 13) {
-                $('.tools .user_search_btn').click();
-            }
-        });
+        $('.user_search_input').keydown(function(e) {
+			if(e.keyCode == 13) {
+				$('.user_search_btn').click();
+			}
+		});
 
-        $('.tools .user_search_btn').click(function() {
-            var id = $('.tools .user_search_input').val();
+		$('.user_search_btn').click(function() {
+			var id = $('.user_search_input').val();
 
-            location.href = "/search?id=" + id;
-        });
+			location.href = "/search?id=" + id;
+		});
 
 		$('.changeinfo_btns > button').click(function() {
 			var value = $(this).attr('value');

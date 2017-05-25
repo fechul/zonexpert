@@ -1,22 +1,52 @@
 <div id="header_wrap">
 	<div id="header">
-		<a href="/" class="logo"></a>
-		<ul class="main_menu" style="<%= headerHideMenu %>">
-			<li class="menu_rank" move="rank">순위</li>
-			<li class="menu_schedule" move="schedule">경기일정</li>
-			<li class="menu_board" move="board">게시판</li>
-		</ul>
-		<ul class="tools" style="<%= headerHideMenu %>">
-			<li class="menu_search">
-				<input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
-				<button type="button" class="user_search_btn">
-					<i class="fa fa-search"></i>
-				</button>
-			</li>
-			<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
-			<li class="logout" style="<%= logout_display %>">로그아웃</li>
-			<li class="login" style="<%= login_display %>">로그인</li>
-			<li class="signup" style="<%= signup_display %>">회원가입</li>
-		</ul>
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav_menu" style="<%= headerHideMenu %> margin-top:15px;">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="logo" title="존문가닷컴" href="/"></a>
+		</div>
+	  
+	    <div class="navbar-collapse collapse" id="nav_menu" style="<%= headerHideMenu %>">
+			<ul class="nav navbar-nav main_menu">
+				<li class="menu_rank" move="rank">순위</li>
+				<li class="menu_schedule" move="schedule">경기일정</li>
+				<li class="menu_board" move="board">게시판</li>
+			</ul>
+
+			<ul class="nav navbar-nav navbar-right tools">
+				<li class="menu_search">
+					<input type="text" class="user_search_input" placeholder="ID 검색" autocomplete="off">
+					<button type="button" class="user_search_btn">
+						<i class="fa fa-search"></i>
+					</button>
+				</li>
+				<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
+				<li class="logout" style="<%= logout_display %>">로그아웃</li>
+				<li class="login" style="<%= login_display %>">로그인</li>
+				<li class="signup" style="<%= signup_display %>">회원가입</li>
+			</ul>
+		</div>
+
 	</div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

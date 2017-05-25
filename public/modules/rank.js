@@ -43,14 +43,14 @@ var RANK = {
 			location.href = "/rank?search_id=" + search_id;
 		});
 
-		$('.tools .user_search_input').keydown(function(e) {
+		$('.user_search_input').keydown(function(e) {
 			if(e.keyCode == 13) {
-				$('.tools .user_search_btn').click();
+				$('.user_search_btn').click();
 			}
 		});
 
-		$('.tools .user_search_btn').click(function() {
-			var id = $('.tools .user_search_input').val();
+		$('.user_search_btn').click(function() {
+			var id = $('.user_search_input').val();
 
 			location.href = "/search?id=" + id;
 		});

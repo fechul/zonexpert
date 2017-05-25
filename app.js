@@ -1,17 +1,3 @@
-global.__host = '127.0.0.1';
-global.__port = '3000';
-global.__url = 'http://' + __host + ':' + __port;
-global.__admin_email = 'zonexpert0@gmail.com';
-global.__admin_password = 'whsansrk123!';
-global.__matchList = {
-    'count': 0,
-    'TIMED': [],
-    'IN_PLAY': [],
-    'FINISHED': []
-};
-global.__run_first = true;
-global.__do_test_mode = true;
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -21,6 +7,32 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var http = require('http');
 var async = require('async');
+var fs = require('fs');
+
+var set_configs = function() {
+    var configs_read = fs.readFileSync('./configs.json', 'utf8');
+    configs_read = JSON.parse(configs_read);
+
+    var keys = Object.keys(configs_read);
+
+    for (var i = 0; i < keys.length; i++) {
+        global['__' + keys[i]] = configs_read[keys[i]];
+    }
+
+    console.log('set configs complete');
+}();
+
+if (__port.length > 0) {
+    global.__url = 'http://' + __host + ':' + __port;
+} else {
+    global.__url = 'http://' + __host;
+}
+global.__matchList = {
+    'count': 0,
+    'TIMED': [],
+    'IN_PLAY': [],
+    'FINISHED': []
+};
 
 // redis
 var session = require('express-session');

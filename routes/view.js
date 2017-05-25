@@ -34,6 +34,7 @@ var readPredictionShortcutHTML = function(req, res, next) {
 };
 
 router.get('/', readPredictionShortcutHTML, function(req, res) {
+	console.log("Qwer")
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -505,6 +506,7 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 	json.prediction_shortcut = req.predictionShortcut;
 
 	user.countAllUsers(function(userCount) {
+		console.log(userCount)
 		user.get(id, function(userdata) {
 			if(!userdata) {
 				json.search_show = 'display:none;';
