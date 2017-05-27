@@ -41,56 +41,38 @@ body {
 */
 
 #header_wrap {
-	/* border-bottom: 1px solid #ccc; */
 	height: 70px;
 	background-color: #444;
-	/* opacity: 0.85; */
 	flex: 0 0 70px;
 }
 
 #header {
-	/*max-width: 1200px;*/
 	margin-left: auto;
 	margin-right: auto;
-	/* height: 100%; */
-	/* padding-top: 10px; */
+	height: 100%;
 }
 
 .logo {
-	/* color: #fff; 
-    text-shadow: #333 0px 2px, #333 2px 0px, #333 -2px 0px, 
-    #333 0px -2px, #333 -1.4px -1.4px, #333 1.4px 1.4px, 
-    #333 1.4px -1.4px, #333 -1.4px 1.4px; 
-	font-size: 40px;
-	
-	position: relative;
-	display: inline-block;
-	
-	line-height: 70px;
-	vertical-align: middle;
-	cursor: pointer;
-	padding: 0px 20px 0px 20px;
-	font-family: Jazz LET, fantasy; */
 	background: url(/image/zonexpert_logo.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: cover;
 }
 
-#header > .logo {
+#header .logo {
 	height: 70px;
 	width: 200px;
 	float: left;
 }
 
-#header > .main_menu {
+#header .main_menu {
 	display: inline-block;
 	line-height: 70px;
 	vertical-align: middle;
 	margin: 0px;
 }
 
-#header > .tools {
+#header .tools {
 	float: right;
 	display: inline-block;
 	line-height: 70px;
@@ -98,13 +80,13 @@ body {
 	margin: 0px;
 }
 
-#header > .tools > .my_page,
-#header > .tools > .logout,
-#header > .tools > .login,
-#header > .tools > .signup,
-#header > .main_menu > .menu_rank,
-#header > .main_menu > .menu_schedule,
-#header > .main_menu > .menu_board {
+#header .tools .my_page,
+#header .tools .logout,
+#header .tools .login,
+#header .tools .signup,
+#header .main_menu .menu_rank,
+#header .main_menu .menu_schedule,
+#header .main_menu .menu_board {
 	/* float: right;
 	text-align: center;
 	border-left: 1px solid #ccc;
@@ -119,26 +101,29 @@ body {
 	cursor: pointer;
 }
 
-#header > .tools > .my_page:hover,
-#header > .tools > .logout:hover,
-#header > .tools > .login:hover,
-#header > .tools > .signup:hover,
-#header > .main_menu > .menu_rank:hover,
-#header > .main_menu > .menu_schedule:hover,
-#header > .main_menu > .menu_board:hover {
+#header .tools .my_page:hover,
+#header .tools .logout:hover,
+#header .tools .login:hover,
+#header .tools .signup:hover,
+#header .main_menu .menu_rank:hover,
+#header .main_menu .menu_schedule:hover,
+#header .main_menu .menu_board:hover {
  	background-color: #333;
+	box-shadow: 0px -4px 2px -2px white inset
 }
 
-#header > .tools > .menu_search {
+#header .menu_search {
 	display: inline-block;
 	position: relative;
-	margin-right: 30px;
+	/*margin-right: 30px;*/
+	/*margin-top: 18px;*/
+	padding: 18px;
 }
 
-#header > .tools > .menu_search > button {
+#header .menu_search > button {
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 18px;
+	top: 18px;
 	border: none;
 	background: none;
 	padding: 11px;
@@ -146,11 +131,13 @@ body {
 	line-height: 0px;
 }
 
-#header > .tools > .menu_search > button:hover {
+#header .menu_search > button:hover {
 	background-color: #ccc;
+	/*height: 100%;*/
+	border-radius: 0px 5px 5px 0px;
 }
 
-#header > .tools > .menu_search > input {
+#header .menu_search > input {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
@@ -160,6 +147,25 @@ body {
 	border-radius: 5px;
 	outline: none;
 	border: 1px solid #ccc;
+}
+
+.mobile_my_point {
+	position: absolute;
+	top: 23px;
+	right: 60px;
+}
+
+.mobile_my_point > img,
+.my_point > img {
+	width: 25px;
+	height: 25px;
+	margin-right: 5px;
+}
+
+#mobile_my_current_point,
+#my_current_point {
+	color: #c5bb21;
+	margin-right: 5px;
 }
 
 .modal-backdrop, .modal-backdrop.in {
