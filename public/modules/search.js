@@ -331,6 +331,18 @@ var SEARCH = {
 			}
 
 			$('#statistics_table').append(table_html);
+
+			// var user_agent = navigator.userAgent;
+			// var isMobile = false;
+
+			// if (/mobile/i.test(user_agent) || /android/i.test(user_agent)) {
+			// 	isMobile = true;
+			// }
+
+			// if(isMobile && $(window).width() <= 360) {
+				
+			// }
+			
 		} else {
 			$('.no_statistics_field').show();
 		}

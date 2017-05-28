@@ -128,6 +128,13 @@ var BOARD = {
 		var self = this;
 		var board_html = '';
 
+		var user_agent = navigator.userAgent;
+		var isMobile = false;
+
+		if (/mobile/i.test(user_agent) || /android/i.test(user_agent)) {
+			isMobile = true;
+		}
+
 		var make_date = function(date) {
 			date = new Date(date);
 
@@ -154,7 +161,18 @@ var BOARD = {
 				s = '0' + s;
 			}
 
-			var date_html = y + '/' + m + '/' + d + '<br>' + h + ':' + min + ':' + s;
+			var today = new Date();
+			var todayDate = today.getDate();
+
+			if(isMobile) {
+				if(d == todayDate) {
+					var date_html = h + ':' + min;
+				} else {
+					var date_html = m + '/' + d;
+				}
+			} else {
+				var date_html = y + '/' + m + '/' + d + '<br>' + h + ':' + min + ':' + s;
+			}
 			return date_html;
 		};
 
@@ -187,7 +205,7 @@ var BOARD = {
                 board_html += '<tr boardNo=' + board_data[i].boardNo + '>';
                 board_html += '<td>' + board_data[i].boardNo + '</td>';
                 board_html += '<td>' + ((board_data[i].readyGameCnt && board_data[i].readyGameCnt > 0) ? '<div class="rank_table_tier badge_ready"></div>' : get_tier_img(board_data[i].rating)) + board_data[i].nickname + '</td>';
-                board_html += '<td>' + board_data[i].title + '</td>';
+                board_html += '<td><nobr>' + board_data[i].title + '<nobr></td>';
                 board_html += '<td class="current_like">' + board_data[i].like + '</td>';
                 board_html += '<td>' + make_date(board_data[i].date) + '</td>';
                 board_html += '</tr>';
