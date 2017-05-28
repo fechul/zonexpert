@@ -114,15 +114,15 @@ var INDEX = {
 			rating = parseInt(rating);
 
 			if(rating < 1200) {
-				return '<div><div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span></div>';
+				return '<div><div class="rank_table_tier badge_bronze"></div></div>';
 			} else if(1200 <= rating && rating < 1400) {
-				return '<div><div class="rank_table_tier badge_silver"></div><span class="table_tier_name">실버</span></div>';
+				return '<div><div class="rank_table_tier badge_silver"></div></div>';
 			} else if(1400 <= rating && rating < 1600) {
-				return '<div><div class="rank_table_tier badge_gold"></div><span class="table_tier_name">골드</span></div>';
+				return '<div><div class="rank_table_tier badge_gold"></div></div>';
 			} else if(1600 <= rating && rating < 1800) {
-				return '<div><div class="rank_table_tier badge_platinum"></div><span class="table_tier_name">플래티넘</span></div>';
+				return '<div><div class="rank_table_tier badge_platinum"></div></div>';
 			} else if(1800 <= rating) {
-				return '<div><div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span></div>';
+				return '<div><div class="rank_table_tier badge_diamond"></div></div>';
 			}
 		};
 
@@ -164,35 +164,42 @@ var INDEX = {
 			}
 		};
 
+		var user_agent = navigator.userAgent;
+		var isMobile = false;
+
+		if (/mobile/i.test(user_agent) || /android/i.test(user_agent)) {
+			isMobile = true;
+		}
+
 		$.get('/getTopTen', {
 			'type': type
 		}, function(data) {
 			if(data && data.length) {
 				for(var i = 0; i < data.length; i++) {
 					table_html += '<tr>';
-					table_html += '<td>' + (i+1) + '</td>';
-					table_html += '<td>' + data[i].nickname + '</td>';
-					table_html += '<td>' + get_league_name(data[i].main_league) + '</td>';
-					table_html += '<td>' + data[i].rating + '</td>';
+					table_html += '<td class="table_label_rank">' + (i+1) + '</td>';
+					table_html += '<td class="table_label_nickname">' + data[i].nickname + '</td>';
+					table_html += '<td class="table_label_mainsport">' + get_league_name(data[i].main_league) + '</td>';
+					table_html += '<td class="table_label_score">' + data[i].rating + '</td>';
 
 					if(data[i].record) {
 						if(data[i].record.total) {
-							table_html += '<td>' + (data[i].record.total.hit || 0) + ' / ' + (data[i].record.total.fail || 0) + '</td>';
+							table_html += '<td class="table_label_record">' + (data[i].record.total.hit || 0) + ' / ' + (data[i].record.total.fail || 0) + '</td>';
 							if(!data[i].record.total.fail) {
-								table_html += '<td>-</td>';
+								table_html += '<td class="table_label_hitrate">-</td>';
 							} else {
-								table_html += '<td>' + ((data[i].record.total.hit/(data[i].record.total.hit + data[i].record.total.fail))*100).toFixed(2) + '%</td>';
+								table_html += '<td class="table_label_hitrate">' + ((data[i].record.total.hit/(data[i].record.total.hit + data[i].record.total.fail))*100).toFixed(2) + '%</td>';
 							}
 						} else {
-							table_html += '<td>0 / 0</td>';
-							table_html += '<td>-</td>';
+							table_html += '<td class="table_label_record">0 / 0</td>';
+							table_html += '<td class="table_label_hitrate">-</td>';
 						}
 					} else {
-						table_html += '<td>0 / 0</td>';
-						table_html += '<td>-</td>';
+						table_html += '<td class="table_label_record">0 / 0</td>';
+						table_html += '<td class="table_label_hitrate">-</td>';
 					}
 
-					table_html += '<td class="tier_cell left">' + get_tier_img(data[i].rating) + '</td>';
+					table_html += '<td class="tier_cell table_label_tier">' + get_tier_img(data[i].rating) + '</td>';
 					table_html += '</tr>';
 				}
 			} else {
@@ -200,6 +207,28 @@ var INDEX = {
 			}
 			$('#rank_table > tbody > tr:not(:first-child)').remove();
 			$('#rank_table').append(table_html);
+
+			if(isMobile) {
+				$('.table_label_mainsport').hide();
+				if(type == 'rating') {
+					$('.table_label_score').show();
+					$('.table_label_record').hide();
+					$('.table_label_hitrate').hide();
+				} else if(type == 'game_cnt') {
+					$('.table_label_record').show();
+					$('.table_label_score').hide();
+					$('.table_label_hitrate').hide();
+				} else if(type == 'predict_rate') {
+					$('.table_label_hitrate').show();
+					$('.table_label_score').hide();
+					$('.table_label_record').hide();
+				}
+			} else {
+				$('.table_label_mainsport').show();
+				$('.table_label_score').show();
+				$('.table_label_record').show();
+				$('.table_label_hitrate').show();
+			}
 		});
 	}
 };

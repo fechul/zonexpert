@@ -2,9 +2,6 @@
 <html>
     <head>
         <title>Zonexpert</title>
-        <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
-	    <!--<meta charset="utf-8"> -->
-	    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
 	    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
         <link rel='stylesheet' media="only screen" href='/stylesheets/common.css' />
@@ -24,7 +21,7 @@
 			<div class="mydata_wrapper">
 				<div class="mydata_section container_box" style="<%= mydata_display %>">
 					<div class="mydata_user">
-						<span class="mydata_user_id">-</span>&nbsp(주종목:<span class="mydata_user_main_field">-</span>)
+						<span class="mydata_user_id">-</span><!-- &nbsp(주종목:<span class="mydata_user_main_field">-</span>) -->
 					</div>
 					<div class="mydata_statistics">
 						<div class="mydata_badge">
@@ -61,13 +58,13 @@
 					<div class="rank_table_section">
 						<table id="rank_table">
 							<tr>
-								<td>순위</td>
-								<td>닉네임</td>
-								<td>주종목</td>
-								<td>점수</td>
-								<td>전적</td>
-								<td>적중률</td>
-								<td>티어</td>
+								<td class="table_label_title">순위</td>
+								<td class="table_label_nickname">닉네임</td>
+								<td class="table_label_mainsport">주종목</td>
+								<td class="table_label_score">점수</td>
+								<td class="table_label_record">전적</td>
+								<td class="table_label_hitrate">적중률</td>
+								<td class="table_label_tier">티어</td>
 							</tr>
 						</table>
 					</div>

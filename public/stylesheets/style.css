@@ -153,11 +153,121 @@
 }
 
 .tier_cell {
-	width: 135px;
+	width: 80px;
 }
 
-.tier_cell > div{
+/*.tier_cell > div{
 	margin-left: 30px;
+}*/
+
+/* 
+	Media Query
+*/
+
+/* mobile header */
+@media all and (min-device-width: 471px) and (max-device-width: 768px) {
+	.main_section .mydata_section,
+	.main_section .rank_section {
+		width: 85%;
+	}
+
+	.mydata_statistics {
+		display: block;
+	}
+
+	.mydata_statistics .mydata_badge {
+		width: 45%;
+		float: left;
+		border-bottom: 1px solid #bbb;
+	}
+
+	.mydata_statistics .mydata_rate {
+		width: 55%;
+		float: left;
+		border-bottom: 1px solid #bbb;
+		border-right: none;
+	}
+
+	.mydata_statistics .mydata_recent_predict {
+		width: 100%;
+		float: left;
+		padding-bottom: 20px;
+	}
+
+	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content {
+		font-size: 11px;
+	}
+}
+
+@media all and (max-device-width: 470px) {
+	.main_section .mydata_section,
+	.main_section .rank_section {
+		width: 90%;
+	}
+
+	.mydata_statistics {
+		display: block;
+	}
+
+	.mydata_statistics .mydata_badge {
+		width: 45%;
+		float: left;
+		border-bottom: 1px solid #bbb;
+		height: 150px;
+		padding-top: 35px;
+	}
+
+	.mydata_statistics .mydata_badge  > img{
+		width: 80px;
+		height: 80px;
+	}
+
+	.mydata_statistics .mydata_rate {
+		width: 55%;
+		float: left;
+		border-bottom: 1px solid #bbb;
+		border-right: none;
+		font-size: 11px;
+		height: 150px;
+	}
+
+	.mydata_statistics .mydata_recent_predict {
+		width: 100%;
+		float: left;
+		padding-bottom: 20px;
+	}
+
+	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content {
+		font-size: 11px;
+	}
+
+	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content .predict_content_row {
+		margin-bottom: 10px;
+	}
+
+	.rankdata_type_btn > .type_btn {
+		margin-right: 0px;
+		width: 70px;
+	}
+
+	.table_label_score,
+	.table_label_record,
+	.table_label_hitrate,
+	.table_label_tier {
+		display: none !important;
+	}
+
+	.container_box {
+		margin: 30px 15px;
+	}
+
+	.match_result_team {
+		width: 95px !important;
+	}
+
+	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
+		margin-right: 5px;
+	}
 }
 
 
