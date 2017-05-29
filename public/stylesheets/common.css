@@ -267,6 +267,7 @@ table > tbody > tr:not(:last-child) {
 }
 
 .page_title {
+	position: relative;
 	font-size: 48px;
 	max-width: 1200px;
 	margin: 0 auto;
