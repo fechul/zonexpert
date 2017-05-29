@@ -3,19 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a3edf157-852f-405b-9f6e-56b74f346589" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/modules/board.js" afterPath="$PROJECT_DIR$/public/modules/board.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/modules/search.js" afterPath="$PROJECT_DIR$/public/modules/search.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/board.css" afterPath="$PROJECT_DIR$/public/stylesheets/board.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/common.css" afterPath="$PROJECT_DIR$/public/stylesheets/common.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/login.css" afterPath="$PROJECT_DIR$/public/stylesheets/login.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/my_page.css" afterPath="$PROJECT_DIR$/public/stylesheets/my_page.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/rank.css" afterPath="$PROJECT_DIR$/public/stylesheets/rank.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/schedule.css" afterPath="$PROJECT_DIR$/public/stylesheets/schedule.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/search.css" afterPath="$PROJECT_DIR$/public/stylesheets/search.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/signup.css" afterPath="$PROJECT_DIR$/public/stylesheets/signup.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/view.js" afterPath="$PROJECT_DIR$/routes/view.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/my_page.html" afterPath="$PROJECT_DIR$/views/my_page.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/rank.html" afterPath="$PROJECT_DIR$/views/rank.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -99,8 +87,8 @@
       <file leaf-file-name="my_page.css" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/my_page.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="208" column="24" lean-forward="false" selection-start-line="208" selection-start-column="24" selection-end-line="208" selection-end-column="24" />
+            <state relative-caret-position="346">
+              <caret line="143" column="17" lean-forward="false" selection-start-line="143" selection-start-column="17" selection-end-line="143" selection-end-column="17" />
               <folding />
             </state>
           </provider>
@@ -456,12 +444,12 @@
       <workItem from="1494756587019" duration="714000" />
       <workItem from="1495591481510" duration="18813000" />
       <workItem from="1495961352960" duration="3208000" />
-      <workItem from="1496066675511" duration="6155000" />
+      <workItem from="1496066675511" duration="6841000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113668000" />
+    <option name="totallyTimeSpent" value="114354000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -872,8 +860,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/stylesheets/my_page.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="208" column="24" lean-forward="false" selection-start-line="208" selection-start-column="24" selection-end-line="208" selection-end-column="24" />
+        <state relative-caret-position="346">
+          <caret line="143" column="17" lean-forward="false" selection-start-line="143" selection-start-column="17" selection-end-line="143" selection-end-column="17" />
           <folding />
         </state>
       </provider>
