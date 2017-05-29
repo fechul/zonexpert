@@ -151,15 +151,15 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 							rating = parseInt(rating);
 
 							if(rating < 1200) {
-								return '<div><div class="rank_table_tier badge_bronze"></div><span class="table_tier_name">브론즈</span></div>';
+								return '<div><div class="rank_table_tier badge_bronze"></div></div>';
 							} else if(1200 <= rating && rating < 1400) {
-								return '<div><div class="rank_table_tier badge_silver"></div><span class="table_tier_name">실버</span></div>';
+								return '<div><div class="rank_table_tier badge_silver"></div></div>';
 							} else if(1400 <= rating && rating < 1600) {
-								return '<div><div class="rank_table_tier badge_gold"></div><span class="table_tier_name">골드</span></div>';
+								return '<div><div class="rank_table_tier badge_gold"></div></div>';
 							} else if(1600 <= rating && rating < 1800) {
-								return '<div><div class="rank_table_tier badge_platinum"></div><span class="table_tier_name">플래티넘</span></div>';
+								return '<div><div class="rank_table_tier badge_platinum"></div></div>';
 							} else if(1800 <= rating) {
-								return '<div><div class="rank_table_tier badge_diamond"></div><span class="table_tier_name">다이아</span></div>';
+								return '<div><div class="rank_table_tier badge_diamond"></div></div>';
 							}
 						};
 
@@ -209,29 +209,29 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 
 						async.mapSeries(userdata, function(user, _async_cb) {
 							rank_table_html += '<tr id="' + (search_target == rank ? 'target_row' : '') + '">';
-							rank_table_html += '<td>' + rank + '</td>';
-							rank_table_html += '<td>' + user.nickname + '</td>';
-							rank_table_html += '<td>' + get_league_name(user.main_league) + '</td>';
-							rank_table_html += '<td>' + user.rating + '</td>';
+							rank_table_html += '<td class="table_label_rank">' + rank + '</td>';
+							rank_table_html += '<td class="table_label_nickname">' + user.nickname + '</td>';
+							rank_table_html += '<td class="table_label_mainsport">' + get_league_name(user.main_league) + '</td>';
+							rank_table_html += '<td class="table_label_score">' + user.rating + '</td>';
 
 							if(user.record) {
 								if(user.record[type]) {
-									rank_table_html += '<td>' + (user.record[type].hit || 0) + ' / ' + (user.record[type].fail || 0) + '</td>';
+									rank_table_html += '<td class="table_label_record">' + (user.record[type].hit || 0) + ' / ' + (user.record[type].fail || 0) + '</td>';
 									if(!user.record[type].fail) {
-										rank_table_html += '<td>-</td>';
+										rank_table_html += '<td class="table_label_hitrate">-</td>';
 									} else {
-										rank_table_html += '<td>' + ((user.record[type].hit/(user.record[type].hit + user.record[type].fail))*100).toFixed(2) + '%</td>';
+										rank_table_html += '<td class="table_label_hitrate">' + ((user.record[type].hit/(user.record[type].hit + user.record[type].fail))*100).toFixed(2) + '%</td>';
 									}
 								} else {
-									rank_table_html += '<td>0 / 0</td>';
-									rank_table_html += '<td>-</td>';
+									rank_table_html += '<td class="table_label_record">0 / 0</td>';
+									rank_table_html += '<td>-</td class="table_label_hitrate">';
 								}
 							} else {
-								rank_table_html += '<td>0 / 0</td>';
-								rank_table_html += '<td>-</td>';
+								rank_table_html += '<td class="table_label_record">0 / 0</td>';
+								rank_table_html += '<td class="table_label_hitrate">-</td>';
 							}
 
-							rank_table_html += '<td class="tier_cell left">' + get_tier_img(user.rating) + '</td>';
+							rank_table_html += '<td class="tier_cell table_label_tier">' + get_tier_img(user.rating) + '</td>';
 							rank_table_html += '</tr>';
 							rank++;
 							_async_cb();

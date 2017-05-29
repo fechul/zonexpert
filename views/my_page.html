@@ -19,25 +19,25 @@
 				<div class ="mypage_info">
 					<div class="mypage_info1_wrapper">
 						<label class="mypage_info1_label">이메일</label>
-						<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<div class="mypage_info1">
 							<span class ="mypage_st2"><%= myEmail %></span>
 						</div>
 					</div>
 					<div class="mypage_info1_wrapper">
 						<label class="mypage_info1_label">닉네임</label>
-						<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<div class="mypage_info1">
 							<span class ="mypage_st2" id="showNickName"><%= myNickName %></span>
 						</div>
 					</div>
 					<div class="mypage_info1_wrapper">
 						<label class="mypage_info1_label">가입 날짜</label>
-						<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<div class="mypage_info1">
 							<span class ="mypage_st2"><%= signupDate %></span>
 						</div>
 					</div>
 					<div class="mypage_info1_wrapper">
 						<label class="mypage_info1_label">메인 종목</label>
-						<div class="mypage_info1" style = "padding:10px 30px 10px 30px">
+						<div class="mypage_info1">
 							<span class ="mypage_st2">스포츠/리그</span>
 						</div>
 					</div>
@@ -54,7 +54,7 @@
 					<div class="changinfo_input_field">
 					 	<div class="form-group">
 							<label for="inputEmail" class="col-sm-2 control-label">Email 주소</label>
-							<div>
+							<div class="check">
 						  		<input type="email" id="inputEmail" class="form-control" value="<%= myEmail %>" disabled>
 							</div>
 					  	</div>
@@ -119,7 +119,7 @@
 							</ul>
 						</div>
 						<div style="text-align:center;">
-							<button type="button" class="btn btn-default btn-sm" onclick="location.href='/buylist'">구매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/buylist'">구매 내역 자세히 보기</button></div>
 					</article>
 
 					<article class="mypage_article">
@@ -134,7 +134,7 @@
 								<li><i class="fa fa-caret-right"></i> 판매금액 : 0</li>
 							</ul></div>
 						<div style="text-align:center;">
-							<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
 					</article>
 					
 					<article class="mypage_article">
@@ -147,9 +147,9 @@
 								<li><i class="fa fa-caret-right"></i> 잔고금액 : 0</li>
 							</ul></div>
 						<div style="text-align:center;padding-bottom:10px;">
-							<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">잔고 충전하기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/sell_list'">잔고 충전하기</button></div>
 						<div style="text-align:center;">
-							<button type="button" class="btn btn-default btn-sm" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
 					</article>
 					
 					<article class="mypage_article">
@@ -168,7 +168,7 @@
 							</ul>
 						</div>
 						<div style="text-align:center;">
-							<button type="button" class="btn btn-default btn-sm" onclick="location.href='/index.php?act=dispCommunicationMessages&amp;mid=mypage'">정산/수익관리 자세히 보기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/index.php?act=dispCommunicationMessages&amp;mid=mypage'">정산/수익관리 자세히 보기</button></div>
 					</article>
 				</div>
 			</section>
