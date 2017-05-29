@@ -93,7 +93,7 @@ body {
 	color: #fff;
 }
 /* browser */
-@media(max-width: 562px){
+@media all and (max-width: 562px){
 	.signup_section .logo{
 		width: 200px;
 		height: 90px;
@@ -121,7 +121,7 @@ body {
 	}
 }
 /* device */
-@media (max-device-width: 768px){
+@media all and (max-device-width: 768px){
 	.signup_section .logo{
 		width: 200px;
 		height: 90px;

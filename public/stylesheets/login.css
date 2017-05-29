@@ -112,7 +112,7 @@ body {
 }
 
 /* browswer */
-@media (max-width: 562px){
+@media all and (max-width: 562px){
 	.login_box{
 		width: 80%;
 	}
@@ -124,7 +124,7 @@ body {
 	/*height: 38px;*/
 	/*}*/
 	.login_box > .row > .login_row_content > input {
-		font-size: 16px;x
+		font-size: 16px;
 		border: none;
 		width: 90%;
 	}
@@ -150,7 +150,7 @@ body {
 	}
 }
 /* device */
-@media (max-device-width: 768px) {
+@media all and (max-device-width: 768px) {
 	.login_box{
 		width: 80%;
 	}
