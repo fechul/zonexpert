@@ -141,13 +141,13 @@
         width: 96%;
     }
     .changeinfo_btns > button{
-        width: 100%;
+        width: 80%;
     }
     .form-group{
         width: 100%;
     }
     .changinfo_input_field .form-group > div{
-        width: 100%;
+        width: 90%;
     }
     .mypage_article{
         width: 45%;
@@ -194,11 +194,11 @@
     }
 
     .changeinfo_btns > button {
-        width: 100%;
+        width: 80%;
     }
 
     .changinfo_input_field .form-group > div {
-        width: 100%;
+        width: 90%;
     }
 
     .changinfo_input_field .form-group > div > input {
