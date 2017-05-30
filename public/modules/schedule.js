@@ -140,7 +140,7 @@ var SCHEDULE = {
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
 
-		$.get('/prediction', {
+		$.get('/prediction/all', {
 			'leagueId': leagueId
 		}, function(baskets) {
 			baskets = JSON.parse(baskets);

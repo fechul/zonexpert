@@ -27,10 +27,15 @@ var no_login = function(req, res, next) {
 };
 
 var readPredictionShortcutHTML = function(req, res, next) {
-	fs.readFile('./views/prediction_shortcut.html', function(err, data) {
-		req.predictionShortcut = data;
+	if (req.session.login) {
+		fs.readFile('./views/prediction_shortcut.html', function(err, data) {
+			req.predictionShortcut = data;
+			next();
+		});
+	} else {
+		req.predictionShortcut = '';
 		next();
-	});
+	}
 };
 
 router.get('/', readPredictionShortcutHTML, function(req, res) {

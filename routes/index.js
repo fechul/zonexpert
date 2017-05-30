@@ -158,7 +158,6 @@ router.post('/prediction', function(req, res) {
 
 	prediction.confirm({
 		'userEmail': req.session.email,
-		'beforeRating': 1500,
 		'predictions': predictions
 	}, function(add) {
 		res.json(add);
@@ -169,15 +168,60 @@ router.get('/prediction', function(req, res) {
 	prediction.get({
 		'userEmail': req.session.email,
 		'leagueId': req.query.leagueId
+	}, function(predictions) {
+		var predictionIdList = [];
+
+		for (var i in predictions) {
+			predictionIdList.push(predictions[i].matchId);
+		}
+
+		schedule.getMatches({
+			'idList': predictionIdList
+		}, function(matches) {
+			res.json(JSON.stringify(matches));
+		});
+	});
+});
+
+router.get('/prediction/wait', function(req, res) {
+	prediction.get({
+		'userEmail': req.session.email,
+		'leagueId': req.query.leagueId,
+		'result': 'wait'
+	}, function(predictions) {
+		var predictionIdList = [];
+		var pickObject = {};
+
+		for (var i in predictions) {
+			predictionIdList.push(predictions[i].matchId);
+			pickObject[predictions[i].matchId] = predictions[i].pick;
+		}
+
+		schedule.getMatches({
+			'idList': predictionIdList
+		}, function(matches) {
+			for (var i in matches) {
+				matches[i] = matches[i].toObject();
+				matches[i].pick = pickObject[matches[i].id];
+			}
+
+			res.json(JSON.stringify(matches));
+		});
+	});
+});
+
+router.get('/prediction/all', function(req, res) {
+	prediction.getAll({
+		'userEmail': req.session.email,
+		'leagueId': req.query.leagueId
 	}, function(prediction) {
 		res.json(JSON.stringify(prediction));
 	});
 });
 
-router.get('/prediction/basket', need_login, function(req, res) {
+router.get('/prediction/basket/', need_login, function(req, res) {
 	prediction.getBasketList({
-		'userEmail': req.session.email,
-		'leagueId': req.body.leagueId
+		'userEmail': req.session.email
 	}, function(baskets) {
 		var basketIdList = [];
 
