@@ -1,7 +1,7 @@
 var PREDICTION_SHORTCUT = {
 	init: function() {
 		this.initEvents();
-        this.getBaskets();
+        this.setData();
 	},
 
 	initEvents: function() {
@@ -17,16 +17,16 @@ var PREDICTION_SHORTCUT = {
         });
 
         $('.do_prediction').click(function() {
-            var prediction_shortcut_pick_length = $('.prediction_shortcut_table_row').length;
+            var prediction_shortcut_pick_length = $('.prediction_shortcut_table_row.unconfirmed').length;
 
             var predictions = [];
 
             for (var i = 0; i < prediction_shortcut_pick_length; i++) {
-                var value = $('.prediction_shortcut_table_row').eq(i).find('td.active').eq(0).attr('value');
+                var value = $('.prediction_shortcut_table_row.unconfirmed').eq(i).find('td.active').eq(0).attr('value');
 
                 if (value) {
                     predictions.push({
-                        'matchId': $('.prediction_shortcut_list tr').eq(i).data('matchId'),
+                        'matchId': $('.prediction_shortcut_list.unconfirmed tr').eq(i).data('matchId'),
                         'pick': value
                     });
                 }
@@ -37,22 +37,22 @@ var PREDICTION_SHORTCUT = {
             $.post('/prediction', {
                 'predictions': predictions
             }, function(prediction) {
-                self.getBaskets();
-				
+                self.setData();
+
                 if (typeof SCHEDULE !== 'undefined') {
                     SCHEDULE.get_schedule();
                 }
             });
         });
 
-		$('#prediction_shortcut_table').on('click', '.prediction_shortcut_table_row td:not(:first-child)', function() {
+		$('#prediction_shortcut_unconfirmed_table').on('click', '.prediction_shortcut_table_row.unconfirmed td:not(:first-child)', function() {
 			var $this = $(this);
 			var thisIsActive = $this.hasClass('active');
 
 			if (thisIsActive) {
 				$this.removeClass('active');
 			} else {
-				var tds = $this.closest('.prediction_shortcut_table_row').find('td');
+				var tds = $this.closest('.prediction_shortcut_table_row.unconfirmed').find('td');
 
 				for (var i = 0; i < tds.length; i++) {
 					if (tds.eq(i).hasClass('active')) {
@@ -65,9 +65,19 @@ var PREDICTION_SHORTCUT = {
 			}
 
 		});
+
+		$('.prediction_shortcut_container').on('click', '.prediction_shortcut_title:not(.active)', function() {
+			var $this = $(this);
+			var type = $this.hasClass('unconfirmed') ? 'unconfirmed': 'confirmed';
+			$('.prediction_shortcut_title').removeClass('active');
+			$this.addClass('active');
+
+			$('.prediction_shortcut_list:not(.' + type + ')').hide();
+			$('.prediction_shortcut_list.' + type).show();
+		});
 	},
 
-    getBaskets: function() {
+    setData: function() {
         var self = this;
 		$.get('/prediction/basket', {}, function(data) {
             data = JSON.parse(data);
@@ -75,14 +85,17 @@ var PREDICTION_SHORTCUT = {
             if (data.length) {
                 $('.prediction_shortcut_preview_number').show();
                 $('.prediction_shortcut_preview_number').html(data.length);
+                $('.prediction_shortcut_preview_number_inner_unconfirmed').css('visibility', 'visible');
+                $('.prediction_shortcut_preview_number_inner_unconfirmed').html(data.length);
             } else {
                 $('.prediction_shortcut_preview_number').hide();
+                $('.prediction_shortcut_preview_number_inner_unconfirmed').css('visibility', 'hidden');
             }
 
-            $('.prediction_shortcut_list tbody').empty();
+            $('.prediction_shortcut_list.unconfirmed tbody').empty();
             for (var i in data) {
-                $('.prediction_shortcut_list tbody').eq(0).append([
-                    '<tr class="prediction_shortcut_table_row">',
+                $('.prediction_shortcut_list.unconfirmed tbody').eq(0).append([
+                    '<tr class="prediction_shortcut_table_row unconfirmed">',
                         '<td>', self.getDateString(data[i].date), '</td>',
                         '<td value="home">', data[i].homeTeamName, '</td>',
                         '<td value="draw">무승부</td>',
@@ -95,9 +108,33 @@ var PREDICTION_SHORTCUT = {
                     '</tr>'
                 ].join(''));
 
-                $('.prediction_shortcut_list tr').last().data('matchId', data[i].id);
+                $('.prediction_shortcut_list.unconfirmed tr').last().data('matchId', data[i].id);
             }
         });
+
+		$.get('/prediction/wait', {}, function(data) {
+            data = JSON.parse(data);
+
+            $('.prediction_shortcut_list.confirmed tbody').empty();
+            for (var i in data) {
+                $('.prediction_shortcut_list.confirmed tbody').eq(0).append([
+                    '<tr class="prediction_shortcut_table_row confirmed">',
+                        '<td>', self.getDateString(data[i].date), '</td>',
+                        '<td value="home">', data[i].homeTeamName, '</td>',
+                        '<td value="draw">무승부</td>',
+                        '<td value="away">', data[i].awayTeamName, '</td>',
+                        // '<td>',
+                        //     '<label>홈승', '<input type="radio" class="prediction_shortcut_pick" name="prediction_shortcut_pick_', i, '"value="home"></label>',
+                        //     '<label>무', '<input type="radio" class="prediction_shortcut_pick" name="prediction_shortcut_pick_', i, '"value="draw"></label>',
+                        //     '<label>원정승', '<input type="radio" class="prediction_shortcut_pick" name="prediction_shortcut_pick_', i, '"value="away"></label>',
+                        // '</td>',
+                    '</tr>'
+                ].join(''));
+
+				$('.prediction_shortcut_list.confirmed tr').last().find('td[value="' + data[i].pick + '"]').addClass('active');
+                $('.prediction_shortcut_list.confirmed tr').last().data('matchId', data[i].id);
+            }
+		});
     },
 
 	getDateString: function(date) {
