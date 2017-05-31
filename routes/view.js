@@ -379,7 +379,7 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 	res.render(path, json);
 });
 
-router.get('/chat/:matchId', readPredictionShortcutHTML, function(req, res){
+router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
@@ -406,7 +406,7 @@ router.get('/chat/:matchId', readPredictionShortcutHTML, function(req, res){
 		'matchId': matchId
 	}, function(matchData) {
 		// matchData.roomOpen = true;
-		if (matchData && matchData.roomOpen) {
+		if (matchData) {
 			var json = {
 				myinfo_display: '',
 				logout_display: '',
