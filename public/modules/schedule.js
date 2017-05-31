@@ -41,10 +41,9 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed)', function() {
-
-			var row = $(this);
-			var toggle = $(this).hasClass('basketed');
+		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
+			var row = $(this).closest('tr.schedule_table_row');
+			var toggle = row.hasClass('basketed');
 
 			$.ajax({
 				'url': '/prediction/basket',
@@ -63,7 +62,7 @@ var SCHEDULE = {
 						}
 
 						row.data('toggle', !toggle);
-						PREDICTION_SHORTCUT.getBaskets();
+						PREDICTION_SHORTCUT.setData();
 						$('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
 																		.animate({right: '-=6px'}, 40)
 																		.animate({right: '+=6px'}, 40)
@@ -78,12 +77,8 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', 'td.schedule_chatting:not(.disable) i', function() {
-			location.href = '/chat/' + $(this).closest('.schedule_table_row').data('matchId');
-		});
-
-		$('#schedule_table').on('click', 'td.schedule_chatting', function() {
-			console.log('go chatting');
+		$('#schedule_table').on('click', '.schedule_table_row td:not(:nth-child(1)):not(:nth-child(7))', function() {
+			location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
 		});
 
 		$('.user_search_input').keydown(function(e) {
@@ -187,7 +182,7 @@ var SCHEDULE = {
 							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
 							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
 							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
-							'<td class="schedule_chatting ', match.roomOpen ? '' : 'disable', '"><span><i class="fa fa-commenting-o"></i></span></td>',
+							'<td class="schedule_basket"><span><i class="fa fa-check-square-o"></i></span></td>',
 						'</tr>'
 					].join(''));
 
