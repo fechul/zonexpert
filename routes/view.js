@@ -405,7 +405,7 @@ router.get('/chat/:matchId', readPredictionShortcutHTML, function(req, res){
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		matchData.roomOpen = true;
+		// matchData.roomOpen = true;
 		if (matchData && matchData.roomOpen) {
 			var json = {
 				myinfo_display: '',
