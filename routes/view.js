@@ -13,7 +13,7 @@ var need_login = function(req, res, next) {
 	if (req.session.login) {
 		next();
 	} else {
-		res.redirect('/');
+		res.redirect('/login');
 	}
 };
 
@@ -39,7 +39,6 @@ var readPredictionShortcutHTML = function(req, res, next) {
 };
 
 router.get('/', readPredictionShortcutHTML, function(req, res) {
-	console.log("Qwer")
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -380,7 +379,7 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 	res.render(path, json);
 });
 
-router.get('/chat/:matchId', function(req, res){
+router.get('/chat/:matchId', readPredictionShortcutHTML, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
@@ -406,6 +405,7 @@ router.get('/chat/:matchId', function(req, res){
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
+		matchData.roomOpen = true;
 		if (matchData && matchData.roomOpen) {
 			var json = {
 				myinfo_display: '',
@@ -460,6 +460,8 @@ router.get('/chat/:matchId', function(req, res){
 						json.awayTeamName = result.awayTeamName;
 						json.homeTeamImg = result.homeTeamImg;
 						json.awayTeamImg = result.awayTeamImg;
+
+						json.prediction_shortcut = req.predictionShortcut;
 
 				        res.render(path, json);
 					});

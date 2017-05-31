@@ -47,7 +47,7 @@ chat.init = function (server) {
                 name: data.name,
                 badge: data.badge
             });
-            console.log('ddddddd');
+            
             io.sockets.emit('updateusers', usernames[socket.room || 'trash']);
         });
 

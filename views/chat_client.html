@@ -27,7 +27,7 @@
             <div class="window-wrapper">
                 <div class="window-title">
                     <div class="title">
-                        <span>ZONEXPERT 채팅</span>
+                        <span>ZONEXPERT 채팅</span><button class="showUserList">유저 목록</button>
                     </div>
 
                 </div>
@@ -41,15 +41,15 @@
                         </div>
 
                         <div class="input-area">
-                            <div class="my-account" style="float:left;width:25%">
-                                <div class="image" style="float:left">
+                            <div class="my-account" style="float:left;">
+                                <div class="image" style="float:left;">
                                     <img src="<%= myBadgeSrc %>">
                                 </div>
                                 <div class="name" >
                                     <span ><%= my_nickname %></span>
                                 </div>
                             </div>
-                            <div class="input-wrapper" style="float:left;width:60%">
+                            <div class="input-wrapper" style="float:left;">
                                 <input id="message-input" type="text" value="">
                             </div>
                             <input id="message-button" type="button" value="전송" class="send-btn" style="float:right;width:10%" >
@@ -68,17 +68,21 @@
             </div>
 
         </section>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-        <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-        <script src="/modules/chat.js"></script>
-        <script>
-            CHAT.init({
-                nickname: '<%= my_nickname %>',
-                roomId: parseInt('<%= matchId %>', 10),
-                myBadge: '<%= myBadge %>'
-            });
-        </script>
+        <%- prediction_shortcut %>
     </body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script src="/jquery/jquery.js"></script>
+    <script src="/bootstrap/bootstrap.min.js"></script>
+    <script src="/modules/chat.js"></script>
+    <script src="/modules/prediction_shortcut.js"></script>
+    <script>
+        CHAT.init({
+            nickname: '<%= my_nickname %>',
+            roomId: parseInt('<%= matchId %>', 10),
+            myBadge: '<%= myBadge %>'
+        });
+        PREDICTION_SHORTCUT.init();
+    </script>
 
 </html>

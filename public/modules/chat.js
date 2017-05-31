@@ -64,6 +64,18 @@ var CHAT = {
                 $('#message-button').focus().click();
             }
         });
+
+        $('.showUserList').click(function() {
+            if($('.right-tabs').css('display') == 'none') {
+                $('.window-area').hide();
+                $('.right-tabs').fadeIn(500);
+                $(this).html('채팅하기');
+            } else {
+                $('.right-tabs').hide();
+                $('.window-area').fadeIn(500);
+                $(this).html('유저 목록');
+            }
+        });
     },
 
     connect_socket: function() {
@@ -87,17 +99,15 @@ var CHAT = {
             self.writeMessage('system', 'system', data.message);
         });
         socket.on('message', function (data) {
-            console.log("message: ", data)
             self.writeMessage('other', data.name, data.message, data.badge);
         });
 
         socket.on('updateusers', function (data) {
-            console.log("dat: ", data)
             $('.member-list').empty();
 
             $('.member-list').append('<li>' + '접속자 수 : ' + data.length + '명' + '</li>');
             for (var i = 0; i < data.length; i++) {
-                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div>' + data[i].name + '</li>');
+                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div><span class="chat_nickname"><nobr>' + data[i].name + '</nobr></span></li>');
             }
         });
     },
