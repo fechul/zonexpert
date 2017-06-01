@@ -116,7 +116,8 @@ var predictionSchema = new Schema({
     'pick': String, // home || draw || away
     'result': String, // true, false, wait
     'beforeRating': Number,
-    'afterRating': Number
+    'afterRating': Number,
+    'ratingCalculatedTime': Date
 });
 
 var boardSchema = new Schema({
