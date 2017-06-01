@@ -102,10 +102,11 @@ var rating = {
                         }
 
                         if (user.pick == matchResult) {
-                            user.ratingChange = defaultChangeValue * self.getCorrectP(pickRate[user.pick]) + self.getCorrectW(user.beforeRating, ratingAvg);
+                            //픽률이 높을수록 ++, 픽률이 낮을수록 --
+                            user.ratingChange = defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
                         } else {
-                            user.ratingChange = -1 * defaultChangeValue * self.getIncorrectP(pickRate[user.pick]) - self.getIncorrectW(user.beforeRating, ratingAvg)
+                            user.ratingChange = -1 * defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
                         }
 
@@ -170,29 +171,17 @@ var rating = {
             });
         })
     },
-    getCorrectP: function(rate) {
-        var p = -1 * rate + 1.5;
+    getCompByPickRate: function(rate) {
+        var p = -20 * rate + 10;
 
         return p;
     },
-    getIncorrectP: function(rate) {
-        var p = rate + 0.5;
-
-        return p;
-    },
-    getCorrectW: function(rating, ratingAvg) {
+    getCompByUserRating: function(rating, ratingAvg) {
         var win_rate = 1 / (1 + Math.pow(10, (ratingAvg - rating) / ratingAvg));
-        var w = -1 * win_rate * 20 + 10;
+        var w = -20 * win_rate + 10;
 
         return w;
     },
-    getIncorrectW: function(rating, ratingAvg) {
-        var win_rate = 1 / (1 + Math.pow(10, (ratingAvg - rating) / ratingAvg));
-        // console.log(rating, win_rate);
-        var w = win_rate * 20 - 10;
-
-        return w;
-    }
 };
 
 module.exports = rating;
