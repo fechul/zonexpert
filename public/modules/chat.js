@@ -237,7 +237,7 @@ var CHAT = {
                         }
                     }
 
-                    userListHtml += '<span class="predictedUserInfo"><span class="predictedUserNickname">' + userList[i].nickname + '</span>&nbsp&nbsp&nbsp&nbsp<span class="predictedUserRating">' +  userList[i].rating + '</span></span>';
+                    userListHtml += '<span class="predictedUserInfo"><span class="predictedUserNickname">' + userList[i].nickname + '</span>&nbsp&nbsp&nbsp&nbsp<span class="predictedUserRating">' +  parseInt(userList[i].rating, 10) + '</span></span>';
                     userListHtml += '</div>';
                 }
 
@@ -263,7 +263,7 @@ var CHAT = {
 
                 $('.predictedUserInfo_nick').html(data.nickname);
                 $('.predictedUserInfo_rank').html(data.totalRank + '위');
-                $('.predictedUserInfo_rating').html(data.rating);
+                $('.predictedUserInfo_rating').html(parseInt(data.rating, 10));
 
                 $('.predictedUserInfo_tier').removeClass('badge_ready')
                                             .removeClass('badge_bronze')

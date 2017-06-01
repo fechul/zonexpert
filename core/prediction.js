@@ -555,7 +555,7 @@ exports.pushViewList = function(options, callback) {
         if(data && data.length) {
             data = data[0];
 
-            if(data[0].viewList.indexOf(myEmail) > -1) {
+            if(data.viewList.indexOf(myEmail) > -1) {
                 callback(false);
             } else {
                 db.prediction.update({
