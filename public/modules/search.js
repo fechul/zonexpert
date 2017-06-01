@@ -130,7 +130,7 @@ var SEARCH = {
 				list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
 
 				var afterRating = parseInt(recentMatches[i].afterRating, 10);
-				var ratingChange = recentMatches[i].afterRating - parseInt(recentMatches[i].beforeRating, 10);
+				var ratingChange = parseInt(recentMatches[i].afterRating - recentMatches[i].beforeRating, 10);
 				if(ratingChange > 0) {
 					ratingChange = '+' + ratingChange;
 				}

@@ -235,7 +235,7 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 							rank_table_html += '<td class="table_label_rank">' + rank + '</td>';
 							rank_table_html += '<td class="table_label_nickname">' + user.nickname + '</td>';
 							rank_table_html += '<td class="table_label_mainsport">' + get_league_name(user.main_league) + '</td>';
-							rank_table_html += '<td class="table_label_score">' + user.rating + '</td>';
+							rank_table_html += '<td class="table_label_score">' + parseInt(user.rating, 10) + '</td>';
 
 							if(user.record) {
 								if(user.record[type]) {
