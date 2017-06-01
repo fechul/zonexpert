@@ -95,7 +95,9 @@ var rating = {
                     }
 
                     async.each(userList, function(user, _async_cb) {
-                        var defaultChangeValue = user.readyGameCnt == 0 ? 30 : 60;
+                        var defaultIncreaseValue = user.readyGameCnt == 0 ? 30 : 45;
+                        var defaultDecreaseValue = user.readyGameCnt == 0 ? -25 : -40;
+                        
                         user.readyGameCnt--;
                         if (user.readyGameCnt < 0) {
                             user.readyGameCnt = 0;
@@ -128,13 +130,13 @@ var rating = {
 
                         if (user.pick == matchResult) {
                             //픽률이 높을수록 ++, 픽률이 낮을수록 --
-                            user.ratingChange = defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
+                            user.ratingChange = defaultIncreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
                             user.record.total.hit++;
                             user.record[1].total.hit++;
                             user.record[1][matchData.leagueId].hit++;
                         } else {
-                            user.ratingChange = -1 * defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
+                            user.ratingChange = defaultDecreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
                             user.record.total.fail++;
                             user.record[1].total.fail++;
@@ -177,8 +179,6 @@ var rating = {
                                     }
 
                                     predict_rate_rank = predict_rate_rank / game_cnt_rank;
-
-                                    console.log(user.email + ' : ' + user.beforeRating + ' -> ' + user.afterRating);
 
                                     redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
                                         redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
