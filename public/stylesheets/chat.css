@@ -51,6 +51,17 @@ body {
     position: relative;
 }
 
+.predictedUsers {
+    float: left;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+}
+
+..userPredictData
+
+
+
+
 
 
 

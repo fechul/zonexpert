@@ -23,7 +23,7 @@ var NOTICE = {
 
 					setTimeout(function() {
 						notice.fadeOut(500);
-					}, 5000);
+					}, 20000);
 				}
 			}
 		} else if(type == 'success') {
@@ -36,7 +36,7 @@ var NOTICE = {
 
 					setTimeout(function() {
 						notice.fadeOut(500);
-					}, 5000);
+					}, 20000);
 				}
 			}
 		}
