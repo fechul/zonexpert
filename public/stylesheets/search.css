@@ -188,14 +188,47 @@ canvas{position:relative; z-index:9999;}
 	padding: 15px;
 }
 
-.my_recent_predict_section .recent_predict_data_row > img {
-	width: 40px;
-	height: 40px;
+.my_recent_predict_section .recent_predict_data_row div {
+	display: inline-block;
 }
 
-.my_recent_predict_section .recent_predict_data_row > span {
-	margin-right: 10px;
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+	float: left;
+	margin-top: 8px;
 }
+
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_goals {
+	margin: auto 10px;
+}
+
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+	float: right;
+	margin-top: 8px;
+	margin-left: 20px;
+}
+
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+	float: right;
+	margin-top: 8px;
+}
+
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg.success {
+	color: green;
+}
+
+.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg.failed {
+	color: red;
+}
+
+.my_recent_predict_section .recent_predict_data_row > img {
+	/*width: 40px;*/
+	height: 40px;
+	margin: auto 10px;
+}
+
+/*.my_recent_predict_section .recent_predict_data_row > span {
+	margin-right: 10px;
+}*/
 
 
 /* mobile */
@@ -320,60 +353,3 @@ canvas{position:relative; z-index:9999;}
 		font-size: 11px;
 	}
 }
-
-/*@media all and (max-device-width: 360px) {*/
-	/*.page_title {*/
-		/*padding-top: 25px;*/
-	/*}*/
-
-	/*.main_section .searchdata_section {*/
-		/*width: 90%;*/
-		/*margin: 20px 0px 0px 0px;*/
-		/*font-size: 12px;*/
-	/*}*/
-
-	/*.main_section .my_record_data_section,*/
-	/*.main_section .my_statistics_data_section,*/
-	/*.main_section .my_recent_predict_section {*/
-		/*width: 90%;*/
-	/*}*/
-
-	/*.main_section .no_searchdata_section {*/
-		/*width: 90%;*/
-		/*font-size: 16px;*/
-	/*}*/
-
-	/*.mydata_badge > img {*/
-		/*height: 110px !important;*/
-	/*}*/
-
-	/*.mydata_statistics > .mydata_rate {*/
-		/*padding: 10px;*/
-	/*}*/
-
-	/*.container_box {*/
-		/*margin: 30px 0px;*/
-	/*}*/
-
-	/*#statistics_table tbody td {*/
-		/*display: block;*/
-	/*}*/
-
-	/*#statistics_table tbody tr td:first-child {*/
-		/*display: none;*/
-	/*}*/
-
-	/*#statistics_table tbody tr td:nth-child(3) {*/
-		/*color: #2bb31d;*/
-	/*}*/
-
-	/*#statistics_table tbody tr td:nth-child(4) {*/
-		/*color: #dc1616;*/
-	/*}*/
-/*}*/
-
-
-
-
-
-

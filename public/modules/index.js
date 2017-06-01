@@ -69,6 +69,11 @@ var INDEX = {
 
 			location.href = "/search?id=" + id;
 		});
+
+		$('#rank_table').on('click', 'tr:not(:nth-child(1))', function() {
+			var $this = $(this);
+			location.href = '/search?id=' + $this.find('td.table_label_nickname').html()
+		});
 	},
 
 	set_mydata: function() {
@@ -217,7 +222,7 @@ var INDEX = {
 					table_html += '</tr>';
 				}
 			} else {
-				table_html += '<tr><td colspan="7">데이터가 없습니다.</td></tr>'				
+				table_html += '<tr><td colspan="7">데이터가 없습니다.</td></tr>'
 			}
 			$('#rank_table > tbody > tr:not(:first-child)').remove();
 			$('#rank_table').append(table_html);

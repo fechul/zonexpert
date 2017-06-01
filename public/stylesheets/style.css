@@ -152,6 +152,11 @@
 	width: 100%;
 }
 
+#rank_table tr:not(:nth-child(1)):hover {
+	cursor: pointer;
+	background-color: #e5e5e5;
+}
+
 .tier_cell {
 	width: 80px;
 }
@@ -160,7 +165,7 @@
 	margin-left: 30px;
 }*/
 
-/* 
+/*
 	Media Query
 */
 
@@ -270,8 +275,3 @@
 		margin-right: 5px;
 	}
 }
-
-
-
-
-

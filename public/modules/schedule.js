@@ -135,11 +135,11 @@ var SCHEDULE = {
 		// } else if (status == 'POSTPONED') {
 		// 	str = '연기';
 		} else if (status == 'IN_PLAY') {
-			str = '경기중';
+			str = '진행';
 		} else if (status == 'DELAYED') {
 			str = '지연';
 		} else {
-			str = '경기전';
+			str = '예정';
 		}
 
 		return str;

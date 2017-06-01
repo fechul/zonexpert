@@ -85,6 +85,7 @@ exports.confirm = function(data, callback) {
                             }, {
                                 '$set': {
                                     'confirmed': true,
+                                    'confirmedTime': new Date(),
                                     'pick': prediction.pick,
                                     'result': 'wait'
                                 }
@@ -355,8 +356,6 @@ exports.getMatchesRecord = function(data, callback) {
                                                 }, {
                                                     'crestUrl': 1
                                                 }).limit(1).exec(function(awayErr, awayTeam) {
-                                                    console.log(predictData);
-                                                    console.log('000000000000000000000000000000000');
                                                     matchDataArray.push({
                                                         'homeTeamName': matchData.homeTeamName || '-',
                                                         'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
@@ -367,7 +366,7 @@ exports.getMatchesRecord = function(data, callback) {
                                                         'afterRating': predict.afterRating,
                                                         'beforeRating': predict.beforeRating,
                                                         'myPredict': predict.result,
-                                                        'date': new Date()  // date has to be updated
+                                                        'date': predict.confirmedTime  // date has to be updated
                                                     });
 
                                                     async_cb();
