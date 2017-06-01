@@ -385,4 +385,3 @@ exports.checkAttendancePoint = function(email, callback) {
         }
     });
 };
-

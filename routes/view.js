@@ -557,7 +557,7 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 				json.searchdata_user_id = userdata.nickname;
 
 				var rating = userdata.rating;
-				json.searchdata_rating = rating;
+				json.searchdata_rating = parseInt(rating, 10);
 
 				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
 					json.searchdata_tier_img = 'image/badge_ready.png';
