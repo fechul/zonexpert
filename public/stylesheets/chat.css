@@ -37,6 +37,23 @@ body {
     color: #333f4d;
 }
 
+.tab_container {
+    width: 780px;
+    margin: 30px auto;
+}
+
+#goToPredictionSystem,
+#goToOtherPredict {
+    width: 780px;
+    margin-top: 0px;
+    overflow: hidden;
+    min-height: 530px;
+    position: relative;
+}
+
+
+
+
 .chat-wrapper{
     background: #ffffff;
     width: 780px;
@@ -47,6 +64,7 @@ body {
     min-height: 530px;
     position: relative;
 }
+
 .chat-title{
     padding: 14px;
     position: relative;
@@ -78,10 +96,10 @@ b{
 .window-wrapper{
     background: #fff;
     width: 780px;
-    margin: 100px auto;
+    /*margin: 100px auto;*/
     margin-top: 0px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    /*border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);*/
     overflow: hidden;
     min-height: 530px;
     position: relative;
@@ -90,12 +108,9 @@ b{
     position: relative;
 }
 
-
 .window-area{
     width: 605px;
     float: left;
-
-
 }
 
 #chat-content{
