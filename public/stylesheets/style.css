@@ -183,6 +183,7 @@
 
 	.mydata_statistics .mydata_rate {
 		width: 55%;
+		height: 180.6px;
 		float: left;
 		border-bottom: 1px solid #bbb;
 		border-right: none;
@@ -214,12 +215,12 @@
 		float: left;
 		border-bottom: 1px solid #bbb;
 		height: 150px;
-		padding-top: 35px;
+		padding-top: 15px;
 	}
 
 	.mydata_statistics .mydata_badge  > img{
 		width: 80px;
-		height: 80px;
+		height: 110px;
 	}
 
 	.mydata_statistics .mydata_rate {

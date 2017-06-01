@@ -166,6 +166,35 @@
 
 }
 
+/* device */
+@media all and (min-device-width: 301px) and (max-device-width: 768px){
+    .mypage_info{
+        width: 96%;
+    }
+    .mypage_info1{
+        width: 80%;
+    }
+    .changeinfo{
+        width: 96%;
+    }
+    .myPointsManagementField {
+        width: 96%;
+    }
+    .changeinfo_btns > button{
+        width: 80%;
+    }
+    .form-group{
+        width: 100%;
+    }
+    .changinfo_input_field .form-group > div{
+        width: 90%;
+    }
+    .mypage_article{
+        width: 45%;
+        margin: 0px;
+    }
+}
+
 @media all and (max-device-width: 400px){
     .article_btn{
         padding: 5px 10px;
@@ -216,27 +245,18 @@
         font-size: 12px;
     }
     .mypage_article{
-        width: 40%;
-        margin: 0px;
-        font-size: 12px;
-    }
-    mypage_article > div {
-
-    }
-    .fa-img{
-        list-style:none;
-        padding-left:0;
-        font-size: 50px;
-    }
-    .mypage_article .mypage_img{
-        font-size: 60px;
-        padding-top: 10px;
-        color: #f49f6b;
+        width: 96%;
+        margin: 5px 0px;
     }
 
+    /*.article_btn{*/
+    /*padding: 5px 0px;*/
+
+    /*}*/
+
 }
-@media all and (max-device-width: 300px){
-    .mypage_article{
-        font-size: 10px;
-    }
-}
+/*@media all and (max-device-width: 300px){*/
+    /*.mypage_article{*/
+        /*font-size: 10px;*/
+    /*}*/
+/*}*/
