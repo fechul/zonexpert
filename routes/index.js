@@ -344,22 +344,15 @@ router.get('/prediction/getUserInfo', function(req, res) {
 						'matchId': matchId,
 						'userEmail': email
 					}, function(viewList) {
-						data[0].viewList = viewList;
+						data[0].viewList = viewList;						
 
-						prediction.getPick({
-							'matchId': matchId,
-							'userEmail': email
-						}, function(pick) {
-							data[0].pick = pick;
-
-							var key = 'rating_rank';
-							redis_client.zrevrank(key, email, function(err, rankData) {
-					        	if(!err) {
-					        		data[0].totalRank = rankData+1;
-					        	}
-					        	res.json(data);
-					        });
-						});
+						var key = 'rating_rank';
+						redis_client.zrevrank(key, email, function(err, rankData) {
+				        	if(!err) {
+				        		data[0].totalRank = rankData+1;
+				        	}
+				        	res.json(data);
+				        });
 					});
 				} else {
 					res.json(data);
@@ -391,7 +384,15 @@ router.post('/prediction/viewOthers', function(req, res) {
 					'matchId': matchId
 				}, function(pushResult) {
 					if(pushResult) {
-						res.json(true);
+						prediction.getPick({
+							'matchId': matchId,
+							'userEmail': targetEmail
+						}, function(pick) {
+							res.json({
+								'result': true,
+								'pick': pick
+							});
+						});
 					} else {
 						user.returnPoint({
 							'email': myEmail,
@@ -400,12 +401,16 @@ router.post('/prediction/viewOthers', function(req, res) {
 							'target': targetEmail,
 							'matchId': matchId
 						}, function(returnResult) {
-							res.json(false);
+							res.json({
+								'result': false
+							});
 						});
 					}
 				});
 			} else {
-				res.json(false);
+				res.json({
+					'result': false
+				});
 			}
 		});
 	});
