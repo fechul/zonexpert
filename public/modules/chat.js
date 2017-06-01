@@ -4,6 +4,12 @@ var CHAT = {
         this.room = options.roomId;
         this.badge = options.myBadge;
 
+        notice.init();
+
+        if(options.attendancePointUpdated) {
+            notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+        }
+
         this.init_events();
         this.connect_socket();
     },
@@ -38,6 +44,14 @@ var CHAT = {
             location.href = '/' + move;
         });
 
+        $('#header li.my_point > img').click(function() {
+            location.href = '/my_page';
+        });
+
+        $('#header li.my_point > span').click(function() {
+            location.href = '/my_page';
+        });
+
         $('.user_search_input').keydown(function(e) {
             if(e.keyCode == 13) {
                 $('.user_search_btn').click();
@@ -64,6 +78,18 @@ var CHAT = {
                 $('#message-button').focus().click();
             }
         });
+
+        $('.showUserList').click(function() {
+            if($('.right-tabs').css('display') == 'none') {
+                $('.window-area').hide();
+                $('.right-tabs').fadeIn(500);
+                $(this).html('채팅하기');
+            } else {
+                $('.right-tabs').hide();
+                $('.window-area').fadeIn(500);
+                $(this).html('유저 목록');
+            }
+        });
     },
 
     connect_socket: function() {
@@ -87,17 +113,26 @@ var CHAT = {
             self.writeMessage('system', 'system', data.message);
         });
         socket.on('message', function (data) {
-            console.log("message: ", data)
             self.writeMessage('other', data.name, data.message, data.badge);
         });
 
         socket.on('updateusers', function (data) {
-            console.log("dat: ", data)
             $('.member-list').empty();
 
             $('.member-list').append('<li>' + '접속자 수 : ' + data.length + '명' + '</li>');
             for (var i = 0; i < data.length; i++) {
-                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div>' + data[i].name + '</li>');
+                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div><span class="chat_nickname"><nobr>' + data[i].name + '</nobr></span></li>');
+            }
+        });
+
+        socket.on('updateLive', function (matchData) {
+            if (matchData.result) {
+                $('#goalsHomeTeam').html(matchData.result.goalsHomeTeam || 0);
+                $('#goalsAwayTeam').html(matchData.result.goalsAwayTeam || 0);
+            }
+
+            if (matchData.status == 'FINISHED') {
+                
             }
         });
     },

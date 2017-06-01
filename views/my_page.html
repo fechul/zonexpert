@@ -184,7 +184,9 @@
 	 <script src="notice/notice.js"></script>
 	 <script> 
 	 	var notice = NOTICE;
-		MYPAGE.init();
+		MYPAGE.init({
+			'attendancePointUpdated': <%- attendancePointUpdated %>
+		});
 	</script> 
 
 </html>

@@ -18,9 +18,10 @@ var userSchema = new Schema({
     'point': {'type': Number, 'default': 0},
     'pointLog': [{
         'amount': Number,
-        'classification': String, // charge, use, earn,
+        'classification': String, // charge, use, earn, attendance
         'time': Date
-    }]
+    }],
+    'todayAttendancePoint': Boolean
 });
 
 // user - record

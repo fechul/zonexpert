@@ -50,30 +50,30 @@
 	cursor: pointer;
 }
 
-#schedule_table .schedule_table_row.finished {
+#schedule_table .schedule_table_row.finished td:nth-child(7) {
 	background-color: #e7e7e7;
 	cursor: not-allowed;
 }
 
-#schedule_table .schedule_table_row.basketed {
+#schedule_table .schedule_table_row.basketed td:nth-child(7) {
 	background-color: #ffc94f;
 }
 
-#schedule_table .schedule_table_row.confirmed {
+#schedule_table .schedule_table_row.confirmed td:nth-child(7) {
 	background-color: rgba(121, 162, 192, 0.83);
 	cursor: not-allowed;
 }
 
-#schedule_table .schedule_table_row.failed {
+#schedule_table .schedule_table_row.failed td:nth-child(7){
 	background-color: #e25353;
 }
 
-#schedule_table .schedule_table_row.success {
+#schedule_table .schedule_table_row.success td:nth-child(7){
 	background-color: #46cc50;
 }
 
 #schedule_table .schedule_table_row i {
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 #schedule_table .schedule_table_row .disable i {
@@ -124,7 +124,7 @@
 	width: 5%;
 	font-size: 18px;
 	border-left: 1px solid #bbb;
-	background-color: #e0e0e0;
+	/*background-color: #e0e0e0;*/
 }
 
 /* mobile */
@@ -215,7 +215,7 @@
 		border-right: 0px !important;
 	}
 
-	#schedule_table .schedule_chatting {
+	#schedule_table .schedule_basket {
 		border-left: 0px !important;
 	}
 

@@ -1,13 +1,11 @@
-var io;
 var chat = {};
-var roomList = [];
-
-var usernames = {};
-
+chat.io;
+chat.roomList = [];
+chat.usernames = {};
 chat.init = function (server) {
-    io = require('socket.io').listen(server);
+    chat.io = require('socket.io').listen(server);
     var matchId ='';
-    io.on('connection', function (socket) {
+    chat.io.on('connection', function (socket) {
         console.log('socket connection');
         socket.emit('connection', {
             type: 'connected'
@@ -16,7 +14,7 @@ chat.init = function (server) {
 
         socket.on('connection', function (data) {
             if (data.type == 'join') {
-                if (roomList.indexOf(data.room) > -1) {
+                if (chat.roomList.indexOf(data.room) > -1) {
                     socket.room = data.room
                 } else {
                     socket.room = null;
@@ -39,16 +37,16 @@ chat.init = function (server) {
 
             socket.username = data.name;
 
-            if (!usernames[socket.room || 'trash']) {
-                usernames[socket.room || 'trash'] = [];
+            if (!chat.usernames[socket.room || 'trash']) {
+                chat.usernames[socket.room || 'trash'] = [];
             }
 
-            usernames[socket.room || 'trash'].push({
+            chat.usernames[socket.room || 'trash'].push({
                 name: data.name,
                 badge: data.badge
             });
-            console.log('ddddddd');
-            io.sockets.emit('updateusers', usernames[socket.room || 'trash']);
+
+            chat.io.sockets.emit('updateusers', chat.usernames[socket.room || 'trash']);
         });
 
         socket.on('sendchat', function (data) {
@@ -60,20 +58,21 @@ chat.init = function (server) {
         });
 
         socket.on('disconnect', function () {
-            for (var i = 0; i < usernames[socket.room || 'trash'].length; i++) {
-                if(usernames[socket.room || 'trash'][i].name == socket.username) {
-                    usernames[socket.room || 'trash'].splice(i, 1);
+            for (var i = 0; i < chat.usernames[socket.room || 'trash'].length; i++) {
+                if(chat.usernames[socket.room || 'trash'][i].name == socket.username) {
+                    chat.usernames[socket.room || 'trash'].splice(i, 1);
                     break;
                 }
             }
 
-            io.sockets.emit('updateusers', usernames[socket.room || 'trash']);
+            chat.io.sockets.emit('updateusers', chat.usernames[socket.room || 'trash']);
         });
     });
 };
 
 chat.controlRoom = function() {
-    if (io) {
+    if (chat.io) {
+        var roomList = this.roomList;
         var matchList = [];
         matchList = matchList.concat(__matchList.TIMED);
         matchList = matchList.concat(__matchList.IN_PLAY);
@@ -117,7 +116,6 @@ chat.openRoom = function(matchId) {
 };
 
 chat.closeRoom = function(matchId) {
-    // console.log('close : ', matchId);
     db.match.update({
         'id': matchId
     }, {
@@ -128,7 +126,6 @@ chat.closeRoom = function(matchId) {
 };
 
 chat.closeRoomAll = function() {
-    console.log('closeRoomAll');
     db.match.update({}, {
         '$set': {
             'roomOpen': false
@@ -136,6 +133,10 @@ chat.closeRoomAll = function() {
     }, {
         'multi': true
     }).exec();
+};
+
+chat.sendMsgToRoom = function(_matchId, msg) {
+    chat.io.in(_matchId).emit('updateLive', msg);
 };
 
 module.exports = chat;

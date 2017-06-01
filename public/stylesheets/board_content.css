@@ -168,6 +168,22 @@ body {
 	margin-right: 5px;
 }
 
+#toolsmenu {
+	background-color: #444;
+	border-color: #444;
+}
+
+.icon-bar {
+	width: 22px;
+	height: 2px;
+	background: #fff;
+	display: block;
+	border-radius: 1px;
+	margin-bottom: 7px;
+}
+
+
+
 .modal-backdrop, .modal-backdrop.in {
     display: none;
 }
@@ -186,14 +202,14 @@ body {
 
 .prediction_shortcut_container {
 	display: none;
-    height: 300px;
-    width: 800px;
+    height: 330px;
+    width: 520px;
     position: fixed;
-    right: 30px;
-    bottom: 30px;
-	background-color: #ffa500;
+    right: 15px;
+    bottom: 15px;
+	background-color: #f3f3f3;
 	border-radius: 5px;
-	border: 2px solid #ffdfa4;
+	box-shadow: 0px 0px 3px;
 }
 
 /*.prediction_shortcut_close {
@@ -209,13 +225,62 @@ body {
 	color: #3a2500;
 }*/
 
-.prediction_shortcut_title {
-	height: 30px;
+.prediction_shortcut_title_container {
+	height: 36px;
+	border-bottom: 1px solid #bbb;
+	/*padding-left: 5px;*/
+	/*background-color: #ffa500;*/
+	/*color: #3a2500;*/
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+
+.prediction_shortcut_title.unconfirmed {
+	float: left;
+	height: 36px;
+	width: 50%;
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 32px;
+	text-align: center;
+	border-top-left-radius: 5px
+}
+
+.prediction_shortcut_title.confirmed {
+	float: left;
+	height: 36px;
+	width: 50%;
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 32px;
+	text-align: center;
+	border-top-right-radius: 5px
+}
+
+.prediction_shortcut_title.active {
+	background-color: #ffa500;
+}
+
+.prediction_shortcut_title:hover {
+	cursor: pointer;
+}
+
+.prediction_shortcut_title:not(.active) {
+	color: #888;
+}
+
+.prediction_shortcut_title:not(.active):hover {
+	color: #ffa500;
+}
+
+.prediction_shortcut_title_text {
+	margin-left: 30px;
 }
 
 .prediction_shortcut_list {
-	height: 230px;
+	height: calc(100% - 38px - 32px);
 	overflow-y: scroll;
+	font-weight: bold;
 }
 
 .prediction_shortcut_list table {
@@ -223,8 +288,8 @@ body {
 }
 
 .prediction_shortcut_button_container {
-    height: 100px;
-    width: 100px;
+    height: 85px;
+    width: 85px;
     position: fixed;
     right: 0px;
     bottom: 0px;
@@ -247,7 +312,6 @@ body {
 }
 
 .prediction_shortcut_button:hover {
-	background-color: #e69500;
 	border-color: #ffdfa4;
 	color: #3a2500
 }
@@ -263,30 +327,76 @@ body {
     color: white;
     font-weight: bold;
     top: 0px;
-    right: 21px;
+    right: 13px;
 }
 
-.prediction_shortcut_list td:nth-child(1) {
+.prediction_shortcut_preview_number_inner_unconfirmed {
+	float: right;
+	visibility: hidden;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+	line-height: 22px;
+	margin: 4px 5px 0px 0px;
+}
+
+.prediction_shortcut_preview_number_inner_confirmed {
+	float: right;
+	visibility: hidden;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+	line-height: 22px;
+	margin: 4px 5px 0px 0px;
+}
+
+.prediction_shortcut_table {
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	text-align: center;
+}
+
+.prediction_shortcut_table tr.unconfirmed td:not(:first-child):hover {
+	cursor: pointer;
+	background-color: #e9e9e9;
+}
+
+.prediction_shortcut_table td:nth-child(1) {
+	width: 13%;
+	font-size: 12px;
+	border-right: 1px solid #bbb;
+}
+
+.prediction_shortcut_table td:nth-child(2) {
+	width: 36%;
+	font-size: 14px;
+	border-right: 1px solid #bbb;
+}
+
+.prediction_shortcut_table td:nth-child(3) {
 	width: 15%;
+	font-size: 14px;
+	border-right: 1px solid #bbb;
 }
 
-.prediction_shortcut_list td:nth-child(2) {
-	text-align: center;
-	width: 25%;
+.prediction_shortcut_table td:nth-child(4) {
+	width: 36%;
+	font-size: 14px;
+	border-right: 1px solid #bbb;
 }
 
-.prediction_shortcut_list td:nth-child(3) {
-	width: 5%;
-}
-
-.prediction_shortcut_list td:nth-child(4) {
-	text-align: center;
-	width: 25%;
-}
-
-.prediction_shortcut_list td:nth-child(5) {
-	text-align: right;
-	width: 30%;
+.prediction_shortcut_table td.active {
+	background-color: #ffc94f !important;
+	border: 2px solid black;
 }
 
 .prediction_shortcut_list label {
@@ -305,18 +415,119 @@ body {
     vertical-align: text-bottom;
 }
 
-.prediction_shortcut_container table {
-	border: 1px solid #999;
+.prediction_shortcut_list tr {
+	background-color: #f3f3f3 !important;
+	color: #333 !important;
 }
 
-.prediction_shortcut_container table > tbody > tr {
-	height: 50px;
+
+/*
+	Media Query
+*/
+
+@media all and (min-device-width: 541px) and (max-device-width: 768px) {
+	#header .main_menu,
+	#header .tools {
+		width: 100%;
+	}
+
+	#header .main_menu > li {
+		width: 100%;
+		background-color: #444;
+		z-index: 9999;
+		border-bottom: 1px solid #fff;
+	}
+
+	#header .tools > li {
+		width: 100%;
+		background-color: #444;
+		z-index: 9999;
+	}
+
+	#header .tools > li:not(:last-child) {
+		border-bottom: 1px solid #fff;
+	}
+
+	#header .tools > .logout,
+	#header .tools > .signup {
+		border-bottom: none !important;
+	}
+
+	.prediction_shortcut_container {
+		width: 92%;
+	}
+
+	.board_wrapper {
+		margin: 0 65px;
+	}
+
+	.main_section .board_section {
+		width: 100%;
+	}
+
+	.container_box {
+		margin: 30px 0px;
+	}
 }
 
-.prediction_shortcut_container table > tbody > tr > td.left {
-	text-align: left;
+@media all and (max-device-width: 540px) {
+	#header .main_menu,
+	#header .tools {
+		width: 100%;
+	}
+
+	#header .main_menu > li {
+		width: 100%;
+		background-color: #444;
+		z-index: 9999;
+		border-bottom: 1px solid #fff;
+	}
+
+	#header .tools > li {
+		width: 100%;
+		background-color: #444;
+		z-index: 9999;
+	}
+
+	#header .tools > li:not(:last-child) {
+		border-bottom: 1px solid #fff;
+	}
+
+	#header .tools > .logout,
+	#header .tools > .signup {
+		border-bottom: none !important;
+	}
+
+	#header .logo {
+		height: 45px;
+		width: 130px;
+		margin-top: 15px;
+	}
+
+	.main_logo_section {
+		height: 200px;
+	}
+
+	.main_logo_section .logo {
+		height: 100px;
+		width: 300px;
+		/*margin-top: 100px;*/
+	}
+
+	.prediction_shortcut_container {
+		width: 92%;
+	}
+
+	.board_wrapper {
+		margin: 0 20px;
+	}
+
+	.main_section .board_section {
+		width: 100%;
+	}
+
+	.container_box {
+		margin: 30px 0px;
+	}
 }
 
-.prediction_shortcut_container table > tbody > tr:not(:last-child) {
-	border-bottom: 1px solid #999;
-}

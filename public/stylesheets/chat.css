@@ -37,6 +37,23 @@ body {
     color: #333f4d;
 }
 
+.tab_container {
+    width: 780px;
+    margin: 30px auto;
+}
+
+#goToPredictionSystem,
+#goToOtherPredict {
+    width: 780px;
+    margin-top: 0px;
+    overflow: hidden;
+    min-height: 530px;
+    position: relative;
+}
+
+
+
+
 .chat-wrapper{
     background: #ffffff;
     width: 780px;
@@ -47,6 +64,7 @@ body {
     min-height: 530px;
     position: relative;
 }
+
 .chat-title{
     padding: 14px;
     position: relative;
@@ -78,10 +96,10 @@ b{
 .window-wrapper{
     background: #fff;
     width: 780px;
-    margin: 100px auto;
+    /*margin: 100px auto;*/
     margin-top: 0px;
-    border-radius: 6px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+    /*border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);*/
     overflow: hidden;
     min-height: 530px;
     position: relative;
@@ -90,12 +108,9 @@ b{
     position: relative;
 }
 
-
 .window-area{
     width: 605px;
     float: left;
-
-
 }
 
 #chat-content{
@@ -184,7 +199,7 @@ b{
     border: 1px solid #cfdae1;
     border-radius: 5px;
     overflow: hidden;
-    width: 300px;
+    width: 60%;
 }
 .input-area .input-wrapper input{
     height: 50px;
@@ -264,10 +279,10 @@ ul.users-container {
 
 .my-account{
     float:left;
-
 }
+
 .my-account .name{
-    margin-left: 20px;
+    float: left;
     height:50px;
     line-height: 50px;
     color: #5d7185;
@@ -318,4 +333,353 @@ li .badge_ready {
     height: 20px;
     float: left;
     margin-right: 5px;
+}
+
+.showUserList {
+    display: none;
+    float: right;
+    border: 1px solid #ccc;
+}
+
+
+/*
+    Media Query
+*/
+
+@media all and (min-device-width: 621px) and (max-device-width: 768px) {
+    .page_title {
+        padding-top: 25px;
+    }
+
+    .board_wrapper {
+        margin: 0 65px;
+    }
+
+    .main_section .board_section {
+        width: 100%;
+    }
+
+    .window-wrapper {
+        width: 100%;
+    }
+
+    .window-area {
+        width: 70% !important;
+        display: block !important;
+    }
+
+    .right-tabs {
+        width: 30% !important;
+        display: block !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamNameTitle {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .teamNameTitle.homeTeamSection {
+        margin-bottom: 20px !important;
+    }
+
+    .main_section {
+        margin: 0 20px;
+    }
+
+    .member-list > li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #message-button {
+        width: 50px !important;
+    }
+
+    .my-account {
+        margin-right: 10px;
+    }
+}
+
+@media all and (min-device-width: 541px) and (max-device-width: 620px) {
+    .page_title {
+        padding-top: 25px;
+    }
+
+    .board_wrapper {
+        margin: 0 65px;
+    }
+
+    .main_section .board_section {
+        width: 100%;
+    }
+
+    .window-wrapper {
+        width: 100%;
+    }
+
+    .window-area {
+        width: 70% !important;
+        display: block !important;
+    }
+
+    .right-tabs {
+        width: 30% !important;
+        display: block !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamNameTitle {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .teamNameTitle.homeTeamSection {
+        margin-bottom: 20px !important;
+    }
+
+    .main_section {
+        margin: 0 20px;
+    }
+
+    .member-list > li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #message-button {
+        width: 50px !important;
+    }
+
+    .my-account {
+        margin-right: 10px;
+    }
+
+    .input-wrapper {
+        width: 50% !important;
+    }
+}
+
+@media all and (min-device-width: 441px) and (max-device-width: 540px) {
+    .page_title {
+        padding-top: 25px;
+    }
+
+    .board_wrapper {
+        margin: 0 20px;
+    }
+
+    .main_section .board_section {
+        width: 100%;
+    }
+
+    .window-wrapper {
+        width: 100%;
+    }
+
+    .window-area {
+        width: 100% !important;
+    }
+
+    .right-tabs {
+        width: 100% !important;
+        display: none;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamNameTitle {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .teamNameTitle.homeTeamSection {
+        margin-bottom: 20px !important;
+    }
+
+    .main_section {
+        margin: 0 20px;
+    }
+
+    .member-list > li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #message-button {
+        width: 50px !important;
+    }
+
+    .my-account {
+        margin-right: 10px;
+    }
+
+    .input-wrapper {
+        width: 60% !important;
+    }
+
+    .showUserList {
+        display: block;
+    }
+}
+
+@media all and (min-device-width: 371px) and (max-device-width: 440px) {
+    .page_title {
+        padding-top: 25px;
+    }
+
+    .board_wrapper {
+        margin: 0 20px;
+    }
+
+    .main_section .board_section {
+        width: 100%;
+    }
+
+    .window-wrapper {
+        width: 100%;
+    }
+
+    .window-area {
+        width: 100% !important;
+    }
+
+    .right-tabs {
+        width: 100% !important;
+        display: none;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamNameTitle {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .teamNameTitle.homeTeamSection {
+        margin-bottom: 20px !important;
+    }
+
+    .main_section {
+        margin: 0 20px;
+    }
+
+    .member-list > li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #message-button {
+        width: 50px !important;
+    }
+
+    .my-account {
+        margin-right: 10px;
+    }
+
+    .input-wrapper {
+        width: 50% !important;
+    }
+
+    .showUserList {
+        display: block;
+    }
+
+    .teamTitleSection {
+        font-size: 16px !important;
+    }
+
+    .teamTitleSection img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+@media all and (max-device-width: 370px) {
+    .page_title {
+        padding-top: 25px;
+    }
+
+    .board_wrapper {
+        margin: 0 20px;
+    }
+
+    .main_section .board_section {
+        width: 100%;
+    }
+
+    .window-wrapper {
+        width: 100%;
+    }
+
+    .window-area {
+        width: 100% !important;
+    }
+
+    .right-tabs {
+        width: 100% !important;
+        display: none;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamNameTitle {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .teamNameTitle.homeTeamSection {
+        margin-bottom: 20px !important;
+    }
+
+    .main_section {
+        margin: 0 20px;
+    }
+
+    .member-list > li {
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #message-button {
+        width: 50px !important;
+    }
+
+    .my-account {
+        margin-right: 10px;
+    }
+
+    .input-wrapper {
+        width: 42% !important;
+    }
+
+    .showUserList {
+        display: block;
+    }
+
+    .teamTitleSection {
+        font-size: 16px !important;
+    }
+
+    .teamTitleSection img {
+        width: 40px !important;
+        height: 40px !important;
+    }
 }

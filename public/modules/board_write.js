@@ -3,6 +3,12 @@ var BOARD_WRITE = {
 		this.isUpdate = options.isUpdate;
 		this.boardNo = options.boardNo;
 
+		notice.init();
+
+		if(options.attendancePointUpdated) {
+			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+		}
+
 		$('#summernote').summernote({
 			minHeight: 300,
 		    toolbar: [
@@ -56,6 +62,14 @@ var BOARD_WRITE = {
 		$('#header .main_menu li').click(function() {
 			var move = $(this).attr('move');
 			location.href = '/' + move;
+		});
+
+		$('#header li.my_point > img').click(function() {
+			location.href = '/my_page';
+		});
+
+		$('#header li.my_point > span').click(function() {
+			location.href = '/my_page';
 		});
 
 		$('.board_section .board_menu > .write').click(function() {

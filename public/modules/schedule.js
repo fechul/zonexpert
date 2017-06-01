@@ -1,7 +1,13 @@
 var SCHEDULE = {
-	init: function() {
+	init: function(initData) {
 		this.init_events();
 		this.get_schedule();
+
+		notice.init();
+
+		if(initData.attendancePointUpdated) {
+			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+		}
 	},
 
 	init_events: function() {
@@ -33,6 +39,14 @@ var SCHEDULE = {
 			location.href = '/' + move;
 		});
 
+		$('#header li.my_point > img').click(function() {
+			location.href = '/my_page';
+		});
+
+		$('#header li.my_point > span').click(function() {
+			location.href = '/my_page';
+		});
+
 		$('.scheduledata_league_btn button').click(function() {
 			var $this_button = $(this);
 			self.get_schedule($this_button.attr('key'), function() {
@@ -41,10 +55,9 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed)', function() {
-
-			var row = $(this);
-			var toggle = $(this).hasClass('basketed');
+		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
+			var row = $(this).closest('tr.schedule_table_row');
+			var toggle = row.hasClass('basketed');
 
 			$.ajax({
 				'url': '/prediction/basket',
@@ -63,7 +76,7 @@ var SCHEDULE = {
 						}
 
 						row.data('toggle', !toggle);
-						PREDICTION_SHORTCUT.getBaskets();
+						PREDICTION_SHORTCUT.setData();
 						$('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
 																		.animate({right: '-=6px'}, 40)
 																		.animate({right: '+=6px'}, 40)
@@ -78,12 +91,8 @@ var SCHEDULE = {
 			});
 		});
 
-		$('#schedule_table').on('click', 'td.schedule_chatting:not(.disable) i', function() {
-			location.href = '/chat/' + $(this).closest('.schedule_table_row').data('matchId');
-		});
-
-		$('#schedule_table').on('click', 'td.schedule_chatting', function() {
-			console.log('go chatting');
+		$('#schedule_table').on('click', '.schedule_table_row td:not(:nth-child(1)):not(:nth-child(7))', function() {
+			location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
 		});
 
 		$('.user_search_input').keydown(function(e) {
@@ -140,7 +149,7 @@ var SCHEDULE = {
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
 
-		$.get('/prediction', {
+		$.get('/prediction/all', {
 			'leagueId': leagueId
 		}, function(baskets) {
 			baskets = JSON.parse(baskets);
@@ -187,7 +196,7 @@ var SCHEDULE = {
 							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
 							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
 							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
-							'<td class="schedule_chatting ', match.roomOpen ? '' : 'disable', '"><span><i class="fa fa-commenting-o"></i></span></td>',
+							'<td class="schedule_basket"><span><i class="fa fa-check-square-o"></i></span></td>',
 						'</tr>'
 					].join(''));
 

@@ -171,3 +171,22 @@ exports.start = function() {
         });
     });
 };
+
+exports.resetAttendance = function() {
+    var rule = node_schedule.RecurrenceRule();
+    rule.dayOfWeek = [new schedule.Range(0, 6)];
+    rule.hour = 0;
+    rule.minute = 0;
+
+    var reset = node_schedule.scheduleJob(rule, function() {
+        db.user.update({},{
+            $set: {
+                'todayAttendancePoint': false
+            }
+        }, {
+            multi: true
+        }, function(err) {
+
+        });
+    });
+};

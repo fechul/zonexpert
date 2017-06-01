@@ -109,6 +109,30 @@ exports.confirm = function(data, callback) {
 
 exports.get = function(data, callback) {
     var findJson = {
+        'userEmail': data.userEmail,
+        'confirmed': true
+    };
+
+    if (data.leagueId) {
+        findJson.leagueId = data.leagueId;
+    }
+
+    if (data.result) {
+        findJson.result = data.result;
+    }
+
+    db.prediction.find(findJson, {
+        'matchId': 1,
+        'confirmed': 1,
+        'result': 1,
+        'pick': 1
+    }).exec(function(err, result) {
+        callback(result);
+    });
+};
+
+exports.getAll = function(data, callback) {
+    var findJson = {
         'userEmail': data.userEmail
     };
 
@@ -137,7 +161,8 @@ exports.getBasketList = function(data, callback) {
 
     db.prediction.find(findJson, {
         'matchId': 1,
-        'confirmed': 1
+        'confirmed': 1,
+        'pick': 1
     }).exec(function(err, result) {
         callback(result);
     });

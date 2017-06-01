@@ -3,6 +3,7 @@ var async = require('async');
 var schedule = require('./schedule.js');
 var rating = require('./rating.js');
 var prediction = require('./prediction.js');
+var chat = require('./chat.js');
 
 exports.updateMatches = function(data, callback) {
     async.eachSeries(data.matches, function(match, async_cb) {
@@ -29,14 +30,24 @@ exports.updateMatches = function(data, callback) {
                         'result': match.result
                     }
                 }).exec(function(_err) {
-                    if ((currentStatus == 'TIMED') && (newStatus == 'IN_PLAY')) {
-                        prediction.deleteExpiredBasket({
-                            'matchId': matchData.id
-                        }, function() {
-                            async_cb();
+                    if (newStatus == 'IN_PLAY') {
+                        chat.sendMsgToRoom(matchData.id, {
+                            'status': 'IN_PLAY',
+                            'result': match.result
                         });
+                        if (currentStatus == 'TIMED') {
+                            prediction.deleteExpiredBasket({
+                                'matchId': matchData.id
+                            }, function() {
+                                async_cb();
+                            });
+                        }
                         // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기
                     } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
+                        chat.sendMsgToRoom(matchData.id, {
+                            'status': 'FINISHED',
+                            'result': match.result
+                        });
                         // 경기 종료 - 레이팅 계산하기,
                         rating.addQueue({
                             'matchId': matchData.id

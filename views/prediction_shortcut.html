@@ -1,9 +1,28 @@
 <div class="prediction_shortcut_container">
-    <div class="prediction_shortcut_title">
-        예측 선택 목록
+    <div class="prediction_shortcut_title_container">
+        <div class="prediction_shortcut_title unconfirmed active">
+            <span class="prediction_shortcut_title_text">
+                예측 대기
+            </span>
+            <div class="prediction_shortcut_preview_number_inner_unconfirmed">
+            </div>
+        </div>
+        <div class="prediction_shortcut_title confirmed">
+            <span class="prediction_shortcut_title_text">
+                예측 완료
+            </span>
+            <div class="prediction_shortcut_preview_number_inner_confirmed">
+            </div>
+        </div>
     </div>
-    <div class="prediction_shortcut_list">
-        <table id="prediction_shortcut_table">
+    <div class="prediction_shortcut_list unconfirmed">
+        <table id="prediction_shortcut_unconfirmed_table" class="prediction_shortcut_table">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="prediction_shortcut_list confirmed" style="display: none;">
+        <table id="prediction_shortcut_confirmed_table" class="prediction_shortcut_table">
             <tbody>
             </tbody>
         </table>
