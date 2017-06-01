@@ -16,11 +16,11 @@
                 <div class="teamTitleSection">
                     <div class="teamNameTitle homeTeamSection">
                         <img class="teamImg" src="<%= homeTeamImg %>"></img><%= homeTeamName %><br>
-                        <span id="homeTeamGoals">0</span>
+                        <span id="goalsHomeTeam"><%= goalsHomeTeam %></span>
                     </div>
                     <div class="teamNameTitle awayTeamSection">
                         <img class="teamImg" src="<%= awayTeamImg %>"></img><%= awayTeamName %><br>
-                        <span id="awayTeamGoals">0</span>
+                        <span id="goalsAwayTeam"><%= goalsAwayTeam %></span>
                     </div>
                 </div>
             </div>
@@ -49,22 +49,18 @@
                                     <span ><%= my_nickname %></span>
                                 </div>
                             </div>
-                            <div class="input-wrapper" style="float:left;">
+                            <input id="message-button" type="button" value="전송" class="send-btn" style="float:right;width:10%" >
+                            <div class="input-wrapper" style="float:right;">
                                 <input id="message-input" type="text" value="">
                             </div>
-                            <input id="message-button" type="button" value="전송" class="send-btn" style="float:right;width:10%" >
                         </div>
-
-
                     </div>
-
-
                 </div>
-                    <div class="right-tabs">
-                        <ul class="member-list">
+                <div class="right-tabs">
+                    <ul class="member-list">
 
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
             </div>
 
         </section>
