@@ -82,7 +82,7 @@ var INDEX = {
 				$('.mydata_user_id').html(data.mydata_user_id);
 				$('.mydata_user_main_field').html(data.mydata_user_main_field);
 				$('#my_tier_img').attr('src', data.my_tier_img);
-				$('#my_rating').html(isNaN(data.my_rating) ? data.my_rating : parseInt(data.my_rating, 10));
+				$('#my_rating').html(isNaN(data.my_rating) ? data.my_rating : parseInt(data.my_rating, 10) + '점');
 				$('#my_tier_name').html(data.my_tier_name);
 				$('#my_total_hit').html(data.my_total_hit);
 				$('#my_total_fail').html(data.my_total_fail);

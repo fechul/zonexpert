@@ -56,7 +56,7 @@
 }
 
 .mydata_statistics > .mydata_badge > img {
-	width: 120px;
+	width: 135px;
 	/*height: 150px;*/
 }
 
@@ -86,10 +86,9 @@
 	font-weight: bold;
 }
 
-/*.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
-	padding: 10px;
-	height: 100px;
-}*/
+.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
+	padding-bottom: 20px;
+}
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content > .predict_content_row {
 	padding: 15px;
