@@ -26,6 +26,20 @@ var nicknameList = [
 ];
 
 for (var i = 1; i <= nicknameList.length; i++) {
+    var getMainLeague = function() {
+        var pickRandNum = Math.floor((Math.random() * 100)) + 1;
+
+        if (pickRandNum <= 50) {
+            return 426;
+        } else if (pickRandNum <= 75) {
+            return 436;
+        } else if (pickRandNum <= 90) {
+            return 430;
+        } else {
+            return 438;
+        }
+    };
+
     userList.push({
             'email': 'test' + i + '@zonexperts.com',
             'nickname': nicknameList[i-1],
@@ -33,7 +47,7 @@ for (var i = 1; i <= nicknameList.length; i++) {
             'authed': true,
             'signup_date': new Date('2017-05-26 17:03:26'),
             'main_sport': 1,
-            'main_league': 426
+            'main_league': pickRandNum()
     });
 };
 
