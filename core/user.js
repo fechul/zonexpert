@@ -505,4 +505,3 @@ exports.returnPoint = function(options, callback) {
         }
     });
 };
-

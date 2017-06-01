@@ -436,12 +436,40 @@ ul.users-container {
     font-size: 11px;
 }
 
+.page_title {
+    font-size: 28px;
+}
+
 .page_title .teamTitleSection {
     width: 800px;
     margin: 0 auto;
-    padding: 20px;
+    padding-top: 20px;
     display: inline-block;
     font-size: 28px;
+}
+
+.page_title .teamScoreSection {
+    width: 800px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    display: inline-block;
+    font-size: 28px;
+}
+
+#goalsHomeTeam {
+    width: 350px;
+    float: left;
+}
+
+#goalsAwayTeam {
+    width: 350px;
+    float: right;
+}
+
+#chatMatchStatus {
+    width: 50px;
+    display: inline-block;
+    font-size: 20px;
 }
 
 .page_title .teamNameTitle.homeTeamSection {
@@ -455,7 +483,7 @@ ul.users-container {
 }
 
 .page_title .teamImg {
-    width: 50px;
+    /*width: 50px;*/
     height: 50px;
     margin-right: 10px;
 }
@@ -511,6 +539,11 @@ li .badge_ready {
     }
 
     .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamScoreSection {
         width: 100% !important;
         font-size: 20px !important;
     }
@@ -574,6 +607,11 @@ li .badge_ready {
         font-size: 20px !important;
     }
 
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
     .teamNameTitle {
         float: none !important;
         width: 100% !important;
@@ -632,6 +670,11 @@ li .badge_ready {
     }
 
     .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamScoreSection {
         width: 100% !important;
         font-size: 20px !important;
     }
@@ -702,6 +745,11 @@ li .badge_ready {
         font-size: 20px !important;
     }
 
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
     .teamNameTitle {
         float: none !important;
         width: 100% !important;
@@ -740,8 +788,12 @@ li .badge_ready {
         font-size: 16px !important;
     }
 
+    .teamScoreSection {
+        font-size: 16px !important;
+    }
+
     .teamTitleSection img {
-        width: 40px !important;
+        /*width: 40px !important;*/
         height: 40px !important;
     }
 }
@@ -773,6 +825,11 @@ li .badge_ready {
     }
 
     .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamScoreSection {
         width: 100% !important;
         font-size: 20px !important;
     }
@@ -815,8 +872,12 @@ li .badge_ready {
         font-size: 16px !important;
     }
 
+    .teamScoreSection {
+        font-size: 16px !important;
+    }
+
     .teamTitleSection img {
-        width: 40px !important;
+        /*width: 40px !important;*/
         height: 40px !important;
     }
 }

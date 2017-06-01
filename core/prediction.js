@@ -85,6 +85,7 @@ exports.confirm = function(data, callback) {
                             }, {
                                 '$set': {
                                     'confirmed': true,
+                                    'confirmedTime': new Date(),
                                     'pick': prediction.pick,
                                     'result': 'wait'
                                 }
@@ -330,7 +331,7 @@ exports.getMatchesRecord = function(data, callback) {
                     'result': {
                         $in: ['true', 'false']
                     }
-                }, function(predictErr, predictData) {
+                }).exec(function(predictErr, predictData) {
                     if(predictErr) {
                         callback(null);
                     } else {
@@ -355,8 +356,6 @@ exports.getMatchesRecord = function(data, callback) {
                                                 }, {
                                                     'crestUrl': 1
                                                 }).limit(1).exec(function(awayErr, awayTeam) {
-                                                    console.log(predictData);
-                                                    console.log('000000000000000000000000000000000');
                                                     matchDataArray.push({
                                                         'homeTeamName': matchData.homeTeamName || '-',
                                                         'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
@@ -367,7 +366,8 @@ exports.getMatchesRecord = function(data, callback) {
                                                         'afterRating': predict.afterRating,
                                                         'beforeRating': predict.beforeRating,
                                                         'myPredict': predict.result,
-                                                        'date': new Date()  // date has to be updated
+                                                        'date': predict.confirmedTime,  // date has to be updated
+                                                        'ratingCalculatedTime': predict.ratingCalculatedTime
                                                     });
 
                                                     async_cb();
@@ -437,14 +437,13 @@ exports.getRecentPredict = function(options, callback) {
                                 'crestUrl': 1,
                                 'shortName': 1
                             }).limit(1).exec(function(awayErr, awayData) {
-                                console.log(matchData.result)
                                 recentPredictData.push({
                                     'homeTeamName': homeData[0].shortName,
                                     'awayTeamName': awayData[0].shortName,
                                     'homeTeamImg': (homeData && homeData.length ? homeData[0].crestUrl : ''),
                                     'awayTeamImg': (awayData && awayData.length ? awayData[0].crestUrl : ''),
-                                    'homeTeamGoals': (matchData.result && matchData.result.homeTeam ? matchData.result.homeTeam.goalsHomeTeam : '-'),
-                                    'awayTeamGoals': (matchData.result && matchData.result.awayTeam ? matchData.result.awayTeam.goalsAwayTeam : '-'),
+                                    'homeTeamGoals': (matchData.result && !isNaN(matchData.result.goalsHomeTeam) ? matchData.result.goalsHomeTeam : '-'),
+                                    'awayTeamGoals': (matchData.result && !isNaN(matchData.result.goalsAwayTeam) ? matchData.result.goalsAwayTeam : '-'),
                                     'date': predict.createTime,
                                     'predictResult': predict.result
                                 });
@@ -589,3 +588,23 @@ exports.getPick = function(options, callback) {
     });
 };
 
+exports.getPredictSummary = function(params, callback) {
+    db.prediction.find({
+        'userEmail': params.email
+    }).exec(function(err, predictionData) {
+        var hit = 0;
+        var fail = 0;
+        for (var i = 0; i < predictionData.length; i++) {
+            if (predictionData[0].result == 'true') {
+                hit++;
+            } else if (predictionData[0].result == 'false') {
+                fail++;
+            }
+        }
+
+        callback({
+            'hit': hit,
+            'fail': fail
+        })
+    });
+};

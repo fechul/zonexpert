@@ -43,7 +43,6 @@ var rating = {
         .limit(1)
         .exec(function(err, matchData) {
             matchData = matchData[0];
-            console.log(matchData);
             if (matchData.result.goalsHomeTeam > matchData.result.goalsAwayTeam) {
                 matchResult = 'home'
             } else if (matchData.result.goalsHomeTeam < matchData.result.goalsAwayTeam) {
@@ -81,7 +80,8 @@ var rating = {
                                 'afterRating': null,
                                 'pick': prediction.pick,
                                 'result': pickResult,
-                                'readyGameCnt': userData.readyGameCnt
+                                'readyGameCnt': userData.readyGameCnt,
+                                'record': userData.record
                             });
                         }
 
@@ -95,18 +95,52 @@ var rating = {
                     }
 
                     async.each(userList, function(user, _async_cb) {
-                        var defaultChangeValue = user.readyGameCnt == 0 ? 30 : 60;
+                        var defaultIncreaseValue = user.readyGameCnt == 0 ? 30 : 45;
+                        var defaultDecreaseValue = user.readyGameCnt == 0 ? -25 : -40;
+
                         user.readyGameCnt--;
                         if (user.readyGameCnt < 0) {
                             user.readyGameCnt = 0;
                         }
 
+                        if (!user.record) {
+                            user.record = {
+                                'total': {
+                                    'hit': 0,
+                                    'fail': 0
+                                }
+                            };
+                        }
+
+                        if (!user.record[1]) {
+                            user.record[1] = {
+                                'total': {
+                                    'hit': 0,
+                                    'fail': 0
+                                }
+                            }
+                        }
+
+                        if (!user.record[1][matchData.leagueId]) {
+                            user.record[1][matchData.leagueId] = {
+                                'hit': 0,
+                                'fail': 0
+                            };
+                        }
+
                         if (user.pick == matchResult) {
-                            user.ratingChange = defaultChangeValue * self.getCorrectP(pickRate[user.pick]) + self.getCorrectW(user.beforeRating, ratingAvg);
+                            //픽률이 높을수록 ++, 픽률이 낮을수록 --
+                            user.ratingChange = defaultIncreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
+                            user.record.total.hit++;
+                            user.record[1].total.hit++;
+                            user.record[1][matchData.leagueId].hit++;
                         } else {
-                            user.ratingChange = -1 * defaultChangeValue * self.getIncorrectP(pickRate[user.pick]) - self.getIncorrectW(user.beforeRating, ratingAvg)
+                            user.ratingChange = defaultDecreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
+                            user.record.total.fail++;
+                            user.record[1].total.fail++;
+                            user.record[1][matchData.leagueId].fail++;
                         }
 
                         user.afterRating = user.beforeRating + user.ratingChange;
@@ -118,7 +152,8 @@ var rating = {
                             '$set': {
                                 'beforeRating': user.beforeRating,
                                 'afterRating': user.afterRating,
-                                'result': user.result
+                                'result': user.result,
+                                'ratingCalculatedTime': new Date()
                             }
                         }).exec(function(err) {
                             db.user.update({
@@ -126,7 +161,8 @@ var rating = {
                             }, {
                                 '$set': {
                                     'rating': user.afterRating,
-                                    'readyGameCnt': user.readyGameCnt
+                                    'readyGameCnt': user.readyGameCnt,
+                                    'record': user.record
                                 }
                             }).exec(function(_err) {
                                 db.prediction.find({
@@ -144,8 +180,6 @@ var rating = {
                                     }
 
                                     predict_rate_rank = predict_rate_rank / game_cnt_rank;
-
-                                    console.log(user.email + ' : ' + user.beforeRating + ' -> ' + user.afterRating);
 
                                     redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
                                         redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
@@ -170,29 +204,17 @@ var rating = {
             });
         })
     },
-    getCorrectP: function(rate) {
-        var p = -1 * rate + 1.5;
+    getCompByPickRate: function(rate) {
+        var p = -20 * rate + 10;
 
         return p;
     },
-    getIncorrectP: function(rate) {
-        var p = rate + 0.5;
-
-        return p;
-    },
-    getCorrectW: function(rating, ratingAvg) {
+    getCompByUserRating: function(rating, ratingAvg) {
         var win_rate = 1 / (1 + Math.pow(10, (ratingAvg - rating) / ratingAvg));
-        var w = -1 * win_rate * 20 + 10;
+        var w = -20 * win_rate + 10;
 
         return w;
     },
-    getIncorrectW: function(rating, ratingAvg) {
-        var win_rate = 1 / (1 + Math.pow(10, (ratingAvg - rating) / ratingAvg));
-        // console.log(rating, win_rate);
-        var w = win_rate * 20 - 10;
-
-        return w;
-    }
 };
 
 module.exports = rating;

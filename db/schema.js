@@ -120,7 +120,8 @@ var predictionSchema = new Schema({
     'result': String, // true, false, wait
     'beforeRating': Number,
     'afterRating': Number,
-    'viewList': Array
+    'viewList': Array,
+    'ratingCalculatedTime': Date
 });
 
 var boardSchema = new Schema({

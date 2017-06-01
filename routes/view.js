@@ -235,7 +235,7 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 							rank_table_html += '<td class="table_label_rank">' + rank + '</td>';
 							rank_table_html += '<td class="table_label_nickname">' + user.nickname + '</td>';
 							rank_table_html += '<td class="table_label_mainsport">' + get_league_name(user.main_league) + '</td>';
-							rank_table_html += '<td class="table_label_score">' + user.rating + '</td>';
+							rank_table_html += '<td class="table_label_score">' + parseInt(user.rating, 10) + '</td>';
 
 							if(user.record) {
 								if(user.record[type]) {
@@ -417,11 +417,12 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		my_nickname: req.session.nickname,
 		matchId: req.params.matchId,
 		myBadge: 'ready',
-		myBadgeSrc: 'image/badge_ready.png',
+		myBadgeSrc: '/image/badge_ready.png',
 		matchId: req.params.matchId,
 		headerHideMenu: '',
-		goalsHomeTeam: 0,
-		goalsAwayTeam: 0,
+		goalsHomeTeam: '',
+		goalsAwayTeam: '',
+		chatMatchStatus: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		myEmail: ''
@@ -443,8 +444,16 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		matchData.roomOpen = true;	//test
 		if (matchData) {
 			if (matchData.result) {
-				json.goalsHomeTeam = matchData.result.goalsHomeTeam;
-				json.goalsAwayTeam = matchData.result.goalsAwayTeam;
+				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
+				json.goalsAwayTeam = matchData.result.goalsAwayTeam == null ? '-' : matchData.result.goalsAwayTeam;
+			}
+
+			if (matchData.status == 'IN_PLAY') {
+				json.chatMatchStatus = ':';
+			} else if (matchData.status == 'FINISHED') {
+				json.chatMatchStatus = '종료';
+			} else {
+				json.chatMatchStatus = '예정';
 			}
 
 			if(req.session.login) {
@@ -552,7 +561,7 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 				json.searchdata_user_id = userdata.nickname;
 
 				var rating = userdata.rating;
-				json.searchdata_rating = rating;
+				json.searchdata_rating = parseInt(rating, 10);
 
 				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
 					json.searchdata_tier_img = 'image/badge_ready.png';
