@@ -441,28 +441,26 @@ router.get('/getMyData', function(req, res) {
 	};
 
 	user.get_rank_data([email], function(mydata) {
-		prediction.getPredictSummary({
-			'email': email
-		}, function(predictionSummary) {
-			if(mydata && mydata.length) {
-				mydata = mydata[0];
+		if(mydata && mydata.length) {
+			mydata = mydata[0];
 
-				mydata_obj.mydata_user_id = mydata.nickname;
-				mydata_obj.mydata_user_main_field = get_sport_name(mydata.main_sport) + '/' + get_league_name(mydata.main_league);
-				mydata_obj.my_rating = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : mydata.rating;
-				mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
-				mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
+			mydata_obj.mydata_user_id = mydata.nickname;
+			mydata_obj.mydata_user_main_field = get_sport_name(mydata.main_sport) + '/' + get_league_name(mydata.main_league);
+			mydata_obj.my_rating = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : mydata.rating;
+			mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
+			mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
 
-				mydata_obj.my_total_hit = predictionSummary.hit;
-				mydata_obj.my_total_fail = predictionSummary.fail;
-
-				if(predictionSummary.fail || predictionSummary.hit ) {
-					mydata_obj.my_predict_rate = ((predictionSummary.hit/(predictionSummary.hit+predictionSummary.fail))*100).toFixed(2);
-				}
+			if (mydata_obj.record) {
+				mydata_obj.my_total_hit = mydata.record.total.hit;
+				mydata_obj.my_total_fail = mydata.record.total.fail;
 			}
 
-			res.json(mydata_obj);
-		});
+			if(mydata.record.total.fail || mydata.record.total.hit ) {
+				mydata_obj.my_predict_rate = ((mydata.record.total.hit/(mydata.record.total.hit+mydata.record.total.fail))*100).toFixed(2);
+			}
+		}
+
+		res.json(mydata_obj);
 	});
 });
 
