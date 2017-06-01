@@ -3,6 +3,8 @@ var CHAT = {
         this.name = options.nickname;
         this.room = options.roomId;
         this.badge = options.myBadge;
+        this.leagueId = options.leagueId;
+        this.email = options.email;
 
         notice.init();
 
@@ -12,6 +14,7 @@ var CHAT = {
 
         this.init_events();
         this.connect_socket();
+        this.setPredictionUserList();
     },
 
     init_events: function() {
@@ -89,6 +92,35 @@ var CHAT = {
                 $('.window-area').fadeIn(500);
                 $(this).html('유저 목록');
             }
+        });
+
+        $(document).on('click', '.eachPredictedUser', function() {
+            if(!$(this).hasClass('active')) {
+                $('.eachPredictedUser').removeClass('active');
+                $(this).addClass('active');
+                var target = $(this).attr('target');
+
+                self.setUserPredictData(target);
+            }
+        });
+
+        $('#viewThisUsersPredict').click(function() {
+            var target = $('.eachPredictedUser.active').attr('target');
+
+            $.post('/prediction/viewOthers', {
+                targetNickname: target,
+                matchId: self.room
+            }, function(result) {
+                if(result && result !== 'false') {
+                    $('#viewBtnDiv').hide();
+                    $('#isShownDiv').show();
+                    $('#predictedUserPredictBox').fadeIn(500);
+                    $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
+                    $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
+                } else {
+                    notice.show('alert', '조회에 실패했습니다.');
+                }
+            });
         });
     },
 
@@ -173,5 +205,144 @@ var CHAT = {
         } else {
             $('.chat-list').stop();
         }
+    },
+
+    setPredictionUserList: function() {
+        var matchId = this.room;
+        var predictedUserList = $('.predictedUsersList');
+        predictedUserList.empty();
+
+        $.get('/prediction/getUserList', {
+            'matchId': matchId
+        }, function(userList) {
+            if(userList && userList.length) {
+                var userListHtml = '';
+
+                for(var i = 0; i < userList.length; i++) {
+                    userListHtml += '<div class="eachPredictedUser" target="' + userList[i].nickname + '">';
+
+                    if(userList[i].readyGameCnt && userList[i].readyGameCnt > 0) {
+                        userListHtml += '<div class="predictedUserBadge badge_ready"></div>';
+                    } else {
+                        if(userList[i].rating < 1200) {
+                            userListHtml += '<div class="predictedUserBadge badge_bronze"></div>';
+                        } else if(1200 <= userList[i].rating && userList[i].rating < 1400) {
+                            userListHtml += '<div class="predictedUserBadge badge_silver"></div>';
+                        } else if(1400 <= userList[i].rating && userList[i].rating < 1600) {
+                            userListHtml += '<div class="predictedUserBadge badge_gold"></div>';
+                        } else if(1600 <= userList[i].rating && userList[i].rating < 1800) {
+                            userListHtml += '<div class="predictedUserBadge badge_platinum"></div>';
+                        } else if(1800 <= userList[i].rating) {
+                            userListHtml += '<div class="predictedUserBadge badge_diamond"></div>';
+                        }
+                    }
+
+                    userListHtml += '<span class="predictedUserInfo"><span class="predictedUserNickname">' + userList[i].nickname + '</span>&nbsp&nbsp&nbsp&nbsp<span class="predictedUserRating">' +  userList[i].rating + '</span></span>';
+                    userListHtml += '</div>';
+                }
+
+                predictedUserList.append(userListHtml);
+            } else {
+                predictedUserList.append('<p class="noPredictedUser" style="border-bottom:0px;">예측한 사용자가 없습니다.</p>');
+            }
+        });
+    },
+
+    setUserPredictData: function(target) {
+        var leagueId = this.leagueId;
+        var matchId = this.room;
+        var myEmail = this.email;
+
+        $.get('/prediction/getUserInfo', {
+            'target': target,
+            'matchId': matchId
+        }, function(data) {
+
+            if(data && data.length) {
+                data = data[0];
+
+                $('.predictedUserInfo_nick').html(data.nickname);
+                $('.predictedUserInfo_rank').html(data.totalRank + '위');
+                $('.predictedUserInfo_rating').html(data.rating);
+
+                $('.predictedUserInfo_tier').removeClass('badge_ready')
+                                            .removeClass('badge_bronze')
+                                            .removeClass('badge_silver')
+                                            .removeClass('badge_gold')
+                                            .removeClass('badge_platinum')
+                                            .removeClass('badge_diamond');
+                if(data.readyGameCnt && data.readyGameCnt > 0) {
+                    $('.predictedUserInfo_tier').addClass('badge_ready');
+                    $('.predictedUserInfo_tierName').html('배치중');
+                } else {
+                    if(data.rating < 1200) {
+                        $('.predictedUserInfo_tier').addClass('badge_bronze');
+                        $('.predictedUserInfo_tierName').html('브론즈');
+                    } else if(1200 <= data.rating && data.rating < 1400) {
+                        $('.predictedUserInfo_tier').addClass('badge_silver');
+                        $('.predictedUserInfo_tierName').html('실버');
+                    } else if(1400 <= data.rating && data.rating < 1600) {
+                        $('.predictedUserInfo_tier').addClass('badge_gold');
+                        $('.predictedUserInfo_tierName').html('골드');
+                    } else if(1600 <= data.rating && data.rating < 1800) {
+                        $('.predictedUserInfo_tier').addClass('badge_platinum');
+                        $('.predictedUserInfo_tierName').html('플래티넘');
+                    } else if(1800 <= data.rating) {
+                        $('.predictedUserInfo_tier').addClass('badge_diamond');
+                        $('.predictedUserInfo_tierName').html('다이아');
+                    }
+                }
+
+                var totalHit = 0;
+                var totalFail = 0;
+                if(data.record) {
+                    if(data.record.total) {
+                        if(data.record.total.hit) {
+                            totalHit = data.record.total.hit;
+                        }
+                        if(data.record.total.fail) {
+                            totalFail = data.record.total.fail;
+                        }
+                    }
+                }
+                $('.predictedUserInfo_totalRecord').html(totalHit + ' / ' + totalFail + ' (' + (totalHit + totalFail == 0 ? '-' : ((totalHit/(totalHit+totalFail))*100).toFixed(2)) + '%)');
+
+                var leagueHit = 0;
+                var leagueFail = 0;
+                if(data.record) {
+                    if(data.record[leagueId]) {
+                        if(data.record[leagueId].hit) {
+                            leagueHit = data.record[leagueId].hit;
+                        }
+                        if(data.record[leagueId].fail) {
+                            leagueFail = data.record[leagueId].fail;
+                        }
+                    }
+                }
+                $('.predictedUserInfo_leagueRecord').html(leagueHit + ' / ' + leagueFail + ' (' + (leagueHit + leagueFail == 0 ? '-' : ((leagueHit/(leagueHit+leagueFail))*100).toFixed(2)) + '%)');
+
+                if(data.pick == 'home') {
+                    $('#predictedUserPredictResult').html('홈팀 승!');
+                } else if(data.pick == 'away') {
+                    $('#predictedUserPredictResult').html('어웨이팀 승!');
+                } else {
+                    $('#predictedUserPredictResult').html('무승부');
+                }
+
+                if(data.viewList && data.viewList.length) {
+                    if(data.viewList.indexOf(myEmail) > -1) {
+                        $('#viewBtnDiv').hide();
+                        $('#isShownDiv').show();
+                        $('#predictedUserPredictBox').show();
+                    } else {
+                        $('#isShownDiv').hide();
+                        $('#viewBtnDiv').show();    
+                    }
+                } else {
+                    $('#isShownDiv').hide();
+                    $('#viewBtnDiv').show();
+                }
+            }
+        });
     }
 };

@@ -19,6 +19,9 @@ var userSchema = new Schema({
     'pointLog': [{
         'amount': Number,
         'classification': String, // charge, use, earn, attendance
+        'useClassification': String, // use - system, view
+        'matchId': String, // for use, earn
+        'target': String, // target email for use(view), earn
         'time': Date
     }],
     'todayAttendancePoint': Boolean
@@ -116,7 +119,8 @@ var predictionSchema = new Schema({
     'pick': String, // home || draw || away
     'result': String, // true, false, wait
     'beforeRating': Number,
-    'afterRating': Number
+    'afterRating': Number,
+    'viewList': Array
 });
 
 var boardSchema = new Schema({

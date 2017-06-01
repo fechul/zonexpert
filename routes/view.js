@@ -423,12 +423,14 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		goalsHomeTeam: 0,
 		goalsAwayTeam: 0,
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		myEmail: ''
 	};
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
+		json.myEmail = req.session.email;
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
@@ -438,7 +440,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		matchData.roomOpen = true;
+		matchData.roomOpen = true;	//test
 		if (matchData) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam;
@@ -453,6 +455,8 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 				json.logout_display = 'display:none;';
 				json.mydata_display = 'display:none;';
 			}
+
+			json.leagueId = matchData.leagueId;
 
 			user.get(req.session.email, function(userData) {
 				if(userData) {

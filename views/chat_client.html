@@ -76,8 +76,40 @@
                         <p>Some content in menu 1.</p>
                     </div>
                     <div id="goToOtherPredict" class="tab-pane fade">
-                        <div class="predictedUsers">asdf</div>
-                        <div class="userPredictData">asdf</div>
+                        <div class="predictionDataWrapper">
+                            <div class="predictedUsers">
+                                <label style="margin-bottom:20px;">이 경기를 예측한 사용자 목록</label>
+                                <div class="predictedUsersList">
+
+                                </div>
+                            </div>
+                            <div class="userPredictData">
+                                <div class="predictedUserInfo">
+                                    <div style="margin-bottom:20px;"><label class="predictedUserInfo_nick">-</label></div>
+                                    <div class="predictedUserRecordData">
+                                        <div class="predictedUserInfoDiv"><label class="predictedUserInfoLabel">전체 순위</label><span class="predictedUserInfoContent predictedUserInfo_rank">-</span></div>
+                                        <div class="predictedUserInfoDiv noMargin"><label class="predictedUserInfoLabel">레이팅</label><span class="predictedUserInfoContent predictedUserInfo_rating">-</span></div>
+                                        <div class="predictedUserInfoDiv"><label class="predictedUserInfoLabel">티어</label><span class="predictedUserInfoContent"><div class="predictedUserInfo_tier"></div><span class="predictedUserInfo_tierName"></span></span></div>
+                                        <div class="predictedUserInfoDiv"><label class="predictedUserInfoLabel">전체 전적</label><span class="predictedUserInfoContent predictedUserInfo_totalRecord">0 / 0 (-%)</span></div>
+                                        <div class="predictedUserInfoDiv"><label class="predictedUserInfoLabel">이 리그의 전적</label><span class="predictedUserInfoContent predictedUserInfo_leagueRecord">0 / 0 (-%)</span></div>
+                                    </div>
+
+                                    <div id="viewBtnDiv">
+                                        <button class="btn btn-primary" id="viewThisUsersPredict">이 사용자의 예측 조회 (<img src="/image/coin.png"></img>100)</button><br>
+                                        <span id="viewPredictionDesc">* 해당 경기에 대해 <span class="predictedUserInfo_nick">-</span> 님이 예측한 결과를 조회합니다.<br>* 포인트 100점이 차감됩니다.</span>
+                                    </div>
+
+                                    <div id="isShownDiv">
+                                        <button class="btn btn-default" id="isShownPredict" disabled>조회 완료된 예측</button>
+                                    </div>
+
+                                    <div id="predictedUserPredictBox">
+                                        <span class="predictedUserInfo_nick">-</span> 님의 예측<br>
+                                        <div id="predictedUserPredictResult">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -141,7 +173,9 @@
             nickname: '<%= my_nickname %>',
             roomId: parseInt('<%= matchId %>', 10),
             myBadge: '<%= myBadge %>',
-            attendancePointUpdated: <%- attendancePointUpdated %>
+            attendancePointUpdated: <%- attendancePointUpdated %>,
+            leagueId: '<%= leagueId %>',
+            email: '<%= myEmail %>'
         });
         PREDICTION_SHORTCUT.init();
     </script>

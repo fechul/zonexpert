@@ -477,3 +477,115 @@ exports.deleteExpiredBasket = function(params, callback) {
         callback();
     });
 };
+
+exports.getUserList = function(options, callback) {
+    var matchId = options.matchId;
+
+    db.prediction.find({
+        'matchId': matchId,
+        'confirmed': true
+    }, {
+        'userEmail': 1
+    }, function(predictionErr, predictionData) {
+        if(predictionData && predictionData.length) {
+            db.user.find({
+                'email': {
+                    $in: predictionData
+                }
+            }, {
+                'nickname': 1,
+                'rating': 1,
+                'readyGameCnt': 1
+            }).sort({'rating': -1}).exec(function(userErr, userData) {
+                if(userData && userData.length) {
+                    callback(userData);
+                } else {
+                    callback(null);
+                }
+            });
+        } else {
+            callback(null);
+        }
+    });
+};
+
+exports.getViewList = function(options, callback) {
+    var matchId = options.matchId;
+    var userEmail = options.userEmail;
+
+    db.prediction.find({
+        'matchId': matchId,
+        'userEmail': userEmail
+    }, {
+        'viewList': 1
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            if(data.viewList && data.viewList.length) {
+                callback(data.viewList);
+            } else {
+                callback([]);
+            }
+        } else {
+            callback([]);
+        }
+    });
+};
+
+exports.pushViewList = function(options, callback) {
+    var target = options.target;
+    var myEmail = options.myEmail;
+    var matchId = options.matchId;
+
+    db.prediction.find({
+        'userEmail': target,
+        'matchId': matchId
+    }, {
+        'viewList': 1
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+
+            if(data[0].viewList.indexOf(myEmail) > -1) {
+                callback(false);
+            } else {
+                db.prediction.update({
+                    'userEmail': target,
+                    'matchId': matchId
+                }, {
+                    $addToSet: {
+                        'viewList': myEmail
+                    }
+                }, function(updateErr) {
+                    if(updateErr) {
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                });
+            }
+        } else {
+            callback(false);
+        }
+    });
+};
+
+exports.getPick = function(options, callback) {
+    var matchId = options.matchId;
+    var userEmail = options.userEmail;
+
+    db.prediction.find({
+        'matchId': matchId,
+        'userEmail': userEmail
+    }, {
+        'pick': 1
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            callback(data.pick);
+        } else {
+            callback(null);
+        }
+    });
+};
+

@@ -319,6 +319,96 @@ router.get('/prediction/getMatchesRecord', function(req, res) {
 	});
 });
 
+router.get('/prediction/getUserList', function(req, res) {
+	var matchId = req.query.matchId;
+
+	prediction.getUserList({
+		'matchId': matchId
+	}, function(data) {
+
+		res.json(data);
+	});
+});
+
+router.get('/prediction/getUserInfo', function(req, res) {
+	var nick = req.query.target;
+	var matchId = req.query.matchId;
+
+	user.get_email(nick, function(email) {
+		if(email) {
+			user.get_rank_data([email], function(data) {
+				if(data && data.length) {
+					prediction.getViewList({
+						'matchId': matchId,
+						'userEmail': email
+					}, function(viewList) {
+						data[0].viewList = viewList;
+
+						prediction.getPick({
+							'matchId': matchId,
+							'userEmail': email
+						}, function(pick) {
+							data[0].pick = pick;
+
+							var key = 'rating_rank';
+							redis_client.zrevrank(key, email, function(err, rankData) {
+					        	if(!err) {
+					        		data[0].totalRank = rankData+1;
+					        	}
+					        	res.json(data);
+					        });
+						});
+					});
+				} else {
+					res.json(data);
+				}
+			});
+		} else {
+			res.json(null);
+		}
+	});
+});
+
+router.post('/prediction/viewOthers', function(req, res) {
+	var targetNickname = req.body.targetNickname;
+	var matchId = req.body.matchId;
+	var myEmail = req.session.email;
+
+	user.get_email(targetNickname, function(targetEmail) {
+		user.usePoint({
+			'email': myEmail,
+			'point': 100,
+			'type': 'view',
+			'target': targetEmail,
+			'matchId': matchId
+		}, function(usePointResult) {
+			if(usePointResult) {
+				prediction.pushViewList({
+					'target': targetEmail,
+					'myEmail': myEmail,
+					'matchId': matchId
+				}, function(pushResult) {
+					if(pushResult) {
+						res.json(true);
+					} else {
+						user.returnPoint({
+							'email': myEmail,
+							'point': 100,
+							'type': 'view',
+							'target': targetEmail,
+							'matchId': matchId
+						}, function(returnResult) {
+							res.json(false);
+						});
+					}
+				});
+			} else {
+				res.json(false);
+			}
+		});
+	});
+});
+
 router.all('/test/schedule_initialize', function(req, res) {
 	var leaguesObject = {};
 	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];

@@ -58,6 +58,7 @@ global.db = require('./db/schema.js');
 var daemon = require('./core/daemon.js');
 
 daemon.start();
+daemon.resetAttendance();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

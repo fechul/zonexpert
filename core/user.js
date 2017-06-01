@@ -386,3 +386,123 @@ exports.checkAttendancePoint = function(email, callback) {
     });
 };
 
+exports.usePoint = function(options, callback) {
+    var email = options.email;
+    var point = options.point;
+    var type = options.type; // charge, view(use), system(use), earn, attendance
+    var target = options.target;
+    var matchId = options.matchId;
+
+    db.user.find({
+        'email': email
+    }, {
+        'point': 1
+    }).limit(1).exec(function(err, userData) {
+        if(userData && userData.length) {
+            userData = userData[0];
+
+            if(userData.point >= point) {
+                var updatedPoint = userData.point - point;
+
+                var pointLog = {
+                    'amount': point,
+                    'classification': (type == 'view' || type == 'system' ? 'use' : type),
+                    'time': new Date()
+                };
+
+                if(pointLog.classification == 'use') {
+                    pointLog.useClassification = type;
+                }
+
+                if(pointLog.classification == 'use' || pointLog.classification == 'earn') {
+                    pointLog.matchId = matchId;
+                    if(type !== 'system') {
+                        pointLog.target = target;
+                    }
+                }
+
+                db.user.update({
+                    'email': email
+                }, {
+                    $set: {
+                        'point': updatedPoint
+                    },
+                    $addToSet: {
+                        'pointLog': pointLog
+                    }
+                }, function(updateErr) {
+                    if(updateErr) {
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                });
+            } else {
+                callback(false);
+            }
+        } else {
+            callback(false);
+        }
+    });
+};
+
+exports.returnPoint = function(options, callback) {
+    var email = options.email;
+    var point = options.point;
+    var type = options.type; // charge, view(use), system(use), earn, attendance
+    var target = options.target;
+    var matchId = options.matchId;
+
+    var classification = (type == 'view' || type == 'system' ? 'use' : type);
+
+    db.user.find({
+        'email': email
+    }, {
+        'point': 1,
+        'pointLog': 1
+    }).limit(1).exec(function(err, userData) {
+        if(userData && userData.length) {
+            userData = userData[0];
+
+            var index = -1;
+            var s_matchId = true;
+            var s_target = true;
+            async.forEachOf(userData.pointLog, function(log, idx, async_cb) {
+                var s_point = (log.amount == point);
+                var s_classification = (log.classification == classification);
+                if(matchId) {
+                    var s_matchId = (log.matchId == matchId);
+                }
+                if(target) {
+                    var s_target = (log.target == target);
+                }
+
+                if(s_point && s_classification && s_matchId && s_target) {
+                    index = idx;
+                }
+                async_cb();
+            }, function(async_err) {
+                var updatedPoint = userData.point + point;
+                var updatedPointLog = userData.pointLog.splice(index, 1);
+
+                db.user.update({
+                    'email': email
+                }, {
+                    $set: {
+                        'point': updatedPoint,
+                        'pointLog': updatedPointLog
+                    }
+                }, function(updateErr) {
+                    if(updateErr) {
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                });
+            });
+        } else {
+            callback(false);
+        }
+    });
+};
+

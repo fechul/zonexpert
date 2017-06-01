@@ -173,8 +173,8 @@ exports.start = function() {
 };
 
 exports.resetAttendance = function() {
-    var rule = node_schedule.RecurrenceRule();
-    rule.dayOfWeek = [new schedule.Range(0, 6)];
+    var rule = new node_schedule.RecurrenceRule();
+    rule.dayOfWeek = [node_schedule.Range(0, 6)];
     rule.hour = 0;
     rule.minute = 0;
 
