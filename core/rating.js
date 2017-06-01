@@ -132,13 +132,13 @@ var rating = {
                             user.result = 'true';
                             user.record.total.hit++;
                             user.record[1].total.hit++;
-                            user.recored[1][matchData.leagueId].hit++;
+                            user.record[1][matchData.leagueId].hit++;
                         } else {
                             user.ratingChange = -1 * defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
                             user.record.total.fail++;
                             user.record[1].total.fail++;
-                            user.recored[1][matchData.leagueId].fail++;
+                            user.record[1][matchData.leagueId].fail++;
                         }
 
                         user.afterRating = user.beforeRating + user.ratingChange;
