@@ -313,14 +313,13 @@ canvas{position:relative; z-index:9999;}
 		margin: 30px 0px;
 	}
 }
-
-@media all and (max-device-width: 360px) {
+@media all and (max-device-width: 360px){
 	.page_title {
 		padding-top: 25px;
 	}
 
 	.main_section .searchdata_section {
-		width: 90%;
+		width: 98%;
 		margin: 20px 0px 0px 0px;
 		font-size: 12px;
 	}
@@ -328,11 +327,11 @@ canvas{position:relative; z-index:9999;}
 	.main_section .my_record_data_section,
 	.main_section .my_statistics_data_section,
 	.main_section .my_recent_predict_section {
-		width: 90%;
+		width: 98%;
 	}
 
 	.main_section .no_searchdata_section {
-		width: 90%;
+		width: 98%;
 		font-size: 16px;
 	}
 
@@ -347,20 +346,10 @@ canvas{position:relative; z-index:9999;}
 	.container_box {
 		margin: 30px 0px;
 	}
-
-	#statistics_table tbody td {
-		display: block;
+	.my_statistics_data_section{
+		padding: 5px;
 	}
-
-	#statistics_table tbody tr td:first-child {
-		display: none;
-	}
-
-	#statistics_table tbody tr td:nth-child(3) {
-		color: #2bb31d;
-	}
-
-	#statistics_table tbody tr td:nth-child(4) {
-		color: #dc1616;
+	#statistics_table{
+		font-size: 11px;
 	}
 }
