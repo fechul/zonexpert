@@ -479,8 +479,7 @@ exports.deleteExpiredBasket = function(params, callback) {
 
 exports.getPredictSummary = function(params, callback) {
     db.prediction.find({
-        'userEmail': params.email,
-        'result': 'true'
+        'userEmail': params.email
     }).exec(function(err, predictionData) {
         var hit = 0;
         var fail = 0;
