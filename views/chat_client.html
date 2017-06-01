@@ -15,13 +15,16 @@
             <div class="page_title">
                 <div class="teamTitleSection">
                     <div class="teamNameTitle homeTeamSection">
-                        <img class="teamImg" src="<%= homeTeamImg %>"></img><%= homeTeamName %><br>
-                        <span id="goalsHomeTeam"><%= goalsHomeTeam %></span>
+                        <img class="teamImg" src="<%= homeTeamImg %>"></img><span><%= homeTeamName %></span>
                     </div>
                     <div class="teamNameTitle awayTeamSection">
-                        <img class="teamImg" src="<%= awayTeamImg %>"></img><%= awayTeamName %><br>
-                        <span id="goalsAwayTeam"><%= goalsAwayTeam %></span>
+                        <img class="teamImg" src="<%= awayTeamImg %>"></img><span><%= awayTeamName %></span>
                     </div>
+                </div>
+                <div class="teamScoreSection">
+                    <div id="goalsHomeTeam"><%= goalsHomeTeam %></div>
+                    <div id="chatMatchStatus"><%= chatMatchStatus %></div>
+                    <div id="goalsAwayTeam"><%= goalsAwayTeam %></div>
                 </div>
             </div>
 

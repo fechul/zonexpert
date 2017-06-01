@@ -420,8 +420,9 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		myBadgeSrc: 'image/badge_ready.png',
 		matchId: req.params.matchId,
 		headerHideMenu: '',
-		goalsHomeTeam: 0,
-		goalsAwayTeam: 0,
+		goalsHomeTeam: '',
+		goalsAwayTeam: '',
+		chatMatchStatus: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point
 	};
@@ -441,8 +442,16 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		matchData.roomOpen = true;
 		if (matchData) {
 			if (matchData.result) {
-				json.goalsHomeTeam = matchData.result.goalsHomeTeam;
-				json.goalsAwayTeam = matchData.result.goalsAwayTeam;
+				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
+				json.goalsAwayTeam = matchData.result.goalsAwayTeam == null ? '-' : matchData.result.goalsAwayTeam;
+			}
+
+			if (matchData.status == 'IN_PLAY') {
+				json.chatMatchStatus = ':';
+			} else if (matchData.status == 'FINISHED') {
+				json.chatMatchStatus = '종료';
+			} else {
+				json.chatMatchStatus = '예정';
 			}
 
 			if(req.session.login) {
