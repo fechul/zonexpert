@@ -425,7 +425,6 @@ var SEARCH = {
 			if(recordData && recordData.length) {
 				$('.no_record_field').hide();
 				recordData.sort(function(a, b) {
-					console.log(a);
 					return (a.ratingCalculatedTime > b.ratingCalculatedTime) ? -1 : ((b.ratingCalculatedTime > a.ratingCalculatedTime) ? 1 : 0);
 				});
 			}
