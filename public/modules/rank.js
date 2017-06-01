@@ -68,6 +68,11 @@ var RANK = {
 
 			location.href = "/search?id=" + id;
 		});
+
+		$('#rank_table').on('click', 'tr:not(:nth-child(1))', function() {
+			var $this = $(this);
+			location.href = '/search?id=' + $this.find('td.table_label_nickname').html()
+		});
 	},
 
 	scrollToTarget: function() {
