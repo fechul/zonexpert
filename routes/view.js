@@ -416,6 +416,12 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		mydata_display: '',
 		my_nickname: req.session.nickname,
 		matchId: req.params.matchId,
+		myBadge: 'ready',
+		myBadgeSrc: 'image/badge_ready.png',
+		matchId: req.params.matchId,
+		headerHideMenu: '',
+		goalsHomeTeam: 0,
+		goalsAwayTeam: 0,
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point
 	};
@@ -434,22 +440,6 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	}, function(matchData) {
 		matchData.roomOpen = true;
 		if (matchData) {
-			var json = {
-				myinfo_display: '',
-				logout_display: '',
-				login_display: '',
-				signup_display: '',
-				mydata_display: '',
-				my_nickname: req.session.nickname,
-				matchId: req.params.matchId,
-				myBadge: 'ready',
-				myBadgeSrc: 'image/badge_ready.png',
-				matchId: req.params.matchId,
-				headerHideMenu: '',
-				goalsHomeTeam: 0,
-				goalsAwayTeam: 0
-			};
-
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam;
 				json.goalsAwayTeam = matchData.result.goalsAwayTeam;
@@ -496,6 +486,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 						json.awayTeamImg = result.awayTeamImg;
 
 						json.prediction_shortcut = req.predictionShortcut;
+						console.log(json)
 
 				        res.render(path, json);
 					});
