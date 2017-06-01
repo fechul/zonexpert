@@ -450,13 +450,13 @@ router.get('/getMyData', function(req, res) {
 			mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
 			mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
 
-			if (mydata_obj.record) {
+			if (mydata.record) {
 				mydata_obj.my_total_hit = mydata.record.total.hit;
 				mydata_obj.my_total_fail = mydata.record.total.fail;
-			}
 
-			if(mydata.record.total.fail || mydata.record.total.hit ) {
-				mydata_obj.my_predict_rate = ((mydata.record.total.hit/(mydata.record.total.hit+mydata.record.total.fail))*100).toFixed(2);
+				if(mydata.record.total.fail || mydata.record.total.hit ) {
+					mydata_obj.my_predict_rate = ((mydata.record.total.hit/(mydata.record.total.hit+mydata.record.total.fail))*100).toFixed(2);
+				}
 			}
 		}
 
