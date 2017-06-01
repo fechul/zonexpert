@@ -486,7 +486,6 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 						json.awayTeamImg = result.awayTeamImg;
 
 						json.prediction_shortcut = req.predictionShortcut;
-						console.log(json)
 
 				        res.render(path, json);
 					});
