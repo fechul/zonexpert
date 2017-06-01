@@ -97,7 +97,7 @@ var rating = {
                     async.each(userList, function(user, _async_cb) {
                         var defaultIncreaseValue = user.readyGameCnt == 0 ? 30 : 45;
                         var defaultDecreaseValue = user.readyGameCnt == 0 ? -25 : -40;
-                        
+
                         user.readyGameCnt--;
                         if (user.readyGameCnt < 0) {
                             user.readyGameCnt = 0;
@@ -152,7 +152,8 @@ var rating = {
                             '$set': {
                                 'beforeRating': user.beforeRating,
                                 'afterRating': user.afterRating,
-                                'result': user.result
+                                'result': user.result,
+                                'ratingCalculatedTime': new Date()
                             }
                         }).exec(function(err) {
                             db.user.update({

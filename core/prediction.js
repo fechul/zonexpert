@@ -331,7 +331,9 @@ exports.getMatchesRecord = function(data, callback) {
                     'result': {
                         $in: ['true', 'false']
                     }
-                }, function(predictErr, predictData) {
+                })
+                .sort({'ratingCalculatedTime': -1})
+                .exec(function(predictErr, predictData) {
                     if(predictErr) {
                         callback(null);
                     } else {
