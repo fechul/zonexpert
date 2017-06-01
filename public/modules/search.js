@@ -64,7 +64,7 @@ var SEARCH = {
 		$('#header li.my_point > span').click(function() {
 			location.href = '/my_page';
 		});
-		
+
 		$('.user_search_input').keydown(function(e) {
 			if(e.keyCode == 13) {
 				$('.user_search_btn').click();
@@ -122,25 +122,26 @@ var SEARCH = {
 				list_html += '<div class="recent_predict_data_row">';
 
 				var date = new Date(recentMatches[i].date);
-				list_html += '<span class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</span>';
-				list_html += '<span class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</span>';
+				list_html += '<div class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</div>';
+				list_html += '<div class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</div>';
 				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
-				list_html += '<span class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</span>';
+				list_html += '<div class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</div>';
 				list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
-				list_html += '<span class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</span>';
-
-				if(recentMatches[i].myPredict == 'true') {
-					list_html += '적중';
-				} else {
-					list_html += '실패';
-				}
+				list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
 
 				var afterRating = parseInt(recentMatches[i].afterRating, 10);
 				var ratingChange = recentMatches[i].afterRating - parseInt(recentMatches[i].beforeRating, 10);
 				if(ratingChange > 0) {
 					ratingChange = '+' + ratingChange;
 				}
-				list_html += '<span class="recent_predict_data_row_rating">' + afterRating + '(' + ratingChange + ')</span>';
+				list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(' + ratingChange + ')</div>';
+
+				if(recentMatches[i].myPredict == 'true') {
+					list_html += '<div class="recent_predict_data_row_result_msg success">적중</div>';
+				} else {
+					list_html += '<div class="recent_predict_data_row_result_msg failed">실패</div>';
+				}
+
 				list_html += '</div>';
 			}
 			$('.my_recent_predict_section').append(list_html);
@@ -354,9 +355,9 @@ var SEARCH = {
 			// }
 
 			// if(isMobile && $(window).width() <= 360) {
-				
+
 			// }
-			
+
 		} else {
 			$('.no_statistics_field').show();
 		}
