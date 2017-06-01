@@ -479,6 +479,7 @@ exports.deleteExpiredBasket = function(params, callback) {
 
 exports.getUserList = function(options, callback) {
     var matchId = options.matchId;
+    var email = options.email;
 
     db.prediction.find({
         'matchId': matchId,
@@ -487,20 +488,29 @@ exports.getUserList = function(options, callback) {
         'userEmail': 1
     }, function(predictionErr, predictionData) {
         if(predictionData && predictionData.length) {
-            db.user.find({
-                'email': {
-                    $in: predictionData
+            var predictList = [];
+            async.each(predictionData, function(eachPredict, async_cb) {
+                console.log(eachPredict.userEmail, email)
+                if(eachPredict.userEmail !== email) {
+                    predictList.push(eachPredict.userEmail);
                 }
-            }, {
-                'nickname': 1,
-                'rating': 1,
-                'readyGameCnt': 1
-            }).sort({'rating': -1}).exec(function(userErr, userData) {
-                if(userData && userData.length) {
-                    callback(userData);
-                } else {
-                    callback(null);
-                }
+                async_cb();
+            }, function(async_err) {
+                db.user.find({
+                    'email': {
+                        $in: predictList
+                    }
+                }, {
+                    'nickname': 1,
+                    'rating': 1,
+                    'readyGameCnt': 1
+                }).sort({'rating': -1}).exec(function(userErr, userData) {
+                    if(userData && userData.length) {
+                        callback(userData);
+                    } else {
+                        callback(null);
+                    }
+                });
             });
         } else {
             callback(null);

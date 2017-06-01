@@ -321,9 +321,11 @@ router.get('/prediction/getMatchesRecord', function(req, res) {
 
 router.get('/prediction/getUserList', function(req, res) {
 	var matchId = req.query.matchId;
+	var email = req.session.email;
 
 	prediction.getUserList({
-		'matchId': matchId
+		'matchId': matchId,
+		'email': email
 	}, function(data) {
 
 		res.json(data);
