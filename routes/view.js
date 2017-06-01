@@ -418,8 +418,15 @@ router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
 				myBadge: 'ready',
 				myBadgeSrc: 'image/badge_ready.png',
 				matchId: req.params.matchId,
-				headerHideMenu: ''
+				headerHideMenu: '',
+				goalsHomeTeam: 0,
+				goalsAwayTeam: 0
 			};
+
+			if (matchData.result) {
+				json.goalsHomeTeam = matchData.result.goalsHomeTeam;
+				json.goalsAwayTeam = matchData.result.goalsAwayTeam;
+			}
 
 			if(req.session.login) {
 				json.login_display = 'display:none;';

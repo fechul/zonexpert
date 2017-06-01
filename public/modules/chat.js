@@ -110,6 +110,17 @@ var CHAT = {
                 $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div><span class="chat_nickname"><nobr>' + data[i].name + '</nobr></span></li>');
             }
         });
+
+        socket.on('updateLive', function (matchData) {
+            if (matchData.result) {
+                $('#goalsHomeTeam').html(matchData.result.goalsHomeTeam || 0);
+                $('#goalsAwayTeam').html(matchData.result.goalsAwayTeam || 0);
+            }
+
+            if (matchData.status == 'FINISHED') {
+                
+            }
+        });
     },
 
     writeMessage: function(type, name, message, badge) {
