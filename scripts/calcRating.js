@@ -19,18 +19,18 @@ mongoose.connect('mongodb://localhost');
 global.db = require('../db/schema.js');
 
 var matchIdList = [
-    '158901',
-    '158902',
     '154508',
     '154509',
+    '158902',
+    '158901',
     '154510',
-    '154511',
-    '154512',
-    '154513',
-    '154514',
-    '154515',
     '154516',
-    '154517'
+    '154515',
+    '154513',
+    '154517',
+    '154514',
+    '154512',
+    '154511'
 ];
 
 async.eachSeries(matchIdList, function(matchId, a_cb) {
