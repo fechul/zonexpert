@@ -1,7 +1,13 @@
 var RANK = {
-	init: function() {
+	init: function(initData) {
 		this.init_events();
 		this.scrollToTarget();
+
+		notice.init();
+
+		if(initData.attendancePointUpdated) {
+			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+		}
 	},
 
 	init_events: function() {
@@ -30,6 +36,14 @@ var RANK = {
 		$('#header .main_menu li').click(function() {
 			var move = $(this).attr('move');
 			location.href = '/' + move;
+		});
+
+		$('#header li.my_point > img').click(function() {
+			location.href = '/my_page';
+		});
+
+		$('#header li.my_point > span').click(function() {
+			location.href = '/my_page';
 		});
 
 		$('.rank_search .rank_search_input').keydown(function(e) {

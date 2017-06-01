@@ -124,6 +124,15 @@ body {
 	border: 1px solid #ccc;
 }
 
+li.my_point {
+	padding: 0px 10px;
+}
+
+li.my_point > img,
+li.my_point > span {
+	cursor: pointer;
+}
+
 .mobile_my_point {
 	position: absolute;
 	top: 23px;

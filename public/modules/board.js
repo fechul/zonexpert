@@ -1,6 +1,12 @@
 var BOARD = {
-	init: function(data) {
-		this.user_email = data.user_email;
+	init: function(initData) {
+		this.user_email = initData.user_email;
+
+		notice.init();
+
+		if(initData.attendancePointUpdated) {
+			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+		}
 
 		this.set_board();
 		this.init_events();
@@ -34,6 +40,14 @@ var BOARD = {
 		$('#header .main_menu li').click(function() {
 			var move = $(this).attr('move');
 			location.href = '/' + move;
+		});
+
+		$('#header li.my_point > img').click(function() {
+			location.href = '/my_page';
+		});
+
+		$('#header li.my_point > span').click(function() {
+			location.href = '/my_page';
 		});
 
 		$('.board_section .board_menu > .write').click(function() {

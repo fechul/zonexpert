@@ -38,7 +38,21 @@ var readPredictionShortcutHTML = function(req, res, next) {
 	}
 };
 
-router.get('/', readPredictionShortcutHTML, function(req, res) {
+var checkAttendancePoint = function(req, res, next) {
+	if(req.session.login) {
+		user.checkAttendancePoint(req.session.email, function(pointData) {
+			req.attendancePointUpdated = pointData.attendancePointUpdated;
+			req.point = pointData.point;
+			next();
+		});
+	} else {
+		req.attendancePointUpdated = false;
+		req.point = 0;
+		next();
+	}
+};
+
+router.get('/', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -46,7 +60,9 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	json.prediction_shortcut = req.predictionShortcut;
@@ -59,7 +75,6 @@ router.get('/', readPredictionShortcutHTML, function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
-
 	res.render(path, json);
 });
 
@@ -70,7 +85,8 @@ router.get('/signup', no_login, function(req, res) {
 		login_display: 'display:none;',
 		signup_display: 'display:none;',
 		myinfo_display: 'display:none;',
-		logout_display: 'display:none;'
+		logout_display: 'display:none;',
+		myCurrentPoint: 0
 	};
 
 	res.render(path, json);
@@ -83,14 +99,15 @@ router.get('/login', no_login, function(req, res) {
 		login_display: 'display:none;',
 		signup_display: 'display:none;',
 		myinfo_display: 'display:none;',
-		logout_display: 'display:none;'
+		logout_display: 'display:none;',
+		myCurrentPoint: 0
 	};
 
 	res.render(path, json);
 
 });
 
-router.get('/rank', readPredictionShortcutHTML, function(req, res) {
+router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'rank.html';
 	var json = {
 		myinfo_display: '',
@@ -99,7 +116,9 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 		signup_display: '',
 		mydata_display: '',
 		rank_html: '',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -277,7 +296,7 @@ router.get('/rank', readPredictionShortcutHTML, function(req, res) {
 	}
 });
 
-router.get('/board', readPredictionShortcutHTML, function(req, res) {
+router.get('/board', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'board.html';
 	console.log('email : ', req.session.email);
 	var json = {
@@ -288,7 +307,9 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 		mydata_display: '',
 		user_email: req.session.email,
 		headerHideMenu: '',
-		board_html:''
+		board_html:'',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -307,7 +328,7 @@ router.get('/board', readPredictionShortcutHTML, function(req, res) {
 
 });
 
-router.get('/board/write', need_login, readPredictionShortcutHTML, function(req, res) {
+router.get('/board/write', need_login, readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var boardNo = req.query.no;
 	var path = 'board_write.html';
 
@@ -322,7 +343,9 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, function(req,
 		board_content: '',
 		isUpdate: false,
 		write_btn_name: '',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -354,7 +377,7 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, function(req,
 	}
 });
 
-router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
+router.get('/schedule', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'schedule.html';
 	var json = {
 		myinfo_display: '',
@@ -362,7 +385,9 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 		login_display: '',
 		signup_display: '',
 		mydata_display: '',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -379,7 +404,7 @@ router.get('/schedule', readPredictionShortcutHTML, function(req, res) {
 	res.render(path, json);
 });
 
-router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
+router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
@@ -390,7 +415,9 @@ router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
 		signup_display: '',
 		mydata_display: '',
 		my_nickname: req.session.nickname,
-		matchId: req.params.matchId
+		matchId: req.params.matchId,
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -405,7 +432,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		// matchData.roomOpen = true;
+		matchData.roomOpen = true;
 		if (matchData) {
 			var json = {
 				myinfo_display: '',
@@ -475,7 +502,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, function(req, res){
 	});
 });
 
-router.get('/search', readPredictionShortcutHTML, function(req, res) {
+router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'search.html';
 	var id = req.query.id;
 
@@ -499,7 +526,9 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 		searchdata_rank: '-',
 
 		myTotalRate: '-',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {
@@ -582,7 +611,7 @@ router.get('/search', readPredictionShortcutHTML, function(req, res) {
 	});
 });
 
-router.get('/my_page', need_login, function(req, res) {
+router.get('/my_page', need_login, checkAttendancePoint, function(req, res) {
 	var path = 'my_page.html';
 	var json = {
 		myinfo_display: '',
@@ -592,7 +621,9 @@ router.get('/my_page', need_login, function(req, res) {
 		myEmail: req.session.email,
 		myNickName: '-',
 		signupDate: '-',
-		headerHideMenu: ''
+		headerHideMenu: '',
+		attendancePointUpdated: req.attendancePointUpdated,
+		myCurrentPoint: req.point
 	};
 
 	if(req.session.login) {

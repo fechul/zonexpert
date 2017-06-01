@@ -328,3 +328,61 @@ exports.countAllUsers = function(callback) {
     });
 };
 
+exports.checkAttendancePoint = function(email, callback) {
+    db.user.find({
+        'email': email
+    }, {
+        'todayAttendancePoint': 1,
+        'point': 1
+    }).limit(1).exec(function(err, userData) {
+        if(err) {
+            callback({
+                attendancePointUpdated: false,
+                point: 0
+            });
+        } else {
+            if(userData && userData.length) {
+                userData = userData[0];
+
+                if(!userData.todayAttendancePoint) {
+                    var atPoint = 100;
+                    var atPointLog = {
+                        'amount': atPoint,
+                        'classification': 'attendance',
+                        'time': new Date()
+                    };
+
+                    db.user.update({
+                        'email': email
+                    }, {
+                        $set: {
+                            'todayAttendancePoint': true
+                        },
+                        $inc: {
+                            'point': atPoint
+                        },
+                        $addToSet: {
+                            'pointLog': atPointLog
+                        }
+                    }, function(err) {
+                        callback({
+                            attendancePointUpdated: err ? false : true,
+                            point: err ? userData.point : userData.point + atPoint
+                        });
+                    });
+                } else {
+                    callback({
+                        attendancePointUpdated: false,
+                        point: userData.point
+                    });
+                }
+            } else {
+                callback({
+                    attendancePointUpdated: false,
+                    point: 0
+                });
+            }
+        }
+    });
+};
+

@@ -3,7 +3,7 @@
 		<div class="navbar-header">
 			<div class="mobile_my_point" style="display:none;">
 				<img src="/image/coin.png">
-				<span id="mobile_my_current_point">300</span>
+				<span id="mobile_my_current_point"><%= myCurrentPoint %></span>
 			</div>
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav_menu" style="<%= headerHideMenu %> margin-top:15px;">
 				<span class="icon-bar"></span>
@@ -29,7 +29,7 @@
 				</li>
 				<li class="my_point" style="<%= logout_display %>">
 					<img src="/image/coin.png">
-					<span id="my_current_point">300</span>
+					<span id="my_current_point"><%= myCurrentPoint %></span>
 				</li>
 				<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
 				<li class="logout" style="<%= logout_display %>">로그아웃</li>

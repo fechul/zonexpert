@@ -75,13 +75,21 @@
 
     </body>
 
+    <div id="notice">
+		<div id="notice-icon"></div><div id="notice-content"></div>
+	</div>
+
 	<script src="jquery/jquery.js"></script>
 	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/index.js"></script>
     <script src="modules/prediction_shortcut.js"></script>
+    <script src="notice/notice.js"></script>
 	<script>
-		INDEX.init();
+		var notice = NOTICE;
+		INDEX.init({
+			'attendancePointUpdated': <%- attendancePointUpdated %>
+		});
         PREDICTION_SHORTCUT.init();
 	</script>
 

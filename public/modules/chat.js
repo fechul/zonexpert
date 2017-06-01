@@ -4,6 +4,12 @@ var CHAT = {
         this.room = options.roomId;
         this.badge = options.myBadge;
 
+        notice.init();
+
+        if(options.attendancePointUpdated) {
+            notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
+        }
+
         this.init_events();
         this.connect_socket();
     },
@@ -36,6 +42,14 @@ var CHAT = {
         $('#header .main_menu li').click(function() {
             var move = $(this).attr('move');
             location.href = '/' + move;
+        });
+
+        $('#header li.my_point > img').click(function() {
+            location.href = '/my_page';
+        });
+
+        $('#header li.my_point > span').click(function() {
+            location.href = '/my_page';
         });
 
         $('.user_search_input').keydown(function(e) {

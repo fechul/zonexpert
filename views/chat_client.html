@@ -76,11 +76,14 @@
     <script src="/bootstrap/bootstrap.min.js"></script>
     <script src="/modules/chat.js"></script>
     <script src="/modules/prediction_shortcut.js"></script>
+    <script src="notice/notice.js"></script>
     <script>
+        var notice = NOTICE;
         CHAT.init({
             nickname: '<%= my_nickname %>',
             roomId: parseInt('<%= matchId %>', 10),
-            myBadge: '<%= myBadge %>'
+            myBadge: '<%= myBadge %>',
+            attendancePointUpdated: <%- attendancePointUpdated %>
         });
         PREDICTION_SHORTCUT.init();
     </script>

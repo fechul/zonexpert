@@ -12,6 +12,10 @@
 		<%- include header.html %>
 
 		<section class="main_section">
+			<div class="page_title">
+				<%= searchdata_user_id %> 님의 기록
+			</div>
+
 			<div class="no_searchdata_wrapper" style="<%= no_search_show %>">
 				<div class="no_searchdata_section container_box">
 					<p>검색 결과가 없습니다.</p>
@@ -98,10 +102,13 @@
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
 	<script src="modules/search.js"></script>
 	<script src="modules/prediction_shortcut.js"></script>
+	<script src="notice/notice.js"></script>
 	<script>
+		var notice = NOTICE;
 		SEARCH.init({
 			'search_id': '<%= searchdata_user_id %>',
-			'search_rating': '<%= searchdata_rating %>'
+			'search_rating': '<%= searchdata_rating %>',
+			'attendancePointUpdated': <%- attendancePointUpdated %>
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>
