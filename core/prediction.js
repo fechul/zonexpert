@@ -476,3 +476,25 @@ exports.deleteExpiredBasket = function(params, callback) {
         callback();
     });
 };
+
+exports.getPredictSummary = function(params, callback) {
+    db.prediction.find({
+        'userEmail': params.email,
+        'result': 'true'
+    }).exec(function(err, predictionData) {
+        var hit = 0;
+        var fail = 0;
+        for (var i = 0; i < predictionData.length; i++) {
+            if (predictionData[0].result == 'true') {
+                hit++;
+            } else if (predictionData[0].result == 'false') {
+                fail++;
+            }
+        }
+
+        callback({
+            'hit': hit,
+            'fail': fail
+        })
+    });
+};

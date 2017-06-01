@@ -43,7 +43,6 @@ var rating = {
         .limit(1)
         .exec(function(err, matchData) {
             matchData = matchData[0];
-            console.log(matchData);
             if (matchData.result.goalsHomeTeam > matchData.result.goalsAwayTeam) {
                 matchResult = 'home'
             } else if (matchData.result.goalsHomeTeam < matchData.result.goalsAwayTeam) {
@@ -81,7 +80,8 @@ var rating = {
                                 'afterRating': null,
                                 'pick': prediction.pick,
                                 'result': pickResult,
-                                'readyGameCnt': userData.readyGameCnt
+                                'readyGameCnt': userData.readyGameCnt,
+                                'record': userData.record
                             });
                         }
 
@@ -101,13 +101,44 @@ var rating = {
                             user.readyGameCnt = 0;
                         }
 
+                        if (!user.record) {
+                            user.record = {
+                                'total': {
+                                    'hit': 0,
+                                    'fail': 0
+                                }
+                            };
+                        }
+
+                        if (!user.record[1]) {
+                            user.record[1] = {
+                                'total': {
+                                    'hit': 0,
+                                    'fail': 0
+                                }
+                            }
+                        }
+
+                        if (!user.record[1][matchData.leagueId]) {
+                            user.record[1][matchData.leagueId] = {
+                                'hit': 0,
+                                'fail': 0
+                            };
+                        }
+
                         if (user.pick == matchResult) {
                             //픽률이 높을수록 ++, 픽률이 낮을수록 --
                             user.ratingChange = defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
+                            user.record.total.hit++;
+                            user.record[1].total.hit++;
+                            user.recored[1][matchData.leagueId].hit++;
                         } else {
                             user.ratingChange = -1 * defaultChangeValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
+                            user.record.total.fail++;
+                            user.record[1].total.fail++;
+                            user.recored[1][matchData.leagueId].fail++;
                         }
 
                         user.afterRating = user.beforeRating + user.ratingChange;
@@ -127,7 +158,8 @@ var rating = {
                             }, {
                                 '$set': {
                                     'rating': user.afterRating,
-                                    'readyGameCnt': user.readyGameCnt
+                                    'readyGameCnt': user.readyGameCnt,
+                                    'record': user.record
                                 }
                             }).exec(function(_err) {
                                 db.prediction.find({
