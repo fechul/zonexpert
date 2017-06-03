@@ -175,6 +175,7 @@ var getAllMatches = function(callback) {
 
 var liveChekcer = function(callback) {
     if ((__matchList.count > 0) && !getAllMatchesUpdating) {
+        getAllMatchesUpdating = true;
         winston.info('liveChekcer start...');
         var football = function(footballCallback) {
             winston.info('  football liveChekcer start...');
@@ -364,6 +365,7 @@ var liveChekcer = function(callback) {
         }
 
         async.waterfall(waterfallFunctionList, function() {
+            getAllMatchesUpdating = false;
             callback();
         });
     } else {
