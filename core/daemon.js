@@ -176,12 +176,12 @@ var getAllMatches = function(callback) {
     });
 };
 
-var liveChekcer = function(callback) {
+var liveChecker = function(callback) {
     if ((__matchList.count > 0) && !getAllMatchesUpdating) {
         getAllMatchesUpdating = true;
-        winston.info('liveChekcer start...');
+        winston.info('liveChecker start...');
         var football = function(footballCallback) {
-            winston.info('  football liveChekcer start...');
+            winston.info('  football liveChecker start...');
 
             var data = '';
             var options = {
@@ -205,9 +205,7 @@ var liveChekcer = function(callback) {
 
                     }
 
-                    console.log(parsedData);
                     if (parsedData) {
-                        console.log('parsedData yes');
                         schedule.updateMatches({
                             'matches': parsedData.fixtures
                         }, function(result) {
@@ -233,18 +231,15 @@ var liveChekcer = function(callback) {
 
                                     }
 
-                                    console.log(_parsedData);
                                     if (_parsedData) {
-                                        console.log('_parsedData yes');
                                         schedule.updateMatches({
                                             'matches': _parsedData.fixtures
                                         }, function(result) {
-                                            winston.info('  football liveCheker finish...');
+                                            winston.info('  football liveChecker finish...');
                                             footballCallback(null);
                                         });
                                     } else {
-                                        console.log('_parsedData no');
-                                        winston.info('  football liveCheker finish...');
+                                        winston.info('  football liveChecker finish...');
                                         footballCallback(null);
                                     }
                                 });
@@ -253,8 +248,6 @@ var liveChekcer = function(callback) {
                             http.request(_options, _requestCallback).end();
                         });
                     } else {
-                        console.log('parsedData no');
-
                         var _data = '';
                         var _options = {
                           'host': 'api.football-data.org',
@@ -277,18 +270,15 @@ var liveChekcer = function(callback) {
 
                                 }
 
-                                console.log(_parsedData);
                                 if (_parsedData) {
-                                    console.log('_parsedData yes');
                                     schedule.updateMatches({
                                         'matches': _parsedData.fixtures
                                     }, function(result) {
-                                        winston.info('  football liveCheker finish...');
+                                        winston.info('  football liveChecker finish...');
                                         footballCallback(null);
                                     });
                                 } else {
-                                    console.log('_parsedData no');
-                                    winston.info('  football liveCheker finish...');
+                                    winston.info('  football liveChecker finish...');
                                     footballCallback(null);
                                 }
                             });
@@ -303,7 +293,7 @@ var liveChekcer = function(callback) {
         };
 
         var baseball = function(baseballCallback) {
-            winston.info('  baseball liveChekcer start...');
+            winston.info('  baseball liveChecker start...');
             var task = spawn('casperjs', ['scripts/casper_kbo_live.js', '--proxy-type=none']);
             var received_data = ''
 
@@ -377,7 +367,7 @@ var liveChekcer = function(callback) {
                 schedule.updateMatches({
                     'matches': matchList
                 }, function(result) {
-                    winston.info('  baseball liveChekcer finish...');
+                    winston.info('  baseball liveChecker finish...');
                     baseballCallback(null);
                 });
             });
@@ -395,6 +385,7 @@ var liveChekcer = function(callback) {
 
         async.waterfall(waterfallFunctionList, function() {
             getAllMatchesUpdating = false;
+            winston.info('liveChecker finish...');
             callback();
         });
     } else {
@@ -463,8 +454,8 @@ exports.start = function() {
                 getAllMatchesUpdating = true;
                 doFunction = getAllMatches;
             } else {
-                doFunction = liveChekcer;
-                // console.log('liveChekcer');
+                doFunction = liveChecker;
+                // console.log('liveChecker');
             }
         } else {
             // doFunction = tester;
