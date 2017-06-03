@@ -23,7 +23,7 @@ var getAllMatches = function(callback) {
         var options = {
           'host': 'api.football-data.org',
           'headers': {
-              'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+              'X-Auth-Token': __footballDataApiToken
           }
         };
 
@@ -187,7 +187,7 @@ var liveChekcer = function(callback) {
               'host': 'api.football-data.org',
               'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
               'headers': {
-                  'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                  'X-Auth-Token': __footballDataApiToken
               }
             };
 
@@ -210,7 +210,7 @@ var liveChekcer = function(callback) {
                                   'host': 'api.football-data.org',
                                   'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
                                   'headers': {
-                                      'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                                      'X-Auth-Token': __footballDataApiToken
                                   }
                                 };
 
@@ -247,7 +247,7 @@ var liveChekcer = function(callback) {
                               'host': 'api.football-data.org',
                               'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
                               'headers': {
-                                  'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                                  'X-Auth-Token': __footballDataApiToken
                               }
                             };
 
