@@ -22,7 +22,9 @@ var getAllMatches = function(callback) {
         var leaguesObject = {};
         var options = {
           'host': 'api.football-data.org',
-          'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+          'headers': {
+              'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+          }
         };
 
         async.each(leagueIdArray, function(league, async_cb) {
@@ -184,7 +186,9 @@ var liveChekcer = function(callback) {
             var options = {
               'host': 'api.football-data.org',
               'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
-              'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+              'headers': {
+                  'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+              }
             };
 
             var requestCallback = function(response) {
@@ -205,7 +209,9 @@ var liveChekcer = function(callback) {
                                 var _options = {
                                   'host': 'api.football-data.org',
                                   'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
-                                  'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                                  'headers': {
+                                      'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                                  }
                                 };
 
                                 var _requestCallback = function(_response) {
@@ -240,7 +246,9 @@ var liveChekcer = function(callback) {
                             var _options = {
                               'host': 'api.football-data.org',
                               'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
-                              'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                              'headers': {
+                                  'X-Auth-Token': 'cbd18febeb41494e869bf7e710227335'
+                              }
                             };
 
                             var _requestCallback = function(_response) {
