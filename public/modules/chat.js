@@ -96,6 +96,7 @@ var CHAT = {
 
         $(document).on('click', '.eachPredictedUser', function() {
             if(!$(this).hasClass('active')) {
+                $('#predictedUserPredictBox').hide();
                 $('.eachPredictedUser').removeClass('active');
                 $(this).addClass('active');
                 var target = $(this).attr('target');
@@ -111,12 +112,16 @@ var CHAT = {
                 targetNickname: target,
                 matchId: self.room
             }, function(result) {
-                if(result && result !== 'false') {
+                if(result) {
+                    if(result.result && result.result !== 'false') {
                     $('#viewBtnDiv').hide();
                     $('#isShownDiv').show();
                     $('#predictedUserPredictBox').fadeIn(500);
                     $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
                     $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
+                    } else {
+                        notice.show('alert', '조회에 실패했습니다.');
+                    }
                 } else {
                     notice.show('alert', '조회에 실패했습니다.');
                 }
