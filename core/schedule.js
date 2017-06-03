@@ -43,6 +43,8 @@ exports.updateMatches = function(data, callback) {
                                 }, function() {
                                     async_cb();
                                 });
+                            } else {
+                                async_cb();
                             }
                             // 경기 시작 - 예측 못하게 막기 (알아서 막아짐), 장바구니에 있는거 뺴기
                         } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
