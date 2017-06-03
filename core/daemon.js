@@ -180,16 +180,17 @@ var liveChekcer = function(callback) {
     if ((__matchList.count > 0) && !getAllMatchesUpdating) {
         getAllMatchesUpdating = true;
         winston.info('liveChekcer start...');
-        var completeCounter = 0;
-
-        var checkBothComplete = function() {
-            completeCounter++;
-            if (completeCounter == 2) {
-                footballCallback();
-            }
-        };
-
         var football = function(footballCallback) {
+            var completeCounter = 0;
+
+            var checkBothComplete = function() {
+                completeCounter++;
+                if (completeCounter == 2) {
+                    winston.info('  football liveChekcer finish...');
+                    footballCallback();
+                }
+            };
+
             winston.info('  football liveChekcer start...');
             var data = '';
             var options = {
