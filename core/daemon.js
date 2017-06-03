@@ -200,6 +200,8 @@ var liveChekcer = function(callback) {
                     var parsedData = '';
                     try {
                         parsedData = JSON.parse(data);
+                    } catch (e) {
+
                     } finally {
                         console.log(parsedData);
                         if (parsedData) {
@@ -225,6 +227,8 @@ var liveChekcer = function(callback) {
                                         var _parsedData = '';
                                         try {
                                             _parsedData = JSON.parse(_data);
+                                        } catch (e) {
+
                                         } finally {
                                             console.log(_parsedData);
                                             if (_parsedData) {
@@ -266,6 +270,8 @@ var liveChekcer = function(callback) {
                                     var _parsedData = '';
                                     try {
                                         _parsedData = JSON.parse(_data);
+                                    } catch (e) {
+
                                     } finally {
                                         if (_parsedData) {
                                             console.log('_parsedData yes 2');
