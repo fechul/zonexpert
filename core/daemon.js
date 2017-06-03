@@ -201,7 +201,9 @@ var liveChekcer = function(callback) {
                     try {
                         parsedData = JSON.parse(data);
                     } finally {
+                        console.log(parsedData);
                         if (parsedData) {
+                            console.log('parsedData yes');
                             schedule.updateMatches({
                                 'matches': parsedData.fixtures
                             }, function(result) {
@@ -224,7 +226,9 @@ var liveChekcer = function(callback) {
                                         try {
                                             _parsedData = JSON.parse(_data);
                                         } finally {
+                                            console.log(_parsedData);
                                             if (_parsedData) {
+                                                console.log('_parsedData yes 1');
                                                 schedule.updateMatches({
                                                     'matches': _data.fixtures
                                                 }, function(result) {
@@ -232,6 +236,7 @@ var liveChekcer = function(callback) {
                                                     footballCallback();
                                                 });
                                             } else {
+                                                console.log('_parsedData no 1');
                                                 winston.info('  football liveChekcer finish...');
                                                 footballCallback();
                                             }
@@ -242,6 +247,7 @@ var liveChekcer = function(callback) {
                                 http.request(_options, _requestCallback).end();
                             });
                         } else {
+                            console.log('parsedData no');
                             var _data = '';
                             var _options = {
                               'host': 'api.football-data.org',
@@ -262,6 +268,7 @@ var liveChekcer = function(callback) {
                                         _parsedData = JSON.parse(_data);
                                     } finally {
                                         if (_parsedData) {
+                                            console.log('_parsedData yes 2');
                                             schedule.updateMatches({
                                                 'matches': _data.fixtures
                                             }, function(result) {
@@ -269,6 +276,7 @@ var liveChekcer = function(callback) {
                                                 footballCallback();
                                             });
                                         } else {
+                                            console.log('_parsedData no 2');
                                             winston.info('  football liveChekcer finish...');
                                             footballCallback();
                                         }
