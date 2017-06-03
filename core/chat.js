@@ -58,10 +58,12 @@ chat.init = function (server) {
         });
 
         socket.on('disconnect', function () {
-            for (var i = 0; i < chat.usernames[socket.room || 'trash'].length; i++) {
-                if(chat.usernames[socket.room || 'trash'][i].name == socket.username) {
-                    chat.usernames[socket.room || 'trash'].splice(i, 1);
-                    break;
+            if (chat.usernames[socket.room || 'trash']) {
+                for (var i = 0; i < chat.usernames[socket.room || 'trash'].length; i++) {
+                    if(chat.usernames[socket.room || 'trash'][i].name == socket.username) {
+                        chat.usernames[socket.room || 'trash'].splice(i, 1);
+                        break;
+                    }
                 }
             }
 
