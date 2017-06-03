@@ -203,7 +203,7 @@ var liveChekcer = function(callback) {
             };
 
             var _requestCallback = function(_response) {
-                _response.on('_data', function (_chunk) {
+                _response.on('data', function (_chunk) {
                     _data += _chunk;
                 });
 
@@ -253,7 +253,7 @@ var liveChekcer = function(callback) {
                     } catch (e) {
 
                     }
-                    
+
                     console.log(parsedData);
                     if (parsedData) {
                         console.log('parsedData yes');
