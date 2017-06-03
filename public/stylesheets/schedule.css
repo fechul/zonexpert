@@ -13,19 +13,35 @@
 	width: 800px;
 }
 
-.scheduledata_league_btn {
+.scheduledata_league_select_btn {
 	margin-top: 10px 0px 25px 25px;
 }
 
-.scheduledata_league_btn > .league_btn {
-	margin-right: 5px;
+.scheduledata_league_select_btn > .league_btn {
 	height: 25px;
 	cursor: pointer;
-	width: 115px;
-	margin-top: 10px;
+	width: 144px;
+	margin: 10px 2px 0px 2px;
 }
 
-.scheduledata_league_btn > .league_btn.active {
+.scheduledata_league_select_btn > .league_btn.active {
+	background-color: #145c86;
+	border: none;
+	color: #fff;
+}
+
+.scheduledata_league_btn_container {
+	margin-top: 10px 0px 25px 25px;
+}
+
+.scheduledata_league_btn_container > .league_btn {
+	height: 25px;
+	cursor: pointer;
+	width: 144px;
+	margin: 10px 2px 0px 2px;
+}
+
+.scheduledata_league_btn_container > .league_btn.active {
 	background-color: #145c86;
 	border: none;
 	color: #fff;

@@ -47,10 +47,10 @@ var SCHEDULE = {
 			location.href = '/my_page';
 		});
 
-		$('.scheduledata_league_btn button').click(function() {
+		$('.scheduledata_league_btn_container button').click(function() {
 			var $this_button = $(this);
 			self.get_schedule($this_button.attr('key'), function() {
-				$('.scheduledata_league_btn button').removeClass('active');
+				$('.scheduledata_league_btn_container button').removeClass('active');
 				$this_button.addClass('active');
 			});
 		});
