@@ -3,6 +3,7 @@ var CHAT = {
         this.name = options.nickname;
         this.room = options.roomId;
         this.badge = options.myBadge;
+        this.sportId = options.sportId;
         this.leagueId = options.leagueId;
         this.email = options.email;
 
@@ -220,6 +221,7 @@ var CHAT = {
         $.get('/prediction/getUserList', {
             'matchId': matchId
         }, function(userList) {
+
             if(userList && userList.length) {
                 var userListHtml = '';
 
@@ -254,6 +256,7 @@ var CHAT = {
     },
 
     setUserPredictData: function(target) {
+        var sportId = this.sportId;
         var leagueId = this.leagueId;
         var matchId = this.room;
         var myEmail = this.email;
@@ -262,7 +265,6 @@ var CHAT = {
             'target': target,
             'matchId': matchId
         }, function(data) {
-
             if(data && data.length) {
                 data = data[0];
 

@@ -203,8 +203,13 @@ exports.getMatchesStatistics = function(data, callback) {
                 var email = userData.email;
 
                 db.prediction.find({
-                    'userEmail': email
+                    'userEmail': email,
+                    'confirmed': true,
+                    'result': {
+                        $in: ['true', 'false']
+                    }
                 }, function(predictErr, predictData) {
+                    console.log("da: ", predictData)
                     if(predictErr) {
                         callback(null);
                     } else {
@@ -366,7 +371,7 @@ exports.getMatchesRecord = function(data, callback) {
                                                         'afterRating': predict.afterRating,
                                                         'beforeRating': predict.beforeRating,
                                                         'myPredict': predict.result,
-                                                        'date': predict.confirmedTime,  // date has to be updated
+                                                        'date': predict.ratingCalculatedTime || predict.confirmedTime,  // date has to be updated
                                                         'ratingCalculatedTime': predict.ratingCalculatedTime
                                                     });
 

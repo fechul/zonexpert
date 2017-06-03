@@ -182,7 +182,7 @@ canvas{position:relative; z-index:9999;}
 
 .my_recent_predict_section .recent_predict_data_row {
 	max-height: 80px;
-	font-size: 16px;
+	font-size: 14px;
 	border: 1px solid #bbb;
 	margin-bottom: 15px;
 	padding: 15px;
@@ -212,18 +212,31 @@ canvas{position:relative; z-index:9999;}
 	margin-top: 8px;
 }
 
-.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg.success {
+.my_recent_predict_section .recent_predict_data_row .success {
 	color: green;
 }
 
-.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg.failed {
+.my_recent_predict_section .recent_predict_data_row .failed {
 	color: red;
+}
+
+.my_recent_predict_section .recent_predict_data_row.borderSuccess {
+	border: 2px solid green;
+}
+
+.my_recent_predict_section .recent_predict_data_row.borderFailed {
+	border: 2px solid red;
 }
 
 .my_recent_predict_section .recent_predict_data_row > img {
 	/*width: 40px;*/
-	height: 40px;
+	height: 30px;
 	margin: auto 10px;
+}
+
+.recent_predict_data_row_homename,
+.recent_predict_data_row_awayname {
+	width: 190px;
 }
 
 /*.my_recent_predict_section .recent_predict_data_row > span {
@@ -254,6 +267,26 @@ canvas{position:relative; z-index:9999;}
 
 	.container_box {
 		margin: 30px 0px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 12px;
+		padding: 10px;
+	}
+
+	.recent_predict_data_row_date {
+		width: 100%;
+		text-align: left;
+		margin-top: 0px;
+	}
+
+	.recent_predict_data_row_homename,
+	.recent_predict_data_row_awayname {
+		width: 135px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		margin-left: 10px;
 	}
 }
 

@@ -51,11 +51,6 @@ body {
     position: relative;
 }
 
-.predictionDataWrapper {
-    height: 533px;
-
-}
-
 .predictedUsers {
     float: left;
     border-right: 1px solid #ccc;
@@ -82,8 +77,9 @@ body {
 .predictedUserBadge {
     width: 30px;
     height: 30px;
-    margin-left: 0px 20px;
     float: left;
+    margin-left: 20px;
+    margin-top: 2px;
 }
 
 .predictedUserInfo {
@@ -520,7 +516,7 @@ li .badge_ready {
         margin: 0 65px;
     }
 
-    .main_section .board_section {
+    .main_section .tab_container {
         width: 100%;
     }
 
@@ -573,6 +569,28 @@ li .badge_ready {
     .my-account {
         margin-right: 10px;
     }
+
+    #goToOtherPredict {
+        width: 100%;
+        position: relative;
+    }
+
+    .predictedUsers {
+        width: 100%;
+        height: initial;
+    }
+
+    .predictedUsersList {
+        height: 300px;
+    }
+
+    .userPredictData {
+        width: 100%;
+    }
+
+    .predictedUserRecordData {
+        text-align: center;
+    }
 }
 
 @media all and (min-device-width: 541px) and (max-device-width: 620px) {
@@ -584,7 +602,7 @@ li .badge_ready {
         margin: 0 65px;
     }
 
-    .main_section .board_section {
+    .main_section .tab_container {
         width: 100%;
     }
 
@@ -641,6 +659,28 @@ li .badge_ready {
     .input-wrapper {
         width: 50% !important;
     }
+
+    #goToOtherPredict {
+        width: 100%;
+        position: relative;
+    }
+
+    .predictedUsers {
+        width: 100%;
+        height: initial;
+    }
+
+    .predictedUsersList {
+        height: 300px;
+    }
+
+    .userPredictData {
+        width: 100%;
+    }
+
+    .predictedUserRecordData {
+        text-align: center;
+    }
 }
 
 @media all and (min-device-width: 441px) and (max-device-width: 540px) {
@@ -652,7 +692,7 @@ li .badge_ready {
         margin: 0 20px;
     }
 
-    .main_section .board_section {
+    .main_section .tab_container {
         width: 100%;
     }
 
@@ -712,9 +752,31 @@ li .badge_ready {
     .showUserList {
         display: block;
     }
+
+    #goToOtherPredict {
+        width: 100%;
+        position: relative;
+    }
+
+    .predictedUsers {
+        width: 100%;
+        height: initial;
+    }
+
+    .predictedUsersList {
+        height: 300px;
+    }
+
+    .userPredictData {
+        width: 100%;
+    }
+
+    .predictedUserRecordData {
+        text-align: center;
+    }
 }
 
-@media all and (min-device-width: 371px) and (max-device-width: 440px) {
+@media all and (min-device-width: 381px) and (max-device-width: 440px) {
     .page_title {
         padding-top: 25px;
     }
@@ -723,7 +785,7 @@ li .badge_ready {
         margin: 0 20px;
     }
 
-    .main_section .board_section {
+    .main_section .tab_container {
         width: 100%;
     }
 
@@ -796,9 +858,31 @@ li .badge_ready {
         /*width: 40px !important;*/
         height: 40px !important;
     }
+
+    #goToOtherPredict {
+        width: 100%;
+        position: relative;
+    }
+
+    .predictedUsers {
+        width: 100%;
+        height: initial;
+    }
+
+    .predictedUsersList {
+        height: 300px;
+    }
+
+    .userPredictData {
+        width: 100%;
+    }
+
+    .predictedUserRecordData {
+        text-align: center;
+    }
 }
 
-@media all and (max-device-width: 370px) {
+@media all and (max-device-width: 380px) {
     .page_title {
         padding-top: 25px;
     }
@@ -807,7 +891,7 @@ li .badge_ready {
         margin: 0 20px;
     }
 
-    .main_section .board_section {
+    .main_section .tab_container {
         width: 100%;
     }
 
@@ -879,5 +963,47 @@ li .badge_ready {
     .teamTitleSection img {
         /*width: 40px !important;*/
         height: 40px !important;
+    }
+
+    #goToOtherPredict {
+        width: 100%;
+        position: relative;
+    }
+
+    .predictedUsers {
+        width: 100%;
+        height: initial;
+    }
+
+    .predictedUsersList {
+        height: 300px;
+    }
+
+    .userPredictData {
+        width: 100%;
+    }
+
+    .predictedUserRecordData {
+        text-align: center;
+    }
+
+    .predictedUserInfo {
+        font-size: 13px !important;
+    }
+
+    .predictedUserInfoLabel {
+        width: 110px;
+    }
+
+    .predictedUserInfoContent {
+        width: 125px;
+    }
+
+    #predictedUserPredictBox {
+        width: 220px;
+    }
+
+    .tab_container > .nav-tabs {
+        font-size: 11px !important;
     }
 }
