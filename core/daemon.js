@@ -21,7 +21,10 @@ var getAllMatches = function(callback) {
         winston.info('  football getAllMatches start...');
         var leaguesObject = {};
         var options = {
-          'host': 'api.football-data.org'
+          'host': 'api.football-data.org',
+          'headers': {
+              'X-Auth-Token': __footballDataApiToken
+          }
         };
 
         async.each(leagueIdArray, function(league, async_cb) {
@@ -150,7 +153,7 @@ var getAllMatches = function(callback) {
                 'matches': matchList
             }, function(result) {
                 winston.info('  baseball getAllMatches finish...');
-                baseballCallback();
+                baseballCallback(null);
             });
         });
     };
@@ -173,16 +176,20 @@ var getAllMatches = function(callback) {
     });
 };
 
-var liveChekcer = function(callback) {
+var liveChecker = function(callback) {
     if ((__matchList.count > 0) && !getAllMatchesUpdating) {
         getAllMatchesUpdating = true;
-        winston.info('liveChekcer start...');
+        winston.info('liveChecker start...');
         var football = function(footballCallback) {
-            winston.info('  football liveChekcer start...');
+            winston.info('  football liveChecker start...');
+
             var data = '';
             var options = {
               'host': 'api.football-data.org',
-              'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL'
+              'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
+              'headers': {
+                  'X-Auth-Token': __footballDataApiToken
+              }
             };
 
             var requestCallback = function(response) {
@@ -194,53 +201,25 @@ var liveChekcer = function(callback) {
                     var parsedData = '';
                     try {
                         parsedData = JSON.parse(data);
-                    } finally {
-                        if (parsedData) {
-                            schedule.updateMatches({
-                                'matches': parsedData.fixtures
-                            }, function(result) {
-                                var _data = '';
-                                var _options = {
-                                  'host': 'api.football-data.org',
-                                  'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL'
-                                };
+                    } catch (e) {
 
-                                var _requestCallback = function(_response) {
-                                    _response.on('_data', function (_chunk) {
-                                        _data += _chunk;
-                                    });
+                    }
 
-                                    _response.on('end', function () {
-                                        var _parsedData = '';
-                                        try {
-                                            _parsedData = JSON.parse(_data);
-                                        } finally {
-                                            if (_parsedData) {
-                                                schedule.updateMatches({
-                                                    'matches': _data.fixtures
-                                                }, function(result) {
-                                                    winston.info('  football liveChekcer finish...');
-                                                    footballCallback();
-                                                });
-                                            } else {
-                                                winston.info('  football liveChekcer finish...');
-                                                footballCallback();
-                                            }
-                                        }
-                                    });
-                                }
-
-                                http.request(_options, _requestCallback).end();
-                            });
-                        } else {
+                    if (parsedData) {
+                        schedule.updateMatches({
+                            'matches': parsedData.fixtures
+                        }, function(result) {
                             var _data = '';
                             var _options = {
                               'host': 'api.football-data.org',
-                              'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL'
+                              'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
+                              'headers': {
+                                  'X-Auth-Token': __footballDataApiToken
+                              }
                             };
 
                             var _requestCallback = function(_response) {
-                                _response.on('_data', function (_chunk) {
+                                _response.on('data', function (_chunk) {
                                     _data += _chunk;
                                 });
 
@@ -248,24 +227,64 @@ var liveChekcer = function(callback) {
                                     var _parsedData = '';
                                     try {
                                         _parsedData = JSON.parse(_data);
-                                    } finally {
-                                        if (_parsedData) {
-                                            schedule.updateMatches({
-                                                'matches': _data.fixtures
-                                            }, function(result) {
-                                                winston.info('  football liveChekcer finish...');
-                                                footballCallback();
-                                            });
-                                        } else {
-                                            winston.info('  football liveChekcer finish...');
-                                            footballCallback();
-                                        }
+                                    } catch (e) {
+
+                                    }
+
+                                    if (_parsedData) {
+                                        schedule.updateMatches({
+                                            'matches': _parsedData.fixtures
+                                        }, function(result) {
+                                            winston.info('  football liveChecker finish...');
+                                            footballCallback(null);
+                                        });
+                                    } else {
+                                        winston.info('  football liveChecker finish...');
+                                        footballCallback(null);
                                     }
                                 });
                             }
 
                             http.request(_options, _requestCallback).end();
+                        });
+                    } else {
+                        var _data = '';
+                        var _options = {
+                          'host': 'api.football-data.org',
+                          'path': '/v1/fixtures?timeFrame=n1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
+                          'headers': {
+                              'X-Auth-Token': __footballDataApiToken
+                          }
+                        };
+
+                        var _requestCallback = function(_response) {
+                            _response.on('data', function (_chunk) {
+                                _data += _chunk;
+                            });
+
+                            _response.on('end', function () {
+                                var _parsedData = '';
+                                try {
+                                    _parsedData = JSON.parse(_data);
+                                } catch (e) {
+
+                                }
+
+                                if (_parsedData) {
+                                    schedule.updateMatches({
+                                        'matches': _parsedData.fixtures
+                                    }, function(result) {
+                                        winston.info('  football liveChecker finish...');
+                                        footballCallback(null);
+                                    });
+                                } else {
+                                    winston.info('  football liveChecker finish...');
+                                    footballCallback(null);
+                                }
+                            });
                         }
+
+                        http.request(_options, _requestCallback).end();
                     }
                 });
             };
@@ -274,7 +293,7 @@ var liveChekcer = function(callback) {
         };
 
         var baseball = function(baseballCallback) {
-            winston.info('  baseball liveChekcer start...');
+            winston.info('  baseball liveChecker start...');
             var task = spawn('casperjs', ['scripts/casper_kbo_live.js', '--proxy-type=none']);
             var received_data = ''
 
@@ -348,8 +367,8 @@ var liveChekcer = function(callback) {
                 schedule.updateMatches({
                     'matches': matchList
                 }, function(result) {
-                    winston.info('  baseball liveChekcer finish...');
-                    baseballCallback();
+                    winston.info('  baseball liveChecker finish...');
+                    baseballCallback(null);
                 });
             });
         };
@@ -366,6 +385,7 @@ var liveChekcer = function(callback) {
 
         async.waterfall(waterfallFunctionList, function() {
             getAllMatchesUpdating = false;
+            winston.info('liveChecker finish...');
             callback();
         });
     } else {
@@ -434,8 +454,8 @@ exports.start = function() {
                 getAllMatchesUpdating = true;
                 doFunction = getAllMatches;
             } else {
-                doFunction = liveChekcer;
-                // console.log('liveChekcer');
+                doFunction = liveChecker;
+                // console.log('liveChecker');
             }
         } else {
             // doFunction = tester;
