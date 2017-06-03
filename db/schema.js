@@ -58,6 +58,7 @@ var userSchema = new Schema({
 // 에레디비지에 433   리그앙 434   라리가 436   세리에 438
 // 포르투갈 439   챔스 440
 // PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL
+// kbo kbo2017
 
 var leagueSchema = new Schema({
     'id' : String,

@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 var http = require('http');
 var async = require('async');
 var fs = require('fs');
+var moment = require('moment');
 
 var set_configs = function() {
     var configs_read = fs.readFileSync('./configs.json', 'utf8');
@@ -33,6 +34,18 @@ global.__matchList = {
     'IN_PLAY': [],
     'FINISHED': []
 };
+
+global.winston = require('winston');
+
+function myTimeStamp () {
+    return moment().format('YYYY-MM-DD hh:mm:ss');
+};
+
+winston.add(winston.transports.File, {
+    filename: 'winston.log',
+    timestamp: myTimeStamp,
+    json: false
+});
 
 // redis
 var session = require('express-session');
