@@ -153,7 +153,7 @@ var getAllMatches = function(callback) {
                 'matches': matchList
             }, function(result) {
                 winston.info('  baseball getAllMatches finish...');
-                baseballCallback();
+                baseballCallback(null);
             });
         });
     };
@@ -240,12 +240,12 @@ var liveChekcer = function(callback) {
                                             'matches': _parsedData.fixtures
                                         }, function(result) {
                                             winston.info('  football liveCheker finish...');
-                                            footballCallback();
+                                            footballCallback(null);
                                         });
                                     } else {
                                         console.log('_parsedData no');
                                         winston.info('  football liveCheker finish...');
-                                        footballCallback();
+                                        footballCallback(null);
                                     }
                                 });
                             }
@@ -284,12 +284,12 @@ var liveChekcer = function(callback) {
                                         'matches': _parsedData.fixtures
                                     }, function(result) {
                                         winston.info('  football liveCheker finish...');
-                                        footballCallback();
+                                        footballCallback(null);
                                     });
                                 } else {
                                     console.log('_parsedData no');
                                     winston.info('  football liveCheker finish...');
-                                    footballCallback();
+                                    footballCallback(null);
                                 }
                             });
                         }
@@ -378,7 +378,7 @@ var liveChekcer = function(callback) {
                     'matches': matchList
                 }, function(result) {
                     winston.info('  baseball liveChekcer finish...');
-                    baseballCallback();
+                    baseballCallback(null);
                 });
             });
         };
