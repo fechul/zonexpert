@@ -192,44 +192,6 @@ var liveChekcer = function(callback) {
             };
 
             winston.info('  football liveChekcer start...');
-            var data = '';
-            var options = {
-              'host': 'api.football-data.org',
-              'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
-              'headers': {
-                  'X-Auth-Token': __footballDataApiToken
-              }
-            };
-
-            var requestCallback = function(response) {
-                response.on('data', function (chunk) {
-                    data += chunk;
-                });
-
-                response.on('end', function () {
-                    var parsedData = '';
-                    try {
-                        parsedData = JSON.parse(data);
-                    } catch (e) {
-
-                    } finally {
-                        console.log(parsedData);
-                        if (parsedData) {
-                            console.log('parsedData yes');
-                            schedule.updateMatches({
-                                'matches': parsedData.fixtures
-                            }, function(result) {
-                                checkBothComplete();
-                            });
-                        } else {
-                            console.log('parsedData no');
-                            checkBothComplete();
-                        }
-                    }
-                });
-            };
-
-            http.request(options, requestCallback).end();
 
             var _data = '';
             var _options = {
@@ -251,24 +213,63 @@ var liveChekcer = function(callback) {
                         _parsedData = JSON.parse(_data);
                     } catch (e) {
 
-                    } finally {
-                        console.log(_parsedData);
-                        if (_parsedData) {
-                            console.log('_parsedData yes');
-                            schedule.updateMatches({
-                                'matches': _parsedData.fixtures
-                            }, function(result) {
-                                checkBothComplete();
-                            });
-                        } else {
-                            console.log('_parsedData no');
+                    }
+
+                    console.log(_parsedData);
+                    if (_parsedData) {
+                        console.log('_parsedData yes');
+                        schedule.updateMatches({
+                            'matches': _parsedData.fixtures
+                        }, function(result) {
                             checkBothComplete();
-                        }
+                        });
+                    } else {
+                        console.log('_parsedData no');
+                        checkBothComplete();
                     }
                 });
             }
 
             http.request(_options, _requestCallback).end();
+
+            var data = '';
+            var options = {
+              'host': 'api.football-data.org',
+              'path': '/v1/fixtures?timeFrame=p1&league=PL,FAC,BL1,DFB,DED,FL1,PD,SA,PPL,CL',
+              'headers': {
+                  'X-Auth-Token': __footballDataApiToken
+              }
+            };
+
+            var requestCallback = function(response) {
+                response.on('data', function (chunk) {
+                    data += chunk;
+                });
+
+                response.on('end', function () {
+                    var parsedData = '';
+                    try {
+                        parsedData = JSON.parse(data);
+                    } catch (e) {
+
+                    }
+                    
+                    console.log(parsedData);
+                    if (parsedData) {
+                        console.log('parsedData yes');
+                        schedule.updateMatches({
+                            'matches': parsedData.fixtures
+                        }, function(result) {
+                            checkBothComplete();
+                        });
+                    } else {
+                        console.log('parsedData no');
+                        checkBothComplete();
+                    }
+                });
+            };
+
+            http.request(options, requestCallback).end();
         };
 
         var baseball = function(baseballCallback) {
