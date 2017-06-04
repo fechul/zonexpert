@@ -13,25 +13,28 @@
 	width: 800px;
 }
 
-.scheduledata_league_select_btn {
-	margin-top: 10px 0px 25px 25px;
+.scheduledata_league_select_btn_container {
+	margin-top: 5px;
+	text-align: center;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 15px;
 }
 
-.scheduledata_league_select_btn > .league_btn {
+.scheduledata_league_select_btn_container > .league_select_btn {
 	height: 25px;
 	cursor: pointer;
 	width: 144px;
 	margin: 10px 2px 0px 2px;
 }
 
-.scheduledata_league_select_btn > .league_btn.active {
+.scheduledata_league_select_btn_container > .league_select_btn.active {
 	background-color: #145c86;
 	border: none;
 	color: #fff;
 }
 
 .scheduledata_league_btn_container {
-	margin-top: 10px 0px 25px 25px;
+	margin-top: 5px;
 }
 
 .scheduledata_league_btn_container > .league_btn {
@@ -67,7 +70,8 @@
 }
 
 #schedule_table .schedule_table_row.finished td:nth-child(7) {
-	background-color: #e7e7e7;
+	background-color: #ccc;
+	color: #888;
 	cursor: not-allowed;
 }
 

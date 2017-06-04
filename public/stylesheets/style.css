@@ -223,8 +223,8 @@
 	}
 
 	.mydata_statistics .mydata_badge  > img{
-		width: 80px;
-		height: 110px;
+		width: 110px;
+		/*height: 110px;*/
 	}
 
 	.mydata_statistics .mydata_rate {

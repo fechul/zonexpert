@@ -49,10 +49,19 @@ var SCHEDULE = {
 
 		$('.scheduledata_league_btn_container button').click(function() {
 			var $this_button = $(this);
+			$('.scheduledata_league_btn_container button').removeClass('active');
+			$this_button.addClass('active');
 			self.get_schedule($this_button.attr('key'), function() {
-				$('.scheduledata_league_btn_container button').removeClass('active');
-				$this_button.addClass('active');
 			});
+		});
+
+		$('.scheduledata_league_select_btn_container button').click(function() {
+			$('.scheduledata_league_select_btn_container button').removeClass('active');
+			$(this).addClass('active');
+
+			$('.scheduledata_league_btn_container:not([sports=' + $(this).attr('key') + '])').hide();
+			$('.scheduledata_league_btn_container[sports=' + $(this).attr('key') + ']').show();
+			$('.scheduledata_league_btn_container[sports=' + $(this).attr('key') + ']').find('button').eq(0).click();
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
