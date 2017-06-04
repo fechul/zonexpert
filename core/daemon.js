@@ -310,6 +310,7 @@ var liveChecker = function(callback) {
                 delete $;
                 $ = cheerio.load(received_data)
                 var smsScore = $('.smsScore');
+                var currentYear = currentDate.getFullYear();
                 var currentDay = $('.today span').eq(0).text();
 
                 var matchList = [];
@@ -330,7 +331,7 @@ var liveChecker = function(callback) {
                 for (var i = 0; i < smsScore.length; i++) {
                     var $this = smsScore.eq(i);
                     var time = $this.find('.place span').eq(0).text();
-                    var MatchDate = new Date(currentDay + ' ' + time);
+                    var MatchDate = new Date(currentYear + ' ' + currentDay + ' ' + time) - 1000 * 60 * 60 * 9;
                     var status = '';
 
                     var awayTeamName = $this.find('.score_wrap .leftTeam .teamT').eq(0).text();
