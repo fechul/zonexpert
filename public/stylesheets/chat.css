@@ -502,6 +502,13 @@ li .badge_ready {
     border: 1px solid #ccc;
 }
 
+#chatMatchStatus.playing {
+    color: #49de41;
+}
+
+#chatMatchStatus.finished {
+    color: #e61e1e;
+}
 
 /*
     Media Query
@@ -532,25 +539,6 @@ li .badge_ready {
     .right-tabs {
         width: 30% !important;
         display: block !important;
-    }
-
-    .teamTitleSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamScoreSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamNameTitle {
-        float: none !important;
-        width: 100% !important;
-    }
-
-    .teamNameTitle.homeTeamSection {
-        margin-bottom: 20px !important;
     }
 
     .main_section {
@@ -591,6 +579,44 @@ li .badge_ready {
     .predictedUserRecordData {
         text-align: center;
     }
+
+    .page_title .teamNameTitle {
+        width: 50% !important;
+    }
+
+    #goalsHomeTeam {
+        position: relative;
+        left: -90px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #goalsAwayTeam {
+        position: relative;
+        left: 90px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #chatMatchStatus {
+        display: inline-block;
+    }
+
+    .teamTitleSection img {
+        height: 25px !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 24px !important;
+    }
+
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 24px !important;
+    }
 }
 
 @media all and (min-device-width: 541px) and (max-device-width: 620px) {
@@ -618,25 +644,6 @@ li .badge_ready {
     .right-tabs {
         width: 30% !important;
         display: block !important;
-    }
-
-    .teamTitleSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamScoreSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamNameTitle {
-        float: none !important;
-        width: 100% !important;
-    }
-
-    .teamNameTitle.homeTeamSection {
-        margin-bottom: 20px !important;
     }
 
     .main_section {
@@ -681,6 +688,44 @@ li .badge_ready {
     .predictedUserRecordData {
         text-align: center;
     }
+
+    .page_title .teamNameTitle {
+        width: 50% !important;
+    }
+
+    #goalsHomeTeam {
+        position: relative;
+        left: -65px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #goalsAwayTeam {
+        position: relative;
+        left: 65px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #chatMatchStatus {
+        display: inline-block;
+    }
+
+    .teamTitleSection img {
+        height: 25px !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
+
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
 }
 
 @media all and (min-device-width: 441px) and (max-device-width: 540px) {
@@ -707,25 +752,6 @@ li .badge_ready {
     .right-tabs {
         width: 100% !important;
         display: none;
-    }
-
-    .teamTitleSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamScoreSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamNameTitle {
-        float: none !important;
-        width: 100% !important;
-    }
-
-    .teamNameTitle.homeTeamSection {
-        margin-bottom: 20px !important;
     }
 
     .main_section {
@@ -774,6 +800,44 @@ li .badge_ready {
     .predictedUserRecordData {
         text-align: center;
     }
+
+    .page_title .teamNameTitle {
+        width: 50% !important;
+    }
+
+    #goalsHomeTeam {
+        position: relative;
+        left: -45px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #goalsAwayTeam {
+        position: relative;
+        left: 45px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #chatMatchStatus {
+        display: inline-block;
+    }
+
+    .teamTitleSection img {
+        height: 25px !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 16px !important;
+    }
+
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
+    }
 }
 
 @media all and (min-device-width: 381px) and (max-device-width: 440px) {
@@ -802,25 +866,6 @@ li .badge_ready {
         display: none;
     }
 
-    .teamTitleSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamScoreSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamNameTitle {
-        float: none !important;
-        width: 100% !important;
-    }
-
-    .teamNameTitle.homeTeamSection {
-        margin-bottom: 20px !important;
-    }
-
     .main_section {
         margin: 0 20px;
     }
@@ -846,19 +891,6 @@ li .badge_ready {
         display: block;
     }
 
-    .teamTitleSection {
-        font-size: 16px !important;
-    }
-
-    .teamScoreSection {
-        font-size: 16px !important;
-    }
-
-    .teamTitleSection img {
-        /*width: 40px !important;*/
-        height: 40px !important;
-    }
-
     #goToOtherPredict {
         width: 100%;
         position: relative;
@@ -879,6 +911,44 @@ li .badge_ready {
 
     .predictedUserRecordData {
         text-align: center;
+    }
+
+    .page_title .teamNameTitle {
+        width: 50% !important;
+    }
+
+    #goalsHomeTeam {
+        position: relative;
+        left: -35px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #goalsAwayTeam {
+        position: relative;
+        left: 35px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #chatMatchStatus {
+        display: inline-block;
+    }
+
+    .teamTitleSection img {
+        height: 25px !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 16px !important;
+    }
+
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
     }
 }
 
@@ -908,25 +978,6 @@ li .badge_ready {
         display: none;
     }
 
-    .teamTitleSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamScoreSection {
-        width: 100% !important;
-        font-size: 20px !important;
-    }
-
-    .teamNameTitle {
-        float: none !important;
-        width: 100% !important;
-    }
-
-    .teamNameTitle.homeTeamSection {
-        margin-bottom: 20px !important;
-    }
-
     .main_section {
         margin: 0 20px;
     }
@@ -950,19 +1001,6 @@ li .badge_ready {
 
     .showUserList {
         display: block;
-    }
-
-    .teamTitleSection {
-        font-size: 16px !important;
-    }
-
-    .teamScoreSection {
-        font-size: 16px !important;
-    }
-
-    .teamTitleSection img {
-        /*width: 40px !important;*/
-        height: 40px !important;
     }
 
     #goToOtherPredict {
@@ -1005,5 +1043,43 @@ li .badge_ready {
 
     .tab_container > .nav-tabs {
         font-size: 11px !important;
+    }
+
+    .page_title .teamNameTitle {
+        width: 50% !important;
+    }
+
+    #goalsHomeTeam {
+        position: relative;
+        left: -25px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #goalsAwayTeam {
+        position: relative;
+        left: 25px;
+        display: inline-block;
+        width: initial;
+        float: none !important;
+    }
+
+    #chatMatchStatus {
+        display: inline-block;
+    }
+
+    .teamTitleSection img {
+        height: 25px !important;
+    }
+
+    .teamTitleSection {
+        width: 100% !important;
+        font-size: 13px !important;
+    }
+
+    .teamScoreSection {
+        width: 100% !important;
+        font-size: 20px !important;
     }
 }

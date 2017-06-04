@@ -389,7 +389,7 @@ exports.getMatchesRecord = function(data, callback) {
                                                         'afterRating': predict.afterRating,
                                                         'beforeRating': predict.beforeRating,
                                                         'myPredict': predict.result,
-                                                        'date': predict.ratingCalculatedTime || predict.confirmedTime,  // date has to be updated
+                                                        'date': predict.ratingCalculatedTime || predict.confirmedTime,
                                                         'ratingCalculatedTime': predict.ratingCalculatedTime
                                                     });
 
@@ -503,9 +503,11 @@ exports.deleteExpiredBasket = function(params, callback) {
 exports.getUserList = function(options, callback) {
     var matchId = options.matchId;
     var email = options.email;
+    var sportsId = options.sportsId;
 
     db.prediction.find({
         'matchId': matchId,
+        'sportsId': sportsId,
         'confirmed': true
     }, {
         'userEmail': 1
@@ -544,9 +546,11 @@ exports.getUserList = function(options, callback) {
 exports.getViewList = function(options, callback) {
     var matchId = options.matchId;
     var userEmail = options.userEmail;
+    var sportsId = options.sportsId;
 
     db.prediction.find({
         'matchId': matchId,
+        'sportsId': sportsId,
         'userEmail': userEmail
     }, {
         'viewList': 1

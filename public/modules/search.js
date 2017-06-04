@@ -130,8 +130,12 @@ var SEARCH = {
 
 				list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
 
-				var date = new Date(recentMatches[i].date);
-				list_html += '<div class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</div>';
+				var date = new Date(recentMatches[i].ratingCalculatedTime);
+				var year = date.getFullYear()%100;
+				var month = (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1));
+				var day = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+
+				list_html += '<div class="recent_predict_data_row_date">' + year + '/' + month + '/' + day + '</div>';
 				list_html += '<div class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</div>';
 				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
 				list_html += '<div class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</div>';
@@ -159,24 +163,28 @@ var SEARCH = {
 		var ratelist = [];
 
 		if(recentMatches && recentMatches.length) {
+			var beforeRating;
 			for(var d = labels.length-1; d >= 0 ; d--) {
 				datelist[d] = (labels[d].month + '/' + labels[d].day);
 				var found = false;
 				var max = -9999;
+				
 				for(var r = 0; r < recentMatches.length; r++) {
-					var matchDate = new Date(recentMatches[r].date);
+					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
 					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
 						if(recentMatches[r].afterRating > max) {
 							max = recentMatches[r].afterRating;
 							ratelist[d] = max;
+							beforeRating = recentMatches[r].beforeRating;
 							found = true;
 						}
 					}
 				}
+
 				if(!found && d == labels.length-1) {
-					ratelist[d] = self.search_rating;
+					ratelist[d] = self.search_rating;;
 				} else if(!found) {
-					ratelist[d] = ratelist[d+1];
+					ratelist[d] = beforeRating || self.search_rating;
 				}
 			}
 		} else {

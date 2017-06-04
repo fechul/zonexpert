@@ -23,7 +23,7 @@
                 </div>
                 <div class="teamScoreSection">
                     <div id="goalsHomeTeam"><%= goalsHomeTeam %></div>
-                    <div id="chatMatchStatus"><%= chatMatchStatus %></div>
+                    <div id="chatMatchStatus" class="<%= chatMatchStatusClass %>"><%= chatMatchStatus %></div>
                     <div id="goalsAwayTeam"><%= goalsAwayTeam %></div>
                 </div>
             </div>
@@ -173,10 +173,11 @@
         var notice = NOTICE;
         CHAT.init({
             nickname: '<%= my_nickname %>',
-            roomId: parseInt('<%= matchId %>', 10),
+            // roomId: parseInt('<%= matchId %>', 10),
+            roomId: '<%= matchId %>',
             myBadge: '<%= myBadge %>',
             attendancePointUpdated: <%- attendancePointUpdated %>,
-            sportId: '<%= sportId %>',
+            sportsId: '<%= sportsId %>',
             leagueId: '<%= leagueId %>',
             email: '<%= myEmail %>'
         });

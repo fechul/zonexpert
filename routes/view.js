@@ -423,6 +423,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 		goalsHomeTeam: '',
 		goalsAwayTeam: '',
 		chatMatchStatus: '',
+		chatMatchStatusClass: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		myEmail: ''
@@ -441,8 +442,8 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		// matchData.roomOpen = true;	//test
-		if (matchData) {
+		matchData.roomOpen = true;	//test
+		if (matchData && matchData.roomOpen) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
 				json.goalsAwayTeam = matchData.result.goalsAwayTeam == null ? '-' : matchData.result.goalsAwayTeam;
@@ -450,10 +451,13 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 
 			if (matchData.status == 'IN_PLAY') {
 				json.chatMatchStatus = ':';
+				json.chatMatchStatusClass = 'playing';
 			} else if (matchData.status == 'FINISHED') {
 				json.chatMatchStatus = '종료';
+				json.chatMatchStatusClass = 'finished';
 			} else {
 				json.chatMatchStatus = '예정';
+				json.chatMatchStatusClass = 'not_started';
 			}
 
 			if(req.session.login) {
@@ -465,7 +469,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 				json.mydata_display = 'display:none;';
 			}
 
-			json.sportId = matchData.sportId || 1;
+			json.sportsId = matchData.sportsId;
 			json.leagueId = matchData.leagueId;
 
 			user.get(req.session.email, function(userData) {
@@ -553,7 +557,6 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 	json.prediction_shortcut = req.predictionShortcut;
 
 	user.countAllUsers(function(userCount) {
-		console.log(userCount)
 		user.get(id, function(userdata) {
 			if(!userdata) {
 				json.search_show = 'display:none;';

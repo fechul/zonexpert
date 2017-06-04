@@ -245,7 +245,7 @@ canvas{position:relative; z-index:9999;}
 
 
 /* mobile */
-@media all and (min-device-width: 521px) and (max-device-width: 768px) {
+@media all and (min-device-width: 701px) and (max-device-width: 768px) {
 	.page_title {
 		padding-top: 25px;
 	}
@@ -288,6 +288,109 @@ canvas{position:relative; z-index:9999;}
 	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
 		margin-left: 10px;
 	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 13px;
+		padding: 5px;
+		max-height: 120px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+		float: none;
+		margin-top: 0px;
+		width: 100%;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row > img {
+		height: 20px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		float: none;
+		margin-right: 5px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+		float: none;
+	}
+
+	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
+		width: 37%;
+	}
+}
+
+@media all and (min-device-width: 521px) and (max-device-width: 700px) {
+	.page_title {
+		padding-top: 25px;
+	}
+
+	.main_section .searchdata_section {
+		width: 90%;
+		margin: 20px 0px 0px 0px;
+	}
+
+	.main_section .my_record_data_section,
+	.main_section .my_statistics_data_section,
+	.main_section .my_recent_predict_section {
+		width: 90%;
+	}
+
+	.main_section .no_searchdata_section {
+		width: 90%;
+	}
+
+	.container_box {
+		margin: 30px 0px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 12px;
+		padding: 10px;
+	}
+
+	.recent_predict_data_row_date {
+		width: 100%;
+		text-align: left;
+		margin-top: 0px;
+	}
+
+	.recent_predict_data_row_homename,
+	.recent_predict_data_row_awayname {
+		width: 135px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		margin-left: 10px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 12px;
+		padding: 5px;
+		max-height: 120px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+		float: none;
+		margin-top: 0px;
+		width: 100%;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row > img {
+		height: 20px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		float: none;
+		margin-right: 5px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+		float: none;
+	}
+
+	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
+		width: 35%;
+	}
 }
 
 @media all and (min-device-width: 421px) and (max-device-width: 520px) {
@@ -313,6 +416,35 @@ canvas{position:relative; z-index:9999;}
 
 	.container_box {
 		margin: 30px 0px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 11px;
+		padding: 5px;
+		max-height: 120px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+		float: none;
+		margin-top: 0px;
+		width: 100%;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row > img {
+		height: 20px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		float: none;
+		margin-right: 5px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+		float: none;
+	}
+
+	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
+		width: 30%;
 	}
 }
 
@@ -344,6 +476,35 @@ canvas{position:relative; z-index:9999;}
 
 	.container_box {
 		margin: 30px 0px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 11px;
+		padding: 5px;
+		max-height: 120px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+		float: none;
+		margin-top: 0px;
+		width: 100%;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row > img {
+		height: 20px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		float: none;
+		margin-right: 5px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+		float: none;
+	}
+
+	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
+		width: 25%;
 	}
 }
 @media all and (max-device-width: 360px){
@@ -385,4 +546,34 @@ canvas{position:relative; z-index:9999;}
 	#statistics_table{
 		font-size: 11px;
 	}
+
+	.my_recent_predict_section .recent_predict_data_row {
+		font-size: 11px;
+		padding: 5px;
+		max-height: 120px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_date {
+		float: none;
+		margin-top: 0px;
+		width: 100%;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row > img {
+		height: 20px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_rating {
+		float: none;
+		margin-right: 5px;
+	}
+
+	.my_recent_predict_section .recent_predict_data_row div.recent_predict_data_row_result_msg {
+		float: none;
+	}
+
+	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
+		width: 25%;
+	}
 }
+
