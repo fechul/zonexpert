@@ -5,6 +5,7 @@ var prediction = require('./prediction.js');
 var chat = require('./chat.js');
 
 exports.updateMatches = function(data, callback) {
+    var sportsId = data.sportsId;
     async.eachSeries(data.matches, function(match, async_cb) {
         var matchId = match._links ? match._links.self.href.split('/').pop() : match.id;
 
@@ -27,6 +28,7 @@ exports.updateMatches = function(data, callback) {
                         'id': matchData.id
                     }, {
                         '$set': {
+                            'sportsId': sportsId,
                             'date': new Date(match.date),
                             'status': match.status,
                             'result': match.result
@@ -65,8 +67,9 @@ exports.updateMatches = function(data, callback) {
                     });
                 } else {
                     var newMatchJson = {
-                        'leagueId' : match._links ? match._links.competition.href.split('/').pop() : match.leagueId,
                         'id' : matchId,
+                        'leagueId' : match._links ? match._links.competition.href.split('/').pop() : match.leagueId,
+                        'sportsId': sportsId,
                         'date' : new Date(match.date),
                         'matchday' : match.matchday,
                         'homeTeamName' : match.homeTeamName,
@@ -89,6 +92,7 @@ exports.updateMatches = function(data, callback) {
             });
         } else {
             db.match.find({
+                'sportsId': sportsId,
                 'homeTeamId': match.homeTeamId,
                 'awayTeamId': match.awayTeamId,
                 'date': new Date(match.date)
@@ -108,6 +112,7 @@ exports.updateMatches = function(data, callback) {
                         'id': matchData.id
                     }, {
                         '$set': {
+                            'sportsId': sportsId,
                             'date': new Date(match.date),
                             'status': match.status,
                             'result': match.result
@@ -145,8 +150,9 @@ exports.updateMatches = function(data, callback) {
                     });
                 } else {
                     var newMatchJson = {
-                        'leagueId' : match._links ? match._links.competition.href.split('/').pop() : match.leagueId,
                         'id' : matchId,
+                        'leagueId' : match._links ? match._links.competition.href.split('/').pop() : match.leagueId,
+                        'sportsId': sportsId,
                         'date' : new Date(match.date),
                         'matchday' : match.matchday,
                         'homeTeamName' : match.homeTeamName,

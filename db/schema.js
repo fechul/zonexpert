@@ -68,6 +68,7 @@ var leagueSchema = new Schema({
 var teamSchema = new Schema({
     'id' : String,
     'leagueId': String,
+    'sportsId': String,
     'name': String,
     'code': String,
     'shortName': String,
@@ -78,6 +79,7 @@ var teamSchema = new Schema({
 var matchSchema = new Schema({
     'id' : String,
     'leagueId' : String,
+    'sportsId': String,
     'date' : Date,
     'matchday' : String,
     'homeTeamName' : String,
@@ -114,6 +116,7 @@ var predictionSchema = new Schema({
     'createTime': Date,
     'matchId': String,
     'leagueId': String,
+    'sportsId': String,
     'teamList': Array,
     'confirmed': {type: Boolean, default: false},
     'confirmedTime': Date,

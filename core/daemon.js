@@ -40,6 +40,7 @@ var getAllMatches = function(callback) {
                     leaguesObject[league] = JSON.parse(leaguesObject[league]);
 
                     schedule.updateMatches({
+                        'sportId': '1',
                         'matches': leaguesObject[league].fixtures
                     }, function(result) {
                         async_cb();
@@ -150,6 +151,7 @@ var getAllMatches = function(callback) {
             }
 
             schedule.updateMatches({
+                'sportId': '2',
                 'matches': matchList
             }, function(result) {
                 winston.info('  baseball getAllMatches finish...');
@@ -207,6 +209,7 @@ var liveChecker = function(callback) {
 
                     if (parsedData) {
                         schedule.updateMatches({
+                            'sportId': '1',
                             'matches': parsedData.fixtures
                         }, function(result) {
                             var _data = '';
@@ -233,6 +236,7 @@ var liveChecker = function(callback) {
 
                                     if (_parsedData) {
                                         schedule.updateMatches({
+                                            'sportId': '1',
                                             'matches': _parsedData.fixtures
                                         }, function(result) {
                                             winston.info('  football liveChecker finish...');
@@ -272,6 +276,7 @@ var liveChecker = function(callback) {
 
                                 if (_parsedData) {
                                     schedule.updateMatches({
+                                        'sportId': '1',
                                         'matches': _parsedData.fixtures
                                     }, function(result) {
                                         winston.info('  football liveChecker finish...');
@@ -365,6 +370,7 @@ var liveChecker = function(callback) {
                 }
 
                 schedule.updateMatches({
+                    'sportId': '2',
                     'matches': matchList
                 }, function(result) {
                     winston.info('  baseball liveChecker finish...');

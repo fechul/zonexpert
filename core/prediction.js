@@ -19,6 +19,7 @@ exports.add = function(data, callback) {
                         'createTime': new Date(),
                         'matchId': matchData.id,
                         'leagueId': matchData.leagueId,
+                        'sportsId': matchData.sportsId,
                         'teamList': [matchData.homeTeamId, matchData.awayTeamId],
                         'confirmed': false
                     });
@@ -57,6 +58,14 @@ exports.confirm = function(data, callback) {
         .exec(function(err, matchData) {
             if (matchData.length == 1) {
                 matchData = matchData[0];
+                var pickCount = matchData.pickCount;
+                if (!pickCount) {
+                    pickCount = {
+                        'home': 0,
+                        'draw': 0,
+                        'away': 0
+                    };
+                }
 
                 db.prediction.find({
                     'userEmail': userEmail,
@@ -90,7 +99,16 @@ exports.confirm = function(data, callback) {
                                     'result': 'wait'
                                 }
                             }).exec(function(err) {
-                                async_callback();
+                                pickCount[prediction.pick]++;
+                                db.match.update({
+                                    'id': prediction.matchId
+                                }, {
+                                    '$set': {
+                                        'pickCount': pickCount
+                                    }
+                                }).exec(function() {
+                                    async_callback();
+                                });
                             });
                         }
                     } else {

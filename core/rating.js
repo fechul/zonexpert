@@ -21,6 +21,7 @@ var rating = {
         var self = this;
         var matchId = this._queue[0].matchId;
         var callback = this._queue[0].callback;
+        var sportsId = '';
 
         var matchResult = '';
         var ratingSum = 0;
@@ -43,6 +44,7 @@ var rating = {
         .limit(1)
         .exec(function(err, matchData) {
             matchData = matchData[0];
+            sportsId = matchData.sportsId;
             if (matchData.result.goalsHomeTeam > matchData.result.goalsAwayTeam) {
                 matchResult = 'home'
             } else if (matchData.result.goalsHomeTeam < matchData.result.goalsAwayTeam) {
@@ -50,7 +52,6 @@ var rating = {
             } else {
                 matchResult = 'draw';
             }
-            console.log(matchResult);
 
             db.prediction.find({
                 'matchId':matchId,
@@ -112,8 +113,8 @@ var rating = {
                             };
                         }
 
-                        if (!user.record[1]) {
-                            user.record[1] = {
+                        if (!user.record[sportsId]) {
+                            user.record[sportsId] = {
                                 'total': {
                                     'hit': 0,
                                     'fail': 0
@@ -121,8 +122,8 @@ var rating = {
                             }
                         }
 
-                        if (!user.record[1][matchData.leagueId]) {
-                            user.record[1][matchData.leagueId] = {
+                        if (!user.record[sportsId][matchData.leagueId]) {
+                            user.record[sportsId][matchData.leagueId] = {
                                 'hit': 0,
                                 'fail': 0
                             };
@@ -133,14 +134,14 @@ var rating = {
                             user.ratingChange = defaultIncreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
                             user.record.total.hit++;
-                            user.record[1].total.hit++;
-                            user.record[1][matchData.leagueId].hit++;
+                            user.record[sportsId].total.hit++;
+                            user.record[sportsId][matchData.leagueId].hit++;
                         } else {
                             user.ratingChange = defaultDecreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg)
                             user.result = 'false';
                             user.record.total.fail++;
-                            user.record[1].total.fail++;
-                            user.record[1][matchData.leagueId].fail++;
+                            user.record[sportsId].total.fail++;
+                            user.record[sportsId][matchData.leagueId].fail++;
                         }
 
                         user.afterRating = user.beforeRating + user.ratingChange;
