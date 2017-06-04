@@ -99,7 +99,7 @@ var getAllMatches = function(callback) {
                     matchDay = tdClassDay.eq(0).text();
                 }
 
-                var MatchDate = new Date(currentYear + ' ' + matchDay + ' ' + tdClassTime.text());
+                var MatchDate = new Date(currentYear + ' ' + matchDay + ' ' + tdClassTime.text()) - 1000 * 60 * 60 * 9;
 
                 var obj = {
                     'id': '',
