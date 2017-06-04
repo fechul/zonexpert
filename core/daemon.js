@@ -107,47 +107,55 @@ var getAllMatches = function(callback) {
                     'date' : MatchDate,
                     'homeTeamName' : homeTeamName,
                     'awayTeamName' : awayTeamName,
-                    'homeTeamId': teamIdObj[homeTeamName],
-                    'awayTeamId': teamIdObj[awayTeamName],
                     'status': ''
                 };
 
-                var tdClassRelay = row.find('td.relay').eq(0);
-
-                var tdClassRelay_a = tdClassRelay.find('a');
-                if (tdClassPlay.find('em span').length == 3) {
-                    if (tdClassRelay_a.length) {
-                        if (tdClassRelay_a.text() == '리뷰') {
-                            // 경기 종료
-                            var goalsHomeTeam = parseInt(tdClassPlay.find('em span').last().text(), 10);
-                            var goalsAwayTeam = parseInt(tdClassPlay.find('em span').first().text(), 10);
-                            var result = {
-                                'goalsHomeTeam': goalsHomeTeam,
-                                'goalsAwayTeam': goalsAwayTeam
-                            };
-
-                            obj.result = result;
-                            obj.status = 'FINISHED';
-                        } else if (tdClassRelay_a.text() == '프리뷰') {
-                            // 경기 시작 전
-                            obj.status = 'TIMED';
-                        }
-                    } else {
-                        // 경기 중
-                        obj.status = 'IN_PLAY';
-                    }
-                } else {
-                    var etcText = row.find('td').last().text();
-                    if (etcText == '우천취소') {
-                        // 우천 취소
-                        obj.status = 'POSTPONED_RAIN';
-                    } else {
-                        // 예정 됨
-                        obj.status = 'SCHEDULED';
-                    }
+                if (teamIdObj[homeTeamName]) {
+                    obj.homeTeamId = teamIdObj[homeTeamName];
                 }
 
-                matchList.push(obj);
+                if (teamIdObj[awayTeamName]) {
+                    obj.awayTeamId = teamIdObj[awayTeamName];
+                }
+
+                if (obj.homeTeamId && obj.awayTeamId) {
+                    var tdClassRelay = row.find('td.relay').eq(0);
+
+                    var tdClassRelay_a = tdClassRelay.find('a');
+                    if (tdClassPlay.find('em span').length == 3) {
+                        if (tdClassRelay_a.length) {
+                            if (tdClassRelay_a.text() == '리뷰') {
+                                // 경기 종료
+                                var goalsHomeTeam = parseInt(tdClassPlay.find('em span').last().text(), 10);
+                                var goalsAwayTeam = parseInt(tdClassPlay.find('em span').first().text(), 10);
+                                var result = {
+                                    'goalsHomeTeam': goalsHomeTeam,
+                                    'goalsAwayTeam': goalsAwayTeam
+                                };
+
+                                obj.result = result;
+                                obj.status = 'FINISHED';
+                            } else if (tdClassRelay_a.text() == '프리뷰') {
+                                // 경기 시작 전
+                                obj.status = 'TIMED';
+                            }
+                        } else {
+                            // 경기 중
+                            obj.status = 'IN_PLAY';
+                        }
+                    } else {
+                        var etcText = row.find('td').last().text();
+                        if (etcText == '우천취소') {
+                            // 우천 취소
+                            obj.status = 'POSTPONED_RAIN';
+                        } else {
+                            // 예정 됨
+                            obj.status = 'SCHEDULED';
+                        }
+                    }
+
+                    matchList.push(obj);
+                }
             }
 
             schedule.updateMatches({
