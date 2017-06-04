@@ -1,7 +1,41 @@
 var SCHEDULE = {
+	initFlag: true,
 	init: function(initData) {
+		var leagueId = '';
+		if (this.initFlag) {
+			this.initFlag = false;
+			var lastSportsId = localStorage.getItem('zonexpertsScheduleLastAccessSportsId');
+			var lastLeagueId = localStorage.getItem('zonexpertsScheduleLastAccessLeagueId');
+
+			if (lastSportsId) {
+				$('.scheduledata_league_select_btn_container button').removeClass('active');
+				$('.scheduledata_league_select_btn_container button[key="' + lastSportsId + '"]').addClass('active');
+
+				$('.scheduledata_league_btn_container').hide();
+				$('.scheduledata_league_btn_container[sports="' + lastSportsId + '"]').show();
+
+				$('.league_btn').removeClass('active');
+				if (lastLeagueId) {
+					$('.league_btn[key="' + lastLeagueId + '"]').addClass('active');
+					leagueId = lastLeagueId;
+				} else {
+					$('.scheduledata_league_btn_container[sports="' + lastSportsId + '"] .league_btn').eq(0).addClass('active');
+					leagueId = $('.scheduledata_league_btn_container[sports="' + lastSportsId + '"] .league_btn').eq(0).attr('key');
+				}
+			} else {
+				$('.scheduledata_league_select_btn_container button').eq(0).addClass('active');
+				if (lastLeagueId) {
+					$('.league_btn[key="' + lastLeagueId + '"]').addClass('active');
+					leagueId = lastLeagueId;
+				} else {
+					$('.scheduledata_league_btn_container').eq(0).find('.league_btn').eq(0).addClass('active');
+					leagueId = $('.scheduledata_league_btn_container').eq(0).find('.league_btn').eq(0).attr('key');
+				}
+			}
+		}
+
 		this.init_events();
-		this.get_schedule();
+		this.get_schedule(leagueId);
 
 		notice.init();
 
@@ -51,17 +85,24 @@ var SCHEDULE = {
 			var $this_button = $(this);
 			$('.scheduledata_league_btn_container button').removeClass('active');
 			$this_button.addClass('active');
-			self.get_schedule($this_button.attr('key'), function() {
+
+			var leagueId = $this_button.attr('key');
+
+			localStorage.setItem('zonexpertsScheduleLastAccessLeagueId', leagueId);
+			self.get_schedule(leagueId, function() {
 			});
 		});
 
 		$('.scheduledata_league_select_btn_container button').click(function() {
 			$('.scheduledata_league_select_btn_container button').removeClass('active');
 			$(this).addClass('active');
+			var sportsId = $(this).attr('key');
 
-			$('.scheduledata_league_btn_container:not([sports=' + $(this).attr('key') + '])').hide();
-			$('.scheduledata_league_btn_container[sports=' + $(this).attr('key') + ']').show();
-			$('.scheduledata_league_btn_container[sports=' + $(this).attr('key') + ']').find('button').eq(0).click();
+			$('.scheduledata_league_btn_container:not([sports=' + sportsId + '])').hide();
+			$('.scheduledata_league_btn_container[sports=' + sportsId + ']').show();
+			$('.scheduledata_league_btn_container[sports=' + sportsId + ']').find('button').eq(0).click();
+
+			localStorage.setItem('zonexpertsScheduleLastAccessSportsId', sportsId);
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
@@ -115,6 +156,11 @@ var SCHEDULE = {
 
 			location.href = "/search?id=" + id;
 		});
+
+		$('#schedule_month_select').change(function() {
+			$('.schedule_table_row:not([month=' + $(this).val() + '])').hide();
+			$('.schedule_table_row[month=' + $(this).val() + ']').show();
+		});
 	},
 
 	getDateString: function(date) {
@@ -141,12 +187,14 @@ var SCHEDULE = {
 
 		if (status == 'FINISHED') {
 			str = '종료';
-		// } else if (status == 'POSTPONED') {
-		// 	str = '연기';
 		} else if (status == 'IN_PLAY') {
-			str = '진행';
+			str = '<span class="status_live">LIVE</span>';
 		} else if (status == 'DELAYED') {
 			str = '지연';
+		} else if (status == 'POSTPONED') {
+			str = '연기';
+		} else if (status == 'POSTPONED_RAIN') {
+			str = '우천<br>취소';
 		} else {
 			str = '예정';
 		}
@@ -157,6 +205,11 @@ var SCHEDULE = {
 	get_schedule: function(leagueId, callback) {
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
+		var currentDate = new Date();
+		var currentMonth = currentDate.getMonth() + 1;
+		var currentDay = currentDate.getDate();
+		var monthList = [];
+		var todayCount = 0;
 
 		$.get('/prediction/all', {
 			'leagueId': leagueId
@@ -171,14 +224,34 @@ var SCHEDULE = {
 				'leagueId': leagueId
 			}, function(matches) {
 				$('#schedule_table').empty();
+				$('#schedule_month_select').empty();
 
 				for (var i in matches) {
 					var match = matches[i];
-					var currentDate = new Date();
 					var finished = '';
 					var resultFlag = '';
 
-					if ((new Date(match.date)) < currentDate) {
+					var matchDate = new Date(match.date);
+					var matchYear = matchDate.getFullYear();
+					var matchMonth = matchDate.getMonth() + 1;
+					var matchDay = matchDate.getDate();
+
+					if (monthList.indexOf(matchMonth) == -1) {
+						monthList.push(matchMonth);
+
+						var monthString = matchMonth;
+						if (matchMonth < 10) {
+							monthString = '0' + matchMonth;
+						}
+
+						$('#schedule_month_select').append([
+							'<option value=', matchMonth, ' ', (matchMonth == currentMonth ? 'selected' : ''), '>',
+								matchYear, '.', monthString,
+							'</option>'
+						].join(''));
+					}
+
+					if (matchDate < currentDate) {
 						finished = 'finished';
 					}
 
@@ -196,25 +269,56 @@ var SCHEDULE = {
 						}
 					}
 
+					var today = ''
+					if ((matchDay == (currentDay + 1)) && (matchMonth == currentMonth) && (matchYear == currentDate.getFullYear())) {
+						if (todayCount == 0) {
+							today = 'today-first';
+						} else {
+							today = 'today';
+						}
+						todayCount++;
+					} else {
+						if (todayCount > 0) {
+							today = 'today-last';
+							todayCount = 0;
+						}
+					}
 					var row_data = [
-						'<tr class="schedule_table_row ', finished, ' ', resultFlag, '">',
+						'<tr class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, '" month="', matchMonth, '">',
 							'<td class="schedule_date">', self.getDateString(match.date), '</td>'
 					].join('');
 
+					var homeResult = '';
+					var awayResult = '';
+
+					if ((match.status == 'FINISHED') && match.result) {
+						if (match.result.goalsHomeTeam > match.result.goalsAwayTeam) {
+							homeResult = 'win';
+							awayResult = 'lose';
+						} else if (match.result.goalsHomeTeam < match.result.goalsAwayTeam) {
+							homeResult = 'lose';
+							awayResult = 'win';
+						} else {
+							homeResult = 'draw';
+							awayResult = 'draw';
+						}
+					}
+
 					if (match.sportsId == '2') {
+						// (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? () : '-'
 						row_data += [
 							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
-							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
+							'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
 							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
-							'<td class="schedule_home_team_score">', match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : '-', '</td>',
+							'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
 							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
 						].join('');
 					} else {
 						row_data += [
 							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
-							'<td class="schedule_home_team_score">', match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : '-', '</td>',
+							'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
 							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
-							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
+							'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
 							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
 						].join('');
 					}
@@ -233,6 +337,12 @@ var SCHEDULE = {
 				$(document).ready(function() {
 					// $('body').animate({'scrollTop': $('#schedule_table tr .schedule_basket_toggle:not(.disable)').first().offset().top - window.innerHeight / 2}, 800);
 				});
+
+				if($('#schedule_month_select option[selected]').length) {
+					$('#schedule_month_select').val($('#schedule_month_select option[selected]').eq(0).attr('value')).change();
+				} else {
+					$('#schedule_month_select').val($('#schedule_month_select option').last().attr('value')).change();
+				}
 
 				if (callback && typeof(callback) == 'function') {
 					callback();
