@@ -295,6 +295,7 @@ table > tbody > tr:not(:last-child) {
 	background-color: #f3f3f3;
 	border-radius: 5px;
 	box-shadow: 0px 0px 3px;
+	z-index: 10000;
 }
 
 /*.prediction_shortcut_close {
@@ -603,6 +604,7 @@ table > tbody > tr:not(:last-child) {
 
 	.prediction_shortcut_container {
 		width: 92%;
+		z-index: 10000;
 	}
 }
 
@@ -652,5 +654,6 @@ table > tbody > tr:not(:last-child) {
 
 	.prediction_shortcut_container {
 		width: 92%;
+		z-index: 10000;
 	}
 }

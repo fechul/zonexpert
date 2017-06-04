@@ -481,7 +481,7 @@ exports.resetAttendance = function() {
     var rule = new node_schedule.RecurrenceRule();
     rule.dayOfWeek = [node_schedule.Range(0, 6)];
     rule.hour = 0;
-    rule.minute = 0;
+    rule.minute = 1;
 
     var reset = node_schedule.scheduleJob(rule, function() {
         db.user.update({},{

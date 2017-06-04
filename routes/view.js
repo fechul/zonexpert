@@ -465,6 +465,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 				json.mydata_display = 'display:none;';
 			}
 
+			json.sportId = matchData.sportId || 1;
 			json.leagueId = matchData.leagueId;
 
 			user.get(req.session.email, function(userData) {

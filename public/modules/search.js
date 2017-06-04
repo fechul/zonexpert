@@ -116,10 +116,22 @@ var SEARCH = {
 
 		var recentMatches = this.recentMatches;
 		var list_html = '';
-
+console.log(recentMatches)
 		if(recentMatches && recentMatches.length) {
 			for(var i = 0; i < recentMatches.length; i++) {
-				list_html += '<div class="recent_predict_data_row">';
+				recentMatches[i].date = new Date();
+				recentMatches[i].afterRating = 1700;
+				recentMatches[i].beforeRating = 1668;
+
+				var afterRating = parseInt(recentMatches[i].afterRating, 10);
+				var ratingChange = parseInt(recentMatches[i].afterRating - recentMatches[i].beforeRating, 10);
+				var ratingChangeType = 'failed';
+				if(ratingChange > 0) {
+					ratingChange = '+' + ratingChange;
+					ratingChangeType = 'success';
+				}
+
+				list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
 
 				var date = new Date(recentMatches[i].date);
 				list_html += '<div class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</div>';
@@ -129,12 +141,7 @@ var SEARCH = {
 				list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
 				list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
 
-				var afterRating = parseInt(recentMatches[i].afterRating, 10);
-				var ratingChange = parseInt(recentMatches[i].afterRating - recentMatches[i].beforeRating, 10);
-				if(ratingChange > 0) {
-					ratingChange = '+' + ratingChange;
-				}
-				list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(' + ratingChange + ')</div>';
+				list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(<span class="' + ratingChangeType + '">' + ratingChange + '</span>)</div>';
 
 				if(recentMatches[i].myPredict == 'true') {
 					list_html += '<div class="recent_predict_data_row_result_msg success">적중</div>';
