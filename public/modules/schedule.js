@@ -196,18 +196,35 @@ var SCHEDULE = {
 						}
 					}
 
-
-					$('#schedule_table').append([
+					var row_data = [
 						'<tr class="schedule_table_row ', finished, ' ', resultFlag, '">',
-							'<td class="schedule_date">', self.getDateString(match.date), '</td>',
+							'<td class="schedule_date">', self.getDateString(match.date), '</td>'
+					].join('');
+
+					if (match.sportsId == '2') {
+						row_data += [
+							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
+							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
+							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
+							'<td class="schedule_home_team_score">', match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : '-', '</td>',
+							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
+						].join('');
+					} else {
+						row_data += [
 							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
 							'<td class="schedule_home_team_score">', match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : '-', '</td>',
 							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
 							'<td class="schedule_away_team_score">', match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : '-', '</td>',
 							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
+						].join('');
+					}
+
+					row_data += [
 							'<td class="schedule_basket"><span><i class="fa fa-check-square-o"></i></span></td>',
 						'</tr>'
-					].join(''));
+					].join('');
+
+					$('#schedule_table').append(row_data);
 
 					$('#schedule_table .schedule_table_row').last().data('matchId', match.id);
 					$('#schedule_table .schedule_table_row').last().data('leagueId', match.leagueId);
