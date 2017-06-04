@@ -310,6 +310,7 @@ var liveChecker = function(callback) {
                 delete $;
                 $ = cheerio.load(received_data)
                 var smsScore = $('.smsScore');
+                var currentDate = new Date();
                 var currentYear = currentDate.getFullYear();
                 var currentDay = $('.today span').eq(0).text();
 
