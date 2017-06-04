@@ -116,12 +116,9 @@ var SEARCH = {
 
 		var recentMatches = this.recentMatches;
 		var list_html = '';
-console.log(recentMatches)
+
 		if(recentMatches && recentMatches.length) {
 			for(var i = 0; i < recentMatches.length; i++) {
-				recentMatches[i].date = new Date();
-				recentMatches[i].afterRating = 1700;
-				recentMatches[i].beforeRating = 1668;
 
 				var afterRating = parseInt(recentMatches[i].afterRating, 10);
 				var ratingChange = parseInt(recentMatches[i].afterRating - recentMatches[i].beforeRating, 10);
