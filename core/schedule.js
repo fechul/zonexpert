@@ -131,6 +131,8 @@ exports.updateMatches = function(data, callback) {
                                 }, function() {
                                     async_cb();
                                 });
+                            } else {
+                                async_cb();
                             }
                         } else if ((currentStatus == 'IN_PLAY') && (newStatus == 'FINISHED')) {
                             // 경기 종료 - 레이팅 계산하기
