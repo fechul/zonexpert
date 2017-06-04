@@ -441,7 +441,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		matchData.roomOpen = true;	//test
+		// matchData.roomOpen = true;	//test
 		if (matchData) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
