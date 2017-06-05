@@ -86,6 +86,10 @@ var SIGNUP = {
 				select_html += '<option value="432">포칼컵</option>';
 				select_html += '<option value="439">포르투갈</option>';
 				break;
+			case '2':
+				select_html += '<option value="none">리그 선택</option>';
+				select_html += '<option value="kbo2017">KBO</option>';
+				break;
 		}
 
 		$('#main_league_select > option').remove();

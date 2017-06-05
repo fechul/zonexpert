@@ -3,7 +3,7 @@ var CHAT = {
         this.name = options.nickname;
         this.room = options.roomId;
         this.badge = options.myBadge;
-        this.sportId = options.sportId;
+        this.sportsId = options.sportsId;
         this.leagueId = options.leagueId;
         this.email = options.email;
 
@@ -215,11 +215,13 @@ var CHAT = {
 
     setPredictionUserList: function() {
         var matchId = this.room;
+        var sportsId = this.sportsId;
         var predictedUserList = $('.predictedUsersList');
         predictedUserList.empty();
 
         $.get('/prediction/getUserList', {
-            'matchId': matchId
+            'matchId': matchId,
+            'sportsId': sportsId
         }, function(userList) {
 
             if(userList && userList.length) {
@@ -256,14 +258,15 @@ var CHAT = {
     },
 
     setUserPredictData: function(target) {
-        var sportId = this.sportId;
+        var sporstId = this.sportsId;
         var leagueId = this.leagueId;
         var matchId = this.room;
         var myEmail = this.email;
 
         $.get('/prediction/getUserInfo', {
             'target': target,
-            'matchId': matchId
+            'matchId': matchId,
+            'sportsId': sportsId
         }, function(data) {
             if(data && data.length) {
                 data = data[0];

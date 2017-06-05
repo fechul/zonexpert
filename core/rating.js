@@ -182,13 +182,17 @@ var rating = {
 
                                     predict_rate_rank = predict_rate_rank / game_cnt_rank;
 
-                                    redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
-                                        redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
-                                            redis_client.zadd('predict_rate_rank', predict_rate_rank, user.email, function(__zerr, __reply) {
-                                                _async_cb();
+                                    if(user.readyGameCnt <= 0) {
+                                        redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
+                                            redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
+                                                redis_client.zadd('predict_rate_rank', predict_rate_rank, user.email, function(__zerr, __reply) {
+                                                    _async_cb();
+                                                });
                                             });
                                         });
-                                    });
+                                    } else {
+                                        _async_cb();
+                                    }
                         		});
                             });
                         });

@@ -322,9 +322,11 @@ router.get('/prediction/getMatchesRecord', function(req, res) {
 router.get('/prediction/getUserList', function(req, res) {
 	var matchId = req.query.matchId;
 	var email = req.session.email;
+	var sportsId = req.query.sportsId;
 
 	prediction.getUserList({
 		'matchId': matchId,
+		'sportsId': sportsId,
 		'email': email
 	}, function(data) {
 
@@ -335,6 +337,7 @@ router.get('/prediction/getUserList', function(req, res) {
 router.get('/prediction/getUserInfo', function(req, res) {
 	var nick = req.query.target;
 	var matchId = req.query.matchId;
+	var sportsId = req.query.sportsId;
 
 	user.get_email(nick, function(email) {
 		if(email) {
@@ -342,6 +345,7 @@ router.get('/prediction/getUserInfo', function(req, res) {
 				if(data && data.length) {
 					prediction.getViewList({
 						'matchId': matchId,
+						'sportsId': sportsId,
 						'userEmail': email
 					}, function(viewList) {
 						data[0].viewList = viewList;

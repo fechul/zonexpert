@@ -4,6 +4,7 @@ var SEARCH = {
 
 		this.search_id = options.search_id;
 		this.search_rating = parseInt(options.search_rating, 10);
+		this.targetStatistics_sport = [];
 		this.targetStatistics_league = [];
 		this.targetStatistics_club = [];
 
@@ -19,8 +20,8 @@ var SEARCH = {
 		}
 
 		this.init_events();
-		this.getMatchesStatistics('league', function() {
-			self.setStatisticsField('league');
+		this.getMatchesStatistics('sport', function() {
+			self.setStatisticsField('sport');
 			self.getMatchesRecord(function() {
 				self.setRecordField();
 			});
@@ -96,13 +97,18 @@ var SEARCH = {
 			$(this).addClass('active');
 
 			var value = $(this).attr('value');
-			if(value == 'league') {
+			if(value == 'sport') {
+				$('.statistics_table_type_name').html('스포츠');
+				self.getMatchesStatistics('sport', function() {
+					self.setStatisticsField('sport');
+				});
+			} else if(value == 'league') {
 				$('.statistics_table_type_name').html('리그');
 				self.getMatchesStatistics('league', function() {
 					self.setStatisticsField('league');
 				});
 			} else {
-				$('.statistics_table_type_name').html('클럽');
+				$('.statistics_table_type_name').html('팀');
 				self.getMatchesStatistics('club', function() {
 					self.setStatisticsField('club');
 				});
@@ -121,7 +127,8 @@ var SEARCH = {
 			for(var i = 0; i < recentMatches.length; i++) {
 
 				var afterRating = parseInt(recentMatches[i].afterRating, 10);
-				var ratingChange = parseInt(recentMatches[i].afterRating - recentMatches[i].beforeRating, 10);
+				var beforeRating = parseInt(recentMatches[i].beforeRating, 10);
+				var ratingChange = parseInt(afterRating - beforeRating, 10);
 				var ratingChangeType = 'failed';
 				if(ratingChange > 0) {
 					ratingChange = '+' + ratingChange;
@@ -130,8 +137,12 @@ var SEARCH = {
 
 				list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
 
-				var date = new Date(recentMatches[i].date);
-				list_html += '<div class="recent_predict_data_row_date">' + (date.getFullYear()%100) + '/' + (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '/' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + '</div>';
+				var date = new Date(recentMatches[i].ratingCalculatedTime);
+				var year = date.getFullYear()%100;
+				var month = (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1));
+				var day = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+
+				list_html += '<div class="recent_predict_data_row_date">' + year + '/' + month + '/' + day + '</div>';
 				list_html += '<div class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</div>';
 				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
 				list_html += '<div class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</div>';
@@ -159,24 +170,38 @@ var SEARCH = {
 		var ratelist = [];
 
 		if(recentMatches && recentMatches.length) {
+			beforeRating = null;
 			for(var d = labels.length-1; d >= 0 ; d--) {
 				datelist[d] = (labels[d].month + '/' + labels[d].day);
 				var found = false;
-				var max = -9999;
+				var lastRatingOnTheDay = null;
+				var lastRatingDay = null;
+				
 				for(var r = 0; r < recentMatches.length; r++) {
-					var matchDate = new Date(recentMatches[r].date);
+					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
 					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
-						if(recentMatches[r].afterRating > max) {
-							max = recentMatches[r].afterRating;
-							ratelist[d] = max;
+						if(!lastRatingOnTheDay) {
+							lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+							lastRatingDay = recentMatches[r].ratingCalculatedTime;
+							ratelist[d] = lastRatingOnTheDay;
+							beforeRating = recentMatches[r].beforeRating;
 							found = true;
+						} else {
+							if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
+								lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+								lastRatingDay = recentMatches[r].ratingCalculatedTime;
+								ratelist[d] = lastRatingOnTheDay;
+								beforeRating = recentMatches[r].beforeRating;
+								found = true;	
+							}
 						}
 					}
 				}
+
 				if(!found && d == labels.length-1) {
 					ratelist[d] = self.search_rating;
 				} else if(!found) {
-					ratelist[d] = ratelist[d+1];
+					ratelist[d] = parseInt(beforeRating) || self.search_rating;
 				}
 			}
 		} else {
@@ -221,7 +246,9 @@ var SEARCH = {
 	//pie
 	setStatisticsField: function(type) {
 		var statisticsData = [];
-		if(type == 'league') {
+		if(type == 'sport') {
+			statisticsData = this.targetStatistics_sport;
+		} else if(type == 'league') {
 			statisticsData = this.targetStatistics_league;
 		} else {
 			statisticsData = this.targetStatistics_club;
@@ -235,7 +262,63 @@ var SEARCH = {
 			var pieCnt = 0;
 			var table_html = '';
 
-			if(type == 'league') {
+			if(type == 'sport') {
+				for(var i = 0; i < statisticsData.length; i++) {
+					var sportsId = statisticsData[i].sportsId;
+					var sportsName = statisticsData[i].sportsName;
+					var sportsHit = statisticsData[i].sportsHit;
+					var sportsFail = statisticsData[i].sportsFail;
+					var sportsGameCnt = statisticsData[i].sportsGameCnt;
+					var sportsRate = Math.floor(statisticsData[i].sportsRate);
+					sportsRate = isNaN(sportsRate) ? '-' : sportsRate;
+
+					if(pieCnt < 4) {
+						var html = '<div class="pie_field"><canvas width="200" height="200" style="width:150px; height:150px" id="' + sportsId + '_pie"></canvas><label class="pieLeagueName">(' + sportsName + ')</label><label class="piePercentage">' + sportsRate + '%</label></div>';
+						$('#pie_record').append(html);
+
+						var data = {
+						    labels: [
+						        "적중",
+						        "실패"
+						    ],
+						    datasets: [{
+					            data: [sportsHit, sportsFail],
+					            backgroundColor: [
+					                "#36A2EB",
+					                "#e82335"
+					            ],
+					            hoverBackgroundColor: [
+					                "#36A2EB",
+					                "#e82335"
+					            ]
+					        }]
+						};
+
+						var options = {
+							legend: {
+								onClick: 'handleClick'
+							}
+					    };
+
+						var myDoughnutChart = new Chart($('#' + sportsId + '_pie'), {
+						    type: 'doughnut',
+						    data: data,
+						    options: options
+						});
+					}
+
+					pieCnt++;
+
+					table_html += '<tr class="statistics_row_data">';
+					table_html += '<td>' + (i+1) + '</td>';
+					table_html += '<td>' + sportsName + '</td>';
+					table_html += '<td>' + sportsHit + '</td>';
+					table_html += '<td>' + sportsFail + '</td>';
+					table_html += '<td>' + sportsGameCnt + '</td>';
+					table_html += '<td>' + sportsRate + '%</td>';
+					table_html += '</tr>';
+				}
+			} else if(type == 'league') {
 				for(var i = 0; i < statisticsData.length; i++) {
 					var leagueId = statisticsData[i].leagueId;
 					var leagueName = statisticsData[i].leagueName;
@@ -351,17 +434,6 @@ var SEARCH = {
 
 			$('#statistics_table').append(table_html);
 
-			// var user_agent = navigator.userAgent;
-			// var isMobile = false;
-
-			// if (/mobile/i.test(user_agent) || /android/i.test(user_agent)) {
-			// 	isMobile = true;
-			// }
-
-			// if(isMobile && $(window).width() <= 360) {
-
-			// }
-
 		} else {
 			$('.no_statistics_field').show();
 		}
@@ -371,7 +443,11 @@ var SEARCH = {
 		var self = this;
 
 		var alreadyHas = false;
-		if(type == 'league') {
+		if(type == 'sport') {
+			if(self.targetStatistics_sport && self.targetStatistics_sport.length) {
+				alreadyHas = true;
+			}
+		} else if(type == 'league') {
 			if(self.targetStatistics_league && self.targetStatistics_league.length) {
 				alreadyHas = true;
 			}
@@ -389,7 +465,19 @@ var SEARCH = {
 				'type': type	//league, club
 			}, function(statisticsData) {
 				if(statisticsData) {
-					if(type == 'league') {
+					if(type == 'sport') {
+						for(var key in statisticsData) {
+							self.targetStatistics_sport.push({
+								sportsId: statisticsData[key].sportsId,
+								sportsName: self.getsportsName(statisticsData[key].sportsId),
+								sportsHit: parseInt(statisticsData[key].hit, 10),
+								sportsFail: parseInt(statisticsData[key].fail, 10),
+								sportsGameCnt: parseInt(statisticsData[key].game_cnt, 10),
+								sportsRate: parseFloat(statisticsData[key].rate)
+							});
+							self.sortStatisticsData(type, 'sportsGameCnt');
+						}
+					} else if(type == 'league') {
 						for(var key in statisticsData) {
 							self.targetStatistics_league.push({
 								leagueId: statisticsData[key].leagueId,
@@ -509,38 +597,57 @@ var SEARCH = {
 	},
 
 	getLeagueName: function(code) {
-		code = parseInt(code, 10);
+		code = code.toString();
 
 		switch(code) {
-			case 426:
+			case '426':
 				return '프리미어리그';
 				break;
-			case 429:
+			case '429':
 				return '잉글랜드FA컵';
 				break;
-			case 430:
+			case '430':
 				return '분데스리가';
 				break;
-			case 432:
+			case '432':
 				return '포칼컵';
 				break;
-			case 433:
+			case '433':
 				return '에레디비시';
 				break;
-			case 434:
+			case '434':
 				return '리그 1';
 				break;
-			case 436:
+			case '436':
 				return '라리가';
 				break;
-			case 438:
+			case '438':
 				return '세리에 A';
 				break;
-			case 439:
+			case '439':
 				return '포르투갈';
 				break;
-			case 440:
+			case '440':
 				return '챔피언스리그';
+				break;
+			case 'kbo2017':
+				return 'KBO';
+				break;
+			default:
+				return '-';
+				break;
+		}
+	},
+
+	getsportsName: function(code) {
+		code = code.toString();
+
+		switch(code) {
+			case '1':
+				return '축구';
+				break;
+			case '2':
+				return '야구';
 				break;
 			default:
 				return '-';
@@ -549,7 +656,11 @@ var SEARCH = {
 	},
 
 	sortStatisticsData: function(type, sortType) {
-		if(type == 'league') {
+		if(type == 'sport') {
+			this.targetStatistics_sport.sort(function(a, b) {
+				return (a[sortType] > b[sortType]) ? -1 : ((b[sortType] > a[sortType]) ? 1 : 0);
+			});
+		} else if(type == 'league') {
 			this.targetStatistics_league.sort(function(a, b) {
 				return (a[sortType] > b[sortType]) ? -1 : ((b[sortType] > a[sortType]) ? 1 : 0);
 			});
