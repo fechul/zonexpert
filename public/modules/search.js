@@ -174,16 +174,26 @@ var SEARCH = {
 			for(var d = labels.length-1; d >= 0 ; d--) {
 				datelist[d] = (labels[d].month + '/' + labels[d].day);
 				var found = false;
-				var max = -9999;
+				var lastRatingOnTheDay = null;
+				var lastRatingDay = null;
 				
 				for(var r = 0; r < recentMatches.length; r++) {
 					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
 					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
-						if(recentMatches[r].afterRating > max) {
-							max = parseInt(recentMatches[r].afterRating, 10);
-							ratelist[d] = max;
+						if(!lastRatingOnTheDay) {
+							lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+							lastRatingDay = recentMatches[r].ratingCalculatedTime;
+							ratelist[d] = lastRatingOnTheDay;
 							beforeRating = recentMatches[r].beforeRating;
 							found = true;
+						} else {
+							if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
+								lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+								lastRatingDay = recentMatches[r].ratingCalculatedTime;
+								ratelist[d] = lastRatingOnTheDay;
+								beforeRating = recentMatches[r].beforeRating;
+								found = true;	
+							}
 						}
 					}
 				}
