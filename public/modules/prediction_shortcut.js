@@ -32,15 +32,19 @@ var PREDICTION_SHORTCUT = {
                 }
             }
 
-            predictions = JSON.stringify(predictions);
+            stringifyedPredictions = JSON.stringify(predictions);
 
             $.post('/prediction', {
-                'predictions': predictions
+                'predictions': stringifyedPredictions
             }, function(prediction) {
                 self.setData();
 
                 if (typeof SCHEDULE !== 'undefined') {
                     SCHEDULE.get_schedule();
+                }
+
+                if (typeof CHAT !== 'undefined') {
+                    CHAT.setPredictButtonCondition(prediction, predictions);
                 }
             });
         });

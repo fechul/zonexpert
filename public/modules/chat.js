@@ -398,5 +398,17 @@ var CHAT = {
                 }
             }
         });
+    },
+
+    setPredictButtonCondition: function(result, predictions) {
+        for (i = 0; i < predictions.length; i++) {
+            if (predictions[i].matchId == this.room) {
+                if (result) {
+                    $('.predict_in_chat.basketed').removeClass('basketed').addClass('confirmed');
+                }
+
+                break;
+            }
+        }
     }
 };
