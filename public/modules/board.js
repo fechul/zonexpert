@@ -42,14 +42,6 @@ var BOARD = {
 			location.href = '/' + move;
 		});
 
-		$('#header li.my_point > img').click(function() {
-			location.href = '/my_page';
-		});
-
-		$('#header li.my_point > span').click(function() {
-			location.href = '/my_page';
-		});
-
 		$('.board_section .board_menu > .write').click(function() {
 			location.href = '/board/write';
 		});
@@ -70,7 +62,7 @@ var BOARD = {
 		$(document).on('click', '#board_table .board_options > button', function() {
 			var button = this;
 			var boardNo = $(button).parents('.board_content').prev('tr').attr('boardNo');
-			
+
 			if($(button).hasClass('update')) {
 				location.href = "/board/write?no=" + boardNo;
 			} else if($(button).hasClass('delete')) {

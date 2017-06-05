@@ -127,11 +127,12 @@ body {
 
 li.my_point {
 	padding: 0px 10px;
+	cursor: pointer;
 }
 
-li.my_point > img,
-li.my_point > span {
-	cursor: pointer;
+li.my_point:hover {
+ 	background-color: #333;
+	box-shadow: 0px -4px 2px -2px white inset
 }
 
 .mobile_my_point {
@@ -151,6 +152,25 @@ li.my_point > span {
 #my_current_point {
 	color: #c5bb21;
 	margin-right: 5px;
+	display: inline-block;
+	min-width: 35px;
+	text-align: right;
+}
+
+#my_current_point_detail {
+    position: absolute;
+    top: -17px;
+    right: 15px;
+    font-size: 10px;
+    color: #c5bb21;
+}
+
+#mobile_my_current_point_detail {
+    position: absolute;
+    top: -14px;
+    right: 5px;
+    font-size: 10px;
+    color: #c5bb21;
 }
 
 /*

@@ -136,6 +136,26 @@ body {
     height: 50px;
 }
 
+.choicePointTypeBtn.free {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 50px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-right: -1px;
+}
+
+.choicePointTypeBtn.currency {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 50px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-left: -1px;
+}
+
 #viewThisUsersPredict > img {
     width: 15px;
     height: 15px;
@@ -503,14 +523,6 @@ li .badge_ready {
     border: 1px solid #ccc;
 }
 
-#chatMatchStatus.playing {
-    color: #49de41;
-}
-
-#chatMatchStatus.finished {
-    color: #e61e1e;
-}
-
 .predict_in_chat {
     float: right !important;
     cursor: pointer;
@@ -565,13 +577,28 @@ li .badge_ready {
 }
 
 .nav > li:last-child > a {
-    border-top-right-radius: 5px;
+    border-top-right-radius: 7px;
     border-top-left-radius: 0px;
     margin-right: 0px !important;
 }
 
 .userPredictData {
-    display: none;
+    /*display: none;*/
+}
+
+.status_live {
+    background-color: red;
+    color: white;
+    border-radius: 50px;
+    font-weight: 900;
+    padding: 2px 5px;
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  40% { opacity: 1; }
+  20% { opacity: 0.7; }
+  40% { opacity: 1; }
 }
 
 /*

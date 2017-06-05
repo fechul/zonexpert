@@ -73,14 +73,6 @@ var SCHEDULE = {
 			location.href = '/' + move;
 		});
 
-		$('#header li.my_point > img').click(function() {
-			location.href = '/my_page';
-		});
-
-		$('#header li.my_point > span').click(function() {
-			location.href = '/my_page';
-		});
-
 		$('.scheduledata_league_btn_container button').click(function() {
 			var $this_button = $(this);
 			$('.scheduledata_league_btn_container button').removeClass('active');
@@ -208,7 +200,6 @@ var SCHEDULE = {
 	},
 
 	get_schedule: function(leagueId, callback) {
-		console.log('called');
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
 		var currentDate = new Date();
@@ -350,7 +341,6 @@ var SCHEDULE = {
 					$('#schedule_month_select').val($('#schedule_month_select option').last().attr('value')).change();
 				}
 
-					console.log('finish');
 				if (callback && typeof(callback) == 'function') {
 					callback();
 				}

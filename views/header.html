@@ -3,6 +3,7 @@
 		<div class="navbar-header">
 			<div class="mobile_my_point" style="display:none;">
 				<img src="/image/coin.png">
+				<div id="mobile_my_current_point_detail" style="display: none;"></div>
 				<span id="mobile_my_current_point"><%= myCurrentPoint %></span>
 			</div>
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#nav_menu" style="<%= headerHideMenu %> margin-top:15px;">
@@ -12,11 +13,11 @@
 			</button>
 			<a class="logo" title="존문가닷컴" href="/"></a>
 		</div>
-	  
+
 	    <div class="navbar-collapse collapse" id="nav_menu" style="<%= headerHideMenu %>">
 			<ul class="nav navbar-nav main_menu">
 				<li class="menu_rank" move="rank">순위</li>
-				<li class="menu_schedule" move="schedule">경기일정</li>
+				<li class="menu_schedule" move="schedule">일정 & 예측</li>
 				<li class="menu_board" move="board">게시판</li>
 			</ul>
 
@@ -29,7 +30,8 @@
 				</li>
 				<li class="my_point" style="<%= logout_display %>">
 					<img src="/image/coin.png">
-					<span id="my_current_point"><%= myCurrentPoint %></span>
+					<div id="my_current_point_detail" style="display: none;"></div>
+					<span id="my_current_point" class="sum"><%= myCurrentPoint %></span>
 				</li>
 				<li class="my_page" style="<%= myinfo_display %>">마이페이지</li>
 				<li class="logout" style="<%= logout_display %>">로그아웃</li>
@@ -50,23 +52,81 @@
 			document.getElementsByClassName('mobile_my_point')[0].style.display = 'block';
 		}
 	}
-	
+
+    document.addEventListener("DOMContentLoaded", function() {
+		GET_POINT = function(callback) {
+			$.get('/user/point', {}, function(data) {
+				if (callback && typeof(callback) == 'function') {
+					callback(data);
+				}
+			});
+		};
+
+		UPDATE_POINT = function(callback) {
+			var myCurrentPoint = $('#my_current_point');
+			var myCurrentPointDetail = $('#my_current_point_detail');
+			$.get('/user/point', {}, function(data) {
+				if (data) {
+					if (myCurrentPoint.hasClass('free') || myCurrentPoint.hasClass('currency')) {
+						myCurrentPoint.removeClass('free').removeClass('currency').addClass('sum');
+						myCurrentPointDetail.hide();
+					}
+
+					$('#my_current_point').html(data.freePoint + data.point);
+					$('#mobile_my_current_point').html(data.freePoint + data.point);
+				}
+
+				if (callback && typeof(callback) == 'function') {
+					callback(data);
+				}
+			});
+		};
+
+		$('#header li.my_point').click(function() {
+			var myCurrentPoint = $('#my_current_point');
+			var myCurrentPointDetail = $('#my_current_point_detail');
+			$.get('/user/point', {}, function(data) {
+				if (data) {
+					if (myCurrentPoint.hasClass('sum')) {
+						myCurrentPointDetail.html('무료');
+						myCurrentPointDetail.show();
+						myCurrentPoint.html(data.freePoint);
+						myCurrentPoint.removeClass('sum').addClass('free');
+					} else if (myCurrentPoint.hasClass('free')) {
+						myCurrentPointDetail.html('충전');
+						myCurrentPoint.html(data.point);
+						myCurrentPoint.removeClass('free').addClass('currency');
+					} else {
+						myCurrentPointDetail.hide();
+						myCurrentPoint.html(data.freePoint + data.point);
+						myCurrentPoint.removeClass('currency').addClass('sum');
+					}
+				}
+			});
+		});
+
+		$('#header div.mobile_my_point').click(function() {
+			var mobilemyCurrentPoint = $('#mobile_my_current_point');
+			var mobilemyCurrentPointDetail = $('#mobile_my_current_point_detail');
+			$.get('/user/point', {}, function(data) {
+				if (data) {
+					if (mobilemyCurrentPoint.hasClass('sum')) {
+						mobilemyCurrentPointDetail.html('무료');
+						mobilemyCurrentPointDetail.show();
+						mobilemyCurrentPoint.html(data.freePoint);
+						mobilemyCurrentPoint.removeClass('sum').addClass('free');
+					} else if (mobilemyCurrentPoint.hasClass('free')) {
+						mobilemyCurrentPointDetail.html('충전');
+						mobilemyCurrentPoint.html(data.point);
+						mobilemyCurrentPoint.removeClass('free').addClass('currency');
+					} else {
+						mobilemyCurrentPointDetail.hide();
+						mobilemyCurrentPoint.html(data.freePoint + data.point);
+						mobilemyCurrentPoint.removeClass('currency').addClass('sum');
+					}
+				}
+			});
+		});
+	});
+
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -46,9 +46,9 @@ var readFeedbackHTML = function(req, res, next) {
 	});
 };
 
-var checkAttendancePoint = function(req, res, next) {
+var checkPoint = function(req, res, next) {
 	if(req.session.login) {
-		user.checkAttendancePoint(req.session.email, function(pointData) {
+		user.checkPoint(req.session.email, function(pointData) {
 			req.attendancePointUpdated = pointData.attendancePointUpdated;
 			req.point = pointData.point;
 			next();
@@ -117,7 +117,7 @@ var getLeagueName = function(code) {
 	}
 }
 
-router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -179,7 +179,7 @@ router.get('/login', no_login, readFeedbackHTML, function(req, res) {
 
 });
 
-router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'rank.html';
 	var json = {
 		myinfo_display: '',
@@ -334,7 +334,7 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkAttendanc
 	}
 });
 
-router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'board.html';
 	console.log('email : ', req.session.email);
 	var json = {
@@ -367,7 +367,7 @@ router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkAttendan
 
 });
 
-router.get('/board/write', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/board/write', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var boardNo = req.query.no;
 	var path = 'board_write.html';
 
@@ -417,7 +417,7 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, readFeedbackH
 	}
 });
 
-router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'schedule.html';
 	var json = {
 		myinfo_display: '',
@@ -445,7 +445,7 @@ router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkAtten
 	res.render(path, json);
 });
 
-router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res){
+router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
@@ -464,7 +464,6 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 		goalsHomeTeam: '',
 		goalsAwayTeam: '',
 		chatMatchStatus: '',
-		chatMatchStatusClass: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		myEmail: ''
@@ -491,14 +490,11 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 			}
 
 			if (matchData.status == 'IN_PLAY') {
-				json.chatMatchStatus = ':';
-				json.chatMatchStatusClass = 'playing';
+				json.chatMatchStatus = '<span class="status_live">LIVE</span>';
 			} else if (matchData.status == 'FINISHED') {
 				json.chatMatchStatus = '종료';
-				json.chatMatchStatusClass = 'finished';
 			} else {
 				json.chatMatchStatus = '예정';
-				json.chatMatchStatusClass = 'not_started';
 			}
 
 			if(req.session.login) {
@@ -587,7 +583,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 	});
 });
 
-router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'search.html';
 	var id = req.query.id;
 
@@ -694,7 +690,7 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkAttenda
 	});
 });
 
-router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
+router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
 	var path = 'my_page.html';
 	var json = {
 		myinfo_display: '',
