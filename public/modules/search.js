@@ -180,7 +180,7 @@ var SEARCH = {
 					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
 					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
 						if(recentMatches[r].afterRating > max) {
-							max = recentMatches[r].afterRating;
+							max = parseInt(recentMatches[r].afterRating, 10);
 							ratelist[d] = max;
 							beforeRating = recentMatches[r].beforeRating;
 							found = true;
