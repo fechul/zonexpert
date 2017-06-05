@@ -1,5 +1,9 @@
 var LOGIN = {
 	init: function() {
+		var remeberId = localStorage.getItem('zeRememberEmail');
+		if (remeberId) {
+			$('#email_input').val(remeberId);
+		}
 		this.init_events();
 		notice.init();
 	},
@@ -11,6 +15,7 @@ var LOGIN = {
 				'password': $('#pw_input').val()
 			}, function(login) {
 				if (login.result) {
+					localStorage.setItem('zeRememberEmail', $('#email_input').val());
 					location.replace('/');
 				} else {
 					var err_msg = '';

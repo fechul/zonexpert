@@ -71,12 +71,18 @@
 
 #schedule_table {
 	width: 100%;
+	border-top: 2px solid #d2d2d2;
+	border-bottom: 2px solid #d2d2d2;
 }
 
 #schedule_table .schedule_table_row {
 	cursor: default;
 	height: 38px;
-	border-bottom: 1px solid #bbb;
+	border-bottom: 1px solid #ddd;
+}
+
+#schedule_table .schedule_table_row.changeDay {
+	border-top: 2px solid #d2d2d2;
 }
 
 #schedule_table .schedule_table_row.today {
@@ -188,7 +194,7 @@
 }
 
 #schedule_table .schedule_table_row td:nth-child(4) {
-	width: 5%;
+	width: 7%;
 	font-size: 12px;
     line-height: 14px;
 	font-weight: bold;
@@ -255,14 +261,55 @@
 		margin: 30px 0px;
 	}
 
-	#schedule_table .schedule_table_row td:nth-child(2),
-	#schedule_table .schedule_table_row td:nth-child(6) {
-		font-size: 11px;
+	.schedule_table_section {
+		padding: 0px 2px 25px 2px;
 	}
 
-	#schedule_table .schedule_table_row td:nth-child(4),
 	#schedule_table .schedule_table_row td:nth-child(1) {
+		width: 12%;
 		font-size: 10px;
+		font-weight: normal;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(2) {
+		width: 30%;
+		font-size: 12px;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(3) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(4) {
+		width: 12%;
+		font-size: 11px;
+	    line-height: 12px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(5) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(6) {
+		width: 30%;
+		font-size: 12px;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(7) {
+		width: 8%;
+		font-size: 12px;
+		border-left: 1px solid #bbb;
+		/*background-color: #e0e0e0;*/
+	}
+
+	.status_live {
+		font-size: 10px;
+	    padding: 2px 4px;
 	}
 }
 
@@ -279,14 +326,55 @@
 		margin: 30px 0px;
 	}
 
-	#schedule_table .schedule_table_row td:nth-child(2),
-	#schedule_table .schedule_table_row td:nth-child(6) {
-		font-size: 11px;
+	.schedule_table_section {
+		padding: 0px 2px 25px 2px;
 	}
 
-	#schedule_table .schedule_table_row td:nth-child(4),
 	#schedule_table .schedule_table_row td:nth-child(1) {
+		width: 12%;
 		font-size: 10px;
+		font-weight: normal;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(2) {
+		width: 30%;
+		font-size: 12px;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(3) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(4) {
+		width: 12%;
+		font-size: 11px;
+	    line-height: 12px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(5) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(6) {
+		width: 30%;
+		font-size: 12px;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(7) {
+		width: 8%;
+		font-size: 12px;
+		border-left: 1px solid #bbb;
+		/*background-color: #e0e0e0;*/
+	}
+
+	.status_live {
+		font-size: 10px;
+	    padding: 2px 4px;
 	}
 }
 
@@ -307,21 +395,54 @@
 		width: 60px;
 	}
 
-	#schedule_table tr {
-		border: 1px solid #999;
+	.schedule_table_section {
+		padding: 0px 2px 25px 2px;
 	}
 
-	#schedule_table .schedule_date {
-		border-right: 0px !important;
+	#schedule_table .schedule_table_row td:nth-child(1) {
+		width: 12%;
+		font-size: 10px;
+		font-weight: normal;
 	}
 
-	#schedule_table .schedule_basket {
-		border-left: 0px !important;
+	#schedule_table .schedule_table_row td:nth-child(2) {
+		width: 30%;
+		font-size: 12px;
 	}
 
-	#schedule_table td {
-		display: block;
-		text-align: center;
-		width: 100% !important;
+	#schedule_table .schedule_table_row td:nth-child(3) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(4) {
+		width: 12%;
+		font-size: 11px;
+	    line-height: 12px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(5) {
+		width: 3%;
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(6) {
+		width: 30%;
+		font-size: 12px;
+	}
+
+	#schedule_table .schedule_table_row td:nth-child(7) {
+		width: 8%;
+		font-size: 12px;
+		border-left: 1px solid #bbb;
+		/*background-color: #e0e0e0;*/
+	}
+
+	.status_live {
+		font-size: 10px;
+	    padding: 2px 4px;
 	}
 }

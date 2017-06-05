@@ -126,7 +126,7 @@ var SCHEDULE = {
 																		.animate({right: '+=6px'}, 40)
 																		.animate({right: '-=3px'}, 40);
 					} else {
-						console.log('err');
+						notice.show('alert', '로그인 해주세요');
 					}
 
 				}
@@ -207,6 +207,7 @@ var SCHEDULE = {
 		var currentDay = currentDate.getDate();
 		var monthList = [];
 		var todayCount = 0;
+		var prevDay = 0;
 
 		$.get('/prediction/all', {
 			'leagueId': leagueId
@@ -280,8 +281,16 @@ var SCHEDULE = {
 							todayCount = 0;
 						}
 					}
+
+					var changeDay = '';
+
+					if (prevDay != matchDay) {
+						changeDay = 'changeDay';
+						prevDay = matchDay;
+					}
+
 					var row_data = [
-						'<tr class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, '" month="', matchMonth, '">',
+						'<tr class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, ' ', changeDay, '" month="', matchMonth, '">',
 							'<td class="schedule_date">', self.getDateString(match.date), '</td>'
 					].join('');
 
