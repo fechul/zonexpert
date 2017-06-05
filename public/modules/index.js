@@ -145,37 +145,58 @@ var INDEX = {
 			}
 		};
 
-		var get_league_name = function(code) {
+		var get_sport_name = function(code) {
+			code = code.toString();
+
 			switch(code) {
-				case 426:
+				case '1':
+					return '축구';
+					break;
+				case '2':
+					return '야구';
+					break;
+				default:
+					return '-';
+					break;
+			}			
+		};
+
+		var get_league_name = function(code) {
+			code = code.toString();
+
+			switch(code) {
+				case '426':
 					return '프리미어리그';
 					break;
-				case 429:
+				case '429':
 					return '잉글랜드FA컵';
 					break;
-				case 430:
+				case '430':
 					return '분데스리가';
 					break;
-				case 432:
+				case '432':
 					return '포칼컵';
 					break;
-				case 433:
+				case '433':
 					return '에레디비시';
 					break;
-				case 434:
+				case '434':
 					return '리그 1';
 					break;
-				case 436:
+				case '436':
 					return '라리가';
 					break;
-				case 438:
+				case '438':
 					return '세리에 A';
 					break;
-				case 439:
+				case '439':
 					return '포르투갈';
 					break;
-				case 440:
+				case '440':
 					return '챔피언스리그';
+					break;
+				case 'kbo2017':
+					return 'KBO';
 					break;
 				default:
 					return '-';
@@ -198,7 +219,7 @@ var INDEX = {
 					table_html += '<tr>';
 					table_html += '<td class="table_label_rank">' + (i+1) + '</td>';
 					table_html += '<td class="table_label_nickname">' + data[i].nickname + '</td>';
-					table_html += '<td class="table_label_mainsport">' + get_league_name(data[i].main_league) + '</td>';
+					table_html += '<td class="table_label_mainsport">' + get_sport_name(data[i].main_sport) + '/' + get_league_name(data[i].main_league) + '</td>';
 					table_html += '<td class="table_label_score">' + parseInt(data[i].rating, 10) + '</td>';
 
 					if(data[i].record) {

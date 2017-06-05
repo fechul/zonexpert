@@ -52,6 +52,63 @@ var checkAttendancePoint = function(req, res, next) {
 	}
 };
 
+var getSportsName = function(code) {
+	code = code.toString();
+	switch(code) {
+		case '1':
+			return '축구';
+			break;
+		case '2':
+			return '야구';
+			break;
+		default:
+			return '-';
+			break;
+	}
+}
+
+var getLeagueName = function(code) {
+	code = code.toString();
+	switch(code) {
+		case '426':
+			return '프리미어리그';
+			break;
+		case '429':
+			return '잉글랜드FA컵';
+			break;
+		case '430':
+			return '분데스리가';
+			break;
+		case '432':
+			return '포칼컵';
+			break;
+		case '433':
+			return '에레디비시';
+			break;
+		case '434':
+			return '리그 1';
+			break;
+		case '436':
+			return '라리가';
+			break;
+		case '438':
+			return '세리에 A';
+			break;
+		case '439':
+			return '포르투갈';
+			break;
+		case '440':
+			return '챔피언스리그';
+			break;
+		case 'kbo2017':
+			return 'KBO';
+			break;
+		default:
+			return '-';
+			break;
+	}
+}
+
 router.get('/', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
 	var path = 'index.html';
 	var json = {
@@ -186,44 +243,6 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 							}
 						};
 
-						var get_league_name = function(code) {
-							switch(code) {
-								case 426:
-									return '프리미어리그';
-									break;
-								case 429:
-									return '잉글랜드FA컵';
-									break;
-								case 430:
-									return '분데스리가';
-									break;
-								case 432:
-									return '포칼컵';
-									break;
-								case 433:
-									return '에레디비시';
-									break;
-								case 434:
-									return '리그 1';
-									break;
-								case 436:
-									return '라리가';
-									break;
-								case 438:
-									return '세리에 A';
-									break;
-								case 439:
-									return '포르투갈';
-									break;
-								case 440:
-									return '챔피언스리그';
-									break;
-								default:
-									return '-';
-									break;
-							}
-						};
-
 						var rank = 1;
 						var type = 'total';
 						if(req.query.type) {
@@ -234,7 +253,7 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 							rank_table_html += '<tr id="' + (search_target == rank ? 'target_row' : '') + '">';
 							rank_table_html += '<td class="table_label_rank">' + rank + '</td>';
 							rank_table_html += '<td class="table_label_nickname">' + user.nickname + '</td>';
-							rank_table_html += '<td class="table_label_mainsport">' + get_league_name(user.main_league) + '</td>';
+							rank_table_html += '<td class="table_label_mainsport">' + getSportsName(user.main_sport) + '/' + getLeagueName(user.main_league) + '</td>';
 							rank_table_html += '<td class="table_label_score">' + parseInt(user.rating, 10) + '</td>';
 
 							if(user.record) {
@@ -658,8 +677,8 @@ router.get('/my_page', need_login, checkAttendancePoint, function(req, res) {
 			var day = signupDate.getDate();
 
 			json.signupDate = year + '년 ' + month + '월 ' + day + '일';
-			json.mainSport = userData.main_sport;
-			json.mainLeague = userData.main_league;
+			json.mainSport = getSportsName(userData.main_sport);
+			json.mainLeague = getLeagueName(userData.main_league);
 		}
 
 		res.render(path, json);

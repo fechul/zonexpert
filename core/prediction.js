@@ -227,12 +227,41 @@ exports.getMatchesStatistics = function(data, callback) {
                         $in: ['true', 'false']
                     }
                 }, function(predictErr, predictData) {
-                    console.log("da: ", predictData)
                     if(predictErr) {
                         callback(null);
                     } else {
                         if(predictData && predictData.length) {
-                            if(type == 'league') {
+                            if(type == 'sport') {
+                                async.each(predictData, function(eachData, async_cb) {
+                                    if(!userStatistics[eachData.sportsId]) {
+                                        userStatistics[eachData.sportsId] = {
+                                            'hit': 0,
+                                            'fail': 0,
+                                            'game_cnt': 0,
+                                            'sportsId': eachData.sportsId
+                                        };
+                                    }
+
+                                    if(eachData.result == 'true') {
+                                        userStatistics[eachData.sportsId].hit++;
+                                        userStatistics[eachData.sportsId].game_cnt++;
+                                    } else if(eachData.result == 'false') {
+                                        userStatistics[eachData.sportsId].fail++;
+                                        userStatistics[eachData.sportsId].game_cnt++;
+                                    }
+
+                                    async_cb();
+                                }, function(async_err) {
+                                    if(async_err) {
+                                        callback(null);
+                                    } else {
+                                        for(var key in userStatistics) {
+                                            userStatistics[key].rate = ((userStatistics[key].hit/userStatistics[key].game_cnt)*100).toFixed(2);
+                                        }
+                                        callback(userStatistics);
+                                    }
+                                });
+                            } else if(type == 'league') {
                                 async.each(predictData, function(eachData, async_cb) {
                                     if(!userStatistics[eachData.leagueId]) {
                                         userStatistics[eachData.leagueId] = {
