@@ -6,7 +6,7 @@ body {
 	font-family: "Nanum Gothic", sans-serif !important;
 	/*background-color: #145c86 !important;*/
 
-	background-image: url(http://i.imgur.com/MQB99sg.jpg);	
+	background-image: url(http://i.imgur.com/MQB99sg.jpg);
 	background-repeat: repeat;
 	background-size: 100% 100vh;
 	background-attachment: fixed;
@@ -210,20 +210,8 @@ body {
 	background-color: #f3f3f3;
 	border-radius: 5px;
 	box-shadow: 0px 0px 3px;
+	z-index: 10000;
 }
-
-/*.prediction_shortcut_close {
-    position: absolute;
-    right: 6px;
-    top: 0px;
-    font-size: 20px;
-    color: #674403;
-    cursor: pointer;
-}
-
-.prediction_shortcut_close:hover {
-	color: #3a2500;
-}*/
 
 .prediction_shortcut_title_container {
 	height: 36px;
@@ -278,33 +266,41 @@ body {
 }
 
 .prediction_shortcut_list {
-	height: calc(100% - 38px - 32px);
+	height: calc(100% - 38px - 42px);
 	overflow-y: scroll;
 	font-weight: bold;
+	border-bottom: 1px solid #ccc;
 }
 
 .prediction_shortcut_list table {
 	width: 100%;
 }
 
+.prediction_shortcut_do {
+	padding-top: 5px;
+	padding-right: 10px;
+}
+
 .prediction_shortcut_button_container {
-    height: 85px;
-    width: 85px;
+    height: 80px;
+    width: 70px;
     position: fixed;
-    right: 0px;
+    right: 80px;
     bottom: 0px;
 }
 
 .prediction_shortcut_button {
-    height: 70px;
-    width: 70px;
+    height: 65px;
+    width: 65px;
     background-color: #ffa500;
     text-align: center;
     border: 2px solid #ffdfa4;
 	border-radius: 50px;
-    font-size: 50px;
+    font-size: 49px;
     cursor: pointer;
     color: #674403;
+	line-height: 66px;
+	padding-left: 3px;
 }
 
 .prediction_shortcut_icon {
@@ -326,8 +322,8 @@ body {
     text-align: center;
     color: white;
     font-weight: bold;
-    top: 0px;
-    right: 13px;
+    top: -2px;
+    right: 0px;
 }
 
 .prediction_shortcut_preview_number_inner_unconfirmed {
@@ -418,6 +414,95 @@ body {
 .prediction_shortcut_list tr {
 	background-color: #f3f3f3 !important;
 	color: #333 !important;
+}
+
+.prediction_shortcut_container .do_prediction {
+	margin-right: 5px;
+	background-color: #ffa500;
+	font-weight: bold;
+}
+.prediction_shortcut_container .do_prediction:hover {
+	background-color: #f69f00;
+}
+
+.prediction_shortcut_container .prediction_shortcut_close {
+	font-weight: bold;
+}
+
+.feedback_container {
+	display: none;
+    height: 330px;
+    width: 520px;
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+	background-color: #f3f3f3;
+	border-radius: 5px;
+	box-shadow: 0px 0px 3px;
+	z-index: 10000;
+	padding: 10px 10px;
+}
+
+.feedback_button_container {
+    height: 80px;
+    width: 70px;
+    position: fixed;
+    right: 10px;
+    bottom: 0px;
+}
+
+.feedback_button {
+    height: 65px;
+    width: 65px;
+    background-color: #1f92ff;
+    text-align: center;
+    border: 2px solid #b3d7ff;
+	border-radius: 50px;
+    font-size: 45px;
+    cursor: pointer;
+    color: #fff;
+    line-height: 59px;
+}
+
+.feedback_icon {
+	margin-left: 4px;
+}
+
+.feedback_button:hover {
+	border-color: #c2dfff;
+	color: #072848;
+}
+
+.feedback_title_container {
+	font-weight: bold;
+	font-size: 16px;
+	padding: 5px 0px 15px 0px;
+}
+
+#send_feedback {
+	margin-right: 5px;
+	background-color: #1f92ff;
+	color: white;
+}
+
+#send_feedback:hover {
+	background-color: #148dff;
+}
+
+.bottom_fixed_button_container {
+    right: 10px;
+}
+
+.bottom_fixed_button_container ~ .bottom_fixed_button_container {
+    right: 80px;
+}
+
+.bottom_fixed_container .btn {
+	font-weight: bold;
+}
+
+.bottom_fixed_container table {
+	border: 1px solid #999;
 }
 
 
@@ -529,5 +614,9 @@ body {
 	.container_box {
 		margin: 30px 0px;
 	}
-}
 
+	.bottom_fixed_container {
+		width: 92%;
+		z-index: 10000;
+	}
+}

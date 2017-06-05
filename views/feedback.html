@@ -1,0 +1,76 @@
+<div class="feedback_container bottom_fixed_container">
+    <div class="feedback_title_container">
+        <span class="feedback_title_text">
+            저희에게 의견을 주세요!
+        </span>
+    </div>
+    <div class="feedback_contents">
+        <div class="form-group">
+            <label for="feedback_email">이메일 주소</label>
+            <input type="email" class="form-control" id="feedback_email">
+        </div>
+        <div class="form-group">
+            <label for="feedback_contents">의견</label>
+            <textarea class="form-control" id="feedback_contents" style="resize: none; height: 120px;"></textarea>
+        </div>
+    </div>
+    <div class="send_feedback_container">
+        <button class="feedback_close btn btn-default pull-right">
+            닫기
+        </button>
+        <button id="send_feedback" class="send_feedback btn btn-default pull-right">
+            보내기
+        </button>
+    </div>
+</div>
+<div class="feedback_button_container bottom_fixed_button_container">
+    <div class="feedback_button">
+        <i class="feedback_icon fa fa-commenting-o"></i>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        var canSend = true;
+        var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+
+        $('.feedback_button').click(function() {
+            $('.bottom_fixed_button_container').hide();
+            $('.feedback_container').show();
+        });
+
+        $('.feedback_close').click(function() {
+            $('.bottom_fixed_container').hide();
+            $('.bottom_fixed_button_container').show();
+        });
+
+        $('#send_feedback').click(function() {
+            var email = $('#feedback_email').val();
+            var contents = $('#feedback_contents').val();
+
+            if (!canSend) {
+                notice.show('alert', '의견을 너무 자주 보내실 수 없어요!');
+            } else if (email.length == 0) {
+                notice.show('alert', '이메일을 입력해주세요.');
+            } else if (!reg_email.test(email)) {
+                notice.show('alert', '이메일을 형식이 잘못되었습니다.');
+            } else if (contents.length == 0) {
+                notice.show('alert', '의견을 입력해주세요.');
+            } else {
+                $.post('/feedback', {
+                    'feedback_email': email,
+                    'feedback_contents': contents
+                }, function(success) {
+                    canSend = false;
+                    setTimeout(function() {
+                        canSend = true;
+                    }, 10000);
+                    if (success) {
+                        notice.show('success', '의견 감사합니다!');
+                    } else {
+                        notice.show('alert', '의견제출에 실패하였습니다.<br>잠시 후에 다시 시도해주세요.');
+                    }
+                });
+            }
+        });
+    });
+</script>

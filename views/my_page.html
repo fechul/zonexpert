@@ -43,7 +43,7 @@
 					</div>
 				</div>
 			</section>
-			
+
 			<section id="changeinfo_wrap">
 				<div class = "changeinfo">
 					<div class="changeinfo_btns">
@@ -76,7 +76,7 @@
 						  		<input type="password" class="form-control" id="inputConfirmPassword" placeholder="비밀번호를 확인해주세요.">
 							</div>
 					  	</div>
-					  	
+
 					  	<div class="form-group" style="margin-bottom:0px;">
 							<div >
 						  		<button type="button" class="btn btn-default" id="submitChangeInfo">변경하기</button>
@@ -91,7 +91,7 @@
 						  		<textarea class="form-control" id="leaveReason" style="min-height:150px; width:600px; display:inline-block;"></textarea>
 							</div>
 					  	</div>
-					  	
+
 					  	<div class="form-group" style="margin-bottom:0px;">
 							<div>
 						  		<button type="submit" class="btn btn-default" id="submitLeaveMember">탈퇴하기</button>
@@ -101,7 +101,7 @@
 
 				</div>
 			</section>
-			
+
 			<section class="mypage_article_wrap">
 				<div class="myPointsManagementField">
 					<article class="mypage_article">
@@ -113,7 +113,7 @@
 						<div class="mypage_menu_div">
 							<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
 								<li><i class="fa fa-caret-right"></i> 구매건수 : 0</li>
-								
+
 								<li><i class="fa fa-caret-right"></i> 구매완료 : 0</li>
 								<li><i class="fa fa-caret-right"></i> 구매금액 : 0</li>
 							</ul>
@@ -136,7 +136,7 @@
 						<div style="text-align:center;">
 							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
 					</article>
-					
+
 					<article class="mypage_article">
 						<div style="text-align:center;">
 							<span class="mypage-ti-fo">잔고</span></div>
@@ -151,7 +151,7 @@
 						<div style="text-align:center;">
 							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
 					</article>
-					
+
 					<article class="mypage_article">
 						<div style="text-align:center;">
 							<span class="mypage-ti-fo">정산/수익관리</span></div>
@@ -170,23 +170,26 @@
 				</div>
 			</section>
 		</section>
-		
+        <%- prediction_shortcut %>
+        <%- feedback %>
     </body>
 
     <div id="notice">
 		<div id="notice-icon"></div><div id="notice-content"></div>
 	</div>
-	
+
 	<script src="jquery/jquery.js"></script>
 	<script src="bootstrap/bootstrap.min.js"></script>
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
-	 <script src="modules/my_page.js"></script>
-	 <script src="notice/notice.js"></script>
-	 <script> 
-	 	var notice = NOTICE;
-		MYPAGE.init({
-			'attendancePointUpdated': <%- attendancePointUpdated %>
-		});
-	</script> 
+    <script src="modules/my_page.js"></script>
+    <script src="modules/prediction_shortcut.js"></script>
+    <script src="notice/notice.js"></script>
+    <script>
+        var notice = NOTICE;
+        MYPAGE.init({
+            'attendancePointUpdated': <%- attendancePointUpdated %>
+        });
+        PREDICTION_SHORTCUT.init();
+    </script>
 
 </html>

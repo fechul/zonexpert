@@ -7,10 +7,10 @@
         <link rel='stylesheet' href='/stylesheets/login.css' />
         <!-- <link rel='stylesheet' href='/bootstrap/bootstrap.css' /> -->
     </head>
-	
+
     <body>
 		<%- include header.html %>
-		
+
 		<section class="login_section">
 		<div class="login_box_wrapper">
 				<div class="logo"></div>
@@ -32,14 +32,13 @@
 				</div>
 			</div>
 		</section>
-		
-		
+        <%- feedback %>
     </body>
 
     <div id="notice">
 		<div id="notice-icon"></div><div id="notice-content"></div>
 	</div>
-	
+
 	<script src="jquery/jquery.js"></script>
 	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
 	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
@@ -50,5 +49,5 @@
 		var notice = NOTICE;
 		LOGIN.init();
 	</script>
-	
+
 </html>
