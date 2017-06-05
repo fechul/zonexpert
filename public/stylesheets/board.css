@@ -2,6 +2,7 @@
 	/*background-color: #145c86;*/
 	/*opacity: 0.85;*/
 	text-align: center;
+	margin-bottom: 60px !important;
 }
 
 table {
@@ -370,6 +371,3 @@ table > tbody > tr:not(:last-child) {
 		padding: 15px;
 	}
 }
-
-
-

@@ -129,8 +129,46 @@ var CHAT = {
             });
         });
 
-        $('.predict_in_chat').click(function() {
-            console.log('d');
+        $(document).on('click', '.predict_in_chat:not(.confirmed)', function() {
+            var $this = $(this);
+            var toggle = false;
+
+            if ($this.hasClass('basketed')) {
+                toggle = true;
+            }
+
+            var matchId = self.room;
+            var leagueId = self.leagueId;
+
+            $.ajax({
+                'url': '/prediction/basket',
+                'type': toggle ? 'DELETE' : 'POST',
+                'data': {
+                    'matchId': matchId,
+                    'leagueId': leagueId
+                },
+                'dataType': 'json',
+                'success': function(result) {
+                    if (result) {
+                        if ($this.hasClass('basketed')) {
+                            $this.removeClass('basketed');
+                        } else {
+                            $this.addClass('basketed');
+                        }
+
+                        PREDICTION_SHORTCUT.setData();
+                        $('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
+                                                                        .animate({right: '-=6px'}, 40)
+                                                                        .animate({right: '+=6px'}, 40)
+                                                                        .animate({right: '-=6px'}, 40)
+                                                                        .animate({right: '+=6px'}, 40)
+                                                                        .animate({right: '-=3px'}, 40);
+                    } else {
+                        console.log('err');
+                    }
+
+                }
+            });
         });
     },
 
