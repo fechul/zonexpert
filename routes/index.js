@@ -520,6 +520,16 @@ router.post('/prediction/viewOthers', function(req, res) {
 	});
 });
 
+router.get('/prediction/getProceedingPredict', function(req, res) {
+	var searchId = req.query.search_id;
+
+	prediction.getProceedingPredict({
+		searchId: searchId
+	}, function(proceeding) {
+		res.json(proceeding);
+	});
+});
+
 router.all('/test/schedule_initialize', function(req, res) {
 	var leaguesObject = {};
 	var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];

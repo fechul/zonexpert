@@ -41,6 +41,28 @@
 				</div>
 			</div>
 
+			<div class="my_prediction_list_wrapper" style="<%= search_show %>">
+				<div class="my_prediction_list_section container_box">
+					<div class="searchdata_user">
+						<span class="searchdata_user_id"><%= searchdata_user_id %>님의 진행중인 예측</span>
+					</div>
+					<div class="my_prediction_list_table_wrapper">
+						<table id="my_prediction_list_table">
+							<tr>
+								<td>경기날짜</td>
+								<td>홈팀</td>
+								<td></td>
+								<td>어웨이팀</td>
+								<td>조회/예측</td>
+							</tr>
+							<tr class="noProceeding">
+								<td colspan="5">진행중인 예측이 없습니다.</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
 			<div class="my_record_data_wrapper" style="<%= search_show %>">
 				<div class="my_record_data_section container_box">
 					<ul class="nav nav-tabs">
@@ -112,7 +134,8 @@
 		SEARCH.init({
 			'search_id': '<%= searchdata_user_id %>',
 			'search_rating': '<%= searchdata_rating %>',
-			'attendancePointUpdated': <%- attendancePointUpdated %>
+			'attendancePointUpdated': <%- attendancePointUpdated %>,
+			'myNickName': '<%= myNickName %>'
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>

@@ -14,7 +14,8 @@
 .searchdata_wrapper,
 .my_record_data_wrapper,
 .my_statistics_data_wrapper,
-.my_recent_predict_wrapper {
+.my_recent_predict_wrapper,
+.my_prediction_list_wrapper {
 	max-width: 1200px;
 	margin: 0 auto;
 }
@@ -30,7 +31,8 @@
 	width: 800px;
 }
 
-.my_record_data_section {
+.my_record_data_section,
+.my_prediction_list_section {
 	width: 800px;
 	border-radius: 0px;
 	margin-top: 0px;
@@ -62,9 +64,6 @@
 #record_field {
 	padding: 15px;
 }
-
-
-
 
 .mydata_statistics {
 	display: flex;
@@ -240,6 +239,41 @@ canvas{position:relative; z-index:9999;}
 .recent_predict_data_row_homename,
 .recent_predict_data_row_awayname {
 	width: 190px;
+}
+
+.my_prediction_list_table_wrapper {
+	padding: 15px;
+}
+
+#my_prediction_list_table tr td > img {
+	width: 60px;
+	margin-right: 5px;
+}
+
+.goToPredict {
+	cursor: pointer;
+}
+
+.goToPredict.ismine {
+	cursor: not-allowed;
+}
+
+.goToPredict:hover {
+	background-color: #ccc;
+	border-left: #ccc;
+}
+
+.goToPredict.ismine:hover {
+	background-color: #f1f1f1;
+}
+
+.goToPredict > i {
+	color: #4365b5;
+	font-size: 18px;
+}
+
+.goToPredict.ismine > i {
+	color: #ccc;
 }
 
 /*.my_recent_predict_section .recent_predict_data_row > span {

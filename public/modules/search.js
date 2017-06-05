@@ -4,6 +4,7 @@ var SEARCH = {
 
 		this.search_id = options.search_id;
 		this.search_rating = parseInt(options.search_rating, 10);
+		this.myNickName = options.myNickName;
 		this.targetStatistics_sport = [];
 		this.targetStatistics_league = [];
 		this.targetStatistics_club = [];
@@ -26,6 +27,7 @@ var SEARCH = {
 				self.setRecordField();
 			});
 		});
+		this.setProceedingPredict();
 	},
 
 	init_events: function() {
@@ -113,6 +115,16 @@ var SEARCH = {
 					self.setStatisticsField('club');
 				});
 			}
+		});
+
+		$(document).on('click', '.goToPredict', function() {
+			if($(this).hasClass('ismine')) {
+				return false;
+			}
+			var matchId = $(this).closest('tr').attr('matchId');
+			var id = self.search_id;
+
+			location.href = '/match/' + matchId + '?viewTargetNick=' + id;
 		});
 	},
 
@@ -526,6 +538,41 @@ var SEARCH = {
 		});
 	},
 
+	setProceedingPredict: function() {
+		var self = this;
+
+		$.get('/prediction/getProceedingPredict', {
+			'search_id': self.search_id
+		}, function(proceeding) {
+
+			var isMine = (self.search_id == self.myNickName) ? 'ismine' : '';
+
+			if(proceeding && proceeding.length) {
+				var proceedingHtml = '';
+				$('#my_prediction_list_table .noProceeding').hide();
+				for(var i = 0; i < proceeding.length; i++) {
+					var date = self.getDateString(proceeding[i].matchday);
+					var homename = proceeding[i].homeTeamName;
+					var homeimg = proceeding[i].homeTeamImg;
+					var awayname = proceeding[i].awayTeamName;
+					var awayimg = proceeding[i].awayTeamImg;
+					var matchId = proceeding[i].matchId;
+
+					proceedingHtml += '<tr matchId="' + matchId + '">';
+					proceedingHtml += '<td>' + date + '</td>';
+					proceedingHtml += '<td><img src="' + homeimg + '"></img>' + homename + '</td>';
+					proceedingHtml += '<td>VS</td>';
+					proceedingHtml += '<td><img src="' + awayimg + '"></img>' + awayname + '</td>';
+					proceedingHtml += '<td class="goToPredict ' + isMine + '"><i class="fa fa-arrow-right"></i></td>';
+					proceedingHtml += '</tr>';
+				}
+				$('#my_prediction_list_table').append(proceedingHtml);
+			} else {
+				$('#my_prediction_list_table .noProceeding').show();
+			}
+		});
+	},
+
 	getDateList: function() {
 		var now = new Date();
 		var month = now.getMonth() + 1;
@@ -653,6 +700,25 @@ var SEARCH = {
 				return '-';
 				break;
 		}
+	},
+
+	getDateString: function(date) {
+		var dayArr = ['일', '월', '화', '수', '목', '금', '토'];
+		date = new Date(date);
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var day = dayArr[date.getDay()];
+		var _date = date.getDate();
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		month = month >= 10 ? month : '0' + month
+		_date = _date >= 10 ? _date : '0' + _date;
+		hours = hours >= 10 ? hours : '0' + hours;
+		minutes = minutes >= 10 ? minutes : '0' + minutes;
+
+		var dateString = month + '.' + _date + ' (' + day + ')' + '<br>' + hours + ':' + minutes;
+
+		return dateString;
 	},
 
 	sortStatisticsData: function(type, sortType) {

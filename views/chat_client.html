@@ -32,7 +32,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#goToChat">채팅</a></li>
                     <li><a data-toggle="tab" href="#goToPredictionSystem">예측시스템</a></li>
-                    <li><a data-toggle="tab" href="#goToOtherPredict">다른 사용자 예측 조회</a></li>
+                    <li><a data-toggle="tab" class="goToOtherPredictLi" href="#goToOtherPredict">다른 사용자 예측 조회</a></li>
                     <li class="predict_in_chat <%- predict_in_chat_condition %>"><a><i class="fa fa-check-square-o"></i></a></li>
                 </ul>
 
@@ -181,7 +181,8 @@
             attendancePointUpdated: <%- attendancePointUpdated %>,
             sportsId: '<%= sportsId %>',
             leagueId: '<%= leagueId %>',
-            email: '<%= myEmail %>'
+            email: '<%= myEmail %>',
+            viewTargetNick: '<%- viewTargetNick %>'
         });
         PREDICTION_SHORTCUT.init();
     </script>
