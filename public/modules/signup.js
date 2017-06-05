@@ -29,7 +29,8 @@ var SIGNUP = {
 				'main_league': main_league
 			}, function(signup) {
 				if (signup.result) {
-					location.replace('/');
+					notice.show('success', '인증 메일을 발송했습니다. 인증 후 이용해주세요.<br><a href="/">메인페이지로 이동</a>');
+					// location.replace('/');
 				} else {
 		    		if(signup.code == 1) {
 		    			notice.show('alert', '회원가입에 실패했습니다. 잠시후 다시 시도해주세요.');
