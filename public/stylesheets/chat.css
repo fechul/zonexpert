@@ -527,8 +527,9 @@ li .badge_ready {
     background-color: #ffc94f !important;
 }
 
-.predict_in_chat.confirmed {
+.predict_in_chat.confirmed:hover {
     background-color: rgba(121, 162, 192, 0.83) !important;
+    cursor: not-allowed;
 }
 
 .predict_in_chat a {
@@ -536,6 +537,7 @@ li .badge_ready {
     font-size: 20px;
     line-height: 0px !important;
     padding: 10px !important;
+    border
 
 }
 
@@ -559,11 +561,13 @@ li .badge_ready {
 }
 
 .nav > li:first-child > a {
-    border-top-left-radius: 10px;
+    border-top-left-radius: 5px;
 }
 
 .nav > li:last-child > a {
-    border-top-right-radius: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 0px;
+    margin-right: 0px !important;
 }
 
 /*
