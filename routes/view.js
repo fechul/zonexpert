@@ -592,7 +592,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 			} else {
 				res.redirect('/login');
 			}
-			
+
 		} else {
 			res.redirect('/schedule');
 		}

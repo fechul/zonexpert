@@ -8,6 +8,7 @@ section .logo {
 .wrapper {
     max-width: 1200px;
     margin: 0 auto;
+	margin-bottom: 60px;
 }
 
 .container_box {

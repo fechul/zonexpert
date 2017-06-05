@@ -71,8 +71,8 @@
 
 #schedule_table {
 	width: 100%;
-	border-top: 2px solid #d2d2d2;
-	border-bottom: 2px solid #d2d2d2;
+	border-top: 2px solid #c1c1c1;
+	border-bottom: 2px solid #c1c1c1;
 }
 
 #schedule_table .schedule_table_row {
@@ -82,7 +82,7 @@
 }
 
 #schedule_table .schedule_table_row.changeDay {
-	border-top: 2px solid #d2d2d2;
+	border-top: 2px solid #c1c1c1;
 }
 
 #schedule_table .schedule_table_row.today {
