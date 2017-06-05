@@ -115,7 +115,36 @@ var MYPAGE = {
 		});
 
 		$('#submitLeaveMember').click(function() {
-			var reason = $('#leaveReason').val();
+			$('.leaveConfirmDiv').show();
+			$(this).hide();
+			$('#submitLeaveMemberConfirm').show();
+		});
+
+		$('#submitLeaveMemberConfirm').click(function() {
+			var leaveReason = $('#leaveReason').val();
+			var password = $('#leavePassword').val();
+
+			$.post('/user/leave', {
+				'leaveReason': leaveReason,
+				'password': password
+			}, function(leaveResult) {
+				if(leaveResult.result && leaveResult != 'false') {
+					$.post('/logout', {}, function(logout) {
+		                if (logout.result) {
+		                    location.href = "/";
+		                } else {
+		                    console.log(logout);
+		                }
+		            });
+				} else {
+					if(leaveResult.code == 2) {
+						notice.show('alert', '비밀번호를 정확하게 입력해주세요.');
+					} else {
+						notice.show('alert', '회원 탈퇴에 실패했습니다. 잠시 후 다시 시도해주세요.');
+					}
+
+				}
+			});
 		});
 
 		$('#searchMyData').click(function() {

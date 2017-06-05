@@ -519,3 +519,50 @@ exports.returnPoint = function(options, callback) {
         }
     });
 };
+
+exports.leave = function(options, callback) {
+    var email = options.email;
+    var leaveReason = options.leaveReason;
+
+    db.user.find({
+        'email': email
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            db.user.remove({
+                'email': email
+            }, function(_err, remove) {
+                if(remove) {
+                    var smtpTransport = nodemailer.createTransport({
+                        'service': 'gmail',
+                        'auth': {
+                            'user': __admin_email,
+                            'pass': __admin_password
+                        }
+                    });
+
+                    var mailOptions = {
+                        'from': '존문가닷컴 <' + __admin_email + '>',
+                        'to': __admin_email,
+                        'subject': '회원 탈퇴: ' + email,
+                        'html': [
+                            '<div>',
+                                '-----탈퇴 계정-----<br>',
+                                '이메일: ' + email + '<br>',
+                                '탈퇴 사유: ' + leaveReason,
+                            '</div>'
+                        ].join('')
+                    };
+
+                    smtpTransport.sendMail(mailOptions, function(__err, res) {
+                        smtpTransport.close();
+                        callback(true);
+                    });
+                } else {
+                    callback(false);
+                }
+            });
+        } else {
+            callback(false);
+        }
+    });
+};
