@@ -189,9 +189,9 @@ var SEARCH = {
 				}
 
 				if(!found && d == labels.length-1) {
-					ratelist[d] = self.search_rating;;
+					ratelist[d] = self.search_rating;
 				} else if(!found) {
-					ratelist[d] = beforeRating || self.search_rating;
+					ratelist[d] = parseInt(beforeRating) || self.search_rating;
 				}
 			}
 		} else {
