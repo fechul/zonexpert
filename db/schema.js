@@ -8,7 +8,7 @@ var userSchema = new Schema({
     'authed': {'type': Boolean, 'default': false},
     'signup_auth_token': String,
     'signup_date': Date,
-    'main_sport': Number, // soccer 1
+    'main_sport': String, // soccer 1
     'main_league': String,
     'rating': {'type': Number, 'default': 1500},
     'record': Object,

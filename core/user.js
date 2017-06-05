@@ -233,7 +233,7 @@ exports.validate = function(data, callback) {
                 validation.code = 43;
             } else if (!reg_password.test(password)) {
                 validation.code = 44;
-            } else if(!main_sport || main_sport == 'none' || isNaN(parseInt(main_sport))) {
+            } else if(!main_sport || main_sport == 'none') {
                 validation.code = 51;
             } else if(!main_league || main_league == 'none') {
                 validation.code = 52;
