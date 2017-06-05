@@ -38,6 +38,13 @@ var readPredictionShortcutHTML = function(req, res, next) {
 	}
 };
 
+var readFeedbackHTML = function(req, res, next) {
+	fs.readFile('./views/feedback.html', function(err, data) {
+		req.feedback = data;
+		next();
+	});
+};
+
 var checkAttendancePoint = function(req, res, next) {
 	if(req.session.login) {
 		user.checkAttendancePoint(req.session.email, function(pointData) {
@@ -109,7 +116,7 @@ var getLeagueName = function(code) {
 	}
 }
 
-router.get('/', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'index.html';
 	var json = {
 		myinfo_display: '',
@@ -123,6 +130,7 @@ router.get('/', readPredictionShortcutHTML, checkAttendancePoint, function(req, 
 	};
 
 	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -135,7 +143,7 @@ router.get('/', readPredictionShortcutHTML, checkAttendancePoint, function(req, 
 	res.render(path, json);
 });
 
-router.get('/signup', no_login, function(req, res) {
+router.get('/signup', no_login, readFeedbackHTML, function(req, res) {
 	var path = 'signup.html';
 	var json = {
 		headerHideMenu: 'display:none;',
@@ -146,10 +154,12 @@ router.get('/signup', no_login, function(req, res) {
 		myCurrentPoint: 0
 	};
 
+	json.feedback = req.feedback;
+
 	res.render(path, json);
 });
 
-router.get('/login', no_login, function(req, res) {
+router.get('/login', no_login, readFeedbackHTML, function(req, res) {
 	var path = 'login.html';
 	var json = {
 		headerHideMenu: 'display:none;',
@@ -160,11 +170,13 @@ router.get('/login', no_login, function(req, res) {
 		myCurrentPoint: 0
 	};
 
+	json.feedback = req.feedback;
+
 	res.render(path, json);
 
 });
 
-router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'rank.html';
 	var json = {
 		myinfo_display: '',
@@ -289,6 +301,8 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
     };
 
     json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
+
     var search_id = req.query.search_id;
     if(search_id) {
     	search_id = search_id.replace(/ /g, '');
@@ -315,7 +329,7 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 	}
 });
 
-router.get('/board', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'board.html';
 	console.log('email : ', req.session.email);
 	var json = {
@@ -342,12 +356,13 @@ router.get('/board', readPredictionShortcutHTML, checkAttendancePoint, function(
 
 
 	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
     res.render(path, json);
 
 });
 
-router.get('/board/write', need_login, readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/board/write', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var boardNo = req.query.no;
 	var path = 'board_write.html';
 
@@ -377,6 +392,7 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, checkAttendan
 	}
 
 	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
 	if(boardNo) {	//update
 		json.write_btn_name = '수정하기';
@@ -396,7 +412,7 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, checkAttendan
 	}
 });
 
-router.get('/schedule', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'schedule.html';
 	var json = {
 		myinfo_display: '',
@@ -419,11 +435,12 @@ router.get('/schedule', readPredictionShortcutHTML, checkAttendancePoint, functi
 	}
 
 	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
 	res.render(path, json);
 });
 
-router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, function(req, res){
+router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
 
@@ -523,6 +540,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 						json.awayTeamImg = result.awayTeamImg;
 
 						json.prediction_shortcut = req.predictionShortcut;
+						json.feedback = req.feedback;
 
 				        res.render(path, json);
 					});
@@ -536,7 +554,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	});
 });
 
-router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function(req, res) {
+router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'search.html';
 	var id = req.query.id;
 
@@ -574,6 +592,7 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 	}
 
 	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
 	user.countAllUsers(function(userCount) {
 		user.get(id, function(userdata) {
@@ -644,7 +663,7 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 	});
 });
 
-router.get('/my_page', need_login, checkAttendancePoint, function(req, res) {
+router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoint, function(req, res) {
 	var path = 'my_page.html';
 	var json = {
 		myinfo_display: '',
@@ -667,6 +686,9 @@ router.get('/my_page', need_login, checkAttendancePoint, function(req, res) {
 		json.logout_display = 'display:none;';
 		json.mydata_display = 'display:none;';
 	}
+
+	json.prediction_shortcut = req.predictionShortcut;
+	json.feedback = req.feedback;
 
 	user.get(req.session.email, function(userData) {
 		if(userData) {

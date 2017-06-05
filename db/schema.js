@@ -144,12 +144,19 @@ var boardSchema = new Schema({
 //     }]
 // });
 
+var feedbackSchema = new Schema({
+    'createTime': Date,
+    'email': String,
+    'contents': String
+});
+
 var user = mongoose.model('user', userSchema);
 var league = mongoose.model('league' , leagueSchema);
 var match = mongoose.model('match', matchSchema);
 var team = mongoose.model('team' , teamSchema);
 var board = mongoose.model('board', boardSchema);
 var prediction = mongoose.model('prediction', predictionSchema);
+var feedback = mongoose.model('feedback', feedbackSchema);
 
 module.exports = {
   'user' : user,
@@ -157,5 +164,6 @@ module.exports = {
   'match' : match,
   'team' : team,
   'board': board,
-  'prediction': prediction
+  'prediction': prediction,
+  'feedback': feedback
 };

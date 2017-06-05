@@ -4,8 +4,8 @@ var SCHEDULE = {
 		var leagueId = '';
 		if (this.initFlag) {
 			this.initFlag = false;
-			var lastSportsId = localStorage.getItem('zonexpertsScheduleLastAccessSportsId');
-			var lastLeagueId = localStorage.getItem('zonexpertsScheduleLastAccessLeagueId');
+			var lastSportsId = localStorage.getItem('zeslaSI');
+			var lastLeagueId = localStorage.getItem('zeslaLI');
 
 			if (lastSportsId) {
 				$('.scheduledata_league_select_btn_container button').removeClass('active');
@@ -88,7 +88,7 @@ var SCHEDULE = {
 
 			var leagueId = $this_button.attr('key');
 
-			localStorage.setItem('zonexpertsScheduleLastAccessLeagueId', leagueId);
+			localStorage.setItem('zeslaLI', leagueId);
 			self.get_schedule(leagueId, function() {
 			});
 		});
@@ -102,7 +102,7 @@ var SCHEDULE = {
 			$('.scheduledata_league_btn_container[sports=' + sportsId + ']').show();
 			$('.scheduledata_league_btn_container[sports=' + sportsId + ']').find('button').eq(0).click();
 
-			localStorage.setItem('zonexpertsScheduleLastAccessSportsId', sportsId);
+			localStorage.setItem('zeslaSI', sportsId);
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
@@ -270,7 +270,7 @@ var SCHEDULE = {
 					}
 
 					var today = ''
-					if ((matchDay == (currentDay + 1)) && (matchMonth == currentMonth) && (matchYear == currentDate.getFullYear())) {
+					if ((matchDay == currentDay) && (matchMonth == currentMonth) && (matchYear == currentDate.getFullYear())) {
 						if (todayCount == 0) {
 							today = 'today-first';
 						} else {
@@ -279,7 +279,7 @@ var SCHEDULE = {
 						todayCount++;
 					} else {
 						if (todayCount > 0) {
-							today = 'today-last';
+							$('#schedule_table .schedule_table_row').last().removeClass('today').addClass('today-last');
 							todayCount = 0;
 						}
 					}
