@@ -566,6 +566,10 @@ li .badge_ready {
     border-top-right-radius: 10px;
 }
 
+.userPredictData {
+    display: none;
+}
+
 /*
     Media Query
 */

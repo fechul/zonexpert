@@ -115,11 +115,11 @@ var CHAT = {
             }, function(result) {
                 if(result) {
                     if(result.result && result.result !== 'false') {
-                    $('#viewBtnDiv').hide();
-                    $('#isShownDiv').show();
-                    $('#predictedUserPredictBox').fadeIn(2000);
-                    $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
-                    $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
+                        $('#viewBtnDiv').hide();
+                        $('#isShownDiv').show();
+                        $('#predictedUserPredictBox').fadeIn(2000);
+                        $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
+                        $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
                     } else {
                         notice.show('alert', '조회에 실패했습니다.');
                     }
@@ -377,8 +377,10 @@ var CHAT = {
                     $('#predictedUserPredictResult').html('홈팀 승!');
                 } else if(data.pick == 'away') {
                     $('#predictedUserPredictResult').html('어웨이팀 승!');
-                } else {
+                } else if(data.pick == 'draw') {
                     $('#predictedUserPredictResult').html('무승부');
+                } else {
+                    $('#predictedUserPredictResult').html('-');
                 }
 
                 if(data.viewList && data.viewList.length) {
