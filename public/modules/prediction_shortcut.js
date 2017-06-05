@@ -78,6 +78,12 @@ var PREDICTION_SHORTCUT = {
 
 			$('.prediction_shortcut_list:not(.' + type + ')').hide();
 			$('.prediction_shortcut_list.' + type).show();
+
+            if($this.hasClass('unconfirmed')) {
+                $('.do_prediction').show();
+            } else {
+                $('.do_prediction').hide();
+            }
 		});
 	},
 
