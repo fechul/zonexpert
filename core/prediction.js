@@ -561,7 +561,6 @@ exports.getUserList = function(options, callback) {
         if(predictionData && predictionData.length) {
             var predictList = [];
             async.each(predictionData, function(eachPredict, async_cb) {
-                console.log(eachPredict.userEmail, email)
                 if(eachPredict.userEmail !== email) {
                     predictList.push(eachPredict.userEmail);
                 }
@@ -695,3 +694,70 @@ exports.getPredictSummary = function(params, callback) {
         })
     });
 };
+
+exports.getProceedingPredict = function(options, callback) {
+    var searchId = options.searchId;
+    var proceedingMatches = [];
+
+    db.user.find({
+        'nickname': searchId
+    }, {
+        'email': 1
+    }).limit(1).exec(function(err, userData) {
+        if(userData && userData.length) {
+            email = userData[0].email;
+
+            db.prediction.find({
+                'userEmail': email,
+                'confirmed': true,
+                'result': 'wait'
+            }, {
+                'matchId': 1
+            }).limit(5).sort({confirmedTime:-1}).exec(function(_err, proceeding) {
+                async.mapSeries(proceeding, function(each, async_cb) {
+                    db.match.find({
+                        'id': each.matchId
+                    }, {
+                        'matchday': 1,
+                        'homeTeamId': 1,
+                        'awayTeamId': 1
+                    }).limit(1).exec(function(__err, proceedingMatch) {
+                        if(proceedingMatch && proceedingMatch.length) {
+                            proceedingMatch = proceedingMatch[0];
+                            db.team.find({
+                                'id': proceedingMatch.homeTeamId
+                            }, {
+                                'crestUrl': 1,
+                                'shortName': 1
+                            }).limit(1).exec(function(homeErr, homeData) {
+                                db.team.find({
+                                    'id': proceedingMatch.awayTeamId
+                                }, {
+                                    'crestUrl': 1,
+                                    'shortName': 1
+                                }).limit(1).exec(function(awayErr, awayData) {
+                                    proceedingMatches.push({
+                                        'matchId': each.matchId,
+                                        'matchday': new Date(proceedingMatch.matchday),
+                                        'homeTeamName': homeData[0].shortName,
+                                        'awayTeamName': awayData[0].shortName,
+                                        'homeTeamImg': homeData[0].crestUrl,
+                                        'awayTeamImg': awayData[0].crestUrl
+                                    });
+                                    async_cb();
+                                });
+                            });
+                        } else {
+                            async_cb();
+                        }
+                    });
+                }, function(async_err) {
+                    callback(proceedingMatches);
+                });
+            });
+        } else {
+            callback(null);
+        }
+    });
+};
+

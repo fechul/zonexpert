@@ -6,6 +6,7 @@ var CHAT = {
         this.sportsId = options.sportsId;
         this.leagueId = options.leagueId;
         this.email = options.email;
+        this.viewTargetNick = options.viewTargetNick || null;
 
         notice.init();
 
@@ -274,6 +275,7 @@ var CHAT = {
     },
 
     setPredictionUserList: function() {
+        var viewTargetNick = this.viewTargetNick;
         var matchId = this.room;
         var sportsId = this.sportsId;
         var predictedUserList = $('.predictedUsersList');
@@ -311,6 +313,15 @@ var CHAT = {
                 }
 
                 predictedUserList.append(userListHtml);
+                if(viewTargetNick) {
+                    $('.tab_container .goToOtherPredictLi').click();
+                    var predictList = $('.eachPredictedUser');
+                    $.each(predictList, function(idx) {
+                        if($(predictList[idx]).attr('target') == viewTargetNick) {
+                            predictList[idx].click();
+                        }
+                    });
+                }
             } else {
                 predictedUserList.append('<p class="noPredictedUser" style="border-bottom:0px;">예측한 사용자가 없습니다.</p>');
             }

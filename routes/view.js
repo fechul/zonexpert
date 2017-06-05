@@ -454,6 +454,7 @@ router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkPoint
 router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res){
 	var path = 'chat_client.html';
 	var matchId = req.params.matchId;
+	var viewTargetNick = req.query.viewTargetNick;
 
 	var json = {
 		myinfo_display: '',
@@ -472,13 +473,17 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 		chatMatchStatus: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
-		myEmail: ''
+		myEmail: '',
+		viewTargetNick: null
 	};
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
 		json.myEmail = req.session.email;
+		if(viewTargetNick) {
+			json.viewTargetNick = viewTargetNick;
+		}
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
@@ -488,7 +493,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		matchData.roomOpen = true;	//test
+		// matchData.roomOpen = true;	//test
 		if (matchData && (matchData.status != 'FINISHED')) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
@@ -515,74 +520,79 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 			json.sportsId = matchData.sportsId;
 			json.leagueId = matchData.leagueId;
 
-			user.get(req.session.email, function(userData) {
-				if(userData) {
-					json.my_nickname = userData.nickname;
+			if(req.session.login) {
+				user.get(req.session.email, function(userData) {
+					if(userData) {
+						json.my_nickname = userData.nickname;
 
-					user.countAllUsers('onlyRanked', function(userCount) {
-						redis_client.zrevrank('rating_rank', userData.email, function(err, data) {
-				        	if(!err) {
-				        		var myRank = data+1;
-				        		var myTotalRate = ((myRank / userCount)*100).toFixed(2);
+						user.countAllUsers('onlyRanked', function(userCount) {
+							redis_client.zrevrank('rating_rank', userData.email, function(err, data) {
+					        	if(!err) {
+					        		var myRank = data+1;
+					        		var myTotalRate = ((myRank / userCount)*100).toFixed(2);
 
-				        		if(userData.readyGameCnt && userData.readyGameCnt > 0) {
-										json.myBadge = 'ready';
-										json.myBadgeSrc = '/image/badge_ready.png';
-								} else {
-									if(myTotalRate <= 3) {
-										json.myBadge = 'diamond';
-										json.myBadgeSrc = '/image/badge_diamond.png';
-									} else if(3 < myTotalRate && myTotalRate <= 10) {
-										json.myBadge = 'platinum';
-										json.myBadgeSrc = '/image/badge_platinum.png';
-									} else if(10 < myTotalRate && myTotalRate <= 30) {
-										json.myBadge = 'gold';
-										json.myBadgeSrc = '/image/badge_gold.png';
-									} else if(30 < myTotalRate && myTotalRate <= 70) {
-										json.myBadge = 'silver';
-										json.myBadgeSrc = '/image/badge_silver.png';
-									} else if(70 < myTotalRate) {
-										json.myBadge = 'bronze';
-										json.myBadgeSrc = '/image/badge_bronze.png';
-									}
-								}
-				        	}
-
-				        	schedule.getMatchTeamsName({
-								'matchId': matchId
-							}, function(result) {
-								json.homeTeamName = result.homeTeamName;
-								json.awayTeamName = result.awayTeamName;
-								json.homeTeamImg = result.homeTeamImg;
-								json.awayTeamImg = result.awayTeamImg;
-								json.prediction_shortcut = req.predictionShortcut;
-								json.feedback = req.feedback;
-
-								json.prediction_shortcut = req.predictionShortcut;
-
-								prediction.getMatchPrediction({
-									'email': req.session.email,
-									'matchId': matchId
-								}, function(predictionData) {
-									if (predictionData) {
-										if (predictionData.confirmed) {
-											json.predict_in_chat_condition = 'confirmed';
-										} else {
-											json.predict_in_chat_condition = 'basketed';
-										}
+					        		if(userData.readyGameCnt && userData.readyGameCnt > 0) {
+											json.myBadge = 'ready';
+											json.myBadgeSrc = '/image/badge_ready.png';
 									} else {
-										json.predict_in_chat_condition = '';
+										if(myTotalRate <= 3) {
+											json.myBadge = 'diamond';
+											json.myBadgeSrc = '/image/badge_diamond.png';
+										} else if(3 < myTotalRate && myTotalRate <= 10) {
+											json.myBadge = 'platinum';
+											json.myBadgeSrc = '/image/badge_platinum.png';
+										} else if(10 < myTotalRate && myTotalRate <= 30) {
+											json.myBadge = 'gold';
+											json.myBadgeSrc = '/image/badge_gold.png';
+										} else if(30 < myTotalRate && myTotalRate <= 70) {
+											json.myBadge = 'silver';
+											json.myBadgeSrc = '/image/badge_silver.png';
+										} else if(70 < myTotalRate) {
+											json.myBadge = 'bronze';
+											json.myBadgeSrc = '/image/badge_bronze.png';
+										}
 									}
+					        	}
 
-						        	res.render(path, json);
+					        	schedule.getMatchTeamsName({
+									'matchId': matchId
+								}, function(result) {
+									json.homeTeamName = result.homeTeamName;
+									json.awayTeamName = result.awayTeamName;
+									json.homeTeamImg = result.homeTeamImg;
+									json.awayTeamImg = result.awayTeamImg;
+									json.prediction_shortcut = req.predictionShortcut;
+									json.feedback = req.feedback;
+
+									json.prediction_shortcut = req.predictionShortcut;
+
+									prediction.getMatchPrediction({
+										'email': req.session.email,
+										'matchId': matchId
+									}, function(predictionData) {
+										if (predictionData) {
+											if (predictionData.confirmed) {
+												json.predict_in_chat_condition = 'confirmed';
+											} else {
+												json.predict_in_chat_condition = 'basketed';
+											}
+										} else {
+											json.predict_in_chat_condition = '';
+										}
+
+							        	res.render(path, json);
+									});
 								});
-							});
-				        });
-					});
-				} else {
-					res.redirect('/schedule');
-				}
-			});
+					        });
+						});
+					} else {
+						res.redirect('/schedule');
+					}
+				});
+			} else {
+				res.redirect('/login');
+			}
+			
 		} else {
 			res.redirect('/schedule');
 		}
@@ -615,12 +625,14 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 		myTotalRate: '-',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		myNickName: ''
 	};
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
+		json.myNickName = req.session.nickname;
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
