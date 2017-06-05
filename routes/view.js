@@ -60,7 +60,7 @@ var checkAttendancePoint = function(req, res, next) {
 };
 
 var getSportsName = function(code) {
-	code = code.toString();
+	code = (code || '').toString();
 	switch(code) {
 		case '1':
 			return '축구';
@@ -75,7 +75,7 @@ var getSportsName = function(code) {
 }
 
 var getLeagueName = function(code) {
-	code = code.toString();
+	code = (code || '').toString();
 	switch(code) {
 		case '426':
 			return '프리미어리그';
