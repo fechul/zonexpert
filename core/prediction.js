@@ -561,7 +561,6 @@ exports.getUserList = function(options, callback) {
         if(predictionData && predictionData.length) {
             var predictList = [];
             async.each(predictionData, function(eachPredict, async_cb) {
-                console.log(eachPredict.userEmail, email)
                 if(eachPredict.userEmail !== email) {
                     predictList.push(eachPredict.userEmail);
                 }
@@ -717,7 +716,7 @@ exports.getProceedingPredict = function(options, callback) {
             }).limit(5).sort({confirmedTime:-1}).exec(function(_err, proceeding) {
                 async.mapSeries(proceeding, function(each, async_cb) {
                     db.match.find({
-                        'matchId': each.matchId
+                        'id': each.matchId
                     }, {
                         'matchday': 1,
                         'homeTeamId': 1,
@@ -739,7 +738,7 @@ exports.getProceedingPredict = function(options, callback) {
                                 }).limit(1).exec(function(awayErr, awayData) {
                                     proceedingMatches.push({
                                         'matchId': each.matchId,
-                                        'matchday': proceedingMatch.matchday,
+                                        'matchday': new Date(proceedingMatch.matchday),
                                         'homeTeamName': homeData[0].shortName,
                                         'awayTeamName': awayData[0].shortName,
                                         'homeTeamImg': homeData[0].crestUrl,

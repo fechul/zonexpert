@@ -317,7 +317,7 @@ var CHAT = {
                     $('.tab_container .goToOtherPredictLi').click();
                     var predictList = $('.eachPredictedUser');
                     $.each(predictList, function(idx) {
-                        if(predictList[idx].attr(target) == viewTargetNick) {
+                        if($(predictList[idx]).attr('target') == viewTargetNick) {
                             predictList[idx].click();
                         }
                     });
