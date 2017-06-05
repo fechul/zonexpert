@@ -146,7 +146,7 @@ var INDEX = {
 		};
 
 		var get_sport_name = function(code) {
-			code = code.toString();
+			code = (code || '').toString();
 
 			switch(code) {
 				case '1':
@@ -158,11 +158,11 @@ var INDEX = {
 				default:
 					return '-';
 					break;
-			}			
+			}
 		};
 
 		var get_league_name = function(code) {
-			code = code.toString();
+			code = (code || '').toString();
 
 			switch(code) {
 				case '426':

@@ -147,7 +147,8 @@ var boardSchema = new Schema({
 var feedbackSchema = new Schema({
     'createTime': Date,
     'email': String,
-    'contents': String
+    'contents': String,
+    'url': String
 });
 
 var user = mongoose.model('user', userSchema);

@@ -649,7 +649,8 @@ router.post('/feedback', function(req, res) {
 	var newFeedBack = new db.feedback({
 		'createTime': new Date,
 		'email': req.body.feedback_email || '',
-		'contents': req.body.feedback_contents || ''
+		'contents': req.body.feedback_contents || '',
+		'url': req.body.url
 	});
 
 	newFeedBack.save(function(err) {

@@ -122,8 +122,23 @@ app.use(function(err, req, res, next) {
 	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
 	// render the error page
-	res.status(err.status || 500);
-	res.send('error');
+	// res.status(err.status || 500);
+	// res.send('error');
+	var path = 'under_construction.html';
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;',
+		myCurrentPoint: 0
+	};
+
+	fs.readFile('./views/feedback.html', function(err, data) {
+		json.feedback = data;
+
+    	res.render(path, json);
+	});
 });
 
 module.exports = app;
