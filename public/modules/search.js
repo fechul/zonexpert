@@ -214,7 +214,7 @@ var SEARCH = {
 		    labels: datelist,
 		    datasets: [
 		        {
-		            label: "Rating",
+		            label: "레이팅",
 		            fill: false,
 		            lineTension: 0.0,
 		            borderColor: "rgba(75,192,192,1)",
@@ -229,11 +229,11 @@ var SEARCH = {
 	        scales: {
 	            yAxes: [{
 	                ticks: {
-	                    beginAtZero: false
+	                    beginAtZero: false,
+						stepSize: 1
 	                }
 	            }]
-	        },
-	        onClick: 'handleClick'
+	        }
 	    };
 
 		var myChart = new Chart(ctx, {
@@ -296,7 +296,7 @@ var SEARCH = {
 
 						var options = {
 							legend: {
-								onClick: 'handleClick'
+								onClick: function(){}
 							}
 					    };
 
@@ -352,7 +352,7 @@ var SEARCH = {
 
 						var options = {
 							legend: {
-								onClick: 'handleClick'
+								onClick: function(){}
 							}
 					    };
 
@@ -408,7 +408,7 @@ var SEARCH = {
 
 						var options = {
 							legend: {
-								onClick: 'handleClick'
+								onClick: function(){}
 							}
 					    };
 

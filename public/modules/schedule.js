@@ -208,6 +208,7 @@ var SCHEDULE = {
 	},
 
 	get_schedule: function(leagueId, callback) {
+		console.log('called');
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
 		var currentDate = new Date();
@@ -349,6 +350,7 @@ var SCHEDULE = {
 					$('#schedule_month_select').val($('#schedule_month_select option').last().attr('value')).change();
 				}
 
+					console.log('finish');
 				if (callback && typeof(callback) == 'function') {
 					callback();
 				}
