@@ -176,7 +176,7 @@ var SEARCH = {
 				var found = false;
 				var lastRatingOnTheDay = null;
 				var lastRatingDay = null;
-				
+
 				for(var r = 0; r < recentMatches.length; r++) {
 					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
 					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
@@ -192,7 +192,7 @@ var SEARCH = {
 								lastRatingDay = recentMatches[r].ratingCalculatedTime;
 								ratelist[d] = lastRatingOnTheDay;
 								beforeRating = recentMatches[r].beforeRating;
-								found = true;	
+								found = true;
 							}
 						}
 					}
@@ -597,7 +597,7 @@ var SEARCH = {
 	},
 
 	getLeagueName: function(code) {
-		code = code.toString();
+		code = (code || '').toString();
 
 		switch(code) {
 			case '426':
@@ -640,7 +640,7 @@ var SEARCH = {
 	},
 
 	getsportsName: function(code) {
-		code = code.toString();
+		code = (code || '').toString();
 
 		switch(code) {
 			case '1':
