@@ -434,7 +434,7 @@ router.get('/prediction/getUserInfo', function(req, res) {
 						'sportsId': sportsId,
 						'userEmail': email
 					}, function(viewList) {
-						data[0].viewList = viewList;						
+						data[0].viewList = viewList;
 
 						var key = 'rating_rank';
 						redis_client.zrevrank(key, email, function(err, rankData) {
@@ -702,6 +702,22 @@ router.post('/ratingUpdate', function(req, res) {
 		'matchId': matchId
 	}, function() {
 		res.json(true);
+	});
+});
+
+router.post('/feedback', function(req, res) {
+	var newFeedBack = new db.feedback({
+		'createTime': new Date,
+		'email': req.body.feedback_email || '',
+		'contents': req.body.feedback_contents || ''
+	});
+
+	newFeedBack.save(function(err) {
+		if (err) {
+			res.json(false);
+		} else {
+			res.json(true);
+		}
 	});
 });
 
