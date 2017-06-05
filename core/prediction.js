@@ -553,6 +553,9 @@ exports.getUserList = function(options, callback) {
                 db.user.find({
                     'email': {
                         $in: predictList
+                    },
+                    'readyGameCnt': {
+                        $lt: 1
                     }
                 }, {
                     'email': 1,

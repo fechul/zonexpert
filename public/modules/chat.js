@@ -86,11 +86,11 @@ var CHAT = {
         $('.showUserList').click(function() {
             if($('.right-tabs').css('display') == 'none') {
                 $('.window-area').hide();
-                $('.right-tabs').fadeIn(500);
+                $('.right-tabs').show();
                 $(this).html('채팅하기');
             } else {
                 $('.right-tabs').hide();
-                $('.window-area').fadeIn(500);
+                $('.window-area').show();
                 $(this).html('유저 목록');
             }
         });
@@ -117,7 +117,7 @@ var CHAT = {
                     if(result.result && result.result !== 'false') {
                     $('#viewBtnDiv').hide();
                     $('#isShownDiv').show();
-                    $('#predictedUserPredictBox').fadeIn(500);
+                    $('#predictedUserPredictBox').fadeIn(2000);
                     $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
                     $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
                     } else {
