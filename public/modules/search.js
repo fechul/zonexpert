@@ -588,7 +588,7 @@ var SEARCH = {
 
 	getLeagueName: function(code) {
 		code = code.toString();
-		
+
 		switch(code) {
 			case '426':
 				return '프리미어리그';
@@ -633,10 +633,10 @@ var SEARCH = {
 		code = code.toString();
 
 		switch(code) {
-			case 1:
+			case '1':
 				return '축구';
 				break;
-			case 2:
+			case '2':
 				return '야구';
 				break;
 			default:
