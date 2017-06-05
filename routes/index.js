@@ -20,6 +20,63 @@ var need_login = function(req, res, next) {
 	}
 };
 
+var getSportsName = function(code) {
+	code = code.toString();
+	switch(code) {
+		case '1':
+			return '축구';
+			break;
+		case '2':
+			return '야구';
+			break;
+		default:
+			return '-';
+			break;
+	}
+}
+
+var getLeagueName = function(code) {
+	code = code.toString();
+	switch(code) {
+		case '426':
+			return '프리미어리그';
+			break;
+		case '429':
+			return '잉글랜드FA컵';
+			break;
+		case '430':
+			return '분데스리가';
+			break;
+		case '432':
+			return '포칼컵';
+			break;
+		case '433':
+			return '에레디비시';
+			break;
+		case '434':
+			return '리그 1';
+			break;
+		case '436':
+			return '라리가';
+			break;
+		case '438':
+			return '세리에 A';
+			break;
+		case '439':
+			return '포르투갈';
+			break;
+		case '440':
+			return '챔피언스리그';
+			break;
+		case 'kbo2017':
+			return 'KBO';
+			break;
+		default:
+			return '-';
+			break;
+	}
+}
+
 router.post('/football-data.events', function(req, res) {
 	console.log(req.body);
 	console.log(req.params);
@@ -102,7 +159,20 @@ router.get('/board/get', function(req, res) {
 		'value': value,
 		'type': type
 	}, function(data) {
-		res.json(data);
+		user.countAllUsers('onlyRanked', function(userCount) {
+			async.mapSeries(data, function(board, async_cb) {
+				redis_client.zrevrank('rating_rank', board.writer, function(err, rank) {
+					if(rank || rank == 0) {
+	    				rank += 1;
+	    				var myTotalRate = ((rank / userCount)*100).toFixed(2);
+	    				board.myTotalRate = myTotalRate;
+					}
+					async_cb();
+				});
+			}, function(async_err) {
+				res.json(data);
+			});
+		});
     });
 });
 
@@ -329,8 +399,24 @@ router.get('/prediction/getUserList', function(req, res) {
 		'sportsId': sportsId,
 		'email': email
 	}, function(data) {
-
-		res.json(data);
+		if(data && data.length) {
+			user.countAllUsers('onlyRanked', function(userCount) {
+				async.map(data, function(each, async_cb) {
+					redis_client.zrevrank('rating_rank', each.email, function(search_err, search_data) {
+						if(search_data || search_data == 0) {
+		    				var target_rank = search_data + 1;
+							var myTotalRate = ((target_rank / UserCount)*100).toFixed(2);
+							each.myTotalRate = myTotalRate;
+						}
+						async_cb();
+					});
+				}, function(async_err) {
+					res.json(data);
+				});
+			});
+		} else {
+			res.json(data);
+		}
 	});
 });
 
@@ -468,100 +554,60 @@ router.get('/getMyData', function(req, res) {
 	var email = req.session.email;
 	var mydata_obj = {};
 
-	var get_tier_info = function(rating) {
-		rating = parseInt(rating);
+	var get_tier_info = function(myTotalRate) {
 		var tier_obj = {};
 
-		if(rating < 1200) {
-			tier_obj.name = '브론즈';
-			tier_obj.img = 'image/badge_bronze.png';
-		} else if(1200 <= rating && rating < 1400) {
-			tier_obj.name = '실버';
-			tier_obj.img = 'image/badge_silver.png';
-		} else if(1400 <= rating && rating < 1600) {
-			tier_obj.name = '골드';
-			tier_obj.img = 'image/badge_gold.png';
-		} else if(1600 <= rating && rating < 1800) {
-			tier_obj.name = '플래티넘';
-			tier_obj.img = 'image/badge_platinum.png';
-		} else if(1800 <= rating) {
+		if(myTotalRate <= 3) {
 			tier_obj.name = '다이아몬드';
 			tier_obj.img = 'image/badge_diamond.png';
+		} else if(3 < myTotalRate && myTotalRate <= 10) {
+			tier_obj.name = '플래티넘';
+			tier_obj.img = 'image/badge_platinum.png';
+		} else if(10 < myTotalRate && myTotalRate <= 30) {
+			tier_obj.name = '골드';
+			tier_obj.img = 'image/badge_gold.png';
+		} else if(30 < myTotalRate && myTotalRate <= 70) {
+			tier_obj.name = '실버';
+			tier_obj.img = 'image/badge_silver.png';
+		} else if(70 < myTotalRate) {
+			tier_obj.name = '브론즈';
+			tier_obj.img = 'image/badge_bronze.png';
 		}
 
 		return tier_obj;
 	};
 
-	var get_sport_name = function(code) {
-		switch(code) {
-			case 1:
-				return '축구';
-				break;
-			default:
-				return '-';
-				break;
-		}
-	};
-
-	var get_league_name = function(code) {
-		switch(code) {
-			case 426:
-				return '프리미어리그';
-				break;
-			case 429:
-				return '잉글랜드FA컵';
-				break;
-			case 430:
-				return '분데스리가';
-				break;
-			case 432:
-				return '포칼컵';
-				break;
-			case 433:
-				return '에레디비시';
-				break;
-			case 434:
-				return '리그 1';
-				break;
-			case 436:
-				return '라리가';
-				break;
-			case 438:
-				return '세리에 A';
-				break;
-			case 439:
-				return '포르투갈';
-				break;
-			case 440:
-				return '챔피언스리그';
-				break;
-			default:
-				return '-';
-				break;
-		}
-	};
-
 	user.get_rank_data([email], function(mydata) {
-		if(mydata && mydata.length) {
-			mydata = mydata[0];
+		user.countAllUsers('onlyRanked', function(userCount) {
+			redis_client.zrevrank('rating_rank', email, function(err, data) {
+				if(!err) {
+					var myRank = data+1;
+					var myTotalRate = ((myRank / userCount)*100).toFixed(2);
+					if(mydata && mydata.length) {
+						mydata = mydata[0];
 
-			mydata_obj.mydata_user_id = mydata.nickname;
-			mydata_obj.mydata_user_main_field = get_sport_name(mydata.main_sport) + '/' + get_league_name(mydata.main_league);
-			mydata_obj.my_rating = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : mydata.rating;
-			mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : get_tier_info(mydata.rating).name;
-			mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : get_tier_info(mydata.rating).img;
+						mydata_obj.mydata_user_id = mydata.nickname;
+						mydata_obj.mydata_user_main_field = getSportsName(mydata.main_sport) + '/' + getLeagueName(mydata.main_league);
+						mydata_obj.my_rating = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : mydata.rating;
+						var tierInfo = get_tier_info(myTotalRate);
+						mydata_obj.my_tier_name = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? '배치중' : tierInfo.name;
+						mydata_obj.my_tier_img = (mydata.readyGameCnt && mydata.readyGameCnt > 0) ? 'image/badge_ready.png' : tierInfo.img;
 
-			if (mydata.record) {
-				mydata_obj.my_total_hit = mydata.record.total.hit;
-				mydata_obj.my_total_fail = mydata.record.total.fail;
+						if (mydata.record) {
+							mydata_obj.my_total_hit = mydata.record.total.hit;
+							mydata_obj.my_total_fail = mydata.record.total.fail;
 
-				if(mydata.record.total.fail || mydata.record.total.hit ) {
-					mydata_obj.my_predict_rate = ((mydata.record.total.hit/(mydata.record.total.hit+mydata.record.total.fail))*100).toFixed(2);
+							if(mydata.record.total.fail || mydata.record.total.hit ) {
+								mydata_obj.my_predict_rate = ((mydata.record.total.hit/(mydata.record.total.hit+mydata.record.total.fail))*100).toFixed(2);
+							}
+						}
+						res.json(mydata_obj);
+					}
+				} else {
+					res.json(mydata_obj);
 				}
-			}
-		}
-
-		res.json(mydata_obj);
+			});
+		});
 	});
 });
 
@@ -582,18 +628,32 @@ router.get('/getTopTen', function(req, res) {
 	start = 1 - 1;
 	end = 10 - 1;
 
-	redis_client.zrevrange(key, start, end, function(err, data) {
-		if(data) {
-			user.get_rank_data(data, function(toptenData) {
-				if(toptenData && toptenData) {
-					res.json(toptenData);
-				} else {
-					res.json(null);
-				}
-			});
-		} else {
-			res.json(null);
-		}
+	user.countAllUsers('onlyRanked', function(userCount) {
+		redis_client.zrevrange(key, start, end, function(err, data) {
+			if(data && data.length) {
+				user.get_rank_data(data, function(toptenData) {
+					if(toptenData && toptenData.length) {
+						var rank = 1;
+						async.mapSeries(toptenData, function(eachData, async_cb) {
+							var myTotalRate = ((rank / userCount)*100).toFixed(2);
+							eachData.myTotalRate = myTotalRate;
+							rank++;
+							async_cb();
+						}, function(async_err) {
+							if(async_err) {
+								res.json(null);
+							} else {
+								res.json(toptenData);
+							}
+						});
+					} else {
+						res.json(null);
+					}
+				});
+			} else {
+				res.json(null);
+			}
+		});
 	});
 });
 

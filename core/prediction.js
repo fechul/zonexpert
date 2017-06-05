@@ -555,6 +555,7 @@ exports.getUserList = function(options, callback) {
                         $in: predictList
                     }
                 }, {
+                    'email': 1,
                     'nickname': 1,
                     'rating': 1,
                     'readyGameCnt': 1

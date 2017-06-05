@@ -4,7 +4,6 @@ exports.get = function(params, callback) {
 	var _query = {};
     var _get = function(query){
         db.board.find(query).sort({boardNo: -1}).lean().exec(function(err, data) {
-            console.log('data', data);
             data = JSON.stringify(data);
             data = JSON.parse(data);
             if(data && data.length) {
@@ -13,8 +12,7 @@ exports.get = function(params, callback) {
                     db.user.find({
                         'email': board.writer
                     }, {
-                        'nickname': 1,
-                        'rating': 1
+                        'nickname': 1
                     }).limit(1).exec(function(_err, userdata) {
                         if(_err) {
                             console.log("board get list err: ", _err);
