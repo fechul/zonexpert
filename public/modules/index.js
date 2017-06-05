@@ -44,14 +44,6 @@ var INDEX = {
 			location.href = '/' + move;
 		});
 
-		$('#header li.my_point > img').click(function() {
-			location.href = '/my_page';
-		});
-
-		$('#header li.my_point > span').click(function() {
-			location.href = '/my_page';
-		});
-
 		$('.rankdata_type_btn > button').click(function() {
 			$('.rankdata_type_btn > button.active').removeClass('active');
 			$(this).addClass('active');

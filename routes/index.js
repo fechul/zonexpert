@@ -75,7 +75,32 @@ var getLeagueName = function(code) {
 			return '-';
 			break;
 	}
-}
+};
+
+var getCostPoint = function(email, callback) {
+	var costPoint = 100;
+	user.countAllUsers('onlyRanked', function(userCount) {
+		redis_client.zrevrank('rating_rank', email, function(err, data) {
+			if(!err) {
+				var myTotalRate = (((data+1) / userCount)*100).toFixed(2);
+
+				if(myTotalRate <= 3) {
+					costPoint = 300;
+				} else if(3 < myTotalRate && myTotalRate <= 10) {
+					costPoint = 250;
+				} else if(10 < myTotalRate && myTotalRate <= 30) {
+					costPoint = 200;
+				} else if(30 < myTotalRate && myTotalRate <= 70) {
+					costPoint = 150;
+				} else if(70 < myTotalRate) {
+					costPoint = 100;
+				}
+			}
+
+			callback(costPoint);
+		});
+	});
+};
 
 router.post('/football-data.events', function(req, res) {
 	console.log(req.body);
@@ -434,32 +459,69 @@ router.get('/prediction/getUserInfo', function(req, res) {
 						'sportsId': sportsId,
 						'userEmail': email
 					}, function(viewList) {
-						if(viewList.indexOf(req.session.email) > -1) {
-							prediction.getPick({
-								'matchId': matchId,
-								'userEmail': email
-							}, function(pick) {
-								data[0].pick = pick;
-								var key = 'rating_rank';
-								redis_client.zrevrank(key, email, function(err, rankData) {
-						        	if(!err) {
-						        		data[0].totalRank = rankData+1;
-						        	}
-						        	res.json(data);
-						        });
-							});
-						} else {
-							var key = 'rating_rank';
+						data[0].viewList = viewList;
+
+						var key = 'rating_rank';
+						user.countAllUsers('onlyRanked', function(userCount) {
 							redis_client.zrevrank(key, email, function(err, rankData) {
-					        	if(!err) {
-					        		data[0].totalRank = rankData+1;
-					        	}
-					        	res.json(data);
-					        });
-						}
+								if(!err) {
+									var costPoint = 100;
+									var myTotalRate = (((rankData+1) / userCount)*100).toFixed(2);
+									var tierClassName = '';
+									var tierName = '';
+									var tierImg = '';
+
+									if(myTotalRate <= 3) {
+										costPoint = 300;
+										tierClassName = 'badge_diamond';
+										tierName = '다이아몬드';
+										tierImg = 'image/badge_diamond.png';
+									} else if(3 < myTotalRate && myTotalRate <= 10) {
+										costPoint = 250;
+										tierClassName = 'badge_platinum';
+										tierName = '플래티넘';
+										tierImg = 'image/badge_platinum.png';
+									} else if(10 < myTotalRate && myTotalRate <= 30) {
+										costPoint = 200;
+										tierClassName = 'badge_gold';
+										tierName = '골드';
+										tierImg = 'image/badge_gold.png';
+									} else if(30 < myTotalRate && myTotalRate <= 70) {
+										costPoint = 150;
+										tierClassName = 'badge_silver';
+										tierName = '실버';
+										tierImg = 'image/badge_silver.png';
+									} else if(70 < myTotalRate) {
+										costPoint = 100;
+										tierClassName = 'badge_bronze';
+										tierName = '브론즈';
+										tierImg = 'image/badge_bronze.png';
+									}
+
+									data[0].totalRank = rankData+1;
+									data[0].costPoint = costPoint;
+									data[0].tierImg = tierImg;
+									data[0].tierName = tierName;
+									data[0].tierClassName = tierClassName;
+								}
+
+
+								if (viewList.indexOf(req.session.email) > -1) {
+									prediction.getPick({
+										'matchId': matchId,
+										'userEmail': email
+									}, function(pick) {
+										data[0].pick = pick;
+										res.json(data);
+									});
+								} else {
+									res.json(data);
+								}
+							});
+						});
 					});
 				} else {
-					res.json(data);
+					res.json(null);
 				}
 			});
 		} else {
@@ -472,51 +534,97 @@ router.post('/prediction/viewOthers', function(req, res) {
 	var targetNickname = req.body.targetNickname;
 	var matchId = req.body.matchId;
 	var myEmail = req.session.email;
+	var pointType = req.body.pointType;
 
 	user.get_email(targetNickname, function(targetEmail) {
-		user.usePoint({
-			'email': myEmail,
-			'point': 100,
-			'type': 'view',
-			'target': targetEmail,
-			'matchId': matchId
-		}, function(usePointResult) {
-			if(usePointResult) {
-				prediction.pushViewList({
+		if (targetEmail) {
+			getCostPoint(targetEmail, function(costPoint) {
+				user.usePoint({
+					'email': myEmail,
+					'point': costPoint,
+					'pointType': pointType,
+					'type': 'view',
 					'target': targetEmail,
-					'myEmail': myEmail,
 					'matchId': matchId
-				}, function(pushResult) {
-					if(pushResult) {
-						prediction.getPick({
-							'matchId': matchId,
-							'userEmail': targetEmail
-						}, function(pick) {
-							res.json({
-								'result': true,
-								'pick': pick
-							});
+				}, function(usePointResult) {
+					if(usePointResult) {
+						prediction.pushViewList({
+							'target': targetEmail,
+							'myEmail': myEmail,
+							'matchId': matchId
+						}, function(pushResult) {
+							if(pushResult) {
+								if (pointType == 'free') {
+									prediction.getPick({
+										'matchId': matchId,
+										'userEmail': targetEmail
+									}, function(pick) {
+										res.json({
+											'result': true,
+											'pick': pick
+										});
+									});
+								} else {
+									user.earnPoint({
+										'email': targetEmail,
+										'point': costPoint / 2,
+										'type': 'earn',
+										'target': myEmail,
+										'matchId': matchId
+									}, function(earnPointResult) {
+										if (earnPointResult) {
+											prediction.getPick({
+												'matchId': matchId,
+												'userEmail': targetEmail
+											}, function(pick) {
+												res.json({
+													'result': true,
+													'pick': pick
+												});
+											});
+										} else {
+											user.returnPoint({
+												'email': myEmail,
+												'point': costPoint,
+												'pointType': pointType,
+												'type': 'view',
+												'target': targetEmail,
+												'matchId': matchId
+											}, function(returnResult) {
+												res.json({
+													'result': false
+												});
+											});
+										}
+									});
+								}
+							} else {
+								user.returnPoint({
+									'email': myEmail,
+									'point': costPoint,
+									'pointType': pointType,
+									'type': 'view',
+									'target': targetEmail,
+									'matchId': matchId
+								}, function(returnResult) {
+									res.json({
+										'result': false
+									});
+								});
+							}
 						});
 					} else {
-						user.returnPoint({
-							'email': myEmail,
-							'point': 100,
-							'type': 'view',
-							'target': targetEmail,
-							'matchId': matchId
-						}, function(returnResult) {
-							res.json({
-								'result': false
-							});
+						res.json({
+							'result': false
 						});
 					}
 				});
-			} else {
-				res.json({
-					'result': false
-				});
-			}
-		});
+			});
+		} else {
+			res.json({
+				'result': false
+			});
+		}
 	});
 });
 
@@ -784,6 +892,12 @@ router.post('/user/leave', need_login, function(req, res) {
 				code: check.code
 			});
 		}
+	});
+});
+
+router.get('/user/point', need_login, function(req, res) {
+	user.getPoint(req.session.email, function(result) {
+		res.json(result);
 	});
 });
 

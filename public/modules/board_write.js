@@ -64,14 +64,6 @@ var BOARD_WRITE = {
 			location.href = '/' + move;
 		});
 
-		$('#header li.my_point > img').click(function() {
-			location.href = '/my_page';
-		});
-
-		$('#header li.my_point > span').click(function() {
-			location.href = '/my_page';
-		});
-
 		$('.board_section .board_menu > .write').click(function() {
 			location.href = '/board/write';
 		});

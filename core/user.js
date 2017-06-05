@@ -340,11 +340,33 @@ exports.countAllUsers = function(option, callback) {
     });
 };
 
-exports.checkAttendancePoint = function(email, callback) {
+exports.getPoint = function(email, callback) {
+    db.user.find({
+        'email': email,
+    }, {
+        'freePoint': 1,
+        'point': 1
+    }).limit(1).exec(function(err, userData) {
+        var json = {
+            'freePoint': 0,
+            'point': 0
+        };
+
+        if (!err && userData && userData.length) {
+            json.freePoint = userData[0].freePoint;
+            json.point = userData[0].point;
+        }
+
+        callback(json);
+    });
+};
+
+exports.checkPoint = function(email, callback) {
     db.user.find({
         'email': email
     }, {
         'todayAttendancePoint': 1,
+        'freePoint': 1,
         'point': 1
     }).limit(1).exec(function(err, userData) {
         if(err) {
@@ -360,6 +382,7 @@ exports.checkAttendancePoint = function(email, callback) {
                     var atPoint = 100;
                     var atPointLog = {
                         'amount': atPoint,
+                        'pointType': 'free',
                         'classification': 'attendance',
                         'time': new Date()
                     };
@@ -371,7 +394,7 @@ exports.checkAttendancePoint = function(email, callback) {
                             'todayAttendancePoint': true
                         },
                         $inc: {
-                            'point': atPoint
+                            'freePoint': atPoint
                         },
                         $addToSet: {
                             'pointLog': atPointLog
@@ -379,13 +402,13 @@ exports.checkAttendancePoint = function(email, callback) {
                     }, function(err) {
                         callback({
                             attendancePointUpdated: err ? false : true,
-                            point: err ? userData.point : userData.point + atPoint
+                            point: err ? userData.point + userData.freePoint : userData.point + userData.freePoint + atPoint
                         });
                     });
                 } else {
                     callback({
                         attendancePointUpdated: false,
-                        point: userData.point
+                        point: userData.freePoint + userData.point
                     });
                 }
             } else {
@@ -401,6 +424,7 @@ exports.checkAttendancePoint = function(email, callback) {
 exports.usePoint = function(options, callback) {
     var email = options.email;
     var point = options.point;
+    var pointType = options.pointType;
     var type = options.type; // charge, view(use), system(use), earn, attendance
     var target = options.target;
     var matchId = options.matchId;
@@ -408,16 +432,36 @@ exports.usePoint = function(options, callback) {
     db.user.find({
         'email': email
     }, {
+        'freePoint': 1,
         'point': 1
     }).limit(1).exec(function(err, userData) {
         if(userData && userData.length) {
             userData = userData[0];
 
-            if(userData.point >= point) {
-                var updatedPoint = userData.point - point;
+            var targetPoint;
+            if (pointType == 'free') {
+                targetPoint = userData.freePoint;
+            } else {
+                targetPoint = userData.point;
+            }
+
+            if(targetPoint >= point) {
+                var updatedPoint;
+                var setQuery = {};
+
+                if (pointType == 'free') {
+                    updatedPoint = userData.freePoint - point;
+                    setQuery.freePoint = updatedPoint;
+                    setQuery.point = userData.point;
+                } else {
+                    updatedPoint = userData.point - point;
+                    setQuery.freePoint = userData.freePoint;
+                    setQuery.point = updatedPoint;
+                }
 
                 var pointLog = {
                     'amount': point,
+                    'pointType': (pointType == 'free' ? 'free' : 'currency'),
                     'classification': (type == 'view' || type == 'system' ? 'use' : type),
                     'time': new Date()
                 };
@@ -436,9 +480,7 @@ exports.usePoint = function(options, callback) {
                 db.user.update({
                     'email': email
                 }, {
-                    $set: {
-                        'point': updatedPoint
-                    },
+                    $set: setQuery,
                     $addToSet: {
                         'pointLog': pointLog
                     }
@@ -458,9 +500,67 @@ exports.usePoint = function(options, callback) {
     });
 };
 
+exports.earnPoint = function(options, callback) {
+    var email = options.email;
+    var point = options.point;
+    var type = options.type; // charge, view(use), system(use), earn, attendance
+    var target = options.target;
+    var matchId = options.matchId;
+
+    db.user.find({
+        'email': email
+    }, {
+        'point': 1
+    }).limit(1).exec(function(err, userData) {
+        if(userData && userData.length) {
+            userData = userData[0];
+
+            var updatedPoint = userData.point + point;
+
+            var pointLog = {
+                'amount': point,
+                'pointType': 'currency',
+                'classification': (type == 'view' || type == 'system' ? 'use' : type),
+                'time': new Date()
+            };
+
+            if(pointLog.classification == 'use') {
+                pointLog.useClassification = type;
+            }
+
+            if(pointLog.classification == 'use' || pointLog.classification == 'earn') {
+                pointLog.matchId = matchId;
+                if(type !== 'system') {
+                    pointLog.target = target;
+                }
+            }
+
+            db.user.update({
+                'email': email
+            }, {
+                $set: {
+                    'point': updatedPoint
+                },
+                $addToSet: {
+                    'pointLog': pointLog
+                }
+            }, function(updateErr) {
+                if(updateErr) {
+                    callback(false);
+                } else {
+                    callback(true);
+                }
+            });
+        } else {
+            callback(false);
+        }
+    });
+};
+
 exports.returnPoint = function(options, callback) {
     var email = options.email;
     var point = options.point;
+    var pointType = options.pointType;
     var type = options.type; // charge, view(use), system(use), earn, attendance
     var target = options.target;
     var matchId = options.matchId;
@@ -470,6 +570,7 @@ exports.returnPoint = function(options, callback) {
     db.user.find({
         'email': email
     }, {
+        'freePoint': 1,
         'point': 1,
         'pointLog': 1
     }).limit(1).exec(function(err, userData) {
@@ -494,16 +595,28 @@ exports.returnPoint = function(options, callback) {
                 }
                 async_cb();
             }, function(async_err) {
-                var updatedPoint = userData.point + point;
+                var updatedPoint;
+                var setQuery = {};
+
+                if (pointType == 'free') {
+                    updatedPoint = userData.freePoint + point;
+                    setQuery.freePoint = updatedPoint;
+                    setQuery.point = userData.point;
+                } else {
+                    updatedPoint = userData.point + point;
+                    setQuery.freePoint = userData.freePoint;
+                    setQuery.point = updatedPoint;
+                }
+
+
                 var updatedPointLog = userData.pointLog.splice(index, 1);
+
+                setQuery.pointLog = updatedPointLog;
 
                 db.user.update({
                     'email': email
                 }, {
-                    $set: {
-                        'point': updatedPoint,
-                        'pointLog': updatedPointLog
-                    }
+                    $set: setQuery
                 }, function(updateErr) {
                     if(updateErr) {
                         callback(false);

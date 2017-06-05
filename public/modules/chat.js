@@ -49,14 +49,6 @@ var CHAT = {
             location.href = '/' + move;
         });
 
-        $('#header li.my_point > img').click(function() {
-            location.href = '/my_page';
-        });
-
-        $('#header li.my_point > span').click(function() {
-            location.href = '/my_page';
-        });
-
         $('.user_search_input').keydown(function(e) {
             if(e.keyCode == 13) {
                 $('.user_search_btn').click();
@@ -108,11 +100,27 @@ var CHAT = {
         });
 
         $('#viewThisUsersPredict').click(function() {
+            GET_POINT(function(user) {
+                var costPoint = parseInt($('.viewCostPoint').html(), 10);
+                if ((user.freePoint >= costPoint) || (user.point >= costPoint)) {
+                    $('#viewThisUsersPredict').hide();
+                    $('.choicePointTypeBtn').show();
+                    $('.currentPoint.free').html(user.freePoint);
+                    $('.currentPoint.currency').html(user.point);
+                } else {
+                    notice.show('alert', '포인트가 부족합니다.');
+                }
+            });
+        });
+
+        $('.choicePointTypeBtn').click(function() {
             var target = $('.eachPredictedUser.active').attr('target');
+            var pointType = $(this).attr('pointType');
 
             $.post('/prediction/viewOthers', {
                 targetNickname: target,
-                matchId: self.room
+                matchId: self.room,
+                pointType: pointType
             }, function(result) {
                 if(result) {
                     if(result.result && result.result !== 'false') {
@@ -128,8 +136,7 @@ var CHAT = {
                         $('#viewBtnDiv').hide();
                         $('#isShownDiv').show();
                         $('#predictedUserPredictBox').fadeIn(2000);
-                        $('#my_current_point').html(parseInt($('#my_current_point').text(), 10)-100);
-                        $('#mobile_my_current_point').html(parseInt($('#mobile_my_current_point').text(), 10)-100);
+                        UPDATE_POINT();
                     } else {
                         notice.show('alert', '조회에 실패했습니다.');
                     }
@@ -221,8 +228,10 @@ var CHAT = {
                 $('#goalsAwayTeam').html(matchData.result.goalsAwayTeam || 0);
             }
 
-            if (matchData.status == 'FINISHED') {
-
+            if (matchData.status == 'IN_PLAY') {
+                $('#chatMatchStatus').html('<span class="status_live">LIVE</span>');
+            } else if (matchData.status == 'FINISHED') {
+                $('#chatMatchStatus').html('종료');
             }
         });
     },
@@ -333,6 +342,8 @@ var CHAT = {
             if(data && data.length) {
                 data = data[0];
 
+                $('.viewCostPoint').html(data.costPoint);
+
                 $('.predictedUserInfo_nick').html(data.nickname);
                 $('.predictedUserInfo_rank').html(data.totalRank + '위');
                 $('.predictedUserInfo_rating').html(parseInt(data.rating, 10));
@@ -343,26 +354,13 @@ var CHAT = {
                                             .removeClass('badge_gold')
                                             .removeClass('badge_platinum')
                                             .removeClass('badge_diamond');
-                if(data.readyGameCnt && data.readyGameCnt > 0) {
+
+                if (data.readyGameCnt && data.readyGameCnt > 0) {
                     $('.predictedUserInfo_tier').addClass('badge_ready');
                     $('.predictedUserInfo_tierName').html('배치중');
                 } else {
-                    if(data.rating < 1200) {
-                        $('.predictedUserInfo_tier').addClass('badge_bronze');
-                        $('.predictedUserInfo_tierName').html('브론즈');
-                    } else if(1200 <= data.rating && data.rating < 1400) {
-                        $('.predictedUserInfo_tier').addClass('badge_silver');
-                        $('.predictedUserInfo_tierName').html('실버');
-                    } else if(1400 <= data.rating && data.rating < 1600) {
-                        $('.predictedUserInfo_tier').addClass('badge_gold');
-                        $('.predictedUserInfo_tierName').html('골드');
-                    } else if(1600 <= data.rating && data.rating < 1800) {
-                        $('.predictedUserInfo_tier').addClass('badge_platinum');
-                        $('.predictedUserInfo_tierName').html('플래티넘');
-                    } else if(1800 <= data.rating) {
-                        $('.predictedUserInfo_tier').addClass('badge_diamond');
-                        $('.predictedUserInfo_tierName').html('다이아');
-                    }
+                    $('.predictedUserInfo_tier').addClass(data.tierClassName);
+                    $('.predictedUserInfo_tierName').html(data.tierName);
                 }
 
                 var totalHit = 0;

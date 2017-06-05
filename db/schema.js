@@ -16,8 +16,10 @@ var userSchema = new Schema({
     'like_board': Array,
     'readyGameCnt': {'type': Number, 'default': 5},
     'point': {'type': Number, 'default': 0},
+    'freePoint': {'type': Number, 'default': 0},
     'pointLog': [{
         'amount': Number,
+        'pointType': String, // free, currency
         'classification': String, // charge, use, earn, attendance
         'useClassification': String, // use - system, view
         'matchId': String, // for use, earn

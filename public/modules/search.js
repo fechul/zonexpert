@@ -60,14 +60,6 @@ var SEARCH = {
 			location.href = '/' + move;
 		});
 
-		$('#header li.my_point > img').click(function() {
-			location.href = '/my_page';
-		});
-
-		$('#header li.my_point > span').click(function() {
-			location.href = '/my_page';
-		});
-
 		$('.user_search_input').keydown(function(e) {
 			if(e.keyCode == 13) {
 				$('.user_search_btn').click();
