@@ -74,6 +74,11 @@ var INDEX = {
 			var $this = $(this);
 			location.href = '/search?id=' + $this.find('td.table_label_nickname').html()
 		});
+
+		$('.mydata_user').click(function() {
+			var myNickname = $(this).attr('data-nick');
+			location.href = '/search?id=' + myNickname;
+		});
 	},
 
 	set_mydata: function() {

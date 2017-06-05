@@ -125,6 +125,7 @@ router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoi
 		signup_display: '',
 		mydata_display: '',
 		headerHideMenu: '',
+		myNickname: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point
 	};
@@ -135,6 +136,7 @@ router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoi
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
+		json.myNickname = req.session.nickname;
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';

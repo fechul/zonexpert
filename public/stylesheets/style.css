@@ -25,7 +25,13 @@
 	/*height: 800px;*/
 }
 
-.mydata_user,
+.mydata_user {
+	border-bottom: 1px solid #aaa;
+	padding: 15px;
+	text-align: left;
+	cursor: pointer;
+}
+
 .rankdata {
 	border-bottom: 1px solid #aaa;
 	padding: 15px;

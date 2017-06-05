@@ -223,7 +223,6 @@ var CHAT = {
             'matchId': matchId,
             'sportsId': sportsId
         }, function(userList) {
-            console.log(userList)
 
             if(userList && userList.length) {
                 var userListHtml = '';

@@ -142,7 +142,11 @@ var SCHEDULE = {
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row td:not(:nth-child(1)):not(:nth-child(7))', function() {
-			location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
+			if($(this).closest('tr').hasClass('finished')) {
+				return false;
+			} else {
+				location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
+			}
 		});
 
 		$('.user_search_input').keydown(function(e) {

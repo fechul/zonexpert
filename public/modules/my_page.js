@@ -2,6 +2,7 @@ var MYPAGE = {
 	init: function(initData) {
 		notice.init();
 		this.init_events();
+		this.myNickName = initData.myNickName;
 
 		if(initData.attendancePointUpdated) {
 			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
@@ -9,6 +10,8 @@ var MYPAGE = {
 	},
 
 	init_events: function() {
+		var self = this;
+
 		$('#header .tools .signup').click(function() {
             location.href = "/signup";
         });
@@ -113,6 +116,10 @@ var MYPAGE = {
 
 		$('#submitLeaveMember').click(function() {
 			var reason = $('#leaveReason').val();
+		});
+
+		$('#searchMyData').click(function() {
+			location.href = "/search?id=" + self.myNickName;
 		});
 	}
 };

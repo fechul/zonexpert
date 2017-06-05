@@ -108,6 +108,10 @@
 	cursor: pointer;
 }
 
+#schedule_table .schedule_table_row.finished td {
+	cursor: default;
+}
+
 #schedule_table .schedule_table_row.finished td:nth-child(7) {
 	background-color: #ccc;
 	color: #888;
