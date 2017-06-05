@@ -136,7 +136,7 @@ router.get('/auth/signup', function(req, res) {
 	auth.signup({
 		'token': req.query.token
 	}, function(signup) {
-		res.json("회원가입 인증이 완료되었습니다.");
+		res.redirect('/signup_complete');
 	});
 });
 

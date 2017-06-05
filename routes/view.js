@@ -162,6 +162,12 @@ router.get('/signup', no_login, readFeedbackHTML, function(req, res) {
 	res.render(path, json);
 });
 
+router.get('/signup_complete', function(req, res) {
+	var path = 'signup_complete.html';
+
+	res.render(path);
+});
+
 router.get('/login', no_login, readFeedbackHTML, function(req, res) {
 	var path = 'login.html';
 	var json = {

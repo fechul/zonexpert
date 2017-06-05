@@ -80,12 +80,10 @@ exports.signup = function(data, callback) {
                         'to': data.email,
                         'subject': '존문가닷컴 회원가입 인증메일',
                         'html': [
-                            '<div>',
-                                '안녕하세요 존문가닷컴입니다.<br>',
-                                '회원가입을 위한 이메일 인증 과정입니다.<br>',
-                                '아래의 링크를 클릭하면 인증이 완료됩니다.<br><br>',
-                                '<a href=',__url,'/auth/signup?token=',signup_auth_token,
-                                '>인증하기</a>',
+                            '<div style="border:1px solid #ccc; padding:20px; max-width:500px; margin:50px auto; border-radius:10px; text-align:center; background:linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,   linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,   linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,   linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,   linear-gradient(90deg, #1b1b1b 10px, transparent 10px),   linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424); background-size:20px 20px; background-color:#131313;">',
+                                '<div style="color:#fff !important;"><div style="font-size:48px;font-weight:bold;">존문가닷컴</div><div style="font-size:30px;font-weight:bold;">Zonexperts.com</div></div><div style="font-size:20px;margin-top:30px; color:#fff !important">회원가입 인증메일입니다.</div><br>',
+                                '<p style="color:#fff !important;">아래의 링크를 클릭하면 인증이 완료됩니다.</p><br>',
+                                '<a href=',__url,'/auth/signup?token=',signup_auth_token,' style="font-size:22px; color:#fff;">인증하기</a>',
                             '</div>'
                         ].join('')
                     };
