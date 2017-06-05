@@ -723,4 +723,20 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 	});
 });
 
+router.get('/underconstruction', readFeedbackHTML, function(req, res) {
+	var path = 'under_construction.html';
+	var json = {
+		headerHideMenu: 'display:none;',
+		login_display: 'display:none;',
+		signup_display: 'display:none;',
+		myinfo_display: 'display:none;',
+		logout_display: 'display:none;',
+		myCurrentPoint: 0
+	};
+
+	json.feedback = req.feedback;
+
+	res.render(path, json);
+});
+
 module.exports = router;

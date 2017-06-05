@@ -58,7 +58,8 @@
             } else {
                 $.post('/feedback', {
                     'feedback_email': email,
-                    'feedback_contents': contents
+                    'feedback_contents': contents,
+                    'url': location.pathname
                 }, function(success) {
                     canSend = false;
                     setTimeout(function() {
@@ -66,6 +67,9 @@
                     }, 10000);
                     if (success) {
                         notice.show('success', '의견 감사합니다!');
+                        $('#feedback_email').val('');
+                        $('#feedback_contents').val('');
+                        $('.feedback_close').click();
                     } else {
                         notice.show('alert', '의견제출에 실패하였습니다.<br>잠시 후에 다시 시도해주세요.');
                     }

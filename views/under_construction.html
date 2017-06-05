@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zonexpert-공사중</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel='stylesheet' href='/stylesheets/common.css' />
+        <link rel='stylesheet' href='/stylesheets/under_construction.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+    </head>
+
+    <body>
+		<%- include header.html %>
+
+		<section>
+            <div style="text-align: center;">
+				<div class="logo"></div>
+				<div class="wrapper">
+                    <div class="container_box">
+                        <h2 style="margin-top: 40px; margin-bottom: 40px;">
+                            <i class="fa fa-ban"></i>
+                            <span>공사중</span>
+                            <i class="fa fa-ban"></i>
+                        </h2>
+                        <h3>이 페이지는 현재 이용하실 수 없습니다.</h3>
+                        <h3>빠른 시일내로 사용하실 수 있도록 하겠습니다.</h3>
+                        <h3>감사합니다.</h3>
+                    </div>
+				</div>
+			</div>
+		</section>
+        <%- feedback %>
+    </body>
+
+    <div id="notice">
+		<div id="notice-icon"></div><div id="notice-content"></div>
+	</div>
+
+	<script src="jquery/jquery.js"></script>
+	<!-- <script src="bootstrap/bootsrtap.min.js"></script> -->
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="notice/notice.js"></script>
+	<script>
+		var notice = NOTICE;
+	</script>
+
+</html>
