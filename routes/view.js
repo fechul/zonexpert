@@ -657,6 +657,8 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkAttenda
 				var key = 'rating_rank';
 
 				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
+					json.searchdata_tier_img = 'image/badge_ready.png';
+					json.searchdata_tier_name = '배치중';
 	        		json.searchdata_rank = '-';
 	        		json.myTotalRate = '-';
 		        	res.render(path, json);
@@ -667,26 +669,21 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkAttenda
 			        		var myTotalRate = (((data+1) / userCount)*100).toFixed(2);
 			        		json.myTotalRate = myTotalRate;
 
-			        		if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
-								json.searchdata_tier_img = 'image/badge_ready.png';
-								json.searchdata_tier_name = '배치중';
-							} else {
-								if(myTotalRate <= 3) {
-									json.searchdata_tier_img = 'image/badge_diamond.png';
-									json.searchdata_tier_name = '다이아몬드';
-								} else if(3 < myTotalRate && myTotalRate <= 10) {
-									json.searchdata_tier_img = 'image/badge_platinum.png';
-									json.searchdata_tier_name = '플래티넘';
-								} else if(10 < myTotalRate && myTotalRate <= 30) {
-									json.searchdata_tier_img = 'image/badge_gold.png';
-									json.searchdata_tier_name = '골드';
-								} else if(30 < myTotalRate && myTotalRate <= 70) {
-									json.searchdata_tier_img = 'image/badge_silver.png';
-									json.searchdata_tier_name = '실버';
-								} else if(70 < myTotalRate) {
-									json.searchdata_tier_img = 'image/badge_bronze.png';
-									json.searchdata_tier_name = '브론즈';
-								}
+							if(myTotalRate <= 3) {
+								json.searchdata_tier_img = 'image/badge_diamond.png';
+								json.searchdata_tier_name = '다이아몬드';
+							} else if(3 < myTotalRate && myTotalRate <= 10) {
+								json.searchdata_tier_img = 'image/badge_platinum.png';
+								json.searchdata_tier_name = '플래티넘';
+							} else if(10 < myTotalRate && myTotalRate <= 30) {
+								json.searchdata_tier_img = 'image/badge_gold.png';
+								json.searchdata_tier_name = '골드';
+							} else if(30 < myTotalRate && myTotalRate <= 70) {
+								json.searchdata_tier_img = 'image/badge_silver.png';
+								json.searchdata_tier_name = '실버';
+							} else if(70 < myTotalRate) {
+								json.searchdata_tier_img = 'image/badge_bronze.png';
+								json.searchdata_tier_name = '브론즈';
 							}
 			        	}
 			        	res.render(path, json);

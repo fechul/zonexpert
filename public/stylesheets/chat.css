@@ -570,6 +570,10 @@ li .badge_ready {
     margin-right: 0px !important;
 }
 
+.userPredictData {
+    display: none;
+}
+
 /*
     Media Query
 */

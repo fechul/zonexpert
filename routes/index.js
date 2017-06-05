@@ -722,4 +722,45 @@ router.post('/feedback', function(req, res) {
 	});
 });
 
+router.post('/user/leave', need_login, function(req, res) {
+	var email = req.session.email;
+	var leaveReason = req.body.leaveReason;
+	var password = req.body.password;
+
+	user.login({
+		email: email,
+		password: password
+	}, function(check) {
+		if(check.result) {
+			user.leave({
+				email: email,
+				leaveReason: leaveReason
+			}, function(leave) {
+				if(leave) {
+					var keys = ['rating_rank', 'game_cnt_rank', 'predict_rate_rank'];
+					async.each(keys, function(key, async_cb) {
+						redis_client.zrem(key, email, function(err, data) {
+							async_cb();
+						});
+					}, function(async_err) {
+						res.json({
+							result: true
+						});
+					});
+				} else {
+					res.json({
+						result: false,
+						code: 4
+					});
+				}
+			});
+		} else {
+			res.json({
+				result: false,
+				code: check.code
+			});
+		}
+	});
+});
+
 module.exports = router;

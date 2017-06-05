@@ -88,13 +88,23 @@
 					 	<div class="form-group">
 							<label for="leaveReason" class="col-sm-2 control-label">탈퇴 사유</label>
 							<div>
-						  		<textarea class="form-control" id="leaveReason" style="min-height:150px; width:600px; display:inline-block;"></textarea>
+						  		<textarea class="form-control" id="leaveReason"></textarea>
+							</div>
+							<div class="leaveConfirmDiv">
+								<div style="color:red; margin:10px 5px; font-size: 12px;">* 회원 탈퇴를 하시면 모든 데이터가 삭제되고 복구가 불가능합니다. 회원 탈퇴를 진행하시려면 비밀번호를 입력하고 아래 버튼을 눌러주세요.</div>
+						  		<label for="leavePassword" class="col-sm-2 control-label" style="margin-top: 7px;">비밀번호</label>
+						  		<div>
+							  		<input type="password" class="form-control" id="leavePassword"></input>
+								</div>
 							</div>
 					  	</div>
 
 					  	<div class="form-group" style="margin-bottom:0px;">
 							<div>
 						  		<button type="submit" class="btn btn-default" id="submitLeaveMember">탈퇴하기</button>
+							</div>
+							<div>
+						  		<button type="submit" class="btn btn-default" id="submitLeaveMemberConfirm">탈퇴하기</button>
 							</div>
 					  	</div>
 					</div>
@@ -139,23 +149,23 @@
 
 					<article class="mypage_article">
 						<div style="text-align:center;">
-							<span class="mypage-ti-fo">잔고</span></div>
+							<span class="mypage-ti-fo">포인트</span></div>
 						<div style="text-align:center;">
-							<i class="fa fa-krw mypage_img"></i></div>
+							<i class="fa fa-database mypage_img"></i></div>
 						<div class="mypage-menu-div">
 							<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
-								<li><i class="fa fa-caret-right"></i> 잔고금액 : 0</li>
+								<li><i class="fa fa-caret-right"></i> 보유포인트 : <%= myCurrentPoint %></li>
 							</ul></div>
 						<div style="text-align:center;padding-bottom:10px;">
-							<button type="button" class="article_btn" onclick="location.href='/sell_list'">잔고 충전하기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/sell_list'">포인트 충전하기</button></div>
 						<div style="text-align:center;">
-							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" onclick="location.href='/sell_list'">충전 내역 자세히 보기</button></div>
 					</article>
 
 					<article class="mypage_article">
 						<div style="text-align:center;">
 							<span class="mypage-ti-fo">정산/수익관리</span></div>
-						<div style="text-align:center;"><i class="fa fa-database mypage_img"></i></div>
+						<div style="text-align:center;"><i class="fa fa-krw mypage_img"></i></div>
 						<div class="mypage-menu-div">
 							<ul class="mypage-menu-ul" style="list-style:none; padding-left:0;">
 								<li><i class="fa fa-caret-right"></i> 판매 수수료율 :0</li>
