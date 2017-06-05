@@ -480,7 +480,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		matchData.roomOpen = true;	//test
+		// matchData.roomOpen = true;	//test
 		if (matchData && matchData.roomOpen) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
