@@ -543,7 +543,8 @@ var SEARCH = {
 				var proceedingHtml = '';
 				$('#my_prediction_list_table .noProceeding').hide();
 				for(var i = 0; i < proceeding.length; i++) {
-					var date = self.getDateString(proceeding[i].matchday);
+					console.log(proceeding[i]);
+					var date = self.getDateString(proceeding[i].date);
 					var homename = proceeding[i].homeTeamName;
 					var homeimg = proceeding[i].homeTeamImg;
 					var awayname = proceeding[i].awayTeamName;

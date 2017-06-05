@@ -718,7 +718,7 @@ exports.getProceedingPredict = function(options, callback) {
                     db.match.find({
                         'id': each.matchId
                     }, {
-                        'matchday': 1,
+                        'date': 1,
                         'homeTeamId': 1,
                         'awayTeamId': 1
                     }).limit(1).exec(function(__err, proceedingMatch) {
@@ -738,7 +738,7 @@ exports.getProceedingPredict = function(options, callback) {
                                 }).limit(1).exec(function(awayErr, awayData) {
                                     proceedingMatches.push({
                                         'matchId': each.matchId,
-                                        'matchday': new Date(proceedingMatch.matchday),
+                                        'date': new Date(proceedingMatch.date),
                                         'homeTeamName': homeData[0].shortName,
                                         'awayTeamName': awayData[0].shortName,
                                         'homeTeamImg': homeData[0].crestUrl,
@@ -760,4 +760,3 @@ exports.getProceedingPredict = function(options, callback) {
         }
     });
 };
-

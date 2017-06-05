@@ -18,7 +18,7 @@ var teamList = [{
     'leagueId': 'kbo2017',
     'name': '두산 베어스',
     'shortName': '두산',
-    'crestUrl': '/image/kbo_emblem/kia.png'
+    'crestUrl': '/image/kbo_emblem/doosan.png'
 }, {
     'id': 'kbo2',
     'leagueId': 'kbo2017',
@@ -60,7 +60,7 @@ var teamList = [{
     'leagueId': 'kbo2017',
     'name': '롯데 자이언츠',
     'shortName': '롯데',
-    'crestUrl': '/image/kbo_emblem/lg.png'
+    'crestUrl': '/image/kbo_emblem/lotte.png'
 }, {
     'id': 'kbo9',
     'leagueId': 'kbo2017',
