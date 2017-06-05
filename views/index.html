@@ -20,8 +20,9 @@
 		<section class="main_section">
 			<div class="mydata_wrapper">
 				<div class="mydata_section container_box" style="<%= mydata_display %>">
-					<div class="mydata_user" data-nick="<%= myNickname %>">
+					<div class="mydata_user">
 						<span class="mydata_user_id">-</span><!-- &nbsp(주종목:<span class="mydata_user_main_field">-</span>) -->
+						<button id="searchMyData" class="btn btn-primary"><i class="fa fa-search"></i></button>
 					</div>
 					<div class="mydata_statistics">
 						<div class="mydata_badge">
@@ -89,7 +90,8 @@
 	<script>
 		var notice = NOTICE;
 		INDEX.init({
-			'attendancePointUpdated': <%- attendancePointUpdated %>
+			'attendancePointUpdated': <%- attendancePointUpdated %>,
+			'myNickName': '<%= myNickname %>'
 		});
         PREDICTION_SHORTCUT.init();
 	</script>

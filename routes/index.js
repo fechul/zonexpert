@@ -434,15 +434,29 @@ router.get('/prediction/getUserInfo', function(req, res) {
 						'sportsId': sportsId,
 						'userEmail': email
 					}, function(viewList) {
-						data[0].viewList = viewList;
-
-						var key = 'rating_rank';
-						redis_client.zrevrank(key, email, function(err, rankData) {
-				        	if(!err) {
-				        		data[0].totalRank = rankData+1;
-				        	}
-				        	res.json(data);
-				        });
+						if(viewList.indexOf(req.session.email) > -1) {
+							prediction.getPick({
+								'matchId': matchId,
+								'userEmail': email
+							}, function(pick) {
+								data[0].pick = pick;
+								var key = 'rating_rank';
+								redis_client.zrevrank(key, email, function(err, rankData) {
+						        	if(!err) {
+						        		data[0].totalRank = rankData+1;
+						        	}
+						        	res.json(data);
+						        });
+							});
+						} else {
+							var key = 'rating_rank';
+							redis_client.zrevrank(key, email, function(err, rankData) {
+					        	if(!err) {
+					        		data[0].totalRank = rankData+1;
+					        	}
+					        	res.json(data);
+					        });
+						}
 					});
 				} else {
 					res.json(data);

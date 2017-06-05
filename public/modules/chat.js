@@ -115,6 +115,15 @@ var CHAT = {
             }, function(result) {
                 if(result) {
                     if(result.result && result.result !== 'false') {
+                        if(result.pick == 'home') {
+                            $('#predictedUserPredictResult').html('홈팀 승!');
+                        } else if(result.pick == 'away') {
+                            $('#predictedUserPredictResult').html('어웨이팀 승!');
+                        } else if(result.pick == 'draw') {
+                            $('#predictedUserPredictResult').html('무승부');
+                        } else {
+                            $('#predictedUserPredictResult').html('-');
+                        }
                         $('#viewBtnDiv').hide();
                         $('#isShownDiv').show();
                         $('#predictedUserPredictBox').fadeIn(2000);
@@ -373,29 +382,27 @@ var CHAT = {
                 }
                 $('.predictedUserInfo_leagueRecord').html(leagueHit + ' / ' + leagueFail + ' (' + (leagueHit + leagueFail == 0 ? '-' : ((leagueHit/(leagueHit+leagueFail))*100).toFixed(2)) + '%)');
 
-                if(data.pick == 'home') {
-                    $('#predictedUserPredictResult').html('홈팀 승!');
-                } else if(data.pick == 'away') {
-                    $('#predictedUserPredictResult').html('어웨이팀 승!');
-                } else if(data.pick == 'draw') {
-                    $('#predictedUserPredictResult').html('무승부');
-                } else {
-                    $('#predictedUserPredictResult').html('-');
-                }
+                var pick = data.pick;
 
-                if(data.viewList && data.viewList.length) {
-                    if(data.viewList.indexOf(myEmail) > -1) {
-                        $('#viewBtnDiv').hide();
-                        $('#isShownDiv').show();
-                        $('#predictedUserPredictBox').show();
+                if(pick) {
+                    if(pick == 'home') {
+                        $('#predictedUserPredictResult').html('홈팀 승!');
+                    } else if(pick == 'away') {
+                        $('#predictedUserPredictResult').html('어웨이팀 승!');
+                    } else if(pick == 'draw') {
+                        $('#predictedUserPredictResult').html('무승부');
                     } else {
-                        $('#isShownDiv').hide();
-                        $('#viewBtnDiv').show();
+                        $('#predictedUserPredictResult').html('-');
                     }
+
+                    $('#viewBtnDiv').hide();
+                    $('#isShownDiv').show();
+                    $('#predictedUserPredictBox').show();
                 } else {
                     $('#isShownDiv').hide();
                     $('#viewBtnDiv').show();
                 }
+                $('.userPredictData').show();
             }
         });
     },

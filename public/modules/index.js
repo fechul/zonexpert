@@ -1,5 +1,7 @@
 var INDEX = {
 	init: function(initData) {
+		this.myNickName = initData.myNickName;
+
 		this.init_events();
 		this.set_mydata();
 		this.setRecentPredict();
@@ -75,9 +77,8 @@ var INDEX = {
 			location.href = '/search?id=' + $this.find('td.table_label_nickname').html()
 		});
 
-		$('.mydata_user').click(function() {
-			var myNickname = $(this).attr('data-nick');
-			location.href = '/search?id=' + myNickname;
+		$('#searchMyData').click(function() {
+			location.href = '/search?id=' + self.myNickName;
 		});
 	},
 

@@ -222,11 +222,13 @@ canvas{position:relative; z-index:9999;}
 }
 
 .my_recent_predict_section .recent_predict_data_row.borderSuccess {
-	border: 2px solid green;
+	border: 1px solid green;
+	background-color: #98d698;
 }
 
 .my_recent_predict_section .recent_predict_data_row.borderFailed {
-	border: 2px solid red;
+	border: 1px solid red;
+	background-color: #e2b6b3;
 }
 
 .my_recent_predict_section .recent_predict_data_row > img {
