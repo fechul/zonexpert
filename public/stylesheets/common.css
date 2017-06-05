@@ -648,6 +648,11 @@ table > tbody > tr:not(:last-child) {
 	margin-bottom: 7px;
 }
 
+#nav_menu {
+	text-align: center;
+	padding: 0px;
+}
+
 
 /*
 	Media Query
@@ -655,6 +660,10 @@ table > tbody > tr:not(:last-child) {
 
 /* mobile header */
 @media all and (min-device-width: 541px) and (max-device-width: 768px) {
+	#nav_menu {
+	    padding: 0px 0px 0px 50%;
+	}
+
 	#header .main_menu,
 	#header .tools {
 		width: 100%;
@@ -689,6 +698,9 @@ table > tbody > tr:not(:last-child) {
 }
 
 @media all and (max-device-width: 540px) {
+	#nav_menu {
+	    padding: 0px 0px 0px 50%;
+	}
 	#header .main_menu,
 	#header .tools {
 		width: 100%;
