@@ -126,6 +126,7 @@ router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoi
 		signup_display: '',
 		mydata_display: '',
 		headerHideMenu: '',
+		myNickname: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point
 	};
@@ -136,6 +137,7 @@ router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkAttendancePoi
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
+		json.myNickname = req.session.nickname;
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
@@ -481,7 +483,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		// matchData.roomOpen = true;	//test
+		matchData.roomOpen = true;	//test
 		if (matchData && (matchData.status != 'FINISHED')) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;

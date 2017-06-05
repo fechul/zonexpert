@@ -26,7 +26,7 @@
 					<div class="mypage_info1_wrapper">
 						<label class="mypage_info1_label">닉네임</label>
 						<div class="mypage_info1">
-							<span class ="mypage_st2" id="showNickName"><%= myNickName %></span>
+							<span class ="mypage_st2" id="showNickName"><%= myNickName %></span><button id="searchMyData" class="btn btn-primary"><i class="fa fa-search"></i></button>
 						</div>
 					</div>
 					<div class="mypage_info1_wrapper">
@@ -106,7 +106,7 @@
 				<div class="myPointsManagementField">
 					<article class="mypage_article">
 						<div style="text-align:center;">
-							<span class="mypage-ti-fo">내역</span></div>
+							<span class="mypage-ti-fo">구매내역</span></div>
 						<div style="text-align:center;">
 							<i class="fa fa-shopping-cart mypage_img"></i>
 						</div>
@@ -187,7 +187,8 @@
     <script>
         var notice = NOTICE;
         MYPAGE.init({
-            'attendancePointUpdated': <%- attendancePointUpdated %>
+            'attendancePointUpdated': <%- attendancePointUpdated %>,
+            'myNickName': '<%= myNickName %>'
         });
         PREDICTION_SHORTCUT.init();
     </script>

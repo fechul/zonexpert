@@ -34,7 +34,7 @@
     border: 1px solid red;
     background-color: #fff;
     border: 1px solid #e4e4e4;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .changeinfo {
@@ -46,7 +46,7 @@
     height: 50px;*/
     /*display: inline-block;*/
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .myPointsManagementField {
@@ -54,7 +54,7 @@
     width: 880px;
     margin: 30px auto;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .mypage_article {
@@ -130,6 +130,11 @@
     font-size: 90px;
     padding-top: 10px;
     color: #f49f6b;
+}
+
+#searchMyData {
+    padding: 3px 7px;
+    margin-left: 10px;
 }
 
 /* device */
