@@ -6,6 +6,7 @@ var router = express.Router();
 var board = require('../core/board.js');
 var user = require('../core/user.js');
 var schedule = require('../core/schedule.js');
+var prediction = require('../core/prediction.js');
 // 체크
 // 로그인 상태에서만 접속 가능한 페이지 체크
 // router.get('/url', need_login, function(req, res) {}) 형식으로 사용
@@ -555,7 +556,22 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 
 								json.prediction_shortcut = req.predictionShortcut;
 
-						        res.render(path, json);
+								prediction.getMatchPrediction({
+									'email': req.session.email,
+									'matchId': matchId
+								}, function(predictionData) {
+									if (predictionData) {
+										if (predictionData.confirmed) {
+											json.predict_in_chat_condition = 'confirmed';
+										} else {
+											json.predict_in_chat_condition = 'basketed';
+										}
+									} else {
+										json.predict_in_chat_condition = '';
+									}
+
+						        	res.render(path, json);
+								});
 							});
 				        });
 					});

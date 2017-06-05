@@ -1,6 +1,7 @@
 .main_section {
     /*opacity: 0.85;*/
     text-align: center;
+	margin-bottom: 60px !important;
 }
 
 .container {
@@ -410,17 +411,17 @@ ul.users-container {
     text-align: left;
 }
 
-.my-account{
+.my-account {
     float:left;
 }
 
-.my-account .name{
+.my-account .name {
     float: left;
     height:50px;
     line-height: 50px;
     color: #5d7185;
 }
-.my-account .image >img{
+.my-account .image >img {
     float: left;
     width:50px;
     height:50px;
@@ -512,6 +513,57 @@ li .badge_ready {
 
 .predict_in_chat {
     float: right !important;
+    cursor: pointer;
+    border-left:1px solid #ddd;
+    background-color: #eee;
+    border-top-right-radius: 10px;
+}
+
+.predict_in_chat:hover {
+    background-color: #ffe6bc !important;
+}
+
+.predict_in_chat.basketed {
+    background-color: #ffc94f !important;
+}
+
+.predict_in_chat.confirmed {
+    background-color: rgba(121, 162, 192, 0.83) !important;
+}
+
+.predict_in_chat a {
+    border: 1px solid #eee !important;
+    font-size: 20px;
+    line-height: 0px !important;
+    padding: 10px !important;
+
+}
+
+.predict_in_chat a:hover {
+    border-color: #ffe6bc !important;
+    background-color: #ffe6bc !important;
+}
+
+.predict_in_chat.basketed a {
+    border-color: #ffc94f !important;
+    background-color: #ffc94f !important;
+}
+
+.predict_in_chat.confirmed a {
+    border-color: rgba(121, 162, 192, 0.83) !important;
+    background-color: rgba(121, 162, 192, 0.83) !important;
+}
+
+.predict_in_chat a i {
+    color: #333;
+}
+
+.nav > li:first-child > a {
+    border-top-left-radius: 10px;
+}
+
+.nav > li:last-child > a {
+    border-top-right-radius: 10px;
 }
 
 /*
@@ -621,6 +673,10 @@ li .badge_ready {
         width: 100% !important;
         font-size: 24px !important;
     }
+
+    .nav > li > a {
+        padding: 10px 8px !important;
+    }
 }
 
 @media all and (min-device-width: 541px) and (max-device-width: 620px) {
@@ -665,10 +721,11 @@ li .badge_ready {
 
     .my-account {
         margin-right: 10px;
+        display: none;
     }
 
     .input-wrapper {
-        width: 50% !important;
+        width: calc(100% - 50px) !important;
     }
 
     #goToOtherPredict {
@@ -730,6 +787,10 @@ li .badge_ready {
         width: 100% !important;
         font-size: 20px !important;
     }
+
+    .nav > li > a {
+        padding: 10px 8px !important;
+    }
 }
 
 @media all and (min-device-width: 441px) and (max-device-width: 540px) {
@@ -773,10 +834,11 @@ li .badge_ready {
 
     .my-account {
         margin-right: 10px;
+        display: none;
     }
 
     .input-wrapper {
-        width: 60% !important;
+        width: calc(100% - 50px) !important;
     }
 
     .showUserList {
@@ -842,6 +904,10 @@ li .badge_ready {
         width: 100% !important;
         font-size: 20px !important;
     }
+
+    .nav > li > a {
+        padding: 10px 8px !important;
+    }
 }
 
 @media all and (min-device-width: 381px) and (max-device-width: 440px) {
@@ -885,10 +951,11 @@ li .badge_ready {
 
     .my-account {
         margin-right: 10px;
+        display: none;
     }
 
     .input-wrapper {
-        width: 50% !important;
+        width: calc(100% - 50px) !important;
     }
 
     .showUserList {
@@ -954,6 +1021,10 @@ li .badge_ready {
         width: 100% !important;
         font-size: 20px !important;
     }
+
+    .nav > li > a {
+        padding: 10px 8px !important;
+    }
 }
 
 @media all and (max-device-width: 380px) {
@@ -997,10 +1068,11 @@ li .badge_ready {
 
     .my-account {
         margin-right: 10px;
+        display: none;
     }
 
     .input-wrapper {
-        width: 42% !important;
+        width: calc(100% - 50px) !important;
     }
 
     .showUserList {
@@ -1085,5 +1157,13 @@ li .badge_ready {
     .teamScoreSection {
         width: 100% !important;
         font-size: 20px !important;
+    }
+
+    .nav > li > a {
+        padding: 10px 8px !important;
+    }
+
+    .nav > li:last-child > a {
+        padding: 7px !important;
     }
 }

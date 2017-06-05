@@ -515,6 +515,23 @@ exports.getRecentPredict = function(options, callback) {
     });
 };
 
+exports.getMatchPrediction = function(params, callback) {
+    db.prediction.find({
+        'userEmail': params.email,
+        'matchId': params.matchId
+    })
+    .limit(1)
+    .exec(function(err, data) {
+        if (data.length) {
+            data = data[0];
+        } else {
+            data = null;
+        }
+
+        callback(data);
+    });
+};
+
 exports.deleteExpiredBasket = function(params, callback) {
     var query = {
         'matchId': params.matchId,

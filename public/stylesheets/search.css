@@ -7,6 +7,7 @@
 	/*background-color: #145c86;
 	opacity: 0.85;*/
 	text-align: center;
+	margin-bottom: 60px !important;
 }
 
 .no_searchdata_wrapper,
@@ -576,4 +577,3 @@ canvas{position:relative; z-index:9999;}
 		width: 25%;
 	}
 }
-
