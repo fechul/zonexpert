@@ -45,7 +45,9 @@ exports.login = function(data, callback) {
 };
 
 exports.signup = function(data, callback) {
+    console.log("@: ", data)
     this.validate(data, function(validation) {
+        console.log("2: ", validation)
         if (validation.result) {
             var signup_auth_token = randomstring.generate(30);
             var new_user = new db.user({
@@ -233,7 +235,7 @@ exports.validate = function(data, callback) {
                 validation.code = 44;
             } else if(!main_sport || main_sport == 'none' || isNaN(parseInt(main_sport))) {
                 validation.code = 51;
-            } else if(!main_league || main_league == 'none' || isNaN(parseInt(main_league))) {
+            } else if(!main_league || main_league == 'none') {
                 validation.code = 52;
             } else {
                 validation.result = true;
