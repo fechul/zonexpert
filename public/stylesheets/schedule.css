@@ -104,8 +104,12 @@
 }
 
 #schedule_table .schedule_table_row:hover {
-	background-color: #ddd;
+	background-color: #eaeaea;
 	cursor: pointer;
+}
+
+#schedule_table .schedule_table_row:hover td:nth-child(7) {
+	background-color: #ffe6bc;
 }
 
 #schedule_table .schedule_table_row.finished td:nth-child(7) {

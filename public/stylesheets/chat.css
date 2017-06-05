@@ -510,6 +510,10 @@ li .badge_ready {
     color: #e61e1e;
 }
 
+.predict_in_chat {
+    float: right !important;
+}
+
 /*
     Media Query
 */

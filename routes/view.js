@@ -481,7 +481,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 		'matchId': matchId
 	}, function(matchData) {
 		// matchData.roomOpen = true;	//test
-		if (matchData && matchData.roomOpen) {
+		if (matchData && (matchData.status != 'FINISHED')) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
 				json.goalsAwayTeam = matchData.result.goalsAwayTeam == null ? '-' : matchData.result.goalsAwayTeam;
