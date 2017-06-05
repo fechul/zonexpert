@@ -129,19 +129,21 @@ var INDEX = {
 	set_rank: function(type) {
 		var table_html = '';
 
-		var get_tier_img = function(rating) {
-			rating = parseInt(rating);
+		var get_tier_img = function(myTotalRate) {
+			myTotalRate = parseFloat(myTotalRate);
 
-			if(rating < 1200) {
-				return '<div><div class="rank_table_tier badge_bronze"></div></div>';
-			} else if(1200 <= rating && rating < 1400) {
-				return '<div><div class="rank_table_tier badge_silver"></div></div>';
-			} else if(1400 <= rating && rating < 1600) {
-				return '<div><div class="rank_table_tier badge_gold"></div></div>';
-			} else if(1600 <= rating && rating < 1800) {
-				return '<div><div class="rank_table_tier badge_platinum"></div></div>';
-			} else if(1800 <= rating) {
+			if(myTotalRate <= 3) {
 				return '<div><div class="rank_table_tier badge_diamond"></div></div>';
+			} else if(3 < myTotalRate && myTotalRate <= 10) {
+				return '<div><div class="rank_table_tier badge_platinum"></div></div>';
+			} else if(10 < myTotalRate && myTotalRate <= 30) {
+				return '<div><div class="rank_table_tier badge_gold"></div></div>';
+			} else if(30 < myTotalRate && myTotalRate <= 70) {
+				return '<div><div class="rank_table_tier badge_silver"></div></div>';
+			} else if(70 < myTotalRate) {
+				return '<div><div class="rank_table_tier badge_bronze"></div></div>';
+			} else {
+				return '';
 			}
 		};
 
@@ -239,7 +241,7 @@ var INDEX = {
 						table_html += '<td class="table_label_hitrate">-</td>';
 					}
 
-					table_html += '<td class="tier_cell table_label_tier">' + get_tier_img(data[i].rating) + '</td>';
+					table_html += '<td class="tier_cell table_label_tier">' + (data[i].readyGameCnt && data[i].readyGameCnt > 0 ? '<div><div class="rank_table_tier badge_ready"></div></div>' : get_tier_img(data[i].myTotalRate)) + '</td>';
 					table_html += '</tr>';
 				}
 			} else {

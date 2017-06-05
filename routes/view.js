@@ -198,8 +198,6 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
     	start -= 1;
 		end -= 1;
 
-    	var rank_array = [];
-
 	    // add rank to redis server
 		// var score = 1750;
 		// var id = "zonexpert104@zonexpert.com";
@@ -215,32 +213,34 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 		//get rank from redis server
 
 	    redis_client.zrevrange(key, start, end, function(err, data) {
-			console.log('rank_data' , data);
 	        if(err) {
 	            console.log("redis get rank err: ", err);
 	            res.render(path, json);
 	        } else {
-	            async.mapSeries(data, function(info, async_cb) {
-	                rank_array.push(info);
-	                async_cb();
-	            }, function(async_err) {
-	            	user.get_rank_data(rank_array, function(userdata) {
+            	user.countAllUsers('onlyRanked', function(userCount) {
+            		var redisUserCnt = userCount;
+	            	user.get_rank_data(data, function(userdata) {
 	            		var rank_table_html = '';
 
-	            		var get_tier_img = function(rating) {
-							rating = parseInt(rating);
+	            		var get_tier_img = function(myTotalRate) {
+	            			var tier_img = '';
 
-							if(rating < 1200) {
-								return '<div><div class="rank_table_tier badge_bronze"></div></div>';
-							} else if(1200 <= rating && rating < 1400) {
-								return '<div><div class="rank_table_tier badge_silver"></div></div>';
-							} else if(1400 <= rating && rating < 1600) {
-								return '<div><div class="rank_table_tier badge_gold"></div></div>';
-							} else if(1600 <= rating && rating < 1800) {
-								return '<div><div class="rank_table_tier badge_platinum"></div></div>';
-							} else if(1800 <= rating) {
-								return '<div><div class="rank_table_tier badge_diamond"></div></div>';
+	            			if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
+								tier_img = '<div><div class="rank_table_tier badge_ready"></div></div>';
+							} else {
+								if(myTotalRate <= 3) {
+									tier_img = '<div><div class="rank_table_tier badge_diamond"></div></div>';
+								} else if(3 < myTotalRate && myTotalRate <= 10) {
+									tier_img = '<div><div class="rank_table_tier badge_platinum"></div></div>';
+								} else if(10 < myTotalRate && myTotalRate <= 30) {
+									tier_img = '<div><div class="rank_table_tier badge_gold"></div></div>';
+								} else if(30 < myTotalRate && myTotalRate <= 70) {
+									tier_img = '<div><div class="rank_table_tier badge_silver"></div></div>';
+								} else if(70 < myTotalRate) {
+									tier_img = '<div><div class="rank_table_tier badge_bronze"></div></div>';
+								}
 							}
+							return tier_img;
 						};
 
 						var rank = 1;
@@ -273,7 +273,9 @@ router.get('/rank', readPredictionShortcutHTML, checkAttendancePoint, function(r
 								rank_table_html += '<td class="table_label_hitrate">-</td>';
 							}
 
-							rank_table_html += '<td class="tier_cell table_label_tier">' + get_tier_img(user.rating) + '</td>';
+							var myTotalRate = ((rank / redisUserCnt)*100).toFixed(2);
+
+							rank_table_html += '<td class="tier_cell table_label_tier">' + get_tier_img(myTotalRate) + '</td>';
 							rank_table_html += '</tr>';
 							rank++;
 							_async_cb();
@@ -461,7 +463,7 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
-		// matchData.roomOpen = true;	//test
+		matchData.roomOpen = true;	//test
 		if (matchData && matchData.roomOpen) {
 			if (matchData.result) {
 				json.goalsHomeTeam = matchData.result.goalsHomeTeam == null ? '-' : matchData.result.goalsHomeTeam;
@@ -494,37 +496,49 @@ router.get('/match/:matchId', readPredictionShortcutHTML, checkAttendancePoint, 
 			user.get(req.session.email, function(userData) {
 				if(userData) {
 					json.my_nickname = userData.nickname;
-					if(!userData.readyGameCnt || userData.readyGameCnt <= 0) {
-						var rating = userData.rating;
-						if(rating < 1200) {
-							json.myBadge = 'bronze';
-							json.myBadgeSrc = '/image/badge_bronze.png';
-						} else if(1200 <= rating && rating < 1400) {
-							json.myBadge = 'silver';
-							json.myBadgeSrc = '/image/badge_silver.png';
-						} else if(1400 <= rating && rating < 1600) {
-							json.myBadge = 'gold';
-							json.myBadgeSrc = '/image/badge_gold.png';
-						} else if(1600 <= rating && rating < 1800) {
-							json.myBadge = 'platinum';
-							json.myBadgeSrc = '/image/badge_platinum.png';
-						} else if(1800 <= rating) {
-							json.myBadge = 'diamond';
-							json.myBadgeSrc = '/image/badge_diamond.png';
-						}
-					}
 
-					schedule.getMatchTeamsName({
-						'matchId': matchId
-					}, function(result) {
-						json.homeTeamName = result.homeTeamName;
-						json.awayTeamName = result.awayTeamName;
-						json.homeTeamImg = result.homeTeamImg;
-						json.awayTeamImg = result.awayTeamImg;
+					user.countAllUsers('onlyRanked', function(userCount) {
+						redis_client.zrevrank('rating_rank', userData.email, function(err, data) {
+				        	if(!err) {
+				        		var myRank = data+1;
+				        		var myTotalRate = ((myRank / userCount)*100).toFixed(2);
 
-						json.prediction_shortcut = req.predictionShortcut;
+				        		if(userData.readyGameCnt && userData.readyGameCnt > 0) {
+										json.myBadge = 'ready';
+										json.myBadgeSrc = '/image/badge_ready.png';
+								} else {
+									if(myTotalRate <= 3) {
+										json.myBadge = 'diamond';
+										json.myBadgeSrc = '/image/badge_diamond.png';
+									} else if(3 < myTotalRate && myTotalRate <= 10) {
+										json.myBadge = 'platinum';
+										json.myBadgeSrc = '/image/badge_platinum.png';
+									} else if(10 < myTotalRate && myTotalRate <= 30) {
+										json.myBadge = 'gold';
+										json.myBadgeSrc = '/image/badge_gold.png';
+									} else if(30 < myTotalRate && myTotalRate <= 70) {
+										json.myBadge = 'silver';
+										json.myBadgeSrc = '/image/badge_silver.png';
+									} else if(70 < myTotalRate) {
+										json.myBadge = 'bronze';
+										json.myBadgeSrc = '/image/badge_bronze.png';
+									}
+								}
+				        	}
 
-				        res.render(path, json);
+				        	schedule.getMatchTeamsName({
+								'matchId': matchId
+							}, function(result) {
+								json.homeTeamName = result.homeTeamName;
+								json.awayTeamName = result.awayTeamName;
+								json.homeTeamImg = result.homeTeamImg;
+								json.awayTeamImg = result.awayTeamImg;
+
+								json.prediction_shortcut = req.predictionShortcut;
+
+						        res.render(path, json);
+							});
+				        });
 					});
 				} else {
 					res.redirect('/schedule');
@@ -575,7 +589,7 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 
 	json.prediction_shortcut = req.predictionShortcut;
 
-	user.countAllUsers(function(userCount) {
+	user.countAllUsers('onlyRanked', function(userCount) {
 		user.get(id, function(userdata) {
 			if(!userdata) {
 				json.search_show = 'display:none;';
@@ -585,28 +599,6 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 
 				var rating = userdata.rating;
 				json.searchdata_rating = parseInt(rating, 10);
-
-				if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
-					json.searchdata_tier_img = 'image/badge_ready.png';
-					json.searchdata_tier_name = '배치중';
-				} else {
-					if(rating < 1200) {
-						json.searchdata_tier_img = 'image/badge_bronze.png';
-						json.searchdata_tier_name = '브론즈';
-					} else if(1200 <= rating && rating < 1400) {
-						json.searchdata_tier_img = 'image/badge_silver.png';
-						json.searchdata_tier_name = '실버';
-					} else if(1400 <= rating && rating < 1600) {
-						json.searchdata_tier_img = 'image/badge_gold.png';
-						json.searchdata_tier_name = '골드';
-					} else if(1600 <= rating && rating < 1800) {
-						json.searchdata_tier_img = 'image/badge_platinum.png';
-						json.searchdata_tier_name = '플래티넘';
-					} else if(1800 <= rating) {
-						json.searchdata_tier_img = 'image/badge_diamond.png';
-						json.searchdata_tier_name = '다이아몬드';
-					}
-				}
 
 				var total_hit = 0;
 				var total_fail = 0;
@@ -634,7 +626,30 @@ router.get('/search', readPredictionShortcutHTML, checkAttendancePoint, function
 					redis_client.zrevrank(key, userdata.email, function(err, data) {
 			        	if(!err) {
 			        		json.searchdata_rank = data+1;
-			        		json.myTotalRate = (((data+1) / userCount)*100).toFixed(2);
+			        		var myTotalRate = (((data+1) / userCount)*100).toFixed(2);
+			        		json.myTotalRate = myTotalRate;
+
+			        		if(userdata.readyGameCnt && userdata.readyGameCnt > 0) {
+								json.searchdata_tier_img = 'image/badge_ready.png';
+								json.searchdata_tier_name = '배치중';
+							} else {
+								if(myTotalRate <= 3) {
+									json.searchdata_tier_img = 'image/badge_diamond.png';
+									json.searchdata_tier_name = '다이아몬드';
+								} else if(3 < myTotalRate && myTotalRate <= 10) {
+									json.searchdata_tier_img = 'image/badge_platinum.png';
+									json.searchdata_tier_name = '플래티넘';
+								} else if(10 < myTotalRate && myTotalRate <= 30) {
+									json.searchdata_tier_img = 'image/badge_gold.png';
+									json.searchdata_tier_name = '골드';
+								} else if(30 < myTotalRate && myTotalRate <= 70) {
+									json.searchdata_tier_img = 'image/badge_silver.png';
+									json.searchdata_tier_name = '실버';
+								} else if(70 < myTotalRate) {
+									json.searchdata_tier_img = 'image/badge_bronze.png';
+									json.searchdata_tier_name = '브론즈';
+								}
+							}
 			        	}
 			        	res.render(path, json);
 			        });

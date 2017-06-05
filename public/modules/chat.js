@@ -223,6 +223,7 @@ var CHAT = {
             'matchId': matchId,
             'sportsId': sportsId
         }, function(userList) {
+            console.log(userList)
 
             if(userList && userList.length) {
                 var userListHtml = '';
@@ -233,16 +234,16 @@ var CHAT = {
                     if(userList[i].readyGameCnt && userList[i].readyGameCnt > 0) {
                         userListHtml += '<div class="predictedUserBadge badge_ready"></div>';
                     } else {
-                        if(userList[i].rating < 1200) {
-                            userListHtml += '<div class="predictedUserBadge badge_bronze"></div>';
-                        } else if(1200 <= userList[i].rating && userList[i].rating < 1400) {
-                            userListHtml += '<div class="predictedUserBadge badge_silver"></div>';
-                        } else if(1400 <= userList[i].rating && userList[i].rating < 1600) {
-                            userListHtml += '<div class="predictedUserBadge badge_gold"></div>';
-                        } else if(1600 <= userList[i].rating && userList[i].rating < 1800) {
-                            userListHtml += '<div class="predictedUserBadge badge_platinum"></div>';
-                        } else if(1800 <= userList[i].rating) {
+                        if(userList[i].myTotalRate <= 3) {
                             userListHtml += '<div class="predictedUserBadge badge_diamond"></div>';
+                        } else if(3 < userList[i].myTotalRate && userList[i].myTotalRate <= 10) {
+                            userListHtml += '<div class="predictedUserBadge badge_platinum"></div>';
+                        } else if(10 < userList[i].myTotalRate && userList[i].myTotalRate <= 30) {
+                            userListHtml += '<div class="predictedUserBadge badge_gold"></div>';
+                        } else if(30 < userList[i].myTotalRate && userList[i].myTotalRate <= 70) {
+                            userListHtml += '<div class="predictedUserBadge badge_silver"></div>';
+                        } else if(70 < userList[i].myTotalRate) {
+                            userListHtml += '<div class="predictedUserBadge badge_bronze"></div>';
                         }
                     }
 

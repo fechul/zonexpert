@@ -190,19 +190,19 @@ var BOARD = {
 			return date_html;
 		};
 
-		var get_tier_img = function(rating) {
-			rating = parseInt(rating);
+		var get_tier_img = function(myTotalRate) {
+			myTotalRate = parseFloat(myTotalRate);
 
-			if(rating < 1200) {
-				return '<div class="rank_table_tier badge_bronze"></div>';
-			} else if(1200 <= rating && rating < 1400) {
-				return '<div class="rank_table_tier badge_silver"></div>';
-			} else if(1400 <= rating && rating < 1600) {
-				return '<div class="rank_table_tier badge_gold"></div>';
-			} else if(1600 <= rating && rating < 1800) {
-				return '<div class="rank_table_tier badge_platinum"></div>';
-			} else if(1800 <= rating) {
+			if(myTotalRate <= 3) {
 				return '<div class="rank_table_tier badge_diamond"></div>';
+			} else if(3 < myTotalRate && myTotalRate <= 10) {
+				return '<div class="rank_table_tier badge_platinum"></div>';
+			} else if(10 < myTotalRate && myTotalRate <= 30) {
+				return '<div class="rank_table_tier badge_gold"></div>';
+			} else if(30 < myTotalRate && myTotalRate <= 70) {
+				return '<div class="rank_table_tier badge_silver"></div>';
+			} else if(70 < myTotalRate) {
+				return '<div class="rank_table_tier badge_bronze"></div>';
 			}
 		};
 
@@ -218,7 +218,7 @@ var BOARD = {
 			for(i = 0; i < board_data.length; i++) {
                 board_html += '<tr boardNo=' + board_data[i].boardNo + '>';
                 board_html += '<td>' + board_data[i].boardNo + '</td>';
-                board_html += '<td>' + ((board_data[i].readyGameCnt && board_data[i].readyGameCnt > 0) ? '<div class="rank_table_tier badge_ready"></div>' : get_tier_img(board_data[i].rating)) + board_data[i].nickname + '</td>';
+                board_html += '<td>' + ((board_data[i].readyGameCnt && board_data[i].readyGameCnt > 0) ? '<div class="rank_table_tier badge_ready"></div>' : get_tier_img(board_data[i].myTotalRate)) + board_data[i].nickname + '</td>';
                 board_html += '<td><nobr>' + board_data[i].title + '<nobr></td>';
                 board_html += '<td class="current_like">' + board_data[i].like + '</td>';
                 board_html += '<td>' + make_date(board_data[i].date) + '</td>';
