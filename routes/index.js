@@ -405,7 +405,7 @@ router.get('/prediction/getUserList', function(req, res) {
 					redis_client.zrevrank('rating_rank', each.email, function(search_err, search_data) {
 						if(search_data || search_data == 0) {
 		    				var target_rank = search_data + 1;
-							var myTotalRate = ((target_rank / UserCount)*100).toFixed(2);
+							var myTotalRate = ((target_rank / userCount)*100).toFixed(2);
 							each.myTotalRate = myTotalRate;
 						}
 						async_cb();

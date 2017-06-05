@@ -8,7 +8,7 @@ var $;
 var schedule = require('./schedule.js');
 var chat = require('./chat.js');
 
-var sportsArray = [1, 2];
+var sportsArray = [2];
 // 1 football 2 baseball
 var leagueIdArray = [426, 429, 430, 432, 433, 434, 436, 438, 439, 440];
 // var leagueIdArray = [440];
@@ -99,7 +99,7 @@ var getAllMatches = function(callback) {
                     matchDay = tdClassDay.eq(0).text();
                 }
 
-                var MatchDate = new Date(currentYear + ' ' + matchDay + ' ' + tdClassTime.text()) - 1000 * 60 * 60 * 9;
+                var MatchDate = new Date(currentYear + ' ' + matchDay + ' ' + tdClassTime.text());
 
                 var obj = {
                     'id': '',
@@ -338,7 +338,7 @@ var liveChecker = function(callback) {
                 for (var i = 0; i < smsScore.length; i++) {
                     var $this = smsScore.eq(i);
                     var time = $this.find('.place span').eq(0).text();
-                    var MatchDate = new Date(currentDay + ' ' + time) - 1000 * 60 * 60 * 9;
+                    var MatchDate = new Date(currentDay + ' ' + time);
                     var status = '';
 
                     var awayTeamName = $this.find('.score_wrap .leftTeam .teamT').eq(0).text();

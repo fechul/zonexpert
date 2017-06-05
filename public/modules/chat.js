@@ -128,6 +128,10 @@ var CHAT = {
                 }
             });
         });
+
+        $('.predict_in_chat').click(function() {
+            console.log('d');
+        });
     },
 
     connect_socket: function() {
@@ -170,7 +174,7 @@ var CHAT = {
             }
 
             if (matchData.status == 'FINISHED') {
-                
+
             }
         });
     },
@@ -258,7 +262,7 @@ var CHAT = {
     },
 
     setUserPredictData: function(target) {
-        var sporstId = this.sportsId;
+        var sportsId = this.sportsId;
         var leagueId = this.leagueId;
         var matchId = this.room;
         var myEmail = this.email;
@@ -346,7 +350,7 @@ var CHAT = {
                         $('#predictedUserPredictBox').show();
                     } else {
                         $('#isShownDiv').hide();
-                        $('#viewBtnDiv').show();    
+                        $('#viewBtnDiv').show();
                     }
                 } else {
                     $('#isShownDiv').hide();
