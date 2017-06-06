@@ -63,6 +63,7 @@ exports.get = function(params, callback) {
 	                            }
 	                            board.nickname = userdata.nickname;
 	                            board.i_like = false;
+	                            board.readyGameCnt = userdata.readyGameCnt;
 	                            async_cb();
 	                        }
 	                    });
