@@ -310,24 +310,13 @@ var SCHEDULE = {
 						}
 					}
 
-					if (match.sportsId == '2') {
-						// (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? () : '-'
-						row_data += [
-							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
-							'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
-							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
-							'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
-							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
-						].join('');
-					} else {
-						row_data += [
-							'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
-							'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
-							'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
-							'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
-							'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
-						].join('');
-					}
+					row_data += [
+						'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
+						'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
+						'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
+						'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
+						'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
+					].join('');
 
 					row_data += [
 							'<td class="schedule_basket"><span><i class="fa fa-check-square-o"></i></span></td>',

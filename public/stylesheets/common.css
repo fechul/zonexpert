@@ -594,6 +594,34 @@ table > tbody > tr:not(:last-child) {
 	background-color: #148dff;
 }
 
+.feedback_alert {
+    position: absolute;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    top: -2px;
+    right: 0px;
+	line-height: 25px;
+}
+
+.feedback_inner_alert {
+	position: absolute;
+    border-radius: 50px;
+    background-color: #ff5200;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    left: 3px;
+    line-height: 22px;
+    bottom: 35px;
+}
+
 .bottom_fixed_button_container {
     right: 10px;
 }

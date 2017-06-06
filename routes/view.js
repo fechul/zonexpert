@@ -768,4 +768,37 @@ router.get('/underconstruction', readFeedbackHTML, function(req, res) {
 	res.render(path, json);
 });
 
+// router.get('/help', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, function(req, res) {
+// 	var path = 'help.html';
+// 	if (req.is_mobile) {
+// 		path = 'm_help.html';
+// 	}
+//
+// 	var json = {
+// 		myinfo_display: '',
+// 		logout_display: '',
+// 		login_display: '',
+// 		signup_display: '',
+// 		mydata_display: '',
+// 		rank_html: '',
+// 		headerHideMenu: '',
+// 		attendancePointUpdated: req.attendancePointUpdated,
+// 		myCurrentPoint: req.point
+// 	};
+//
+// 	if(req.session.login) {
+// 		json.login_display = 'display:none;';
+// 		json.signup_display = 'display:none;';
+// 	} else {
+// 		json.myinfo_display = 'display:none;';
+// 		json.logout_display = 'display:none;';
+// 		json.mydata_display = 'display:none;';
+// 	}
+//
+// 	json.prediction_shortcut = req.predictionShortcut;
+// 	json.feedback = req.feedback;
+//
+// 	res.render(path, json);
+// });
+
 module.exports = router;
