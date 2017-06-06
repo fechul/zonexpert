@@ -353,12 +353,14 @@ router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, f
 		headerHideMenu: '',
 		board_html:'',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		isLogin: false
 	};
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
 		json.signup_display = 'display:none;';
+		json.isLogin = true;
 	} else {
 		json.myinfo_display = 'display:none;';
 		json.logout_display = 'display:none;';
