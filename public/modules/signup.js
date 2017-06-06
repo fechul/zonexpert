@@ -17,6 +17,8 @@ var SIGNUP = {
 		});
 
 		$('#signup_btn').click(function() {
+			var $this = $(this);
+			$this.attr('disabled', 'disabled');
 			var main_sport = $('#main_sport_select').val();
 			var main_league = $('#main_league_select').val();
 
@@ -28,6 +30,7 @@ var SIGNUP = {
 				'main_sport': main_sport,
 				'main_league': main_league
 			}, function(signup) {
+				$this.removeAttr('disabled');
 				if (signup.result) {
 					notice.show('success', '인증 메일을 발송했습니다. 인증 후 이용해주세요.<br><a href="/">메인페이지로 이동</a>');
 					// location.replace('/');
