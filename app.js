@@ -23,7 +23,9 @@ var set_configs = function() {
     console.log('set configs complete');
 }();
 
-if (__port.length > 0) {
+if (__domain.length > 0) {
+    global.__url = __domain;
+} else if (__port.length > 0) {
     global.__url = 'http://' + __host + ':' + __port;
 } else {
     global.__url = 'http://' + __host;
