@@ -118,6 +118,8 @@
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_score {
 	margin: 0px 8px 0px 8px;
+	display: inline-block;
+	width: 40px;
 }
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.success {
@@ -214,6 +216,14 @@
 	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content {
 		font-size: 11px;
 	}
+
+	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
+		width: 50px;
+	}
+
+	.match_result_team {
+		width: 100px !important;
+	}
 }
 
 @media all and (max-device-width: 470px) {
@@ -255,7 +265,7 @@
 	}
 
 	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content {
-		font-size: 11px;
+		font-size: 10px;
 	}
 
 	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content .predict_content_row {
@@ -278,8 +288,12 @@
 		margin: 30px 15px;
 	}
 
+	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
+		width: 100%;
+	}
+
 	.match_result_team {
-		width: 95px !important;
+		width: 85px !important;
 	}
 
 	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
