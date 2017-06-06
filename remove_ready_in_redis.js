@@ -17,7 +17,31 @@ var db = require('./db/schema.js');
 
 var keys = ['rating_rank', 'game_cnt_rank', 'predict_rate_rank'];
 
-db.user.find({
+db.user.find({}, function(err, data) {
+	async.each(data, function(user, async_cb) {
+		if(user.main_sport) {
+			var ms = user.main_sport.toString();
+			db.user.update({
+				'email': user.email
+			}, {
+				$set: {
+					main_sport: ms
+				}
+			}, function(updateErr) {
+				console.log("updated! : ", user.email);
+				async_cb();
+			});
+		} else {
+			console.log("no main sport: ", user.email);
+			async_cb();
+		}
+	}, function(async_err) {
+		console.log("done!");
+	});
+});
+
+
+/*db.user.find({
 	'readyGameCnt': {
 		$gt: 0
 	}
@@ -36,4 +60,4 @@ db.user.find({
 			console.log("Redis에서 배치중인 Users 제거 완료");
 		});
 	}
-});
+});*/
