@@ -29,6 +29,7 @@ exports.get = function(params, callback) {
 		                                userdata = userdata[0];
 		                            }
 		                            board.nickname = userdata.nickname;
+		                            board.readyGameCnt = userdata.readyGameCnt;
 		                           
 		                            if(myData && myData.length) {
 		                                myData = myData[0]
@@ -37,8 +38,6 @@ exports.get = function(params, callback) {
 		                                } else {
 		                                    board.i_like = false;
 		                                }
-
-		                                board.readyGameCnt = userdata.readyGameCnt;
 		                            }
 		                            async_cb();
 		                        }
