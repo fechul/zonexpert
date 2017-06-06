@@ -664,7 +664,7 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 				json.searchdata_total_hit = total_hit;
 				json.searchdata_total_fail = total_fail;
 
-				json.searchdata_predict_rate = (total_fail == 0 ? 0 : ((total_hit/(total_hit + total_fail))*100).toFixed(2));
+				json.searchdata_predict_rate = (total_hit == 0 ? 0 : ((total_hit/(total_hit + total_fail))*100).toFixed(2));
 
 				json.no_search_show = 'display:none;';
 
