@@ -111,7 +111,7 @@
 }
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_team {
-	width: 110px;
+	width: 105px;
 	display: inline-block;
 	text-align: center;
 }
@@ -119,7 +119,7 @@
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_score {
 	margin: 0px 8px 0px 8px;
 	display: inline-block;
-	width: 40px;
+	width: 50px;
 }
 
 .mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.success {
