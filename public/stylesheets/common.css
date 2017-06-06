@@ -699,6 +699,9 @@ table > tbody > tr:not(:last-child) {
 #nav_menu {
 	text-align: center;
 	padding: 0px;
+	z-index: 999999;
+	-webkit-transform-style: flat;
+	-webkit-transform: none;
 }
 
 
