@@ -15,7 +15,11 @@ var LOGIN = {
 				'password': $('#pw_input').val()
 			}, function(login) {
 				if (login.result) {
-					localStorage.setItem('zeRememberEmail', $('#email_input').val());
+					if ($('#remember_email').prop('checked')) {
+						localStorage.setItem('zeRememberEmail', $('#email_input').val());
+					} else {
+						localStorage.removeItem('zeRememberEmail');
+					}
 					location.replace('/');
 				} else {
 					var err_msg = '';

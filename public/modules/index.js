@@ -1,5 +1,20 @@
 var INDEX = {
 	init: function(initData) {
+		var visitFirst = localStorage.getItem('zeVisitFirst');
+
+		if (!visitFirst) {
+			var $visitFirstHelpNotice = $('#visitFirstHelpNotice');
+			setTimeout(function() {
+				$visitFirstHelpNotice.fadeIn(800);
+
+				localStorage.setItem('zeVisitFirst', true);
+			}, 500);
+
+			$visitFirstHelpNotice.find('.noticeClose').click(function() {
+				$visitFirstHelpNotice.fadeOut(800);
+			});
+		}
+
 		this.myNickName = initData.myNickName;
 
 		this.init_events();

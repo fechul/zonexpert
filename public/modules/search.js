@@ -233,8 +233,7 @@ var SEARCH = {
 	        scales: {
 	            yAxes: [{
 	                ticks: {
-	                    beginAtZero: false,
-						stepSize: 1
+	                    beginAtZero: false
 	                }
 	            }]
 	        }
