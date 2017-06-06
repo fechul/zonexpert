@@ -200,6 +200,8 @@ var BOARD = {
 				return '<div class="rank_table_tier badge_silver"></div>';
 			} else if(70 < myTotalRate) {
 				return '<div class="rank_table_tier badge_bronze"></div>';
+			} else {
+				return '<div class="rank_table_tier badge_ready"></div>';
 			}
 		};
 
