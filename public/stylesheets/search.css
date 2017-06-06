@@ -246,7 +246,7 @@ canvas{position:relative; z-index:9999;}
 }
 
 #my_prediction_list_table tr td > img {
-	width: 60px;
+	height: 60px;
 	margin-right: 5px;
 }
 
@@ -359,6 +359,10 @@ canvas{position:relative; z-index:9999;}
 	#my_prediction_list_table td {
 		font-size: 12px;
 	}
+
+	#my_prediction_list_table tr td > img {
+		height: 40px;
+	}
 }
 
 @media all and (min-device-width: 521px) and (max-device-width: 700px) {
@@ -433,6 +437,10 @@ canvas{position:relative; z-index:9999;}
 
 	.recent_predict_data_row_homename, .recent_predict_data_row_awayname {
 		width: 35%;
+	}
+
+	#my_prediction_list_table tr td > img {
+		height: 40px;
 	}
 }
 
@@ -617,6 +625,10 @@ canvas{position:relative; z-index:9999;}
 	#my_prediction_list_table td img {
 		display: none;
 	}
+
+	.searchdata_user {
+		font-size: 18px;
+	}
 }
 @media all and (max-device-width: 360px){
 	.page_title {
@@ -719,5 +731,9 @@ canvas{position:relative; z-index:9999;}
 
 	#my_prediction_list_table td img {
 		display: none;
+	}
+
+	.searchdata_user {
+		font-size: 18px;
 	}
 }
