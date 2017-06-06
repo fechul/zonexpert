@@ -655,7 +655,7 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 				var total_hit = 0;
 				var total_fail = 0;
 				if(userdata.record) {
-					if(userdata.record.total) {점
+					if(userdata.record.total) {
 						var total_hit = userdata.record.total.hit || 0;
 						var total_fail = userdata.record.total.fail || 0;
 					}
