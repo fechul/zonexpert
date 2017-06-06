@@ -31,7 +31,7 @@
 							<img id="my_tier_img" src="<%= searchdata_tier_img %>">
 						</div>
 						<div class="mydata_rate">
-							<p><span class="rate_classification">레이팅</span><span id="my_rating"><%= searchdata_rating %></span>점</p>
+							<p><span class="rate_classification">레이팅</span><span id="my_rating"><%= searchdata_rating %></span></p>
 							<p><span class="rate_classification">등&nbsp&nbsp&nbsp급</span> <span id="my_tier_name"><%= searchdata_tier_name %></span></p>
 							<p><span class="rate_classification">랭&nbsp&nbsp&nbsp킹</span> <span id="my_rank"><%= searchdata_rank %> 위 (상위 <%= myTotalRate %>%)</span></p>
 							<p><span class="rate_classification">전&nbsp&nbsp&nbsp적</span> <span id="my_total_hit"><%= searchdata_total_hit %></span> / <span id="my_total_fail"><%= searchdata_total_fail %></span></p>
@@ -84,6 +84,7 @@
 					  	</div>
 					  	<div id="record_field" class="tab-pane fade">
 					   		<canvas id="myChart"></canvas>
+					   		<div class="noChart">전적 그래프는 배치가 완료되면 공개됩니다.</div>
 					  	</div>
 					</div>
 				</div>
@@ -135,7 +136,8 @@
 			'search_id': '<%= searchdata_user_id %>',
 			'search_rating': '<%= searchdata_rating %>',
 			'attendancePointUpdated': <%- attendancePointUpdated %>,
-			'myNickName': '<%= myNickName %>'
+			'myNickName': '<%= myNickName %>',
+			'isReady': <%- isReady %>
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>

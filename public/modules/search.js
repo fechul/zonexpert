@@ -3,6 +3,7 @@ var SEARCH = {
 		var self = this;
 
 		this.search_id = options.search_id;
+		this.isReady = options.isReady;
 		this.search_rating = parseInt(options.search_rating, 10);
 		this.myNickName = options.myNickName;
 		this.targetStatistics_sport = [];
@@ -125,6 +126,7 @@ var SEARCH = {
 		var self = this;
 
 		var recentMatches = this.recentMatches;
+		var isReady = this.isReady;
 		var list_html = '';
 
 		if(recentMatches && recentMatches.length) {
@@ -153,7 +155,9 @@ var SEARCH = {
 				list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
 				list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
 
-				list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(<span class="' + ratingChangeType + '">' + ratingChange + '</span>)</div>';
+				if(!isReady) {
+					list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(<span class="' + ratingChangeType + '">' + ratingChange + '</span>)</div>';
+				}
 
 				if(recentMatches[i].myPredict == 'true') {
 					list_html += '<div class="recent_predict_data_row_result_msg success">적중</div>';
@@ -166,84 +170,90 @@ var SEARCH = {
 			$('.my_recent_predict_section').append(list_html);
 		}
 
-		var ctx = $("#myChart");
-		ctx.attr('height', 150);
+		if(!isReady) {
+			$('.noChart').hide();
+			var ctx = $("#myChart");
+			ctx.attr('height', 150);
 
-		var labels = this.getDateList();
-		var datelist = [];
-		var ratelist = [];
+			var labels = this.getDateList();
+			var datelist = [];
+			var ratelist = [];
 
-		if(recentMatches && recentMatches.length) {
-			beforeRating = null;
-			for(var d = labels.length-1; d >= 0 ; d--) {
-				datelist[d] = (labels[d].month + '/' + labels[d].day);
-				var found = false;
-				var lastRatingOnTheDay = null;
-				var lastRatingDay = null;
+			if(recentMatches && recentMatches.length) {
+				beforeRating = null;
+				for(var d = labels.length-1; d >= 0 ; d--) {
+					datelist[d] = (labels[d].month + '/' + labels[d].day);
+					var found = false;
+					var lastRatingOnTheDay = null;
+					var lastRatingDay = null;
 
-				for(var r = 0; r < recentMatches.length; r++) {
-					var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
-					if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
-						if(!lastRatingOnTheDay) {
-							lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
-							lastRatingDay = recentMatches[r].ratingCalculatedTime;
-							ratelist[d] = lastRatingOnTheDay;
-							beforeRating = recentMatches[r].beforeRating;
-							found = true;
-						} else {
-							if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
+					for(var r = 0; r < recentMatches.length; r++) {
+						var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
+						if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
+							if(!lastRatingOnTheDay) {
 								lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
 								lastRatingDay = recentMatches[r].ratingCalculatedTime;
 								ratelist[d] = lastRatingOnTheDay;
 								beforeRating = recentMatches[r].beforeRating;
 								found = true;
+							} else {
+								if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
+									lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+									lastRatingDay = recentMatches[r].ratingCalculatedTime;
+									ratelist[d] = lastRatingOnTheDay;
+									beforeRating = recentMatches[r].beforeRating;
+									found = true;
+								}
 							}
 						}
 					}
-				}
 
-				if(!found && d == labels.length-1) {
-					ratelist[d] = self.search_rating;
-				} else if(!found) {
-					ratelist[d] = parseInt(beforeRating) || self.search_rating;
+					if(!found && d == labels.length-1) {
+						ratelist[d] = self.search_rating;
+					} else if(!found) {
+						ratelist[d] = parseInt(beforeRating) || self.search_rating;
+					}
+				}
+			} else {
+				for(var d = labels.length-1; d >= 0 ; d--) {
+					ratelist.push(self.search_rating);
 				}
 			}
-		} else {
-			for(var d = labels.length-1; d >= 0 ; d--) {
-				ratelist.push(self.search_rating);
-			}
-		}
 
-		var data = {
-		    labels: datelist,
-		    datasets: [
-		        {
-		            label: "레이팅",
-		            fill: false,
-		            lineTension: 0.0,
-		            borderColor: "rgba(75,192,192,1)",
-		            pointBackgroundColor: "#fff",
-		            data: ratelist,
-		            spanGaps: false
+			var data = {
+			    labels: datelist,
+			    datasets: [
+			        {
+			            label: "레이팅",
+			            fill: false,
+			            lineTension: 0.0,
+			            borderColor: "rgba(75,192,192,1)",
+			            pointBackgroundColor: "#fff",
+			            data: ratelist,
+			            spanGaps: false
+			        }
+			    ]
+			};
+
+			var options = {
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero: false
+		                }
+		            }]
 		        }
-		    ]
-		};
+		    };
 
-		var options = {
-	        scales: {
-	            yAxes: [{
-	                ticks: {
-	                    beginAtZero: false
-	                }
-	            }]
-	        }
-	    };
-
-		var myChart = new Chart(ctx, {
-		    type: 'line',
-		    data: data,
-		    options: options
-		});
+			var myChart = new Chart(ctx, {
+			    type: 'line',
+			    data: data,
+			    options: options
+			});
+		} else {
+			$('#myChart').hide();
+			$('.noChart').show();
+		}
 	},
 
 	//pie
@@ -542,7 +552,6 @@ var SEARCH = {
 				var proceedingHtml = '';
 				$('#my_prediction_list_table .noProceeding').hide();
 				for(var i = 0; i < proceeding.length; i++) {
-					console.log(proceeding[i]);
 					var date = self.getDateString(proceeding[i].date);
 					var homename = proceeding[i].homeTeamName;
 					var homeimg = proceeding[i].homeTeamImg;

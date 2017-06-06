@@ -626,7 +626,8 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
-		myNickName: ''
+		myNickName: '',
+		isReady: false
 	};
 
 	if(req.session.login) {
@@ -650,7 +651,6 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 				json.searchdata_user_id = userdata.nickname;
 
 				var rating = userdata.rating;
-				json.searchdata_rating = parseInt(rating, 10);
 
 				var total_hit = 0;
 				var total_fail = 0;
@@ -664,7 +664,7 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 				json.searchdata_total_hit = total_hit;
 				json.searchdata_total_fail = total_fail;
 
-				json.searchdata_predict_rate = (total_fail == 0 ? 0 : ((total_hit/(total_hit + total_fail))*100).toFixed(2));
+				json.searchdata_predict_rate = (total_hit == 0 ? 0 : ((total_hit/(total_hit + total_fail))*100).toFixed(2));
 
 				json.no_search_show = 'display:none;';
 
@@ -675,8 +675,11 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 					json.searchdata_tier_name = '배치중';
 	        		json.searchdata_rank = '-';
 	        		json.myTotalRate = '-';
+	        		json.searchdata_rating = '배치중';
+	        		json.isReady = true;
 		        	res.render(path, json);
 				} else {
+					json.searchdata_rating = parseInt(rating, 10) + '점';
 					redis_client.zrevrank(key, userdata.email, function(err, data) {
 			        	if(!err) {
 			        		json.searchdata_rank = data+1;
