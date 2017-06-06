@@ -264,7 +264,7 @@ var INDEX = {
 			$('#rank_table').append(table_html);
 
 			if(isMobile) {
-				$('.table_label_mainsport').hide();
+				// $('.table_label_mainsport').hide();
 				if(type == 'rating') {
 					$('.table_label_score').show();
 					$('.table_label_record').hide();
@@ -279,10 +279,10 @@ var INDEX = {
 					$('.table_label_record').hide();
 				}
 			} else {
-				$('.table_label_mainsport').show();
-				$('.table_label_score').show();
-				$('.table_label_record').show();
-				$('.table_label_hitrate').show();
+				// $('.table_label_mainsport').show();
+				// $('.table_label_score').show();
+				// $('.table_label_record').show();
+				// $('.table_label_hitrate').show();
 			}
 		});
 	}
