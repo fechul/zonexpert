@@ -134,8 +134,9 @@ var SCHEDULE = {
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row td:not(:nth-child(1)):not(:nth-child(7))', function() {
-			if($(this).parent('tr').find('.schedule_status').html() == '종료') {
-				notice.show('alert', '종료된 경기입니다.');
+			var status = $(this).parent('tr').data('status');
+			if(status == 'FINISHED' || status == 'POSTPONED' || status == 'POSTPONED_RAIN') {
+				notice.show('alert', '진행중이거나 예정된 경기만 들어갈 수 있습니다.');
 				return false;
 			} else {
 				location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
@@ -331,6 +332,7 @@ var SCHEDULE = {
 
 					$('#schedule_table .schedule_table_row').last().data('matchId', match.id);
 					$('#schedule_table .schedule_table_row').last().data('leagueId', match.leagueId);
+					$('#schedule_table .schedule_table_row').last().data('status', match.status);
 				}
 
 				$(document).ready(function() {

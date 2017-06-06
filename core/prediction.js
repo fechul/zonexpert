@@ -1,6 +1,7 @@
 var async = require('async');
 
 exports.add = function(data, callback) {
+    var currentDate = new Date();
     db.match.find({
         'id': data.matchId
     })
@@ -9,28 +10,32 @@ exports.add = function(data, callback) {
         if (matchData.length) {
             matchData = matchData[0];
 
-            db.prediction.find({
-                'userEmail': data.userEmail,
-                'matchId': data.matchId
-            }).exec(function(err, predictionData) {
-                if (predictionData.length == 0) {
-                    var newPrediction = new db.prediction({
-                        'userEmail': data.userEmail,
-                        'createTime': new Date(),
-                        'matchId': matchData.id,
-                        'leagueId': matchData.leagueId,
-                        'sportsId': matchData.sportsId,
-                        'teamList': [matchData.homeTeamId, matchData.awayTeamId],
-                        'confirmed': false
-                    });
+            if (new Date(matchData.date) > currentDate) {
+                db.prediction.find({
+                    'userEmail': data.userEmail,
+                    'matchId': data.matchId
+                }).exec(function(err, predictionData) {
+                    if (predictionData.length == 0) {
+                        var newPrediction = new db.prediction({
+                            'userEmail': data.userEmail,
+                            'createTime': new Date(),
+                            'matchId': matchData.id,
+                            'leagueId': matchData.leagueId,
+                            'sportsId': matchData.sportsId,
+                            'teamList': [matchData.homeTeamId, matchData.awayTeamId],
+                            'confirmed': false
+                        });
 
-                    newPrediction.save(function(save_err) {
-                        callback(save_err ? false : true);
-                    });
-                } else {
-                    callback(false);
-                }
-            });
+                        newPrediction.save(function(save_err) {
+                            callback(save_err ? false : true);
+                        });
+                    } else {
+                        callback(false);
+                    }
+                });
+            } else {
+                callback(false);
+            }
         } else {
             callback(false);
         }

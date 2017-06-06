@@ -143,7 +143,7 @@ var SEARCH = {
 
 				list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
 
-				var date = new Date(recentMatches[i].date);
+				var date = new Date(recentMatches[i].ratingCalculatedTime);
 				var year = date.getFullYear()%100;
 				var month = (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1));
 				var day = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
@@ -530,7 +530,7 @@ var SEARCH = {
 			if(recordData && recordData.length) {
 				$('.no_record_field').hide();
 				recordData.sort(function(a, b) {
-					return (a.date > b.date) ? -1 : ((b.date > a.date) ? 1 : 0);
+					return (a.ratingCalculatedTime > b.ratingCalculatedTime) ? -1 : ((b.ratingCalculatedTime > a.ratingCalculatedTime) ? 1 : 0);
 				});
 			}
 
