@@ -51,7 +51,7 @@ var SIGNUP = {
 					} else if(signup.code == 43) {
 						notice.show('alert', '비밀번호에 공백이 들어갈 수 없습니다.');
 					} else if(signup.code == 44) {
-						notice.show('alert', '비밀번호가 형식에 맞지 않습니다.');
+						notice.show('alert', '비밀번호가 형식에 맞지 않습니다. 숫자, 영문, 특수문자를 조합하여 8자 이상 입력해주세요.');
 					} else if(signup.code == 51) {
 						notice.show('alert', '메인 스포츠를 선택해주세요.');
 					} else if(signup.code == 52) {
