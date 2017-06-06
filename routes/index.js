@@ -185,7 +185,6 @@ router.get('/board/get', function(req, res) {
 		'type': type,
 		'myEmail': req.session.email || null
 	}, function(data) {
-		console.log("ddd: ", data)
 		user.countAllUsers('onlyRanked', function(userCount) {
 			async.mapSeries(data, function(board, async_cb) {
 				redis_client.zrevrank('rating_rank', board.writer, function(err, rank) {
