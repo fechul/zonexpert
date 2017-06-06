@@ -8,7 +8,6 @@ body {
 	background-repeat: repeat;
 	background-size: 100% 100vh;
 	background-attachment: fixed;
-    transform-style: preserve-3d;
 }
 
 
@@ -74,8 +73,6 @@ body {
 	/* height: 50px; */
 	padding: 0px 20px 0px 20px;
 	z-index: 85 !important;
-	-webkit-transform: translate3d(0,0,85px);
-	transform: translate3d(0,0,85px);
 	color: #fff;
 	cursor: pointer;
 }
@@ -703,8 +700,8 @@ table > tbody > tr:not(:last-child) {
 	text-align: center;
 	padding: 0px;
 	z-index: 85 !important;
-	-webkit-transform: translate3d(0,0,90px);
-	transform: translate3d(0,0,90px);
+	-webkit-transform-style: flat;
+	-webkit-transform: none;
 }
 
 
