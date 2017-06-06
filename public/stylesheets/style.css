@@ -184,6 +184,10 @@
 
 /* mobile header */
 @media all and (min-device-width: 471px) and (max-device-width: 768px) {
+	.rank_table_section {
+		padding: 25px 5px;
+	}
+
 	.main_section .mydata_section,
 	.main_section .rank_section {
 		width: 85%;
@@ -227,6 +231,10 @@
 }
 
 @media all and (max-device-width: 470px) {
+	.rank_table_section {
+		padding: 25px 5px;
+	}
+
 	.main_section .mydata_section,
 	.main_section .rank_section {
 		width: 90%;
@@ -277,11 +285,26 @@
 		width: 70px;
 	}
 
-	.table_label_score,
+	/*.table_label_score,*/
 	.table_label_record,
-	.table_label_hitrate,
-	.table_label_tier {
-		display: none !important;
+	.table_label_mainsport,
+	.table_label_hitrate {
+	/*.table_label_tier {*/
+		display: none;
+	}
+
+	#rank_table td:nth-child(1) {
+		width: 15%;
+	}
+
+	#rank_table td:nth-child(4),
+	#rank_table td:nth-child(5),
+	#rank_table td:nth-child(6) {
+		width: 23%;
+	}
+
+	#rank_table td:nth-child(7) {
+		width: 18%;
 	}
 
 	.container_box {

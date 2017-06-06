@@ -219,10 +219,6 @@ exports.validate = function(data, callback) {
 
             if (!reg_email.test(email)) {
                 validation.code = 21;
-            } else if (nickname.length < 2 || nickname.length > 12) {
-                validation.code = 31;
-            } else if (!reg_nickname.test(nickname)) {
-                validation.code = 32;
             } else if (password !== password_check) {
                 validation.code = 41;
             } else if (password.length < 8 || password.length > 20) {
@@ -231,6 +227,10 @@ exports.validate = function(data, callback) {
                 validation.code = 43;
             } else if (!reg_password.test(password)) {
                 validation.code = 44;
+            } else if (nickname.length < 2 || nickname.length > 12) {
+                validation.code = 31;
+            } else if (!reg_nickname.test(nickname)) {
+                validation.code = 32;
             } else if(!main_sport || main_sport == 'none') {
                 validation.code = 51;
             } else if(!main_league || main_league == 'none') {

@@ -61,7 +61,8 @@ body {
 #header .tools .signup,
 #header .main_menu .menu_rank,
 #header .main_menu .menu_schedule,
-#header .main_menu .menu_board {
+#header .main_menu .menu_board,
+#header .main_menu .menu_help {
 	/* float: right;
 	text-align: center;
 	border-left: 1px solid #ccc;
@@ -83,6 +84,7 @@ body {
 #header .tools .signup:hover,
 #header .main_menu .menu_rank:hover,
 #header .main_menu .menu_schedule:hover,
+#header .main_menu .menu_help:hover,
 #header .main_menu .menu_board:hover {
  	background-color: #333;
 	box-shadow: 0px -4px 2px -2px white inset
