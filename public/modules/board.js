@@ -1,6 +1,7 @@
 var BOARD = {
 	init: function(initData) {
 		this.user_email = initData.user_email;
+		this.isLogin = initData.isLogin;
 
 		notice.init();
 
@@ -76,6 +77,10 @@ var BOARD = {
 					}
 				});
 			} else if($(button).hasClass('like')) {
+				if(!self.isLogin) {
+					notice.show('alert', '좋아요 버튼은 로그인 후 누르실 수 있습니다.');
+					return false;
+				}
 				$.post('/board/like', {
 					'boardNo': boardNo
 				}, function(result) {

@@ -182,7 +182,8 @@ router.get('/board/get', function(req, res) {
 
 	board.get({
 		'value': value,
-		'type': type
+		'type': type,
+		'myEmail': req.session.email || null
 	}, function(data) {
 		user.countAllUsers('onlyRanked', function(userCount) {
 			async.mapSeries(data, function(board, async_cb) {

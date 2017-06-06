@@ -1,51 +1,76 @@
 var async = require('async');
 
 exports.get = function(params, callback) {
+	var myEmail = params.myEmail;
+
 	var _query = {};
     var _get = function(query){
         db.board.find(query).sort({boardNo: -1}).lean().exec(function(err, data) {
             data = JSON.stringify(data);
             data = JSON.parse(data);
             if(data && data.length) {
-                async.map(data, function(board, async_cb){
-                    console.log('boardWriter' , board.writer);
-                    db.user.find({
-                        'email': board.writer
-                    }, {
-                        'nickname': 1
-                    }).limit(1).exec(function(_err, userdata) {
-                        if(_err) {
-                            console.log("board get list err: ", _err);
-                        } else {
-                            if(userdata && userdata.length) {
-                                userdata = userdata[0];
-                            }
-                            board.nickname = userdata.nickname;
-                            board.rating = userdata.rating;
+            	if(myEmail) {
+            		db.user.find({
+	            		'email': myEmail
+	            	}, {
+	            		'like_board': 1
+	            	}).limit(1).exec(function(myDataErr, myData) {
+	            		async.map(data, function(board, async_cb){
+		                    db.user.find({
+		                        'email': board.writer
+		                    }, {
+		                        'nickname': 1,
+		                        'readyGameCnt': 1
+		                    }).limit(1).exec(function(_err, userdata) {
+		                        if(_err) {
+		                            console.log("board get list err: ", _err);
+		                        } else {
+		                            if(userdata && userdata.length) {
+		                                userdata = userdata[0];
+		                            }
+		                            board.nickname = userdata.nickname;
+		                           
+		                            if(myData && myData.length) {
+		                                myData = myData[0]
+		                                if(myData.like_board.indexOf(board.boardNo) > -1) {
+		                                    board.i_like = true;
+		                                } else {
+		                                    board.i_like = false;
+		                                }
 
-                            db.user.find({
-                                'email': board.writer
-                            }, {
-                                'like_board': 1,
-                                'readyGameCnt': 1
-                            }).limit(1).exec(function(myerr, mydata) {
-                                if(mydata && mydata.length) {
-                                    mydata = mydata[0]
-                                    if(mydata.like_board.indexOf(board.boardNo) > -1) {
-                                        board.i_like = true;
-                                    } else {
-                                        board.i_like = false;
-                                    }
-
-                                    board.readyGameCnt = mydata.readyGameCnt;
-                                }
-                                async_cb();
-                            });
-                        }
-                    });
-                }, function(async_err) {
-                    callback(data);
-                });
+		                                board.readyGameCnt = userdata.readyGameCnt;
+		                            }
+		                            async_cb();
+		                        }
+		                    });
+		                }, function(async_err) {
+		                    callback(data);
+		                });
+	            	});
+            	} else {
+            		async.map(data, function(board, async_cb){
+	                    db.user.find({
+	                        'email': board.writer
+	                    }, {
+	                        'nickname': 1,
+	                        'readyGameCnt': 1
+	                    }).limit(1).exec(function(_err, userdata) {
+	                        if(_err) {
+	                            console.log("board get list err: ", _err);
+	                        } else {
+	                            if(userdata && userdata.length) {
+	                                userdata = userdata[0];
+	                            }
+	                            board.nickname = userdata.nickname;
+	                            board.i_like = false;
+	                            board.readyGameCnt = userdata.readyGameCnt;
+	                            async_cb();
+	                        }
+	                    });
+	                }, function(async_err) {
+	                    callback(data);
+	                });
+            	}
             } else {
                 callback(null);
             }
