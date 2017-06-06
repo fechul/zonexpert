@@ -134,7 +134,7 @@ var SCHEDULE = {
 		});
 
 		$('#schedule_table').on('click', '.schedule_table_row td:not(:nth-child(1)):not(:nth-child(7))', function() {
-			if($(this).closest('tr').hasClass('finished')) {
+			if($(this).parent('tr').find('.schedule_status').html() == '종료') {
 				notice.show('alert', '종료된 경기입니다.');
 				return false;
 			} else {
