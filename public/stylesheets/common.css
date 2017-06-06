@@ -72,7 +72,7 @@ body {
 	position: relative;
 	/* height: 50px; */
 	padding: 0px 20px 0px 20px;
-	z-index: 10000;
+	z-index: 85 !important;
 	color: #fff;
 	cursor: pointer;
 }
@@ -699,7 +699,7 @@ table > tbody > tr:not(:last-child) {
 #nav_menu {
 	text-align: center;
 	padding: 0px;
-	z-index: 999999;
+	z-index: 85 !important;
 	-webkit-transform-style: flat;
 	-webkit-transform: none;
 }
