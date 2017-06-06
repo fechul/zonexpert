@@ -209,6 +209,10 @@ var SCHEDULE = {
 		var todayCount = 0;
 		var prevDay = 0;
 
+		var isInteger = function(num) {
+			return (num ^ 0) === num;
+		};
+
 		$.get('/prediction/all', {
 			'leagueId': leagueId
 		}, function(baskets) {
@@ -312,9 +316,9 @@ var SCHEDULE = {
 
 					row_data += [
 						'<td class="schedule_home_team_name">', match.homeTeamName, '</td>',
-						'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
+						'<td class="schedule_home_team_score ', homeResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && isInteger(match.result.goalsHomeTeam) ? match.result.goalsHomeTeam : 0) : '-', '</td>',
 						'<td class="schedule_status">', self.getStatusString(match.status), '</td>',
-						'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && Number.isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
+						'<td class="schedule_away_team_score ', awayResult, '">', (match.status == 'FINISHED') || (match.status == 'IN_PLAY') ? (match.result && isInteger(match.result.goalsAwayTeam) ? match.result.goalsAwayTeam : 0) : '-', '</td>',
 						'<td class="schedule_away_team_name">', match.awayTeamName, '</td>',
 					].join('');
 
