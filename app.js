@@ -102,7 +102,9 @@ app.use(session({
 
 // mobile checker -> req.is_mobile = true | false
 app.use(function(req, res, next) {
-    req.is_mobile = /mobile/i.test(req.headers['user-agent']) || /android/i.test(req.headers['user-agent']);
+    var user_agent = req.headers['user-agent'];
+    req.is_mobile = /mobile/i.test(user_agent) || /android/i.test(user_agent);
+    req.is_mobile_safari = /mobile/i.test(user_agent) && /Safari/i.test(user_agent);
     next();
 });
 

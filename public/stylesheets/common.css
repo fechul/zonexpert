@@ -4,8 +4,9 @@ body {
 	margin: 0px !important;
 	font-family: "Nanum Gothic", sans-serif !important;
 	/*background-color: #145c86 !important;*/
-	background-image: url(http://i.imgur.com/MQB99sg.jpg);
-	background-repeat: repeat;
+	background-image: url(/image/background.jpg);
+	/*background-repeat: ;*/
+	background-color: black;
 	background-size: 100% 100vh;
 	background-attachment: fixed;
 }
@@ -48,14 +49,15 @@ body {
 }
 
 #header .tools {
-	float: right;
+	/*float: right;*/
 	display: inline-block;
-	line-height: 70px;
+	/*line-height: 70px;*/
 	vertical-align: middle;
 	margin: 0px;
 }
 
 #header .tools .my_page,
+#header .tools .my_point,
 #header .tools .logout,
 #header .tools .login,
 #header .tools .signup,
@@ -71,11 +73,19 @@ body {
 	/* float: right; */
 	display: inline-block;
 	position: relative;
-	/* height: 50px; */
+	height: 70px;
 	padding: 0px 20px 0px 20px;
 	z-index: 85 !important;
 	color: #fff;
 	cursor: pointer;
+}
+
+#header .tools .my_page,
+#header .tools .my_point,
+#header .tools .logout,
+#header .tools .login,
+#header .tools .signup {
+	padding-top: 25px;
 }
 
 #header .tools .my_page:hover,
@@ -161,7 +171,7 @@ li.my_point:hover {
 
 #my_current_point_detail {
     position: absolute;
-    top: -17px;
+    top: 11px;
     right: 15px;
     font-size: 10px;
     color: #c5bb21;
@@ -702,8 +712,8 @@ table > tbody > tr:not(:last-child) {
 	text-align: center;
 	padding: 0px;
 	z-index: 85 !important;
-	-webkit-transform-style: flat;
-	-webkit-transform: none;
+	/*-webkit-transform-style: preserve-3d;
+	-webkit-transform: translateZ(85px);*/
 }
 
 
@@ -715,24 +725,24 @@ table > tbody > tr:not(:last-child) {
 @media all and (min-device-width: 541px) and (max-device-width: 768px) {
 	#nav_menu {
 	    padding: 0px 0px 0px 50%;
+		position: absolute;
 	}
 
 	#header .main_menu,
 	#header .tools {
 		width: 100%;
+		float: none;
 	}
 
 	#header .main_menu > li {
 		width: 100%;
 		background-color: #444;
-		z-index: 9999;
 		border-bottom: 1px solid #fff;
 	}
 
 	#header .tools > li {
 		width: 100%;
 		background-color: #444;
-		z-index: 9999;
 	}
 
 	#header .tools > li:not(:last-child) {
@@ -753,23 +763,23 @@ table > tbody > tr:not(:last-child) {
 @media all and (max-device-width: 540px) {
 	#nav_menu {
 	    padding: 0px 0px 0px 50%;
+		position: absolute;
 	}
 	#header .main_menu,
 	#header .tools {
 		width: 100%;
+		float: none;
 	}
 
 	#header .main_menu > li {
 		width: 100%;
 		background-color: #444;
-		z-index: 9999;
 		border-bottom: 1px solid #fff;
 	}
 
 	#header .tools > li {
 		width: 100%;
 		background-color: #444;
-		z-index: 9999;
 	}
 
 	#header .tools > li:not(:last-child) {
