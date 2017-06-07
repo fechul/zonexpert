@@ -249,6 +249,12 @@ router.get('/schedule/league', function(req, res) {
 	});
 });
 
+router.get('/schedule/getScheduledMatches', function(req, res) {
+	schedule.getScheduledMatches(function(data) {
+		res.json(data);
+	});
+});
+
 router.post('/prediction', function(req, res) {
 	var predictions = JSON.parse(req.body.predictions);
 

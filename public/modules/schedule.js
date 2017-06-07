@@ -1,6 +1,7 @@
 var SCHEDULE = {
 	initFlag: true,
 	init: function(initData) {
+		this.targetMatch = initData.targetMatch;
 		var leagueId = '';
 		if (this.initFlag) {
 			this.initFlag = false;
@@ -295,7 +296,7 @@ var SCHEDULE = {
 					}
 
 					var row_data = [
-						'<tr class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, ' ', changeDay, '" month="', matchMonth, '">',
+						'<tr matchId="', match.id ,'" class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, ' ', changeDay, '" month="', matchMonth, '">',
 							'<td class="schedule_date">', self.getDateString(match.date), '</td>'
 					].join('');
 
@@ -336,7 +337,15 @@ var SCHEDULE = {
 				}
 
 				$(document).ready(function() {
-					// $('body').animate({'scrollTop': $('#schedule_table tr .schedule_basket_toggle:not(.disable)').first().offset().top - window.innerHeight / 2}, 800);
+					if(self.targetMatch && self.targetMatch.length) {
+						if($('#schedule_table tr.schedule_table_row[matchId="' + self.targetMatch + '"]').length) {
+							$('body').animate({'scrollTop': $('#schedule_table tr.schedule_table_row[matchId="' + self.targetMatch + '"]').first().offset().top - window.innerHeight / 2}, 800);
+						}
+					} else {
+						if ($('#schedule_table tr.schedule_table_row.today-first').length) {
+							$('body').animate({'scrollTop': $('#schedule_table tr.schedule_table_row.today-first').first().offset().top - window.innerHeight / 2}, 800);
+						}
+					}
 				});
 
 				if($('#schedule_month_select option[selected]').length) {

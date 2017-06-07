@@ -54,13 +54,39 @@
 							<div class="mydata_recent_predict_sub">
 								최근 예측
 							</div>
-							<div class="mydata_recent_predict_content">
-								<div class="predict_content_row no_data">예측 기록이 없습니다.</div>
-							</div>
+							<table id="mydata_recent_predict_table">
+								<tr class="predict_content_row no_data">
+									<td colspan="5">예측 기록이 없습니다.</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<div class="scheduled_wrapper">
+				<div class="scheduled_section container_box">
+					<div class="scheduleddata">
+						<span class="scheduleddata_sub">예정된 경기</span>
+					</div>
+
+					<div class="scheduled_table_section">
+						<table id="scheduled_table">
+							<tr>
+								<td class="table_label_scheduledDate">날짜</td>
+								<td class="table_label_scheduledTeam">홈팀</td>
+								<td class="table_label_scheduledState"></td>
+								<td class="table_label_scheduledTeam">어웨이팀</td>
+								<td class="table_label_sceduledMove">예측하기</td>
+							</tr>
+							<tr class="noScheduled">
+								<td colspan="5">예정된 경기 없습니다.</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
 			<div class="rank_wrapper">
 				<div class="rank_section container_box">
 					<div class="rankdata">
