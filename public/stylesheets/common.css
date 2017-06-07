@@ -319,7 +319,7 @@ table > tbody > tr:not(:last-child) {
 
 .prediction_shortcut_container {
 	display: none;
-    height: 330px;
+    height: 360px;
     width: 520px;
     position: fixed;
     right: 15px;
@@ -343,27 +343,40 @@ table > tbody > tr:not(:last-child) {
 .prediction_shortcut_title.unconfirmed {
 	float: left;
 	height: 36px;
-	width: 50%;
+	width: 33.333%;
 	font-size: 17px;
 	font-weight: bold;
 	line-height: 32px;
 	text-align: center;
-	border-top-left-radius: 5px
+	border-top-left-radius: 5px;
 }
 
 .prediction_shortcut_title.confirmed {
 	float: left;
 	height: 36px;
-	width: 50%;
+	width: 33.333%;
 	font-size: 17px;
 	font-weight: bold;
 	line-height: 32px;
 	text-align: center;
-	border-top-right-radius: 5px
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.prediction_shortcut_title.result {
+	float: left;
+	height: 36px;
+	width: 33.333%;
+	font-size: 17px;
+	font-weight: bold;
+	line-height: 32px;
+	text-align: center;
+	border-top-right-radius: 5px;
 }
 
 .prediction_shortcut_title.active {
 	background-color: #ffa500;
+	color: #f2f2f2;
 }
 
 .prediction_shortcut_title:hover {
@@ -379,11 +392,12 @@ table > tbody > tr:not(:last-child) {
 }
 
 .prediction_shortcut_title_text {
-	margin-left: 30px;
+	/*margin-left: 30px;*/
+	display: block;
 }
 
 .prediction_shortcut_list {
-	height: calc(100% - 38px - 42px);
+	height: calc(100% - 38px - 42px - 25px);
 	overflow-y: scroll;
 	font-weight: bold;
 	border-bottom: 1px solid #ccc;
@@ -391,6 +405,54 @@ table > tbody > tr:not(:last-child) {
 
 .prediction_shortcut_list table {
 	width: 100%;
+}
+
+.prediction_shortcut_list tr {
+	background-color: #f3f3f3 !important;
+	color: #333 !important;
+}
+
+.prediction_shortcut_list tr.result_detail {
+	background-color: #f3f3f3 !important;
+	color: #333 !important;
+	height: 10px;
+}
+
+.prediction_shortcut_list tr.result:not(:first-child) {
+    border-top: 2px solid #888;
+}
+
+.prediction_shortcut_list_header {
+	overflow-y: scroll;
+}
+
+.prediction_shortcut_list_no_contents {
+	text-align: center;
+	height: 100%;
+	display: none;
+    padding-top: 25px;
+}
+
+.prediction_shortcut_list_no_contents > div {
+	padding-top: 20px;
+	font-size: 16px;
+}
+
+.prediction_shortcut_list_no_contents .prediction_shortcut_go_schedule {
+    display: block;
+	font-size: 16px;
+    width: 170px;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 7px;
+    border-radius: 5px;
+    background-color: #33aeff;
+    color: white;
+    cursor: pointer;
+}
+
+.prediction_shortcut_list_no_contents .prediction_shortcut_go_schedule {
+	background-color: #009aff;
 }
 
 .prediction_shortcut_do {
@@ -443,7 +505,9 @@ table > tbody > tr:not(:last-child) {
     right: 0px;
 }
 
-.prediction_shortcut_preview_number_inner_unconfirmed {
+.prediction_shortcut_preview_number_inner_unconfirmed,
+.prediction_shortcut_preview_number_inner_confirmed,
+.prediction_shortcut_preview_number_inner_result {
 	float: right;
 	visibility: hidden;
     border-radius: 50px;
@@ -454,21 +518,7 @@ table > tbody > tr:not(:last-child) {
     color: white;
     font-weight: bold;
 	line-height: 22px;
-	margin: 4px 5px 0px 0px;
-}
-
-.prediction_shortcut_preview_number_inner_confirmed {
-	float: right;
-	visibility: hidden;
-    border-radius: 50px;
-    background-color: #ff5200;
-    width: 25px;
-    height: 25px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-	line-height: 22px;
-	margin: 4px 5px 0px 0px;
+	margin: -27px 5px 0px 0px;
 }
 
 .prediction_shortcut_table {
@@ -476,6 +526,15 @@ table > tbody > tr:not(:last-child) {
 	border-right: 0px;
 	border-top: 0px;
 	text-align: center;
+}
+
+.prediction_shortcut_table.header tr {
+	height: 25px;
+}
+
+.prediction_shortcut_table.header tr td {
+	font-size: 12px !important;
+	font-weight: bold;
 }
 
 .prediction_shortcut_table tr.unconfirmed td:not(:first-child):hover {
@@ -507,36 +566,60 @@ table > tbody > tr:not(:last-child) {
 	border-right: 1px solid #bbb;
 }
 
-.prediction_shortcut_table td.active {
-	background-color: #ffc94f !important;
-	border: 2px solid black;
+.prediction_shortcut_table .prediction_shortcut_table_row.result td:nth-child(2) {
+	color: #666;
 }
 
-.prediction_shortcut_list label {
-	cursor: pointer;
-	font-weight: normal;
-	margin: 0px 5px 0px 0px;
+.prediction_shortcut_table .prediction_shortcut_table_row.result td:nth-child(3) {
+	color: #666;
 }
 
-.prediction_shortcut_list label:hover {
-	font-weight: bold;
+.prediction_shortcut_table .prediction_shortcut_table_row.result td:nth-child(4) {
+	color: #666;
 }
 
-.prediction_shortcut_list label input {
-    cursor: pointer;
-    margin: 0px 10px 0px 5px !important;
-    vertical-align: text-bottom;
+.prediction_shortcut_table .prediction_shortcut_table_row.result_detail td:nth-child(2) {
+	color: #666;
 }
 
-.prediction_shortcut_list tr {
-	background-color: #f3f3f3 !important;
-	color: #333 !important;
+.prediction_shortcut_table .prediction_shortcut_table_row.result_detail td:nth-child(3) {
+	color: #666;
+}
+
+.prediction_shortcut_table .prediction_shortcut_table_row.result_detail td:nth-child(4) {
+	color: #666;
+}
+
+.prediction_shortcut_table td.selected {
+	background-color: #ffc33a !important;
+	color: #f2f2f2 !important;
+}
+
+.prediction_shortcut_table td.confirmed {
+	background-color: rgba(90, 183, 250, 0.83) !important;
+	color: #f2f2f2 !important;
+}
+
+.prediction_shortcut_table td.pick_fail {
+	background-color: #ea4a4a !important;
+	color: #f2f2f2 !important;
+}
+
+.prediction_shortcut_table td.pick_hit {
+	background-color: #35c335 !important;
+	color: #f2f2f2 !important;
+}
+
+.prediction_shortcut_table td.game_result {
+	background-color: rgba(90, 183, 250, 0.83) !important;
+	color: #f2f2f2 !important;
 }
 
 .prediction_shortcut_container .do_prediction {
 	margin-right: 5px;
 	background-color: #ffa500;
 	font-weight: bold;
+	color: #f2f2f2;
 }
 .prediction_shortcut_container .do_prediction:hover {
 	background-color: #f69f00;
@@ -548,7 +631,7 @@ table > tbody > tr:not(:last-child) {
 
 .feedback_container {
 	display: none;
-    height: 330px;
+    height: 360px;
     width: 520px;
     position: fixed;
     right: 15px;
@@ -758,6 +841,23 @@ table > tbody > tr:not(:last-child) {
 		width: 92%;
 		z-index: 10000;
 	}
+
+	.prediction_shortcut_preview_number_inner_unconfirmed,
+	.prediction_shortcut_preview_number_inner_confirmed,
+	.prediction_shortcut_preview_number_inner_result {
+	    float: right;
+	    visibility: hidden;
+	    border-radius: 50px;
+	    background-color: #ff5200;
+	    width: 20px;
+	    height: 20px;
+	    text-align: center;
+	    color: white;
+	    font-weight: bold;
+	    line-height: 19px;
+	    margin: -32px 0px 0px 0px;
+	    font-size: 13px;
+	}
 }
 
 @media all and (max-device-width: 540px) {
@@ -810,5 +910,21 @@ table > tbody > tr:not(:last-child) {
 	.bottom_fixed_container {
 		width: 92%;
 		z-index: 10000;
+	}
+	.prediction_shortcut_preview_number_inner_unconfirmed,
+	.prediction_shortcut_preview_number_inner_confirmed,
+	.prediction_shortcut_preview_number_inner_result {
+	    float: right;
+	    visibility: hidden;
+	    border-radius: 50px;
+	    background-color: #ff5200;
+	    width: 20px;
+	    height: 20px;
+	    text-align: center;
+	    color: white;
+	    font-weight: bold;
+	    line-height: 19px;
+	    margin: -32px 0px 0px 0px;
+	    font-size: 13px;
 	}
 }

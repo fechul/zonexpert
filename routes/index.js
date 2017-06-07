@@ -312,6 +312,36 @@ router.get('/prediction/wait', function(req, res) {
 	});
 });
 
+router.get('/prediction/result', function(req, res) {
+	prediction.get({
+		'userEmail': req.session.email,
+		'leagueId': req.query.leagueId,
+		'result': {
+			'$ne': 'wait'
+		}
+	}, function(predictions) {
+		var predictionIdList = [];
+		var pickObject = {};
+
+		for (var i in predictions) {
+			predictionIdList.push(predictions[i].matchId);
+			pickObject[predictions[i].matchId] = predictions[i].pick;
+		}
+
+		schedule.getMatches({
+			'idList': predictionIdList
+		}, function(matches) {
+			for (var i in matches) {
+				matches[i] = matches[i].toObject();
+				matches[i].pick = pickObject[matches[i].id];
+				delete matches[i].pickCount;
+			}
+
+			res.json(JSON.stringify(matches));
+		});
+	});
+});
+
 router.get('/prediction/all', function(req, res) {
 	prediction.getAll({
 		'userEmail': req.session.email,
