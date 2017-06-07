@@ -556,6 +556,10 @@ body {
 	.container_box {
 		margin: 30px 0px;
 	}
+
+	.board_content img {
+		width: 100% !important;
+	}
 }
 
 @media all and (max-device-width: 540px) {
@@ -621,5 +625,9 @@ body {
 	.bottom_fixed_container {
 		width: 92%;
 		z-index: 10000;
+	}
+
+	.board_content img {
+		width: 100% !important;
 	}
 }
