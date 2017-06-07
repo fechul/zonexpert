@@ -5,10 +5,10 @@
         </span>
     </div>
     <div class="feedback_contents">
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="feedback_email">이메일 주소</label>
             <input type="email" class="form-control" id="feedback_email">
-        </div>
+        </div> -->
         <div class="form-group">
             <label for="feedback_contents">의견</label>
             <textarea class="form-control" id="feedback_contents" style="resize: none; height: 120px;"></textarea>
@@ -40,7 +40,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var canSend = true;
-        var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+        // var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
 
         $('.feedback_button').click(function() {
             $('.bottom_fixed_button_container').hide();
@@ -53,20 +53,23 @@
         });
 
         $('#send_feedback').click(function() {
-            var email = $('#feedback_email').val();
+            // var email = $('#feedback_email').val();
             var contents = $('#feedback_contents').val();
 
             if (!canSend) {
                 notice.show('alert', '의견을 너무 자주 보내실 수 없어요!');
-            } else if (email.length == 0) {
-                notice.show('alert', '이메일을 입력해주세요.');
-            } else if (!reg_email.test(email)) {
-                notice.show('alert', '이메일을 형식이 잘못되었습니다.');
-            } else if (contents.length == 0) {
+            } 
+            // else if (email.length == 0) {
+            //     notice.show('alert', '이메일을 입력해주세요.');
+            // }
+            // else if (!reg_email.test(email)) {
+            //     notice.show('alert', '이메일을 형식이 잘못되었습니다.');
+            // } 
+            else if (contents.length == 0) {
                 notice.show('alert', '의견을 입력해주세요.');
             } else {
                 $.post('/feedback', {
-                    'feedback_email': email,
+                    // 'feedback_email': email,
                     'feedback_contents': contents,
                     'url': location.pathname
                 }, function(success) {
@@ -76,7 +79,7 @@
                     }, 10000);
                     if (success) {
                         notice.show('success', '의견 감사합니다!');
-                        $('#feedback_email').val('');
+                        // $('#feedback_email').val('');
                         $('#feedback_contents').val('');
                         $('.feedback_close').click();
                     } else {

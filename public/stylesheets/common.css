@@ -548,7 +548,7 @@ table > tbody > tr:not(:last-child) {
 
 .feedback_container {
 	display: none;
-    height: 330px;
+    height: 270px;
     width: 520px;
     position: fixed;
     right: 15px;
