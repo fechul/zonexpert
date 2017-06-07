@@ -127,7 +127,8 @@ var predictionSchema = new Schema({
     'beforeRating': Number,
     'afterRating': Number,
     'viewList': Array,
-    'ratingCalculatedTime': Date
+    'ratingCalculatedTime': Date,
+    'checkNotice': {type: Boolean, default: false}
 });
 
 var boardSchema = new Schema({

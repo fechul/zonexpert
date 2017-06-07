@@ -126,20 +126,20 @@
 }
 
 #schedule_table .schedule_table_row.basketed td:nth-child(7) {
-	background-color: #ffc94f;
+	background-color: #ffc33a;
 }
 
 #schedule_table .schedule_table_row.confirmed td:nth-child(7) {
-	background-color: rgba(121, 162, 192, 0.83);
+	background-color: rgba(90, 183, 250, 0.83);
 	cursor: not-allowed;
 }
 
 #schedule_table .schedule_table_row.failed td:nth-child(7){
-	background-color: #e25353;
+	background-color: #ea4a4a;
 }
 
 #schedule_table .schedule_table_row.success td:nth-child(7){
-	background-color: #46cc50;
+	background-color: #35c335;
 }
 
 #schedule_table .schedule_table_row i {

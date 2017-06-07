@@ -14,18 +14,56 @@
             <div class="prediction_shortcut_preview_number_inner_confirmed">
             </div>
         </div>
+        <div class="prediction_shortcut_title result">
+            <span class="prediction_shortcut_title_text">
+                예측 결과
+            </span>
+            <div class="prediction_shortcut_preview_number_inner_result">
+            </div>
+        </div>
+    </div>
+    <div class="prediction_shortcut_list_header">
+        <table class="prediction_shortcut_table header">
+            <tbody>
+                <td>날짜</td>
+                <td>홈팀</td>
+                <td>VS</td>
+                <td>어웨이팀</td>
+            </tbody>
+        </table>
     </div>
     <div class="prediction_shortcut_list unconfirmed">
         <table id="prediction_shortcut_unconfirmed_table" class="prediction_shortcut_table">
             <tbody>
             </tbody>
         </table>
+        <div class="prediction_shortcut_list_no_contents">
+            <div>예측 대기중인 경기가 없습니다.</div>
+            <div>경기 일정을 확인하고 예측해보세요!</div>
+            <a href="/schedule" class="prediction_shortcut_go_schedule">일정&amp;예측으로 이동</a>
+        </div>
     </div>
     <div class="prediction_shortcut_list confirmed" style="display: none;">
         <table id="prediction_shortcut_confirmed_table" class="prediction_shortcut_table">
             <tbody>
             </tbody>
         </table>
+        <div class="prediction_shortcut_list_no_contents">
+            <div>예측한 경기가 없습니다.</div>
+            <div>예측 대기목록의 경기를 예측해보세요!</div>
+            <a href="/schedule" class="prediction_shortcut_go_schedule">일정&amp;예측으로 이동</a>
+        </div>
+    </div>
+    <div class="prediction_shortcut_list result" style="display: none;">
+        <table id="prediction_shortcut_result_table" class="prediction_shortcut_table">
+            <tbody>
+            </tbody>
+        </table>
+        <div class="prediction_shortcut_list_no_contents">
+            <div>예측 결과가 없습니다.</div>
+            <div>경기가 끝날 때까지 기다려주세요</div>
+            <a href="/schedule" class="prediction_shortcut_go_schedule">일정&amp;예측으로 이동</a>
+        </div>
     </div>
     <div class="prediction_shortcut_do">
         <button class="prediction_shortcut_close btn btn-default pull-right">

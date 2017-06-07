@@ -394,7 +394,7 @@ body {
 }
 
 .prediction_shortcut_table td.active {
-	background-color: #ffc94f !important;
+	background-color: #ffc33a !important;
 	border: 2px solid black;
 }
 

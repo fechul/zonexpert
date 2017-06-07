@@ -435,8 +435,8 @@ exports.getScheduledMatches = function(callback) {
                             awayTeamImg: (awayData && awayData.length ? awayData[0].crestUrl : '-'),
                             matchId: match.id
                         });
-                        async_cb();     
-                    }); 
+                        async_cb();
+                    });
                 });
             }, function(async_err) {
                 callback(scheduled);
