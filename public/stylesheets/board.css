@@ -121,7 +121,7 @@ table > tbody > tr:not(:last-child) {
 }
 
 #board_table .board_content img {
-	width: 100%;
+	max-width: 100%;
 }
 
 #board_table .board_content td {
