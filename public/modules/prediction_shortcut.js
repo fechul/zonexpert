@@ -31,7 +31,7 @@ var PREDICTION_SHORTCUT = {
             var predictions = [];
 
             for (var i = 0; i < prediction_shortcut_pick_length; i++) {
-                var value = $('.prediction_shortcut_table_row.unconfirmed').eq(i).find('td.active').eq(0).attr('value');
+                var value = $('.prediction_shortcut_table_row.unconfirmed').eq(i).find('td.selected').eq(0).attr('value');
 
                 if (value) {
                     predictions.push({
