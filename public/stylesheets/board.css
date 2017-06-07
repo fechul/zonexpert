@@ -121,7 +121,7 @@ table > tbody > tr:not(:last-child) {
 }
 
 #board_table .board_content img {
-	width 100%;
+	width: 100%;
 }
 
 #board_table .board_content td {
@@ -189,10 +189,6 @@ table > tbody > tr:not(:last-child) {
 	.board_section .board_menu {
 		padding: 15px;
 	}
-
-	.board_content img {
-		width: 100% !important;
-	}
 }
 @media all and (min-device-width: 421px) and (max-device-width: 520px) {
 	.page_title {
@@ -250,10 +246,6 @@ table > tbody > tr:not(:last-child) {
 
 	.board_section .board_menu {
 		padding: 15px;
-	}
-
-	.board_content img {
-		width: 100% !important;
 	}
 }
 
@@ -313,10 +305,6 @@ table > tbody > tr:not(:last-child) {
 
 	.board_section .board_menu {
 		padding: 15px;
-	}
-
-	.board_content img {
-		width: 100% !important;
 	}
 }
 
@@ -385,9 +373,5 @@ table > tbody > tr:not(:last-child) {
 
 	.board_section .board_menu {
 		padding: 15px;
-	}
-
-	.board_content img {
-		width: 100% !important;
 	}
 }
