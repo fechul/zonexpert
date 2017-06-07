@@ -318,6 +318,9 @@ router.get('/prediction/result', function(req, res) {
 		'leagueId': req.query.leagueId,
 		'result': {
 			'$ne': 'wait'
+		},
+		'ratingCalculatedTime': {
+			'$gte': new Date(new Date() - 1000 * 60 * 60 * 24 * 7)
 		}
 	}, function(predictions) {
 		var predictionIdList = [];
