@@ -284,10 +284,10 @@ var INDEX = {
 					if(data[i].record) {
 						if(data[i].record.total) {
 							table_html += '<td class="table_label_record">' + (data[i].record.total.hit || 0) + ' / ' + (data[i].record.total.fail || 0) + '</td>';
-							if((typeof(data[i].record.total.fail) == 'number') && (data[i].record.total.fail > 0)) {
-								table_html += '<td class="table_label_hitrate">' + ((data[i].record.total.hit/(data[i].record.total.hit + data[i].record.total.fail))*100).toFixed(2) + '%</td>';
-							} else {
+							if(data[i].record.total.fail + data[i].record.total.hit == 0) {
 								table_html += '<td class="table_label_hitrate">-</td>';
+							} else {
+								table_html += '<td class="table_label_hitrate">' + ((data[i].record.total.hit/(data[i].record.total.hit + data[i].record.total.fail))*100).toFixed(2) + '%</td>';
 							}
 						} else {
 							table_html += '<td class="table_label_record">0 / 0</td>';
