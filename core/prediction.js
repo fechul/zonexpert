@@ -145,6 +145,10 @@ exports.get = function(data, callback) {
         findJson.result = data.result;
     }
 
+    if (data.ratingCalculatedTime) {
+        findJson.ratingCalculatedTime = data.ratingCalculatedTime;
+    }
+
     db.prediction.find(findJson, {
         'matchId': 1,
         'confirmed': 1,

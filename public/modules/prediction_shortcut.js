@@ -85,10 +85,13 @@ var PREDICTION_SHORTCUT = {
 
 			if ($this.hasClass('unconfirmed')) {
 				type = 'unconfirmed';
+				$('.prediction_shortcut_result_notice').hide();
 			} else if ($this.hasClass('confirmed')) {
 				type = 'confirmed';
+				$('.prediction_shortcut_result_notice').hide();
 			} else {
 				type = 'result';
+				$('.prediction_shortcut_result_notice').show();
 			}
 
 			$('.prediction_shortcut_title').removeClass('active');

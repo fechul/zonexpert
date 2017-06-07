@@ -629,6 +629,13 @@ table > tbody > tr:not(:last-child) {
 	font-weight: bold;
 }
 
+.prediction_shortcut_result_notice {
+	display: none;
+    float: left;
+    margin-left: 10px;
+    margin-top: 6px;
+}
+
 .feedback_container {
 	display: none;
     height: 280px;
