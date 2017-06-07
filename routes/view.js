@@ -128,8 +128,13 @@ router.get('/', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, functi
 		headerHideMenu: '',
 		myNickname: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	json.prediction_shortcut = req.predictionShortcut;
 	json.feedback = req.feedback;
@@ -154,8 +159,13 @@ router.get('/signup', no_login, readFeedbackHTML, function(req, res) {
 		signup_display: 'display:none;',
 		myinfo_display: 'display:none;',
 		logout_display: 'display:none;',
-		myCurrentPoint: 0
+		myCurrentPoint: 0,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	json.feedback = req.feedback;
 
@@ -176,8 +186,13 @@ router.get('/login', no_login, readFeedbackHTML, function(req, res) {
 		signup_display: 'display:none;',
 		myinfo_display: 'display:none;',
 		logout_display: 'display:none;',
-		myCurrentPoint: 0
+		myCurrentPoint: 0,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	json.feedback = req.feedback;
 
@@ -196,8 +211,13 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 		rank_html: '',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -354,8 +374,13 @@ router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, f
 		board_html:'',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
-		isLogin: false
+		isLogin: false,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -392,8 +417,13 @@ router.get('/board/write', need_login, readPredictionShortcutHTML, readFeedbackH
 		write_btn_name: '',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -436,8 +466,13 @@ router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkPoint
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
-		targetMatch: req.query.move || ''
+		targetMatch: req.query.move || '',
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -477,8 +512,13 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		myEmail: '',
-		viewTargetNick: null
+		viewTargetNick: null,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -630,8 +670,13 @@ router.get('/search', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, 
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		myNickName: '',
-		isReady: false
+		isReady: false,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -726,8 +771,13 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 		signupDate: '-',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
@@ -789,8 +839,13 @@ router.get('/help', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 		rank_html: '',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		mobileSafaribodyBackgroundCss: ''
 	};
+
+	if (req.is_mobile_safari) {
+		json.mobileSafaribodyBackgroundCss = 'style="background-size: 100% 100% !important;"';
+	}
 
 	if(req.session.login) {
 		json.login_display = 'display:none;';
