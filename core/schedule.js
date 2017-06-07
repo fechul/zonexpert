@@ -401,3 +401,48 @@ exports.getMatchTeamsName = function(data, callback) {
         }
     });
 };
+
+exports.getScheduledMatches = function(callback) {
+    var scheduled = [];
+
+    db.match.find({
+        'status': 'SCHEDULED'
+    }, {
+        'date': 1,
+        'homeTeamId': 1,
+        'awayTeamId': 1,
+        'id': 1
+    }).sort({date:1}).limit(3).exec(function(err, data) {
+        if(data && data.length) {
+            async.mapSeries(data, function(match, async_cb) {
+                db.team.find({
+                    'id': match.homeTeamId
+                }, {
+                    'shortName': 1,
+                    'crestUrl': 1
+                }).limit(1).exec(function(homeErr, homeData) {
+                    db.team.find({
+                        'id': match.awayTeamId
+                    }, {
+                        'shortName': 1,
+                        'crestUrl': 1
+                    }).limit(1).exec(function(awayErr, awayData) {
+                        scheduled.push({
+                            date: match.date,
+                            homeTeamName: (homeData && homeData.length ? homeData[0].shortName : '-'),
+                            awayTeamName: (awayData && awayData.length ? awayData[0].shortName : '-'),
+                            homeTeamImg: (homeData && homeData.length ? homeData[0].crestUrl : '-'),
+                            awayTeamImg: (awayData && awayData.length ? awayData[0].crestUrl : '-'),
+                            matchId: match.id
+                        });
+                        async_cb();     
+                    }); 
+                });
+            }, function(async_err) {
+                callback(scheduled);
+            });
+        } else {
+            callback([]);
+        }
+    });
+};

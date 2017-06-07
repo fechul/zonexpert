@@ -435,7 +435,8 @@ router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkPoint
 		mydata_display: '',
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
-		myCurrentPoint: req.point
+		myCurrentPoint: req.point,
+		targetMatch: req.query.move || ''
 	};
 
 	if(req.session.login) {

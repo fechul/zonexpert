@@ -246,7 +246,7 @@ canvas{position:relative; z-index:9999;}
 }
 
 #my_prediction_list_table tr td > img {
-	height: 60px;
+	height: 35px;
 	margin-right: 5px;
 }
 
