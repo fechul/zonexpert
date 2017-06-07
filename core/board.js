@@ -13,7 +13,8 @@ exports.get = function(params, callback) {
             		db.user.find({
 	            		'email': myEmail
 	            	}, {
-	            		'like_board': 1
+	            		'like_board': 1,
+	            		'readyGameCnt': 1
 	            	}).limit(1).exec(function(myDataErr, myData) {
 	            		async.map(data, function(board, async_cb){
 		                    db.user.find({
@@ -39,8 +40,8 @@ exports.get = function(params, callback) {
 		                                    board.i_like = false;
 		                                }
 		                            }
-		                            async_cb();
 		                        }
+		                        async_cb();
 		                    });
 		                }, function(async_err) {
 		                    callback(data);

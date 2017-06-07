@@ -67,7 +67,8 @@
 	<script>
 		var notice = NOTICE;
 		SCHEDULE.init({
-			'attendancePointUpdated': <%- attendancePointUpdated %>
+			'attendancePointUpdated': <%- attendancePointUpdated %>,
+			'targetMatch': '<%= targetMatch %>'
 		});
         PREDICTION_SHORTCUT.init();
 	</script>

@@ -20,6 +20,7 @@ var INDEX = {
 		this.init_events();
 		this.set_mydata();
 		this.setRecentPredict();
+		this.setScheduledMatches();
 		this.set_rank('rating');
 
 		notice.init();
@@ -87,6 +88,12 @@ var INDEX = {
 		$('#searchMyData').click(function() {
 			location.href = '/search?id=' + self.myNickName;
 		});
+
+		$(document).on('click', '.moveForPredict', function() {
+			var matchId = $(this).closest('tr').attr('data-matchid');
+			
+			location.href = '/schedule?move=' + matchId;
+		});
 	},
 
 	set_mydata: function() {
@@ -122,19 +129,56 @@ var INDEX = {
 					if(day < 10) {
 						day = '0' + day;
 					}
-					recentPredictHtml += '<div class="predict_content_row">';
-					recentPredictHtml += '<div class="predict_date">' + year + '/' + month + '/' + day + '</div>';
-					recentPredictHtml += '<div class="match_result"><span class="match_result_team">' + data[i].homeTeamName + '</span><span class="match_result_score">' + data[i].homeTeamGoals +  ' : ' +  data[i].awayTeamGoals + '</span><span class="match_result_team">' + data[i].awayTeamName + '</span></div>';
+
+					recentPredictHtml += '<tr>';
+					recentPredictHtml += '<td class="predicted_date">' + year + '/' + month + '/' + day + '</td>';
+					recentPredictHtml += '<td class="predicted_teamname">' + data[i].homeTeamName + '</td>';
+					recentPredictHtml += '<td class="predicted_result">' + data[i].homeTeamGoals +  ' : ' +  data[i].awayTeamGoals;
+					 recentPredictHtml += '<td class="predicted_teamname">' + data[i].awayTeamName + '</td>';
 					if(data[i].predictResult == 'true') {
-						recentPredictHtml += '<div class="predict_result success">성공</div>';
+						recentPredictHtml += '<td class="predicted_predictres success">성공</td>';
 					} else {
-						recentPredictHtml += '<div class="predict_result fail">실패</div>';
+						recentPredictHtml += '<td class="predicted_predictres fail">실패</td>';
 					}
-					recentPredictHtml += '</div>';
+					recentPredictHtml += '</tr>';
 				}
-				$('.mydata_recent_predict_content').append(recentPredictHtml);
+				$('#mydata_recent_predict_table').append(recentPredictHtml);
 			} else {
 				$('.predict_content_row.no_data').show();
+			}
+		});
+	},
+
+	setScheduledMatches: function() {
+		$.get('/schedule/getScheduledMatches', function(data) {
+			if(data && data.length) {
+				$('.noScheduled').hide();
+				var scheduledHtml = '';
+
+				for(var i = 0; i < data.length; i++) {
+					var date = new Date(data[i].date);
+					var year = date.getFullYear()%100;
+					var month = date.getMonth()+1;
+					if(month < 10) {
+						month = '0' + month;
+					}
+					var day = date.getDate();
+					if(day < 10) {
+						day = '0' + day;
+					}
+
+					scheduledHtml += '<tr data-matchId="' + data[i].matchId + '">';
+					scheduledHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+					scheduledHtml += '<td><img class="scheduledTeamImg" src="' + data[i].homeTeamImg + '"></img>' + data[i].homeTeamName + '</td>';
+					scheduledHtml += '<td>예정</td>';
+					scheduledHtml += '<td><img class="scheduledTeamImg" src="' + data[i].awayTeamImg + '"></img>' + data[i].awayTeamName + '</td>';
+					scheduledHtml += '<td class="moveForPredict"><i class="fa fa-arrow-right"></i></td>';
+					scheduledHtml += '</tr>';
+				}
+
+				$('#scheduled_table').append(scheduledHtml);
+			} else {
+				$('.noScheduled').show();
 			}
 		});
 	},

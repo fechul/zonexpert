@@ -11,7 +11,8 @@
 }
 
 .searchdata_wrapper,
-.rank_wrapper {
+.rank_wrapper,
+.scheduled_wrapper {
 	max-width: 1200px;
 	margin: 0 auto;
 }
@@ -21,7 +22,8 @@
 	/* height: 200px; */
 }
 
-.main_section .rank_section {
+.main_section .rank_section,
+.main_section .scheduled_section {
 	width: 800px;
 	/*height: 800px;*/
 }
@@ -32,14 +34,16 @@
 	text-align: left;
 }
 
-.rankdata {
+.rankdata,
+.scheduleddata {
 	border-bottom: 1px solid #aaa;
 	padding: 15px;
 	text-align: left;
 }
 
 .mydata_user > .mydata_user_id,
-.rankdata_sub {
+.rankdata_sub,
+.scheduleddata_sub {
 	font-weight: bold;
 	font-size: 22px;
 }
@@ -92,44 +96,43 @@
 	font-weight: bold;
 }
 
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content {
-	padding-bottom: 20px;
-}
-
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content > .predict_content_row {
-	padding: 15px;
-}
-
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
-	width: 80px;
-	float: left;
-}
-
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
-	float: left;
-	margin-right: 25px;
-}
-
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_team {
-	width: 105px;
-	display: inline-block;
+#mydata_recent_predict_table {
 	text-align: center;
+	border: none;
 }
 
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result .match_result_score {
-	margin: 0px 8px 0px 8px;
-	display: inline-block;
-	width: 50px;
+#mydata_recent_predict_table tr {
+	height:30px;
+	border: none;
 }
 
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.success {
+#mydata_recent_predict_table tr:first-child {
+	background-color: inherit;
+	color: #333;
+}
+
+#mydata_recent_predict_table td.predicted_date {
+	width: 20%;
+}
+
+#mydata_recent_predict_table td.predicted_teamname {
+	width: 25%;
+}
+
+#mydata_recent_predict_table td.predicted_result {
+	width: 15%;
+}
+
+#mydata_recent_predict_table td.predicted_predictres {
+	width: 15%;
+}
+
+#mydata_recent_predict_table td.predicted_predictres.success {
 	color: #056f05;
-	float: left;
 }
 
-.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_result.fail {
+#mydata_recent_predict_table td.predicted_predictres.fail {
 	color: #d22323;
-	float: left;
 }
 
 .rankdata_type_btn {
@@ -150,7 +153,8 @@
 	color: #fff;
 }
 
-.rank_table_section {
+.rank_table_section,
+.scheduled_table_section {
 	padding: 25px;
 }
 
@@ -174,9 +178,39 @@
 	margin-top: -7px;
 }
 
-/*.tier_cell > div{
-	margin-left: 30px;
-}*/
+.table_label_scheduledDate {
+	width: 20%;
+}
+
+.table_label_scheduledTeam {
+	width: 25%;
+}
+
+.table_label_scheduledState {
+	width: 15%;
+}
+
+.table_label_scheduledMove {
+	width: 15%;
+}
+
+.scheduledTeamImg {
+	width: 30px;
+	margin-right: 10px;
+}
+
+.moveForPredict {
+	cursor: pointer;
+}
+
+.moveForPredict > i {
+	color: #4365b5;
+}
+
+.moveForPredict:hover {
+	background-color: #ccc;
+	border-left: 1px solid #aaa;
+}
 
 /*
 	Media Query
@@ -184,12 +218,14 @@
 
 /* mobile header */
 @media all and (min-device-width: 471px) and (max-device-width: 768px) {
-	.rank_table_section {
+	.rank_table_section,
+	.scheduled_table_section {
 		padding: 25px 5px;
 	}
 
 	.main_section .mydata_section,
-	.main_section .rank_section {
+	.main_section .rank_section,
+	.main_section .scheduled_section {
 		width: 85%;
 	}
 
@@ -217,14 +253,6 @@
 		padding-bottom: 20px;
 	}
 
-	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content {
-		font-size: 11px;
-	}
-
-	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
-		width: 50px;
-	}
-
 	.match_result_team {
 		width: 100px !important;
 	}
@@ -235,8 +263,18 @@
 		padding: 25px 5px;
 	}
 
+	.scheduled_table_section {
+		padding: 25px 5px;
+		font-size: 11px;
+	}
+
+	.scheduledTeamImg {
+		width: 25px;
+	}
+
 	.main_section .mydata_section,
-	.main_section .rank_section {
+	.main_section .rank_section,
+	.main_section .scheduled_section {
 		width: 90%;
 	}
 
@@ -276,9 +314,9 @@
 		font-size: 10px;
 	}
 
-	.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content .predict_content_row {
+	/*.mydata_statistics .mydata_recent_predict .mydata_recent_predict_content .predict_content_row {
 		margin-bottom: 10px;
-	}
+	}*/
 
 	.rankdata_type_btn > .type_btn {
 		margin-right: 0px;
@@ -311,15 +349,7 @@
 		margin: 30px 15px;
 	}
 
-	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .predict_date {
-		width: 100%;
-	}
-
-	.match_result_team {
-		width: 85px !important;
-	}
-
-	.mydata_statistics > .mydata_recent_predict > .mydata_recent_predict_content .match_result {
-		margin-right: 5px;
+	#mydata_recent_predict_table {
+		font-size: 11px;
 	}
 }

@@ -22,7 +22,7 @@ var set_configs = function() {
 
     console.log('set configs complete');
 }();
-
+var __domain ='';
 if (__domain.length > 0) {
     global.__url = __domain;
 } else if (__port.length > 0) {

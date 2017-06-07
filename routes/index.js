@@ -185,7 +185,6 @@ router.get('/board/get', function(req, res) {
 		'type': type,
 		'myEmail': req.session.email || null
 	}, function(data) {
-		console.log("ddd: ", data)
 		user.countAllUsers('onlyRanked', function(userCount) {
 			async.mapSeries(data, function(board, async_cb) {
 				redis_client.zrevrank('rating_rank', board.writer, function(err, rank) {
@@ -247,6 +246,12 @@ router.get('/schedule/league', function(req, res) {
 		'leagueId': req.query.leagueId
 	}, function(matches) {
 		res.json(matches);
+	});
+});
+
+router.get('/schedule/getScheduledMatches', function(req, res) {
+	schedule.getScheduledMatches(function(data) {
+		res.json(data);
 	});
 });
 

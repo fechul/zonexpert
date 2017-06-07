@@ -466,6 +466,7 @@ router.get('/schedule', readPredictionShortcutHTML, readFeedbackHTML, checkPoint
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
+		targetMatch: req.query.move || '',
 		mobileSafaribodyBackgroundCss: ''
 	};
 
