@@ -120,6 +120,10 @@ table > tbody > tr:not(:last-child) {
 	text-align: initial;
 }
 
+#board_table .board_content img {
+	width 100%;
+}
+
 #board_table .board_content td {
 	padding: 5px 10px 10px 10px;
 }
