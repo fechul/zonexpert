@@ -877,7 +877,7 @@ router.post('/ratingUpdate', function(req, res) {
 router.post('/feedback', function(req, res) {
 	var newFeedBack = new db.feedback({
 		'createTime': new Date,
-		'email': req.body.feedback_email || '',
+		'email': req.session.email || 'unknown',
 		'contents': req.body.feedback_contents || '',
 		'url': req.body.url
 	});
