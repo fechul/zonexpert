@@ -16,6 +16,9 @@ exports.get = function(params, callback) {
 	            		'like_board': 1,
 	            		'readyGameCnt': 1
 	            	}).limit(1).exec(function(myDataErr, myData) {
+	            		if(myData && myData.length) {
+	            			myData = myData[0];
+	            		}
 	            		async.map(data, function(board, async_cb){
 		                    db.user.find({
 		                        'email': board.writer
@@ -32,8 +35,7 @@ exports.get = function(params, callback) {
 		                            board.nickname = userdata.nickname;
 		                            board.readyGameCnt = userdata.readyGameCnt;
 		                           
-		                            if(myData && myData.length) {
-		                                myData = myData[0]
+		                            if(myData) {
 		                                if(myData.like_board.indexOf(board.boardNo) > -1) {
 		                                    board.i_like = true;
 		                                } else {
