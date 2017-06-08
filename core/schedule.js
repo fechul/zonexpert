@@ -446,3 +446,38 @@ exports.getScheduledMatches = function(callback) {
         }
     });
 };
+
+exports.pushViewListToMatch = function(options, callback) {
+    var myEmail = options.myEmail;
+    var matchId = options.matchId;
+
+    db.match.find({
+        'id': matchId
+    }, {
+        'systemViewList': 1
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+
+            if(data.systemViewList.indexOf(myEmail) > -1) {
+                callback(false);
+            } else {
+                db.match.update({
+                    'id': matchId
+                }, {
+                    $addToSet: {
+                        'systemViewList': myEmail
+                    }
+                }, function(updateErr) {
+                    if(updateErr) {
+                        callback(false);
+                    } else {
+                        callback(true);
+                    }
+                });
+            }
+        } else {
+            callback(false);
+        }
+    });
+};
