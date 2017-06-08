@@ -190,29 +190,30 @@ var CHAT = {
             $.post('/prediction/system', {
                 matchId: self.room,
                 pointType: pointType
-            }, function(result) {
-                console.log(result);
-                // if(result) {
-                //     if(result.result && result.result !== 'false') {
-                //         if(result.pick == 'home') {
-                //             $('#predictedUserPredictResult').html('홈팀 승!');
-                //         } else if(result.pick == 'away') {
-                //             $('#predictedUserPredictResult').html('어웨이팀 승!');
-                //         } else if(result.pick == 'draw') {
-                //             $('#predictedUserPredictResult').html('무승부');
-                //         } else {
-                //             $('#predictedUserPredictResult').html('-');
-                //         }
-                //         $('#viewBtnDiv').hide();
-                //         $('#isShownDiv').show();
-                //         $('#predictedUserPredictBox').fadeIn(2000);
-                //         UPDATE_POINT();
-                //     } else {
-                //         notice.show('alert', '조회에 실패했습니다.');
-                //     }
-                // } else {
-                //     notice.show('alert', '조회에 실패했습니다.');
-                // }
+            }, function(response) {
+                if(response && response.result) {
+                    $('#predictionSystemBtnContainer').hide();
+                    $('#predictedSystemContentsContainer').show();
+
+                    if(response.pick == 'home') {
+                        $('#predictionSystemPredictResult').html('홈팀 승!');
+                    } else if(response.pick == 'away') {
+                        $('#predictionSystemPredictResult').html('어웨이팀 승!');
+                    } else if(response.pick == 'draw') {
+                        $('#predictionSystemPredictResult').html('무승부');
+                    } else {
+                        $('#predictionSystemPredictResult').html('-');
+                    }
+
+                    $('.predictionSystemResultDetail[value=home] span').html(response.detail.home.toFixed(2));;
+                    $('.predictionSystemResultDetail[value=draw] span').html(response.detail.draw.toFixed(2));;
+                    $('.predictionSystemResultDetail[value=away] span').html(response.detail.away.toFixed(2));;
+
+                    $('#predictionSystemPredictBox').fadeIn(2000);
+                    UPDATE_POINT();
+                } else {
+                    notice.show('alert', '조회에 실패했습니다.');
+                }
             });
         });
 
@@ -369,7 +370,9 @@ var CHAT = {
             'matchId': matchId,
             'sportsId': sportsId
         }, function(userList) {
-
+            $('.predictionCountNumber').html(userList.length);
+            $('.predictionCount').show();
+            var userNumberReadyCntZero = 0;
             if(userList && userList.length) {
                 var userListHtml = '';
 
@@ -379,6 +382,7 @@ var CHAT = {
                     if(userList[i].readyGameCnt && userList[i].readyGameCnt > 0) {
                         userListHtml += '<div class="predictedUserBadge badge_ready"></div>';
                     } else {
+                        userNumberReadyCntZero++;
                         if(userList[i].myTotalRate <= 3) {
                             userListHtml += '<div class="predictedUserBadge badge_diamond"></div>';
                         } else if(3 < userList[i].myTotalRate && userList[i].myTotalRate <= 10) {
@@ -408,6 +412,10 @@ var CHAT = {
                 }
             } else {
                 predictedUserList.append('<p class="noPredictedUser" style="border-bottom:0px;">예측한 사용자가 없습니다.</p>');
+            }
+
+            if (userNumberReadyCntZero < 100) {
+                $('#predictionSystemDesc > div').last().css('visibility', 'visible');
             }
         });
     },

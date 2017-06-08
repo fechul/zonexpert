@@ -15,9 +15,11 @@
             <div class="page_title">
                 <div class="teamTitleSection">
                     <div class="teamNameTitle homeTeamSection">
+                        <div class="teamBase">홈팀</div>
                         <img class="teamImg" src="<%= homeTeamImg %>"></img><span><%= homeTeamName %></span>
                     </div>
                     <div class="teamNameTitle awayTeamSection">
+                        <div class="teamBase">어웨이팀</div>
                         <img class="teamImg" src="<%= awayTeamImg %>"></img><span><%= awayTeamName %></span>
                     </div>
                 </div>
@@ -29,10 +31,11 @@
             </div>
 
             <div class="tab_container container_box">
+                <div class="predictionCount">예측 참여 : <span class="predictionCountNumber">0</span>명</div>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#goToChat">채팅</a></li>
-                    <li><a data-toggle="tab" href="#goToPredictionSystem">예측시스템</a></li>
                     <li><a data-toggle="tab" class="goToOtherPredictLi" href="#goToOtherPredict">다른 사용자 예측 조회</a></li>
+                    <li><a data-toggle="tab" href="#goToPredictionSystem">존문가 예측</a></li>
                     <li class="predict_in_chat <%- predict_in_chat_condition %>"><a><i class="fa fa-check-square-o"></i></a></li>
                 </ul>
 
@@ -76,14 +79,33 @@
                         </div>
                     </div>
                     <div id="goToPredictionSystem" class="tab-pane fade">
-                        <div class="predictionSystemWrapper">
-                            준비중입니다.
-                            <div class="predictedSystemCover" style="display: none;">
-                                <button class="btn btn-primary" id="viewPredictionSystem">예측시스템 조회 (<img src="/image/coin.png"></img>500)</button>
-                                <button class="btn btn-primary systemChoicePointTypeBtn free" pointType="free" style="display: none;">무료포인트 사용<br>보유 : <span class="systemCurrentPoint free">-</span></button>
-                                <button class="btn btn-primary systemChoicePointTypeBtn currency" pointType="currency" style="display: none;">충전포인트 사용<br>보유 : <span class="systemCurrentPoint currency">-</span></button><br>
-                            </div>
-                            <div class="predictedSystemContents">
+                        <div id="predictionSystemDesc">
+                            <div>존문가 예측은 현재 베타버전입니다.</div>
+                            <div style="visibility: hidden;">예측 참여인원이 적어 결과가 부정확합니다.</div>
+                        </div>
+                        <div id="predictionSystemBtnContainer">
+                            <button class="btn btn-primary" id="viewPredictionSystem">존문가 예측 조회 (<img src="/image/coin.png"></img>500)</button>
+                            <button class="btn btn-primary systemChoicePointTypeBtn free" pointType="free" style="display: none;">무료포인트 사용<br>보유 : <span class="systemCurrentPoint free">-</span></button>
+                            <button class="btn btn-primary systemChoicePointTypeBtn currency" pointType="currency" style="display: none;">충전포인트 사용<br>보유 : <span class="systemCurrentPoint currency">-</span></button><br>
+                        </div>
+                        <div id="predictedSystemContentsContainer">
+                            <button class="btn btn-default" id="isShownPredict" disabled>조회 완료된 예측</button>
+
+                            <div id="predictionSystemPredictBox">
+                                <span>존문가 예측</span><br>
+                                <div id="predictionSystemPredictResult">-</div>
+                                <table>
+                                    <tr>
+                                        <td>홈 승</td>
+                                        <td>무승부</td>
+                                        <td>어웨이 승</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="predictionSystemResultDetail" value="home"><span></span>%</td>
+                                        <td class="predictionSystemResultDetail" value="draw"><span></span>%</td>
+                                        <td class="predictionSystemResultDetail" value="away"><span></span>%</td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>

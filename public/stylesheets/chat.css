@@ -32,8 +32,6 @@ section {
 body {
     margin-bottom: 120px;
     line-height: 1;
-    background: url(http://i.imgur.com/MQB99sg.jpg);
-    font-family: 'Open Sans', Arial, sans-serif;
     font-size: 12px;
     color: #333f4d;
 }
@@ -147,6 +145,20 @@ body {
     margin-right: 5px;
 }
 
+#predictionSystemDesc {
+    padding: 20px 20px 0px 0px;
+    text-align: right;
+    font-size: 13px;
+}
+
+#predictionSystemDesc > div {
+    margin-bottom: 10px;
+}
+
+#predictedSystemContentsContainer {
+    display: none;
+}
+
 .choicePointTypeBtn.free {
     font-size: 12px;
     margin-top: 20px;
@@ -204,7 +216,29 @@ body {
     display: none;
 }
 
-#predictedUserPredictResult {
+#predictionSystemPredictBox {
+    width: 300px;
+    height: 190px;
+    border: 1px solid #ccc;
+    padding: 5px 0px;
+    margin: 10px auto;
+    background-color: #ea8c3c;
+    color: #fff;
+    border-radius: 10px;
+    display: none;
+}
+
+#predictionSystemPredictBox table {
+    border: 0px !important;
+    margin-top: 10px;
+}
+
+#predictionSystemPredictBox table td{
+    width: 33.3333%;
+}
+
+#predictedUserPredictResult,
+#predictionSystemPredictResult {
     font-size: 22px;
     padding: 10px;
     font-weight: bold;
@@ -229,9 +263,16 @@ body {
     text-align: center;
 }
 
-
-
-
+.predictionCount {
+    display: none;
+    position: absolute;
+    font-size: 15px;
+    top: -27px;
+    right: 0px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 0px 0px 2px black;
+}
 
 .chat-wrapper{
     background: #ffffff;
@@ -480,6 +521,7 @@ ul.users-container {
 
 .page_title {
     font-size: 28px;
+    text-shadow: 0px 0px 2px black;
 }
 
 .page_title .teamTitleSection {
@@ -522,6 +564,11 @@ ul.users-container {
 .page_title .teamNameTitle.awayTeamSection {
     width: 350px;
     float: right;
+}
+
+.teamBase {
+    font-size: 13px;
+    margin-bottom: 15px;
 }
 
 .page_title .teamImg {
@@ -598,7 +645,7 @@ li .badge_ready {
 }
 
 .nav > li:first-child > a {
-    border-top-left-radius: 5px;
+    border-top-left-radius: 10px;
 }
 
 .nav > li:last-child > a {
@@ -1177,7 +1224,8 @@ li .badge_ready {
         width: 125px;
     }
 
-    #predictedUserPredictBox {
+    #predictedUserPredictBox,
+    #predictionSystemPredictBox {
         width: 220px;
     }
 
