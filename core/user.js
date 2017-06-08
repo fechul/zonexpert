@@ -763,7 +763,7 @@ exports.getPredictSystemData = function(params, callback) {
                         'away': 0
                     };
 
-                    for (var j = 0; j < usersLength; j++) {
+                    for (var j = 0; j < users.length; j++) {
                         pickCounts[predictionObj[users[j].email].pick] += users[j].sportsHitRate;
                         pickCounts[predictionObj[users[j].email].pick] += users[j].leagueHitRate;
                     }
