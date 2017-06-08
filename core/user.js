@@ -600,10 +600,10 @@ exports.returnPoint = function(options, callback) {
                 var s_point = (log.amount == point);
                 var s_classification = (log.classification == classification);
                 if(matchId) {
-                    var s_matchId = (log.matchId == matchId);
+                    s_matchId = (log.matchId == matchId);
                 }
                 if(target) {
-                    var s_target = (log.target == target);
+                    s_target = (log.target == target);
                 }
 
                 if(s_point && s_classification && s_matchId && s_target) {
@@ -690,6 +690,141 @@ exports.leave = function(options, callback) {
             });
         } else {
             callback(false);
+        }
+    });
+};
+
+exports.getPredictSystemData = function(params, callback) {
+    var matchId = params.matchId;
+    var leagueId = params.leagueId;
+    var sportsId = params.sportsId;
+    var predictionObj = {};
+
+    db.prediction.find({
+        'matchId': matchId,
+        'confirmed': true
+    }).exec(function(err, predictions) {
+        var userList = [];
+        if (!err && predictions.length) {
+            for (var i = 0; i < predictions.length; i++) {
+                predictionObj[predictions[i].userEmail] = {
+                    'pick': predictions[i].pick
+                };
+
+                userList.push(predictions[i].userEmail);
+            }
+
+            db.user.find({
+                'readyGameCnt': 0,
+                'email': {
+                    '$in': userList
+                }
+            }).exec(function(err, users) {
+                if (users.length) {
+                    var hit = 0;
+                    var fail = 0;
+
+                    for (var j = 0; j < users.length; j++) {
+                        users[j] = {
+                            'email': users[j].email,
+                            'record': users[j].record
+                        };
+
+                        if (users[j].record && users[j].record[sportsId] && users[j].record[sportsId].total) {
+                            sports_hit = users[j].record[sportsId].total.hit;
+                            sports_fail = users[j].record[sportsId].total.fail;
+
+                            if (sports_hit + sports_fail > 0) {
+                                users[j].sportsHitRate = sports_hit / (sports_hit + sports_fail);
+                            } else {
+                                users[j].sportsHitRate = 0;
+                            }
+
+                            if (users[j].record[sportsId][leagueId]) {
+                                league_hit = users[j].record[sportsId][leagueId].hit;
+                                league_fail = users[j].record[sportsId][leagueId].fail;
+
+                                if (league_hit + league_fail > 0) {
+                                    users[j].leagueHitRate = league_hit / (league_hit + league_fail);
+                                } else {
+                                    users[j].leagueHitRate = 0;
+                                }
+                            } else {
+                                users[j].leagueHitRate = 0.5;
+                            }
+                        } else {
+                            users[j].sportsHitRate = 0.5;
+                        }
+                    }
+
+                    var lack = false;
+                    var usersLength = users.length;
+
+                    if (usersLength < 100) {
+                        lack = true;
+                    }
+
+                    var pickCounts = {
+                        'home': 0,
+                        'draw': 0,
+                        'away': 0
+                    };
+
+                    for (var j = 0; j < usersLength; j++) {
+                        pickCounts[predictionObj[users[j].email].pick] += users[j].sportsHitRate;
+                        pickCounts[predictionObj[users[j].email].pick] += users[j].leagueHitRate;
+                    }
+
+                    var predictionSystemPick = '';
+
+                    if (pickCounts.home > pickCounts.away) {
+                        if (pickCounts.home > pickCounts.draw) {
+                            predictionSystemPick = 'home';
+                        } else if (pickCounts.home == pickCounts.draw) {
+                            predictionSystemPick = 'homeORdraw';
+                        } else {
+                            predictionSystemPick = 'draw';
+                        }
+                    } else if (pickCounts.home < pickCounts.away) {
+                        if (pickCounts.away > pickCounts.draw) {
+                            predictionSystemPick = 'away';
+                        } else if (pickCounts.away == pickCounts.draw) {
+                            predictionSystemPick = 'awayORdraw';
+                        } else {
+                            predictionSystemPick = 'draw';
+                        }
+                    } else {
+                        if (pickCounts.home > pickCounts.draw) {
+                            predictionSystemPick = 'homeORaway';
+                        } else {
+                            predictionSystemPick = 'draw';
+                        }
+                    }
+
+                    var sumPickRate = pickCounts.home + pickCounts.draw + pickCounts.away;
+
+                    var detailWinRate = {
+                        'home':pickCounts.home / sumPickRate,
+                        'draw':pickCounts.draw / sumPickRate,
+                        'away':pickCounts.away / sumPickRate
+                    };
+
+                    callback({
+                        'result': true,
+                        'pick': predictionSystemPick,
+                        'detail': detailWinRate,
+                        'lack': lack
+                    });
+                } else {
+                    callback({
+                        'result': false
+                    });
+                }
+            });
+        } else {
+            callback({
+                'result': false
+            });
         }
     });
 };

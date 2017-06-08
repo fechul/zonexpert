@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var async = require('async');
+var nodemailer = require('nodemailer');
 
 var router = express.Router();
 
@@ -574,7 +575,7 @@ router.post('/prediction/viewOthers', function(req, res) {
 	var targetNickname = req.body.targetNickname;
 	var matchId = req.body.matchId;
 	var myEmail = req.session.email;
-	var pointType = req.body.pointType;
+	var pointType = 'currency';
 
 	user.get_email(targetNickname, function(targetEmail) {
 		if (targetEmail) {
@@ -666,6 +667,72 @@ router.post('/prediction/viewOthers', function(req, res) {
 			});
 		}
 	});
+});
+
+router.post('/prediction/system', function(req, res) {
+	var matchId = req.body.matchId;
+	var myEmail = req.session.email;
+	var pointType = req.body.pointType;
+
+	// user.usePoint({
+	// 	'email': myEmail,
+	// 	'point': costPoint,
+	// 	'pointType': pointType,
+	// 	'type': 'system',
+	// 	'matchId': matchId
+	// }, function(usePointResult) {
+	// 	if(usePointResult) {
+			// match.pushViewListToMatch({
+			// 	'myEmail': myEmail,
+			// 	'matchId': matchId
+			// }, function(pushResult) {
+			// 	if(pushResult) {
+					schedule.getMatch({
+						'matchId': matchId
+					}, function(matchData) {
+						var wholePickCount = matchData.pickCount;
+						var leagueId = matchData.leagueId;
+						var sportsId = matchData.sportsId;
+
+						user.getPredictSystemData({
+							'matchId': matchId,
+							'leagueId': leagueId,
+							'sportsId': sportsId
+						}, function(systemData) {
+							if (systemData.result) {
+								res.json({
+									'result': true,
+									'pick': systemData.pick,
+									'detail': systemData.detail,
+									'lack': systemData.lack
+								});
+							} else {
+								res.json({
+									'result': false
+								});
+							}
+						});
+					});
+			// 	} else {
+			// 		user.returnPoint({
+			// 			'email': myEmail,
+			// 			'point': costPoint,
+			// 			'pointType': pointType,
+			// 			'type': 'system',
+			// 			'matchId': matchId
+			// 		}, function(returnResult) {
+			// 			res.json({
+			// 				'result': false
+			// 			});
+			// 		});
+			// 	}
+			// });
+	// 	} else {
+	// 		res.json({
+	// 			'result': false
+	// 		});
+	// 	}
+	// });
 });
 
 router.get('/prediction/getProceedingPredict', function(req, res) {
@@ -879,17 +946,46 @@ router.post('/ratingUpdate', function(req, res) {
 });
 
 router.post('/feedback', function(req, res) {
+	var email = req.session.email || 'unknown';
+	var contents = req.body.feedback_contents || '';
+	var url = req.body.url;
+
 	var newFeedBack = new db.feedback({
 		'createTime': new Date,
-		'email': req.session.email || 'unknown',
-		'contents': req.body.feedback_contents || '',
-		'url': req.body.url
+		'email': email,
+		'contents': contents,
+		'url': url
 	});
 
 	newFeedBack.save(function(err) {
 		if (err) {
 			res.json(false);
 		} else {
+			var smtpTransport = nodemailer.createTransport({
+				'service': 'gmail',
+				'auth': {
+					'user': __admin_email,
+					'pass': __admin_password
+				}
+			});
+
+			var mailOptions = {
+				'from': '존문가닷컴 <' + __admin_email + '>',
+				'to': __admin_email,
+				'subject': '피드백: ' + email,
+				'html': [
+					'<div>',
+						'-----피드백-----<br>',
+						'이메일: ' + email + '<br>',
+						'url: ' + url + '<br>',
+						'내용: ' + contents,
+					'</div>'
+				].join('')
+			};
+
+			smtpTransport.sendMail(mailOptions, function(__err, res) {
+				smtpTransport.close();
+			});
 			res.json(true);
 		}
 	});

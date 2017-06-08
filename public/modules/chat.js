@@ -100,49 +100,119 @@ var CHAT = {
         });
 
         $('#viewThisUsersPredict').click(function() {
+            var $this = $(this);
             GET_POINT(function(user) {
                 var costPoint = parseInt($('.viewCostPoint').html(), 10);
-                if ((user.freePoint >= costPoint) || (user.point >= costPoint)) {
-                    $('#viewThisUsersPredict').hide();
-                    $('.choicePointTypeBtn').show();
-                    $('.currentPoint.free').html(user.freePoint);
-                    $('.currentPoint.currency').html(user.point);
+                if (user.point >= costPoint) {
+                    var target = $('.eachPredictedUser.active').attr('target');
+
+                    $.post('/prediction/viewOthers', {
+                        matchId: self.room,
+                        targetNickname: target
+                    }, function(result) {
+                        if(result) {
+                            if(result.result && result.result !== 'false') {
+                                if(result.pick == 'home') {
+                                    $('#predictedUserPredictResult').html('홈팀 승!');
+                                } else if(result.pick == 'away') {
+                                    $('#predictedUserPredictResult').html('어웨이팀 승!');
+                                } else if(result.pick == 'draw') {
+                                    $('#predictedUserPredictResult').html('무승부');
+                                } else {
+                                    $('#predictedUserPredictResult').html('-');
+                                }
+                                $('#viewBtnDiv').hide();
+                                $('#isShownDiv').show();
+                                $('#predictedUserPredictBox').fadeIn(2000);
+                                UPDATE_POINT();
+                            } else {
+                                notice.show('alert', '조회에 실패했습니다.');
+                            }
+                        } else {
+                            notice.show('alert', '조회에 실패했습니다.');
+                        }
+                    });
                 } else {
                     notice.show('alert', '포인트가 부족합니다.');
                 }
             });
         });
 
-        $('.choicePointTypeBtn').click(function() {
-            var target = $('.eachPredictedUser.active').attr('target');
+        $('#viewPredictionSystem').click(function() {
+            GET_POINT(function(user) {
+                var costPoint = 500;
+                if ((user.freePoint >= costPoint) || (user.point >= costPoint)) {
+                    $('#viewPredictionSystem').hide();
+                    $('.systemChoicePointTypeBtn').show();
+                    $('.systemCurrentPoint.free').html(user.freePoint);
+                    $('.systemCurrentPoint.currency').html(user.point);
+                } else {
+                    notice.show('alert', '포인트가 부족합니다.');
+                }
+            });
+        });
+
+        // $('.choicePointTypeBtn').click(function() {
+        //     var target = $('.eachPredictedUser.active').attr('target');
+        //     var pointType = $(this).attr('pointType');
+        //
+        //     $.post('/prediction/viewOthers', {
+        //         matchId: self.room,
+        //         pointType: pointType
+        //     }, function(result) {
+        //         if(result) {
+        //             if(result.result && result.result !== 'false') {
+        //                 if(result.pick == 'home') {
+        //                     $('#predictedUserPredictResult').html('홈팀 승!');
+        //                 } else if(result.pick == 'away') {
+        //                     $('#predictedUserPredictResult').html('어웨이팀 승!');
+        //                 } else if(result.pick == 'draw') {
+        //                     $('#predictedUserPredictResult').html('무승부');
+        //                 } else {
+        //                     $('#predictedUserPredictResult').html('-');
+        //                 }
+        //                 $('#viewBtnDiv').hide();
+        //                 $('#isShownDiv').show();
+        //                 $('#predictedUserPredictBox').fadeIn(2000);
+        //                 UPDATE_POINT();
+        //             } else {
+        //                 notice.show('alert', '조회에 실패했습니다.');
+        //             }
+        //         } else {
+        //             notice.show('alert', '조회에 실패했습니다.');
+        //         }
+        //     });
+        // });
+
+        $('.systemChoicePointTypeBtn').click(function() {
             var pointType = $(this).attr('pointType');
 
-            $.post('/prediction/viewOthers', {
-                targetNickname: target,
+            $.post('/prediction/system', {
                 matchId: self.room,
                 pointType: pointType
             }, function(result) {
-                if(result) {
-                    if(result.result && result.result !== 'false') {
-                        if(result.pick == 'home') {
-                            $('#predictedUserPredictResult').html('홈팀 승!');
-                        } else if(result.pick == 'away') {
-                            $('#predictedUserPredictResult').html('어웨이팀 승!');
-                        } else if(result.pick == 'draw') {
-                            $('#predictedUserPredictResult').html('무승부');
-                        } else {
-                            $('#predictedUserPredictResult').html('-');
-                        }
-                        $('#viewBtnDiv').hide();
-                        $('#isShownDiv').show();
-                        $('#predictedUserPredictBox').fadeIn(2000);
-                        UPDATE_POINT();
-                    } else {
-                        notice.show('alert', '조회에 실패했습니다.');
-                    }
-                } else {
-                    notice.show('alert', '조회에 실패했습니다.');
-                }
+                console.log(result);
+                // if(result) {
+                //     if(result.result && result.result !== 'false') {
+                //         if(result.pick == 'home') {
+                //             $('#predictedUserPredictResult').html('홈팀 승!');
+                //         } else if(result.pick == 'away') {
+                //             $('#predictedUserPredictResult').html('어웨이팀 승!');
+                //         } else if(result.pick == 'draw') {
+                //             $('#predictedUserPredictResult').html('무승부');
+                //         } else {
+                //             $('#predictedUserPredictResult').html('-');
+                //         }
+                //         $('#viewBtnDiv').hide();
+                //         $('#isShownDiv').show();
+                //         $('#predictedUserPredictBox').fadeIn(2000);
+                //         UPDATE_POINT();
+                //     } else {
+                //         notice.show('alert', '조회에 실패했습니다.');
+                //     }
+                // } else {
+                //     notice.show('alert', '조회에 실패했습니다.');
+                // }
             });
         });
 

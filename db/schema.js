@@ -110,7 +110,8 @@ var matchSchema = new Schema({
         'draw': {'type': Number, 'default': 0},
         'away': {'type': Number, 'default': 0}
     },
-    'roomOpen': {'type': Boolean, 'default': false}
+    'roomOpen': {'type': Boolean, 'default': false},
+    'systemViewList': Array
 });
 
 var predictionSchema = new Schema({
@@ -127,8 +128,7 @@ var predictionSchema = new Schema({
     'beforeRating': Number,
     'afterRating': Number,
     'viewList': Array,
-    'ratingCalculatedTime': Date,
-    'checkNotice': {type: Boolean, default: false}
+    'ratingCalculatedTime': Date
 });
 
 var boardSchema = new Schema({

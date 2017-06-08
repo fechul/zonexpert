@@ -303,10 +303,10 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 							if(user.record) {
 								if(user.record[type]) {
 									rank_table_html += '<td class="table_label_record">' + (user.record[type].hit || 0) + ' / ' + (user.record[type].fail || 0) + '</td>';
-									if(!user.record[type].fail) {
-										rank_table_html += '<td class="table_label_hitrate">-</td>';
-									} else {
+									if(user.record[type].hit + user.record[type].fail > 0) {
 										rank_table_html += '<td class="table_label_hitrate">' + ((user.record[type].hit/(user.record[type].hit + user.record[type].fail))*100).toFixed(2) + '%</td>';
+									} else {
+										rank_table_html += '<td class="table_label_hitrate">-</td>';
 									}
 								} else {
 									rank_table_html += '<td class="table_label_record">0 / 0</td>';
