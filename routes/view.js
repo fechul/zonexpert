@@ -536,6 +536,9 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 		json.mydata_display = 'display:none;';
 	}
 
+	json.predictionSystemPick = '';
+	json.predictionSystemDetail = JSON.stringify([]);
+
 	schedule.getMatch({
 		'matchId': matchId
 	}, function(matchData) {
@@ -626,7 +629,22 @@ router.get('/match/:matchId', readPredictionShortcutHTML, readFeedbackHTML, chec
 											json.predict_in_chat_condition = '';
 										}
 
-							        	res.render(path, json);
+										if (matchData.systemViewList.indexOf(req.session.email) > -1) {
+											user.getPredictSystemData({
+												'matchId': matchData.id,
+												'leagueId': matchData.leagueId,
+												'sportsId': matchData.sportsId
+											}, function(systemData) {
+												if (systemData.result) {
+													json.predictionSystemPick = systemData.pick;
+													json.predictionSystemDetail = JSON.stringify(systemData.detail);
+												}
+
+								        		res.render(path, json);
+											});
+										} else {
+							        		res.render(path, json);
+										}
 									});
 								});
 					        });
@@ -843,6 +861,9 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 					async_cb();
 				} else if(log.classification == 'use') {
 					getNickname(log.target, function(targetNick) {
+						if (targetNick == null) {
+							targetNick = '-';
+						}
 						schedule.getTeamsInfo({
 							'matchId': log.matchId
 						}, function(teamsInfo) {
@@ -850,7 +871,7 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 							json.useHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
 							json.useHtml += '<td>' + (log.useClassification == 'view' ? '사용자 조회' : '예측시스템 조회') + '</td>';
 							json.useHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
-							json.useHtml += '<td>' + targetNick + '</td>';
+							json.useHtml += '<td>' + targetNick || '-' + '</td>';
 							json.useHtml += '<td><span style="color:#e60b0b;">-' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
 							json.useHtml += '</tr>';
 							json.useCnt++;
@@ -860,6 +881,9 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 					});
 				} else if(log.classification == 'earn') {
 					getNickname(log.target, function(targetNick) {
+						if (targetNick == null) {
+							targetNick = '-';
+						}
 						schedule.getTeamsInfo({
 							'matchId': log.matchId
 						}, function(teamsInfo) {
@@ -877,7 +901,7 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 				} else {
 					async_cb();
 				}
-				
+
 			}, function(async_err) {
 				if(json.useHtml.length) {
 					json.useShow = 'display:none;';
