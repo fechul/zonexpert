@@ -105,11 +105,9 @@ var CHAT = {
                 var costPoint = parseInt($('.viewCostPoint').html(), 10);
                 if (user.point >= costPoint) {
                     var target = $('.eachPredictedUser.active').attr('target');
-                    var pointType = $this.attr('pointType');
 
                     $.post('/prediction/viewOthers', {
                         matchId: self.room,
-                        pointType: pointType,
                         targetNickname: target
                     }, function(result) {
                         if(result) {
