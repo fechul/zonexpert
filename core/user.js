@@ -297,6 +297,21 @@ exports.get_email = function(user, callback) {
     });
 };
 
+exports.get_nickname = function(email, callback) {
+    db.user.find({
+        'email': email
+    }, {
+        'nickname': 1
+    }, function(err, data) {
+        if(data && data.length) {
+            data = data[0];
+            callback(data.nickname);
+        } else {
+            callback(null);
+        }
+    });
+};
+
 exports.get = function(nick, callback) {
     db.user.find({
         '$or': [
