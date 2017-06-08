@@ -98,7 +98,7 @@ var SCHEDULE = {
 			localStorage.setItem('zeslaSI', sportsId);
 		});
 
-		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed) td.schedule_basket', function() {
+		$('#schedule_table').on('click', '.schedule_table_row:not(.finished):not(.success):not(.failed):not(.confirmed):not(.notyet) td.schedule_basket', function() {
 			var row = $(this).closest('tr.schedule_table_row');
 			var toggle = row.hasClass('basketed');
 
@@ -112,20 +112,30 @@ var SCHEDULE = {
 				'dataType': 'json',
 				'success': function(result) {
 					if (result) {
-						if (row.hasClass('basketed')) {
-							row.removeClass('basketed');
-						} else {
-							row.addClass('basketed');
-						}
+						if(result.result) {
+							if (row.hasClass('basketed')) {
+								row.removeClass('basketed');
+							} else {
+								row.addClass('basketed');
+							}
 
-						row.data('toggle', !toggle);
-						PREDICTION_SHORTCUT.setData();
-						$('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
-																		.animate({right: '-=6px'}, 40)
-																		.animate({right: '+=6px'}, 40)
-																		.animate({right: '-=6px'}, 40)
-																		.animate({right: '+=6px'}, 40)
-																		.animate({right: '-=3px'}, 40);
+							row.data('toggle', !toggle);
+							PREDICTION_SHORTCUT.setData();
+							$('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
+																			.animate({right: '-=6px'}, 40)
+																			.animate({right: '+=6px'}, 40)
+																			.animate({right: '-=6px'}, 40)
+																			.animate({right: '+=6px'}, 40)
+																			.animate({right: '-=3px'}, 40);
+						} else {
+							if(result.err_code == 1) {
+								notice.show('alert', '지난 경기는 예측할 수 없습니다.');
+							} else if(result.err_code == 2) {
+								notice.show('alert', '경기 시작 5일 이내의 경기만 예측할 수 있습니다.');
+							} else {
+								notice.show('alert', '실패했습니다. 잠시 후 다시 시도해주세요.');
+							}
+						}
 					} else {
 						notice.show('alert', '로그인 해주세요');
 					}
@@ -138,6 +148,9 @@ var SCHEDULE = {
 			var status = $(this).parent('tr').data('status');
 			if(status == 'FINISHED' || status == 'POSTPONED' || status == 'POSTPONED_RAIN') {
 				notice.show('alert', '진행중이거나 예정된 경기만 들어갈 수 있습니다.');
+				return false;
+			} else if(status == 'NOT_YET') {
+				notice.show('alert', '경기 시작 5일 이내의 경기만 들어갈 수 있습니다.');
 				return false;
 			} else {
 				location.href = '/match/' + $(this).closest('.schedule_table_row').data('matchId');
@@ -205,11 +218,14 @@ var SCHEDULE = {
 		var self = this;
 		leagueId = leagueId || $('.league_btn.active').eq(0).attr('key');
 		var currentDate = new Date();
+		var currentYear = currentDate.getFullYear();
 		var currentMonth = currentDate.getMonth() + 1;
 		var currentDay = currentDate.getDate();
 		var monthList = [];
 		var todayCount = 0;
 		var prevDay = 0;
+		var fiveDaysLater = currentYear + '-' + currentMonth + '-' + (currentDay+5);
+        fiveDaysLater = new Date(fiveDaysLater);
 
 		var isInteger = function(num) {
 			return (num ^ 0) === num;
@@ -234,11 +250,16 @@ var SCHEDULE = {
 					var match = matches[i];
 					var finished = '';
 					var resultFlag = '';
+					var isFiveDaysLater = '';
 
 					var matchDate = new Date(match.date);
 					var matchYear = matchDate.getFullYear();
 					var matchMonth = matchDate.getMonth() + 1;
 					var matchDay = matchDate.getDate();
+
+					if(matchDate >= fiveDaysLater) {
+						isFiveDaysLater = 'notyet';
+					}
 
 					if (monthList.indexOf(matchMonth) == -1) {
 						monthList.push(matchMonth);
@@ -296,7 +317,7 @@ var SCHEDULE = {
 					}
 
 					var row_data = [
-						'<tr matchId="', match.id ,'" class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, ' ', changeDay, '" month="', matchMonth, '">',
+						'<tr matchId="', match.id ,'" class="schedule_table_row ', finished, ' ', resultFlag, ' ', today, ' ', changeDay, ' ', isFiveDaysLater, '" month="', matchMonth, '">',
 							'<td class="schedule_date">', self.getDateString(match.date), '</td>'
 					].join('');
 
@@ -330,6 +351,10 @@ var SCHEDULE = {
 					].join('');
 
 					$('#schedule_table').append(row_data);
+
+					if(isFiveDaysLater == 'notyet') {
+						match.status = 'NOT_YET';
+					}
 
 					$('#schedule_table .schedule_table_row').last().data('matchId', match.id);
 					$('#schedule_table .schedule_table_row').last().data('leagueId', match.leagueId);

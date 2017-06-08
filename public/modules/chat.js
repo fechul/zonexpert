@@ -167,21 +167,31 @@ var CHAT = {
                 'dataType': 'json',
                 'success': function(result) {
                     if (result) {
-                        if ($this.hasClass('basketed')) {
-                            $this.removeClass('basketed');
-                        } else {
-                            $this.addClass('basketed');
-                        }
+                        if(result.result) {
+                            if ($this.hasClass('basketed')) {
+                                $this.removeClass('basketed');
+                            } else {
+                                $this.addClass('basketed');
+                            }
 
-                        PREDICTION_SHORTCUT.setData();
-                        $('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
-                                                                        .animate({right: '-=6px'}, 40)
-                                                                        .animate({right: '+=6px'}, 40)
-                                                                        .animate({right: '-=6px'}, 40)
-                                                                        .animate({right: '+=6px'}, 40)
-                                                                        .animate({right: '-=3px'}, 40);
+                            PREDICTION_SHORTCUT.setData();
+                            $('.prediction_shortcut_button_container').eq(0).animate({right: '+=3px'}, 40)
+                                                                            .animate({right: '-=6px'}, 40)
+                                                                            .animate({right: '+=6px'}, 40)
+                                                                            .animate({right: '-=6px'}, 40)
+                                                                            .animate({right: '+=6px'}, 40)
+                                                                            .animate({right: '-=3px'}, 40);
+                        } else {
+                            if(result.err_code == 1) {
+                                notice.show('alert', '지난 경기는 예측할 수 없습니다.');
+                            } else if(result.err_code == 2) {
+                                notice.show('alert', '경기 시작 5일 이내의 경기만 예측할 수 있습니다.');
+                            } else {
+                                notice.show('alert', '실패했습니다. 잠시 후 다시 시도해주세요.');
+                            }
+                        }
                     } else {
-                        console.log('err');
+                        notice.show('alert', '실패했습니다. 잠시 후 다시 시도해주세요.');
                     }
 
                 }
@@ -232,6 +242,10 @@ var CHAT = {
                 $('#chatMatchStatus').html('<span class="status_live">LIVE</span>');
             } else if (matchData.status == 'FINISHED') {
                 $('#chatMatchStatus').html('종료');
+            } else if(matchData.status == 'POSTPONED_RAIN') {
+                $('#chatMatchStatus').html('우천취소');
+            } else if(matchData.status == 'POSTPONED') {
+                $('#chatMatchStatus').html('연기');
             }
         });
     },

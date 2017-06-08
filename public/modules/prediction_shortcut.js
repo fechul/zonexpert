@@ -46,15 +46,23 @@ var PREDICTION_SHORTCUT = {
             $.post('/prediction', {
                 'predictions': stringifyedPredictions
             }, function(prediction) {
-                self.setData();
+            	if(prediction && prediction.result) {
+            		self.setData();
 
-                if (typeof SCHEDULE !== 'undefined') {
-                    SCHEDULE.get_schedule();
-                }
+	                if (typeof SCHEDULE !== 'undefined') {
+	                    SCHEDULE.get_schedule();
+	                }
 
-                if (typeof CHAT !== 'undefined') {
-                    CHAT.setPredictButtonCondition(prediction, predictions);
-                }
+	                if (typeof CHAT !== 'undefined') {
+	                    CHAT.setPredictButtonCondition(prediction, predictions);
+	                }
+            	} else {
+            		if(prediction.err_code == 10) {
+            			notice.show('alert', '한 번에 최대 10경기를 예측을 할 수 있습니다.');
+            		} else {
+            			notice.show('alert', '예측을 완료하지 못했습니다. 잠시 후 다시 시도해주세요.');
+            		}
+            	}
             });
         });
 

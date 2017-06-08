@@ -111,6 +111,9 @@ var getLeagueName = function(code) {
 		case 'kbo2017':
 			return 'KBO';
 			break;
+		case 'k-league':
+			return 'K리그';
+			break;
 		default:
 			return '-';
 			break;

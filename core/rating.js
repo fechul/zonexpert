@@ -129,7 +129,13 @@ var rating = {
                             };
                         }
 
-                        if (user.pick == matchResult) {
+                        if(matchData.status == 'POSTPONED' || matchData.status == 'POSTPONED_RAIN') {
+                            user.ratingChange = defaultIncreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
+                            user.result = 'true';
+                            user.record.total.hit++;
+                            user.record[sportsId].total.hit++;
+                            user.record[sportsId][matchData.leagueId].hit++;
+                        } else if (user.pick == matchResult) {
                             //픽률이 높을수록 ++, 픽률이 낮을수록 --
                             user.ratingChange = defaultIncreaseValue + self.getCompByPickRate(pickRate[user.pick]) + self.getCompByUserRating(user.beforeRating, ratingAvg);
                             user.result = 'true';
