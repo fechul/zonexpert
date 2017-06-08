@@ -122,14 +122,13 @@
 						</div>
 						<div class="mypage_menu_div">
 							<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
-								<li><i class="fa fa-caret-right"></i> 구매건수 : 0</li>
-
-								<li><i class="fa fa-caret-right"></i> 구매완료 : 0</li>
-								<li><i class="fa fa-caret-right"></i> 구매금액 : 0</li>
+								<li><i class="fa fa-caret-right"></i> 구매건수 : <%= useCnt %></li>
+								<!-- <li><i class="fa fa-caret-right"></i> 구매완료 : 0</li> -->
+								<li><i class="fa fa-caret-right"></i> 총 구매금액 : <%= useAmount %></li>
 							</ul>
 						</div>
 						<div style="text-align:center;">
-							<button type="button" class="article_btn" onclick="location.href='/buylist'">구매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" data-type="use">구매 내역 자세히 보기</button></div>
 					</article>
 
 					<article class="mypage_article">
@@ -139,12 +138,12 @@
 							<i class="fa fa-graduation-cap mypage_img"></i></div>
 						<div class="mypage-menu-div">
 							<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
-								<li><i class="fa fa-caret-right"></i> 판매건수 : 0</li>
-								<li><i class="fa fa-caret-right"></i> 판매완료 : 0</li>
-								<li><i class="fa fa-caret-right"></i> 판매금액 : 0</li>
+								<li><i class="fa fa-caret-right"></i> 판매건수 : <%= earnCnt %></li>
+								<!-- <li><i class="fa fa-caret-right"></i> 판매완료 : 0</li> -->
+								<li><i class="fa fa-caret-right"></i> 총 판매금액 : <%= earnAmount %></li>
 							</ul></div>
 						<div style="text-align:center;">
-							<button type="button" class="article_btn" onclick="location.href='/sell_list'">판매 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" data-type="earn">판매 내역 자세히 보기</button></div>
 					</article>
 
 					<article class="mypage_article">
@@ -154,29 +153,90 @@
 							<i class="fa fa-database mypage_img"></i></div>
 						<div class="mypage-menu-div">
 							<ul class="mypage-menu-ul" style="list-style:none;padding-left:0;">
-								<li><i class="fa fa-caret-right"></i> 보유포인트 : <%= myCurrentPoint %></li>
+								<li><i class="fa fa-caret-right"></i> 총 보유포인트 : <%= myCurrentPoint %></li>
+								<li><i class="fa fa-caret-right"></i> 무료포인트 : <%= myFreePoint %></li>
+								<li><i class="fa fa-caret-right"></i> 충전포인트 : <%= myChargePoint %></li>
 							</ul></div>
-						<div style="text-align:center;padding-bottom:10px;">
-							<button type="button" class="article_btn" onclick="location.href='/sell_list'">포인트 충전하기</button></div>
 						<div style="text-align:center;">
-							<button type="button" class="article_btn" onclick="location.href='/sell_list'">충전 내역 자세히 보기</button></div>
+							<button type="button" class="article_btn" data-type="charge">충전 내역 자세히 보기</button></div>
 					</article>
 
 					<article class="mypage_article">
 						<div style="text-align:center;">
-							<span class="mypage-ti-fo">정산/수익관리</span></div>
+							<span class="mypage-ti-fo">출금관리</span></div>
 						<div style="text-align:center;"><i class="fa fa-krw mypage_img"></i></div>
 						<div class="mypage-menu-div">
 							<ul class="mypage-menu-ul" style="list-style:none; padding-left:0;">
-								<li><i class="fa fa-caret-right"></i> 판매 수수료율 :0</li>
-								<li><i class="fa fa-caret-right"></i> 판매수익 : 0</li>
-								<li><i class="fa fa-caret-right"></i> 정산중 : 0</li>
-								<li><i class="fa fa-caret-right"></i> 출금 가능 : 0</li>
+								<li><i class="fa fa-caret-right"></i> 출금가능 : <%= myChargePoint %></li>
+								<li><i class="fa fa-caret-right"></i> 출금건수 : 0</li>
+								<li><i class="fa fa-caret-right"></i> 총 출금금액 : 0</li>
 							</ul>
 						</div>
 						<div style="text-align:center;">
-							<button type="button" class="article_btn" onclick="location.href='/index.php?act=dispCommunicationMessages&amp;mid=mypage'">정산/수익관리 자세히 보기</button></div>
+							<button type="button" class="article_btn" data-type="withdraw">출금 내역 자세히 보기</button></div>
 					</article>
+					<button class="btn btn-primary" onclick="location.href='/buy'" id="buyPoint"><i class="fa fa-database" style="margin-right: 8px;"></i>포인트 충전 바로가기</button>
+
+					<div class="use_table_section">
+						<h4 style="margin-top:35px; margin-bottom:15px;">구매내역</h4>
+						<table id="use_table">
+							<tr>
+								<td>날짜</td>
+								<td>종류</td>
+								<td>경기</td>
+								<td>판매자</td>
+								<td>포인트</td>
+							</tr>
+							<tr style="<%= useShow %>">
+								<td colspan="5">사용 내역이 없습니다.</td>
+							</tr>
+							<%- useHtml %>
+						</table>
+					</div>
+
+					<div class="earn_table_section">
+						<h4 style="margin-top:35px; margin-bottom:15px;">판매내역</h4>
+						<table id="earn_table">
+							<tr>
+								<td>날짜</td>
+								<td>경기</td>
+								<td>구매자</td>
+								<td>포인트</td>
+							</tr>
+							<tr style="<%= earnShow %>">
+								<td colspan="4">판매 내역이 없습니다.</td>
+							</tr>
+							<%- earnHtml %>
+						</table>
+					</div>
+
+					<div class="charge_table_section">
+						<h4 style="margin-top:35px; margin-bottom:15px;">충전내역</h4>
+						<table id="charge_table">
+							<tr>
+								<td>날짜</td>
+								<td>포인트 종류</td>
+								<td>포인트</td>
+							</tr>
+							<tr style="<%= chargeShow %>">
+								<td colspan="3">충전 내역이 없습니다.</td>
+							</tr>
+							<%- chargeHtml %>
+						</table>
+					</div>
+
+					<div class="withdraw_table_section">
+						<h4 style="margin-top:35px; margin-bottom:15px;">출금내역</h4>
+						<table id="withdraw_table">
+							<tr>
+								<td>날짜</td>
+								<td>포인트</td>
+							</tr>
+							<tr>
+								<td colspan="2">출금 내역이 없습니다.</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</section>
 		</section>

@@ -268,6 +268,28 @@ var CHAT = {
                 }
             });
         });
+
+        $(document).on('click', '.chat_nickname', function() {
+            $('.popover').removeClass('currentPop');
+            $(this).next('.popover').addClass('currentPop');
+            $('.popover:not(.currentPop)').popover('hide');
+        });
+
+        $(document).on('click', '.goToDetail', function() {
+            var target = $(this).attr('data-nick');
+            
+            window.open('/search?id=' + target);
+        });
+
+        $('body').on('click', function(e) {
+            if(!$($(e.target)[0].parentElement).hasClass('chat_nickname') && !$($(e.target)[0].parentElement).hasClass('goToDetail')) {
+                $('.popover').popover('hide');
+            }
+        });
+
+        $('body').on('hidden.bs.popover', function (e) {
+            $(e.target).data("bs.popover").inState.click = false;
+        });
     },
 
     connect_socket: function() {
@@ -299,7 +321,13 @@ var CHAT = {
 
             $('.member-list').append('<li>' + '접속자 수 : ' + data.length + '명' + '</li>');
             for (var i = 0; i < data.length; i++) {
-                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div><span class="chat_nickname"><nobr>' + data[i].name + '</nobr></span></li>');
+                var detailBtn = '<button class="btn btn-primary btn-xs">상세 보기</button>';
+                $('.member-list').append('<li><div class="badge_' + data[i].badge + '"></div><span" class="chat_nickname"><nobr>' + data[i].name + '</nobr></span></li>');
+                $('.chat_nickname').popover({
+                    placement: 'top',
+                    html: 'true',
+                    content : '<button class="btn btn-primary btn-xs goToDetail" data-nick="' + data[i].name + '"><i class="fa fa-search" style="margin-right:3px;"></i>상세보기</button>'
+                });
             }
         });
 

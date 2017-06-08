@@ -156,42 +156,24 @@
     display: inline-block;
 }
 
-/* device */
-@media all and (min-device-width: 301px) and (max-device-width: 768px){
-    .mypage_info{
-        width: 96%;
-    }
-    .mypage_info1{
-        width: 80%;
-    }
-    .changeinfo{
-        width: 96%;
-    }
-    .myPointsManagementField {
-        width: 96%;
-    }
-    .changeinfo_btns > button{
-        width: 80%;
-    }
-    .form-group{
-        width: 100%;
-    }
-    .changinfo_input_field .form-group > div{
-        width: 90%;
-    }
-    .mypage_article{
-        width: 45%;
-        margin: 0px;
-    }
-    .fa-img{
-        list-style:none;
-        padding-left:0;
-    }
+#buyPoint {
+    width: 100%;
+}
 
-    #leaveReason,
-    #leavePassword {
-        width: 100%;
-    }
+.use_table_section,
+.earn_table_section,
+.charge_table_section,
+.withdraw_table_section {
+    display: none;
+}
+
+.listMatch > img {
+    width: 30px;
+    margin-right: 5px;
+}
+
+.versus {
+    margin: 0px 20px;
 }
 
 /* device */
@@ -225,6 +207,21 @@
     #leaveReason,
     #leavePassword {
         width: 100%;
+    }
+
+    #use_table tr,
+    #earn_table tr,
+    #charge_table tr,
+    #withdraw_table tr {
+        font-size: 11px !important;
+    }
+
+    .listMatch > img {
+        display: none;
+    }
+
+    .versus {
+        margin: 0px 10px;
     }
 }
 
@@ -289,6 +286,25 @@
     #leaveReason,
     #leavePassword {
         width: 100%;
+    }
+
+    #use_table tr,
+    #earn_table tr,
+    #charge_table tr,
+    #withdraw_table tr {
+        font-size: 10px !important;
+    }
+
+    .listMatch > img {
+        display: none;
+    }
+
+    .versus {
+        margin: 0px 5px;
+    }
+
+    .myPointsManagementField {
+        padding: 0px;
     }
 
     /*.article_btn{*/
