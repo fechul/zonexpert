@@ -757,20 +757,13 @@ exports.getPredictSystemData = function(params, callback) {
                         }
                     }
 
-                    var lack = false;
-                    var usersLength = users.length;
-
-                    if (usersLength < 100) {
-                        lack = true;
-                    }
-
                     var pickCounts = {
                         'home': 0,
                         'draw': 0,
                         'away': 0
                     };
 
-                    for (var j = 0; j < usersLength; j++) {
+                    for (var j = 0; j < users.length; j++) {
                         pickCounts[predictionObj[users[j].email].pick] += users[j].sportsHitRate;
                         pickCounts[predictionObj[users[j].email].pick] += users[j].leagueHitRate;
                     }
@@ -804,16 +797,15 @@ exports.getPredictSystemData = function(params, callback) {
                     var sumPickRate = pickCounts.home + pickCounts.draw + pickCounts.away;
 
                     var detailWinRate = {
-                        'home':pickCounts.home / sumPickRate,
-                        'draw':pickCounts.draw / sumPickRate,
-                        'away':pickCounts.away / sumPickRate
+                        'home': 100 * pickCounts.home / sumPickRate,
+                        'draw': 100 * pickCounts.draw / sumPickRate,
+                        'away': 100 * pickCounts.away / sumPickRate
                     };
 
                     callback({
                         'result': true,
                         'pick': predictionSystemPick,
-                        'detail': detailWinRate,
-                        'lack': lack
+                        'detail': detailWinRate
                     });
                 } else {
                     callback({

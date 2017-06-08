@@ -809,3 +809,12 @@ exports.getProceedingPredict = function(options, callback) {
         }
     });
 };
+
+exports.getThisMatchPredictionCount = function(params, callback) {
+    db.prediction.find({
+        'matchId': params.matchId,
+        'confirmed': true
+    }).exec(function(err, data) {
+        callback(data.length);
+    });
+};

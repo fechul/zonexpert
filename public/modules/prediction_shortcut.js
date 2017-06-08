@@ -9,7 +9,15 @@ var PREDICTION_SHORTCUT = {
         $('.prediction_shortcut_button').click(function() {
             $('.prediction_shortcut_button_container').hide();
 
-			var type = $('.prediction_shortcut_title.active').hasClass('unconfirmed') ? 'unconfirmed': 'confirmed';
+			var type = '';
+
+			if ($('.prediction_shortcut_title.active').hasClass('unconfirmed')) {
+				type = 'unconfirmed';
+			} else if ($('.prediction_shortcut_title.active').hasClass('confirmed')) {
+				type = 'confirmed';
+			} else {
+				type = 'result';
+			}
 
 			if ($('.prediction_shortcut_list.' + type + ' tr').length) {
 				$('.prediction_shortcut_list_header').css('visibility', 'visible');
@@ -250,7 +258,7 @@ var PREDICTION_SHORTCUT = {
 					'<tr class="prediction_shortcut_table_row result_detail">',
 						'<td style="display: none;"></td>',
 						'<td value="home">', data[i].result.goalsHomeTeam, '</td>',
-						'<td value="draw">VS</td>',
+						'<td value="draw">:</td>',
 						'<td value="away">', data[i].result.goalsAwayTeam, '</td>',
 						// '<td>',
 						//     '<label>홈승', '<input type="radio" class="prediction_shortcut_pick" name="prediction_shortcut_pick_', i, '"value="home"></label>',
