@@ -244,6 +244,7 @@ var SCHEDULE = {
 				'leagueId': leagueId
 			}, function(matches) {
 				$('#schedule_table').empty();
+				$('#schedule_table').append('<tr><td></td><td>홈팀</td><td></td><td></td><td></td><td>어웨이팀</td><td></td></tr>');
 				$('#schedule_month_select').empty();
 
 				for (var i in matches) {
