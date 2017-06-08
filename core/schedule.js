@@ -60,7 +60,28 @@ exports.updateMatches = function(data, callback) {
                             }, function(result) {
                                 async_cb();
                             });
-                            // async_cb();
+                        } else if((currentStatus != 'POSTPONED_RAIN') && (newStatus == 'POSTPONED_RAIN')) {
+                            chat.sendMsgToRoom(matchData.id, {
+                                'status': 'POSTPONED_RAIN',
+                                'result': match.result
+                            });
+                            
+                            rating.addQueue({
+                                'matchId': matchData.id
+                            }, function(result) {
+                                async_cb();
+                            });
+                        } else if((currentStatus != 'POSTPONED') && (newStatus == 'POSTPONED')) {
+                            chat.sendMsgToRoom(matchData.id, {
+                                'status': 'POSTPONED',
+                                'result': match.result
+                            });
+                            
+                            rating.addQueue({
+                                'matchId': matchData.id
+                            }, function(result) {
+                                async_cb();
+                            });
                         } else {
                             async_cb();
                         }
@@ -141,6 +162,28 @@ exports.updateMatches = function(data, callback) {
                                 'result': match.result
                             });
 
+                            rating.addQueue({
+                                'matchId': matchData.id
+                            }, function(result) {
+                                async_cb();
+                            });
+                        } else if((currentStatus != 'POSTPONED_RAIN') && (newStatus == 'POSTPONED_RAIN')) {
+                            chat.sendMsgToRoom(matchData.id, {
+                                'status': 'POSTPONED_RAIN',
+                                'result': match.result
+                            });
+                            
+                            rating.addQueue({
+                                'matchId': matchData.id
+                            }, function(result) {
+                                async_cb();
+                            });
+                        } else if((currentStatus != 'POSTPONED') && (newStatus == 'POSTPONED')) {
+                            chat.sendMsgToRoom(matchData.id, {
+                                'status': 'POSTPONED',
+                                'result': match.result
+                            });
+                            
                             rating.addQueue({
                                 'matchId': matchData.id
                             }, function(result) {

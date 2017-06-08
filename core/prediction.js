@@ -10,7 +10,21 @@ exports.add = function(data, callback) {
         if (matchData.length) {
             matchData = matchData[0];
 
-            if (new Date(matchData.date) > currentDate) {
+            var matchDate = new Date(matchData.date);
+            var fiveDaysLater = currentDate.getFullYear() + '-' + (currentDate.getMonth()+1) + '-' + (currentDate.getDate()+5);
+            fiveDaysLater = new Date(fiveDaysLater);
+
+            if(currentDate >= matchDate) {
+                callback({
+                    result: false,
+                    err_code: 1
+                });
+            } else if(matchDate >= fiveDaysLater) {
+                callback({
+                    result: false,
+                    err_code: 2
+                });
+            } else {
                 db.prediction.find({
                     'userEmail': data.userEmail,
                     'matchId': data.matchId
@@ -27,14 +41,18 @@ exports.add = function(data, callback) {
                         });
 
                         newPrediction.save(function(save_err) {
-                            callback(save_err ? false : true);
+                            if(save_err) {
+                                callback(false);
+                            } else {
+                                callback({
+                                    'result': true
+                                });
+                            }
                         });
                     } else {
                         callback(false);
                     }
                 });
-            } else {
-                callback(false);
             }
         } else {
             callback(false);
@@ -48,86 +66,108 @@ exports.del = function(data, callback) {
         'matchId': data.matchId,
         'confirmed': false
     }).exec(function(err) {
-        callback(err ? false : true);
+        if(err) {
+            callback(false);
+        } else {
+            callback({
+                result: true
+            });
+        }
     });
 };
 
 exports.confirm = function(data, callback) {
     var userEmail = data.userEmail;
 
-    async.each(data.predictions, function(prediction, async_callback) {
-        db.match.find({
-            'id': prediction.matchId
-        })
-        .limit(1)
-        .exec(function(err, matchData) {
-            if (matchData.length == 1) {
-                matchData = matchData[0];
-                var pickCount = matchData.pickCount;
-                if (!pickCount) {
-                    pickCount = {
-                        'home': 0,
-                        'draw': 0,
-                        'away': 0
-                    };
-                }
-
-                db.prediction.find({
-                    'userEmail': userEmail,
-                    'matchId': matchData.id
+    db.prediction.count({
+        'userEmail': userEmail,
+        'confirmed': true,
+        'result': 'wait'
+    }, function(predictLengthErr, predictLength) {
+        var totalPredictLength = data.predictions.length + predictLength;
+        if(totalPredictLength && totalPredictLength > 10) {
+            callback({
+                'result': false,
+                'err_code': 10
+            });
+        } else {
+            async.each(data.predictions, function(prediction, async_callback) {
+                db.match.find({
+                    'id': prediction.matchId
                 })
                 .limit(1)
-                .exec(function(_err, predictionData) {
-                    if (predictionData.length) {
-                        predictionData = predictionData[0];
-                        if (predictionData.confirmed == true) {
-                            // 이미 예측 한 데이터
-                            async_callback();
-                        } else if ((matchData.status == 'IN_PLAY') || (matchData.status == 'FINISHED')) {
-                            // 이미 시작한 경기
-                            db.prediction.remove({
-                                'userEmail': userEmail,
-                                'matchId': matchData.matchId
-                            }, function(result) {
-                                async_callback();
-                            });
-                        } else {
-                            // 업데이트 가능
-                            db.prediction.update({
-                                'userEmail': userEmail,
-                                'matchId': matchData.id
-                            }, {
-                                '$set': {
-                                    'confirmed': true,
-                                    'confirmedTime': new Date(),
-                                    'pick': prediction.pick,
-                                    'result': 'wait'
-                                }
-                            }).exec(function(err) {
-                                pickCount[prediction.pick]++;
-                                db.match.update({
-                                    'id': prediction.matchId
-                                }, {
-                                    '$set': {
-                                        'pickCount': pickCount
-                                    }
-                                }).exec(function() {
-                                    async_callback();
-                                });
-                            });
+                .exec(function(err, matchData) {
+                    if (matchData.length == 1) {
+                        matchData = matchData[0];
+                        var pickCount = matchData.pickCount;
+                        if (!pickCount) {
+                            pickCount = {
+                                'home': 0,
+                                'draw': 0,
+                                'away': 0
+                            };
                         }
+
+                        db.prediction.find({
+                            'userEmail': userEmail,
+                            'matchId': matchData.id
+                        })
+                        .limit(1)
+                        .exec(function(_err, predictionData) {
+                            if (predictionData.length) {
+                                predictionData = predictionData[0];
+                                if (predictionData.confirmed == true) {
+                                    // 이미 예측 한 데이터
+                                    async_callback();
+                                } else if ((matchData.status == 'IN_PLAY') || (matchData.status == 'FINISHED')) {
+                                    // 이미 시작한 경기
+                                    db.prediction.remove({
+                                        'userEmail': userEmail,
+                                        'matchId': matchData.matchId
+                                    }, function(result) {
+                                        async_callback();
+                                    });
+                                } else {
+                                    // 업데이트 가능
+                                    db.prediction.update({
+                                        'userEmail': userEmail,
+                                        'matchId': matchData.id
+                                    }, {
+                                        '$set': {
+                                            'confirmed': true,
+                                            'confirmedTime': new Date(),
+                                            'pick': prediction.pick,
+                                            'result': 'wait'
+                                        }
+                                    }).exec(function(err) {
+                                        pickCount[prediction.pick]++;
+                                        db.match.update({
+                                            'id': prediction.matchId
+                                        }, {
+                                            '$set': {
+                                                'pickCount': pickCount
+                                            }
+                                        }).exec(function() {
+                                            async_callback();
+                                        });
+                                    });
+                                }
+                            } else {
+                                // 존재하지 않는 장바구니
+                                async_callback();
+                            }
+                        });
                     } else {
-                        // 존재하지 않는 장바구니
+                        // 존재하지 않는 경기
                         async_callback();
                     }
                 });
-            } else {
-                // 존재하지 않는 경기
-                async_callback();
-            }
-        });
-    }, function(err, result) {
-        callback(true);
+            }, function(err, result) {
+                callback({
+                    'result':true
+                });
+            });
+        }
     });
 };
 
@@ -505,7 +545,7 @@ exports.getRecentPredict = function(options, callback) {
                                     'awayTeamImg': (awayData && awayData.length ? awayData[0].crestUrl : ''),
                                     'homeTeamGoals': (matchData.result && !isNaN(matchData.result.goalsHomeTeam) ? matchData.result.goalsHomeTeam : '-'),
                                     'awayTeamGoals': (matchData.result && !isNaN(matchData.result.goalsAwayTeam) ? matchData.result.goalsAwayTeam : '-'),
-                                    'date': predict.createTime,
+                                    'date': predict.ratingCalculatedTime || predict.createTime,
                                     'predictResult': predict.result
                                 });
                                 async_cb();

@@ -115,6 +115,18 @@
 	cursor: pointer;
 }
 
+#schedule_table .schedule_table_row.notyet td:nth-child(7) {
+	background-color: #ccc;
+	color: #888;
+	cursor: not-allowed;
+}
+
+#schedule_table .schedule_table_row.notyet:hover td:nth-child(7) {
+	background-color: #ccc;
+	color: #888;
+	cursor: not-allowed;
+}
+
 #schedule_table .schedule_table_row:hover td:nth-child(7) {
 	background-color: #ffe6bc;
 }
