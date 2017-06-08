@@ -805,12 +805,13 @@ router.get('/getTopTen', function(req, res) {
 			if(data && data.length) {
 				user.get_rank_data(data, function(toptenData) {
 					if(toptenData && toptenData.length) {
-						var rank = 1;
 						async.mapSeries(toptenData, function(eachData, async_cb) {
-							var myTotalRate = ((rank / userCount)*100).toFixed(2);
-							eachData.myTotalRate = myTotalRate;
-							rank++;
-							async_cb();
+							redis_client.zrevrank('rating_rank', eachData.email, function(_err, ratingRank) {
+								ratingRank += 1;
+								var myTotalRate = ((ratingRank / userCount)*100).toFixed(2);
+								eachData.myTotalRate = myTotalRate;
+								async_cb();
+							});
 						}, function(async_err) {
 							if(async_err) {
 								res.json(null);
