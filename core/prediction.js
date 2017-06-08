@@ -509,7 +509,7 @@ exports.getRecentPredict = function(options, callback) {
         'result': {
             $in: ['true', 'false']
         }
-    }).sort({'createTime': -1}).limit(4).exec(function(err, data) {   // sorting하는 time 바꿔야 함
+    }).sort({'ratingCalculatedTime': -1}).limit(4).exec(function(err, data) {
         if(data && data.length) {
             async.mapSeries(data, function(predict, async_cb) {
                 db.match.find({
