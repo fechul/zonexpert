@@ -142,5 +142,22 @@ var MYPAGE = {
 		$('#searchMyData').click(function() {
 			location.href = "/search?id=" + self.myNickName;
 		});
+
+		$('.article_btn').click(function() {
+			var dataType = $(this).attr('data-type');
+
+			$('.use_table_section').hide();
+			$('.earn_table_section').hide();
+			$('.charge_table_section').hide();
+			$('.withdraw_table_section').hide();
+
+			$('.' + dataType + '_table_section').show();
+		});
+	},
+
+	setPointLog: function() {
+		var pointLog = this.pointLog;
+
+
 	}
 };

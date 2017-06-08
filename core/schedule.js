@@ -489,3 +489,37 @@ exports.getScheduledMatches = function(callback) {
         }
     });
 };
+
+exports.getTeamsInfo = function(options, callback) {
+    db.match.find({
+        'id': options.matchId
+    }, {
+        homeTeamId: 1,
+        awayTeamId: 1
+    }).limit(1).exec(function(err, data) {
+        if(data && data.length) {
+            db.team.find({
+                'id': data[0].homeTeamId
+            }, {
+                shortName: 1,
+                crestUrl: 1
+            }).limit(1).exec(function(homeErr, homeData) {
+                db.team.find({
+                    'id': data[0].awayTeamId
+                }, {
+                    shortName: 1,
+                    crestUrl: 1
+                }).limit(1).exec(function(awayErr, awayData) {
+                    callback({
+                        'homeTeamName': homeData[0].shortName,
+                        'homeTeamImg': homeData[0].crestUrl,
+                        'awayTeamName': awayData[0].shortName,
+                        'awayTeamImg': awayData[0].crestUrl
+                    });
+                }); 
+            });
+        } else {
+            callback(null);
+        }
+    });
+};
