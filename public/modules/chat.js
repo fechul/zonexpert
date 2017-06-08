@@ -379,13 +379,14 @@ var CHAT = {
 
                 var leagueHit = 0;
                 var leagueFail = 0;
-                if(data.record) {
-                    if(data.record[leagueId]) {
-                        if(data.record[leagueId].hit) {
-                            leagueHit = data.record[leagueId].hit;
+
+                if(data.record && data.record[sportsId]) {
+                    if(data.record[sportsId][leagueId]) {
+                        if(data.record[sportsId][leagueId].hit) {
+                            leagueHit = data.record[sportsId][leagueId].hit;
                         }
-                        if(data.record[leagueId].fail) {
-                            leagueFail = data.record[leagueId].fail;
+                        if(data.record[sportsId][leagueId].fail) {
+                            leagueFail = data.record[sportsId][leagueId].fail;
                         }
                     }
                 }
