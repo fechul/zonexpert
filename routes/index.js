@@ -671,67 +671,78 @@ router.post('/prediction/viewOthers', function(req, res) {
 
 router.post('/prediction/system', function(req, res) {
 	var matchId = req.body.matchId;
-	var myEmail = req.session.email;
 	var pointType = req.body.pointType;
+	var myEmail = req.session.email;
 
-	// user.usePoint({
-	// 	'email': myEmail,
-	// 	'point': costPoint,
-	// 	'pointType': pointType,
-	// 	'type': 'system',
-	// 	'matchId': matchId
-	// }, function(usePointResult) {
-	// 	if(usePointResult) {
-			// match.pushViewListToMatch({
-			// 	'myEmail': myEmail,
-			// 	'matchId': matchId
-			// }, function(pushResult) {
-			// 	if(pushResult) {
-					schedule.getMatch({
-						'matchId': matchId
-					}, function(matchData) {
-						var wholePickCount = matchData.pickCount;
-						var leagueId = matchData.leagueId;
-						var sportsId = matchData.sportsId;
+	user.usePoint({
+		'email': myEmail,
+		'point': 500,
+		'pointType': pointType,
+		'type': 'system',
+		'matchId': matchId
+	}, function(usePointResult) {
+		console.log('usePointResult : ', usePointResult);
+		if(usePointResult) {
+			schedule.getMatch({
+				'matchId': matchId
+			}, function(matchData) {
+				var leagueId = matchData.leagueId;
+				var sportsId = matchData.sportsId;
 
-						user.getPredictSystemData({
-							'matchId': matchId,
-							'leagueId': leagueId,
-							'sportsId': sportsId
-						}, function(systemData) {
-							if (systemData.result) {
+				user.getPredictSystemData({
+					'matchId': matchId,
+					'leagueId': leagueId,
+					'sportsId': sportsId
+				}, function(systemData) {
+					console.log('systemData.result : ', systemData.result);
+					if (systemData.result) {
+						schedule.pushViewListToMatch({
+							'myEmail': myEmail,
+							'matchId': matchId
+						}, function(pushResult) {
+							console.log('pushResult : ', pushResult);
+							if(pushResult) {
 								res.json({
 									'result': true,
 									'pick': systemData.pick,
 									'detail': systemData.detail
 								});
 							} else {
-								res.json({
-									'result': false
+								user.returnPoint({
+									'email': myEmail,
+									'point': 500,
+									'pointType': pointType,
+									'type': 'system',
+									'matchId': matchId
+								}, function(returnResult) {
+									res.json({
+										'result': false
+									});
 								});
 							}
 						});
-					});
-			// 	} else {
-			// 		user.returnPoint({
-			// 			'email': myEmail,
-			// 			'point': costPoint,
-			// 			'pointType': pointType,
-			// 			'type': 'system',
-			// 			'matchId': matchId
-			// 		}, function(returnResult) {
-			// 			res.json({
-			// 				'result': false
-			// 			});
-			// 		});
-			// 	}
-			// });
-	// 	} else {
-	// 		res.json({
-	// 			'result': false
-	// 		});
-	// 	}
-	// });
+					} else {
+						user.returnPoint({
+							'email': myEmail,
+							'point': 500,
+							'pointType': pointType,
+							'type': 'system',
+							'matchId': matchId
+						}, function(returnResult) {
+							res.json({
+								'result': false,
+								'reason': 'no_user'
+							});
+						});
+					}
+				});
+			});
+		} else {
+			res.json({
+				'result': false
+			});
+		}
+	});
 });
 
 router.get('/prediction/getProceedingPredict', function(req, res) {
@@ -935,7 +946,6 @@ router.all('/test/team_initialize', function(req, res) {
 
 router.post('/ratingUpdate', function(req, res) {
 	var matchId = req.body.matchId;
-	console.log(matchId);
 
 	rating.addQueue({
 		'matchId': matchId

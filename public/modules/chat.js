@@ -7,6 +7,29 @@ var CHAT = {
         this.leagueId = options.leagueId;
         this.email = options.email;
         this.viewTargetNick = options.viewTargetNick || null;
+        this.predictionSystemPick = options.predictionSystemPick;
+        this.predictionSystemDetail = JSON.parse(options.predictionSystemDetail);
+
+        if (this.predictionSystemPick) {
+            $('#predictionSystemBtnContainer').hide();
+            $('#predictedSystemContentsContainer').show();
+
+            if(this.predictionSystemPick == 'home') {
+                $('#predictionSystemPredictResult').html('홈팀 승!');
+            } else if(this.predictionSystemPick == 'away') {
+                $('#predictionSystemPredictResult').html('어웨이팀 승!');
+            } else if(this.predictionSystemPick == 'draw') {
+                $('#predictionSystemPredictResult').html('무승부');
+            } else {
+                $('#predictionSystemPredictResult').html('-');
+            }
+
+            $('.predictionSystemResultDetail[value=home] span').html(this.predictionSystemDetail.home.toFixed(2));;
+            $('.predictionSystemResultDetail[value=draw] span').html(this.predictionSystemDetail.draw.toFixed(2));;
+            $('.predictionSystemResultDetail[value=away] span').html(this.predictionSystemDetail.away.toFixed(2));;
+
+            $('#predictionSystemPredictBox').show();
+        }
 
         notice.init();
 
@@ -212,7 +235,17 @@ var CHAT = {
                     $('#predictionSystemPredictBox').fadeIn(2000);
                     UPDATE_POINT();
                 } else {
-                    notice.show('alert', '조회에 실패했습니다.');
+                    if (response.reason) {
+                        if (response.reason == 'no_user') {
+                            notice.show('alert', '이 경기를 예측한 유저가 없습니다.');
+                        } else if (response.reason == 'no_match'){
+                            notice.show('alert', '존재하지 않는 경기입니다.');
+                        } else {
+                            notice.show('alert', '조회에 실패했습니다.');
+                        }
+                    } else {
+                        notice.show('alert', '조회에 실패했습니다.');
+                    }
                 }
             });
         });
@@ -277,7 +310,7 @@ var CHAT = {
 
         $(document).on('click', '.goToDetail', function() {
             var target = $(this).attr('data-nick');
-            
+
             window.open('/search?id=' + target);
         });
 
@@ -398,8 +431,6 @@ var CHAT = {
             'matchId': matchId,
             'sportsId': sportsId
         }, function(userList) {
-            $('.predictionCountNumber').html(userList.length);
-            $('.predictionCount').show();
             var userNumberReadyCntZero = 0;
             if(userList && userList.length) {
                 var userListHtml = '';
@@ -428,6 +459,8 @@ var CHAT = {
                     userListHtml += '</div>';
                 }
 
+                $('.predictionCountNumber').html(userList.length);
+                $('.predictionCount').show();
                 predictedUserList.append(userListHtml);
                 if(viewTargetNick) {
                     $('.tab_container .goToOtherPredictLi').click();
@@ -439,6 +472,8 @@ var CHAT = {
                     });
                 }
             } else {
+                $('.predictionCountNumber').html(0);
+                $('.predictionCount').show();
                 predictedUserList.append('<p class="noPredictedUser" style="border-bottom:0px;">예측한 사용자가 없습니다.</p>');
             }
 

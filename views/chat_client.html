@@ -35,7 +35,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#goToChat">채팅</a></li>
                     <li><a data-toggle="tab" class="goToOtherPredictLi" href="#goToOtherPredict">다른 사용자 예측 조회</a></li>
-                    <li><a data-toggle="tab" href="#goToPredictionSystem">존문가 예측</a></li>
+                    <li class="predictionSystemTab"><a data-toggle="tab" href="#goToPredictionSystem">존문가 예측</a></li>
                     <li class="predict_in_chat <%- predict_in_chat_condition %>"><a><i class="fa fa-check-square-o"></i></a></li>
                 </ul>
 
@@ -213,7 +213,9 @@
             sportsId: '<%= sportsId %>',
             leagueId: '<%= leagueId %>',
             email: '<%= myEmail %>',
-            viewTargetNick: '<%- viewTargetNick %>'
+            viewTargetNick: '<%- viewTargetNick %>',
+            predictionSystemPick: '<%- predictionSystemPick %>',
+            predictionSystemDetail: '<%- predictionSystemDetail %>'
         });
         PREDICTION_SHORTCUT.init();
     </script>
