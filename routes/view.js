@@ -865,7 +865,7 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 						}, function(teamsInfo) {
 							json.earnHtml += '<tr>';
 							json.earnHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
-							json.useHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
+							json.earnHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
 							json.earnHtml += '<td>' + targetNick + '</td>';
 							json.earnHtml += '<td><span style="color:#2d9e27;">+' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
 							json.earnHtml += '</tr>';
