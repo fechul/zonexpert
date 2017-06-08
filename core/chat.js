@@ -41,10 +41,22 @@ chat.init = function (server) {
                 chat.usernames[socket.room || 'trash'] = [];
             }
 
-            chat.usernames[socket.room || 'trash'].push({
-                name: data.name,
-                badge: data.badge
-            });
+            var alreadyIn = false;
+            if(chat.usernames[socket.room]) {
+                for(var i = 0; i < chat.usernames[socket.room].length; i++) {
+                    if(chat.usernames[socket.room][i].name == data.name) {
+                        alreadyIn = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!alreadyIn) {
+                chat.usernames[socket.room || 'trash'].push({
+                    name: data.name,
+                    badge: data.badge
+                });
+            }
 
             chat.io.sockets.emit('updateusers', chat.usernames[socket.room || 'trash']);
         });
