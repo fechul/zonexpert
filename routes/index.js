@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var async = require('async');
+var nodemailer = require('nodemailer');
 
 var router = express.Router();
 
@@ -1001,17 +1002,46 @@ router.post('/ratingUpdate', function(req, res) {
 });
 
 router.post('/feedback', function(req, res) {
+	var email = req.session.email || 'unknown';
+	var contents = req.body.feedback_contents || '';
+	var url = req.body.url;
+
 	var newFeedBack = new db.feedback({
 		'createTime': new Date,
-		'email': req.session.email || 'unknown',
-		'contents': req.body.feedback_contents || '',
-		'url': req.body.url
+		'email': email,
+		'contents': contents,
+		'url': url
 	});
 
 	newFeedBack.save(function(err) {
 		if (err) {
 			res.json(false);
 		} else {
+			var smtpTransport = nodemailer.createTransport({
+				'service': 'gmail',
+				'auth': {
+					'user': __admin_email,
+					'pass': __admin_password
+				}
+			});
+
+			var mailOptions = {
+				'from': '존문가닷컴 <' + __admin_email + '>',
+				'to': __admin_email,
+				'subject': '피드백: ' + email,
+				'html': [
+					'<div>',
+						'-----피드백-----<br>',
+						'이메일: ' + email + '<br>',
+						'url: ' + url + '<br>',
+						'내용: ' + contents,
+					'</div>'
+				].join('')
+			};
+
+			smtpTransport.sendMail(mailOptions, function(__err, res) {
+				smtpTransport.close();
+			});
 			res.json(true);
 		}
 	});
