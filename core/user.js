@@ -710,60 +710,94 @@ exports.getPredictSystemData = function(params, callback) {
                     var fail = 0;
 
                     for (var j = 0; j < users.length; j++) {
-                        users[j] = users[j].toObject();
-                        if (users[j].record && users[j].record[sportsId] && users[j].record[sportsId][leagueId]) {
+                        users[j] = {
+                            'email': users[j].email,
+                            'record': users[j].record
+                        };
 
-                            hit = users[j].record[sportsId][leagueId].hit;
-                            fail = users[j].record[sportsId][leagueId].fail;
+                        if (users[j].record && users[j].record[sportsId] && users[j].record[sportsId].total) {
+                            sports_hit = users[j].record[sportsId].total.hit;
+                            sports_fail = users[j].record[sportsId].total.fail;
 
-                            if (hit + fail > 0) {
-                                users[j]._hitRate = hit / (hit + fail) * 100;
+                            if (sports_hit + sports_fail > 0) {
+                                users[j].sportsHitRate = sports_hit / (sports_hit + sports_fail);
                             } else {
-                                users[j]._hitRate = 0;
+                                users[j].sportsHitRate = 0;
+                            }
+
+                            if (users[j].record[sportsId][leagueId]) {
+                                league_hit = users[j].record[sportsId][leagueId].hit;
+                                league_fail = users[j].record[sportsId][leagueId].fail;
+
+                                if (league_hit + league_fail > 0) {
+                                    users[j].leagueHitRate = league_hit / (league_hit + league_fail);
+                                } else {
+                                    users[j].leagueHitRate = 0;
+                                }
+                            } else {
+                                users[j].leagueHitRate = 0.5;
                             }
                         } else {
-                            users[j]._hitRate = 0;
+                            users[j].sportsHitRate = 0.5;
                         }
                     }
 
-                    users.sort(function(a, b) {
-                        if (a._hitRate < b._hitRate) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    });
-
                     var lack = false;
                     var usersLength = users.length;
-                    var halfUsersLength = parseInt(usersLength / 2, 10);
 
                     if (usersLength < 100) {
                         lack = true;
                     }
 
-                    var pickCounts = {};
-                    var percentList = [5, 10, 20, 30, 40, 50];
+                    var pickCounts = {
+                        'home': 0,
+                        'draw': 0,
+                        'away': 0
+                    };
 
-                    for (var j = 0; j < percentList.length; j++) {
-                        pickCounts[percentList[j]] = {
-                            'home': 0,
-                            'draw': 0,
-                            'away': 0
+                    for (var j = 0; j < usersLength; j++) {
+                        pickCounts[predictionObj[users[j].email].pick] += users[j].sportsHitRate;
+                        pickCounts[predictionObj[users[j].email].pick] += users[j].leagueHitRate;
+                    }
+
+                    var predictionSystemPick = '';
+
+                    if (pickCounts.home > pickCounts.away) {
+                        if (pickCounts.home > pickCounts.draw) {
+                            predictionSystemPick = 'home';
+                        } else if (pickCounts.home == pickCounts.draw) {
+                            predictionSystemPick = 'homeORdraw';
+                        } else {
+                            predictionSystemPick = 'draw';
+                        }
+                    } else if (pickCounts.home < pickCounts.away) {
+                        if (pickCounts.away > pickCounts.draw) {
+                            predictionSystemPick = 'away';
+                        } else if (pickCounts.away == pickCounts.draw) {
+                            predictionSystemPick = 'awayORdraw';
+                        } else {
+                            predictionSystemPick = 'draw';
+                        }
+                    } else {
+                        if (pickCounts.home > pickCounts.draw) {
+                            predictionSystemPick = 'homeORaway';
+                        } else {
+                            predictionSystemPick = 'draw';
                         }
                     }
 
-                    for (var j = 0; j < halfUsersLength; j++) {
-                        for (var k = 0; k < percentList.length; k++) {
-                            if (j < parseInt(usersLength * percentList[k] * 0.01, 10)) {
-                                pickCounts[percentList[k]][predictionObj[users[j].email].pick]++;
-                            }
-                        }
-                    }
+                    var sumPickRate = pickCounts.home + pickCounts.draw + pickCounts.away;
+
+                    var detailWinRate = {
+                        'home':pickCounts.home / sumPickRate,
+                        'draw':pickCounts.draw / sumPickRate,
+                        'away':pickCounts.away / sumPickRate
+                    };
 
                     callback({
                         'result': true,
-                        'pickCounts': pickCounts,
+                        'pick': predictionSystemPick,
+                        'detail': detailWinRate,
                         'lack': lack
                     });
                 } else {

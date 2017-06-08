@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var async = require('async');
+var nodemailer = require('nodemailer');
 
 var router = express.Router();
 
@@ -574,7 +575,7 @@ router.post('/prediction/viewOthers', function(req, res) {
 	var targetNickname = req.body.targetNickname;
 	var matchId = req.body.matchId;
 	var myEmail = req.session.email;
-	var pointType = req.body.pointType;
+	var pointType = 'currency';
 
 	user.get_email(targetNickname, function(targetEmail) {
 		if (targetEmail) {
@@ -672,14 +673,6 @@ router.post('/prediction/system', function(req, res) {
 	var matchId = req.body.matchId;
 	var myEmail = req.session.email;
 	var pointType = req.body.pointType;
-	var weights = {
-		'5': 5,
-		'10': 4,
-		'20': 3,
-		'30': 2.5,
-		'40': 2,
-		'50': 1.5
-	}
 
 	// user.usePoint({
 	// 	'email': myEmail,
@@ -707,59 +700,11 @@ router.post('/prediction/system', function(req, res) {
 							'sportsId': sportsId
 						}, function(systemData) {
 							if (systemData.result) {
-								var predictionSystemResult = '';
-								var sumPickCount = {
-									'home': wholePickCount.home,
-									'draw': wholePickCount.draw,
-									'away': wholePickCount.away
-								};
-
-								var keys = Object.keys(systemData.pickCounts);
-
-								for (var i = 0; i < keys.length; i++) {
-									sumPickCount.home += systemData.pickCounts[keys[i]].home * weights[keys[i]];
-									sumPickCount.draw += systemData.pickCounts[keys[i]].draw * weights[keys[i]];
-									sumPickCount.away += systemData.pickCounts[keys[i]].away * weights[keys[i]];
-								}
-
-								var predictionSystemPick = '';
-
-								if (sumPickCount.home > sumPickCount.away) {
-									if (sumPickCount.home > sumPickCount.draw) {
-										predictionSystemPick = 'home';
-									} else if (sumPickCount.home == sumPickCount.draw) {
-										predictionSystemPick = 'homeORdraw';
-									} else {
-										predictionSystemPick = 'draw';
-									}
-								} else if (sumPickCount.home < sumPickCount.away) {
-									if (sumPickCount.away > sumPickCount.draw) {
-										predictionSystemPick = 'away';
-									} else if (sumPickCount.away == sumPickCount.draw) {
-										predictionSystemPick = 'awayORdraw';
-									} else {
-										predictionSystemPick = 'draw';
-									}
-								} else {
-									if (sumPickCount.home > sumPickCount.draw) {
-										predictionSystemPick = 'homeORaway';
-									} else {
-										predictionSystemPick = 'draw';
-									}
-								}
-
-								var sumPickWeight = sumPickCount.home + sumPickCount.draw + sumPickCount.away;
-
-								var detailWinRate = {
-									'home':sumPickCount.home / sumPickWeight,
-									'draw':sumPickCount.draw / sumPickWeight,
-									'away':sumPickCount.away / sumPickWeight
-								};
-
 								res.json({
 									'result': true,
-									'pick': predictionSystemPick,
-									'detail': detailWinRate
+									'pick': systemData.pick,
+									'detail': systemData.detailWinRate,
+									'lack': systemData.lack
 								});
 							} else {
 								res.json({
@@ -1001,17 +946,46 @@ router.post('/ratingUpdate', function(req, res) {
 });
 
 router.post('/feedback', function(req, res) {
+	var email = req.session.email || 'unknown';
+	var contents = req.body.feedback_contents || '';
+	var url = req.body.url;
+
 	var newFeedBack = new db.feedback({
 		'createTime': new Date,
-		'email': req.session.email || 'unknown',
-		'contents': req.body.feedback_contents || '',
-		'url': req.body.url
+		'email': email,
+		'contents': contents,
+		'url': url
 	});
 
 	newFeedBack.save(function(err) {
 		if (err) {
 			res.json(false);
 		} else {
+			var smtpTransport = nodemailer.createTransport({
+				'service': 'gmail',
+				'auth': {
+					'user': __admin_email,
+					'pass': __admin_password
+				}
+			});
+
+			var mailOptions = {
+				'from': '존문가닷컴 <' + __admin_email + '>',
+				'to': __admin_email,
+				'subject': '피드백: ' + email,
+				'html': [
+					'<div>',
+						'-----피드백-----<br>',
+						'이메일: ' + email + '<br>',
+						'url: ' + url + '<br>',
+						'내용: ' + contents,
+					'</div>'
+				].join('')
+			};
+
+			smtpTransport.sendMail(mailOptions, function(__err, res) {
+				smtpTransport.close();
+			});
 			res.json(true);
 		}
 	});
