@@ -214,7 +214,8 @@ exports.validate = function(data, callback) {
             }
         } else {    // 유효성 체크
             var reg_nickname = /^[A-Za-z가-힣0-9]{2,12}$/;
-            var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+            // var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+            var reg_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
             var reg_password = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}$/;
 
             if (!reg_email.test(email)) {
