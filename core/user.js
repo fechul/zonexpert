@@ -214,7 +214,8 @@ exports.validate = function(data, callback) {
             }
         } else {    // 유효성 체크
             var reg_nickname = /^[A-Za-z가-힣0-9]{2,12}$/;
-            var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+            // var reg_email = /^[\w]{4,}@[\w]+(\.[\w-]+){1,3}$/;
+            var reg_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
             var reg_password = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{6,20}$/;
 
             if (!reg_email.test(email)) {
@@ -584,10 +585,10 @@ exports.returnPoint = function(options, callback) {
                 var s_point = (log.amount == point);
                 var s_classification = (log.classification == classification);
                 if(matchId) {
-                    var s_matchId = (log.matchId == matchId);
+                    s_matchId = (log.matchId == matchId);
                 }
                 if(target) {
-                    var s_target = (log.target == target);
+                    s_target = (log.target == target);
                 }
 
                 if(s_point && s_classification && s_matchId && s_target) {
@@ -674,6 +675,107 @@ exports.leave = function(options, callback) {
             });
         } else {
             callback(false);
+        }
+    });
+};
+
+exports.getPredictSystemData = function(params, callback) {
+    var matchId = params.matchId;
+    var leagueId = params.leagueId;
+    var sportsId = params.sportsId;
+    var predictionObj = {};
+
+    db.prediction.find({
+        'matchId': matchId,
+        'confirmed': true
+    }).exec(function(err, predictions) {
+        var userList = [];
+        if (!err && predictions.length) {
+            for (var i = 0; i < predictions.length; i++) {
+                predictionObj[predictions[i].userEmail] = {
+                    'pick': predictions[i].pick
+                };
+
+                userList.push(predictions[i].userEmail);
+            }
+
+            db.user.find({
+                'readyGameCnt': 0,
+                'email': {
+                    '$in': userList
+                }
+            }).exec(function(err, users) {
+                if (users.length) {
+                    var hit = 0;
+                    var fail = 0;
+
+                    for (var j = 0; j < users.length; j++) {
+                        users[j] = users[j].toObject();
+                        if (users[j].record && users[j].record[sportsId] && users[j].record[sportsId][leagueId]) {
+
+                            hit = users[j].record[sportsId][leagueId].hit;
+                            fail = users[j].record[sportsId][leagueId].fail;
+
+                            if (hit + fail > 0) {
+                                users[j]._hitRate = hit / (hit + fail) * 100;
+                            } else {
+                                users[j]._hitRate = 0;
+                            }
+                        } else {
+                            users[j]._hitRate = 0;
+                        }
+                    }
+
+                    users.sort(function(a, b) {
+                        if (a._hitRate < b._hitRate) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+
+                    var lack = false;
+                    var usersLength = users.length;
+                    var halfUsersLength = parseInt(usersLength / 2, 10);
+
+                    if (usersLength < 100) {
+                        lack = true;
+                    }
+
+                    var pickCounts = {};
+                    var percentList = [5, 10, 20, 30, 40, 50];
+
+                    for (var j = 0; j < percentList.length; j++) {
+                        pickCounts[percentList[j]] = {
+                            'home': 0,
+                            'draw': 0,
+                            'away': 0
+                        }
+                    }
+
+                    for (var j = 0; j < halfUsersLength; j++) {
+                        for (var k = 0; k < percentList.length; k++) {
+                            if (j < parseInt(usersLength * percentList[k] * 0.01, 10)) {
+                                pickCounts[percentList[k]][predictionObj[users[j].email].pick]++;
+                            }
+                        }
+                    }
+
+                    callback({
+                        'result': true,
+                        'pickCounts': pickCounts,
+                        'lack': lack
+                    });
+                } else {
+                    callback({
+                        'result': false
+                    });
+                }
+            });
+        } else {
+            callback({
+                'result': false
+            });
         }
     });
 };

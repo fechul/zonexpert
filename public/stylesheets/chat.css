@@ -50,6 +50,7 @@ body {
     overflow: hidden;
     min-height: 530px;
     position: relative;
+    background-color: #fff;
 }
 
 .predictedUsers {
@@ -58,10 +59,11 @@ body {
     padding: 20px;
     width: 50%;
     height: 100%;
+    background-color: #fff;
 }
 
 .predictedUsersList {
-    background-color: #fff;
+    background-color: #f9f9f9;
     border: 1px solid #aaa;
     height: 360px;
     overflow: auto;
@@ -106,6 +108,7 @@ body {
     padding: 20px;
     width: 50%;
     height: 100%;
+    background-color: #fff;
 }
 
 .predictedUserRecordData {
@@ -130,10 +133,18 @@ body {
 }
 
 #viewThisUsersPredict,
-#isShownPredict {
+#isShownPredict,
+#viewPredictionSystem {
     margin-top: 20px;
     margin-bottom: 10px;
     height: 50px;
+}
+
+#viewThisUsersPredict > img,
+#viewPredictionSystem > img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
 }
 
 .choicePointTypeBtn.free {
@@ -156,10 +167,24 @@ body {
     margin-left: -1px;
 }
 
-#viewThisUsersPredict > img {
-    width: 15px;
-    height: 15px;
-    margin-right: 5px;
+.systemChoicePointTypeBtn.free {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 50px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin-right: -1px;
+}
+
+.systemChoicePointTypeBtn.currency {
+    font-size: 12px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    height: 50px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    margin-left: -1px;
 }
 
 #viewPredictionDesc {
@@ -593,6 +618,10 @@ li .badge_ready {
     font-weight: 900;
     padding: 2px 5px;
     animation: blinker 1s linear infinite;
+}
+
+.chat_nickname {
+    cursor: pointer;
 }
 
 @keyframes blinker {

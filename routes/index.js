@@ -668,6 +668,128 @@ router.post('/prediction/viewOthers', function(req, res) {
 	});
 });
 
+router.post('/prediction/system', function(req, res) {
+	var matchId = req.body.matchId;
+	var myEmail = req.session.email;
+	var pointType = req.body.pointType;
+	var weights = {
+		'5': 5,
+		'10': 4,
+		'20': 3,
+		'30': 2.5,
+		'40': 2,
+		'50': 1.5
+	}
+
+	// user.usePoint({
+	// 	'email': myEmail,
+	// 	'point': costPoint,
+	// 	'pointType': pointType,
+	// 	'type': 'system',
+	// 	'matchId': matchId
+	// }, function(usePointResult) {
+	// 	if(usePointResult) {
+			// match.pushViewListToMatch({
+			// 	'myEmail': myEmail,
+			// 	'matchId': matchId
+			// }, function(pushResult) {
+			// 	if(pushResult) {
+					schedule.getMatch({
+						'matchId': matchId
+					}, function(matchData) {
+						var wholePickCount = matchData.pickCount;
+						var leagueId = matchData.leagueId;
+						var sportsId = matchData.sportsId;
+
+						user.getPredictSystemData({
+							'matchId': matchId,
+							'leagueId': leagueId,
+							'sportsId': sportsId
+						}, function(systemData) {
+							if (systemData.result) {
+								var predictionSystemResult = '';
+								var sumPickCount = {
+									'home': wholePickCount.home,
+									'draw': wholePickCount.draw,
+									'away': wholePickCount.away
+								};
+
+								var keys = Object.keys(systemData.pickCounts);
+
+								for (var i = 0; i < keys.length; i++) {
+									sumPickCount.home += systemData.pickCounts[keys[i]].home * weights[keys[i]];
+									sumPickCount.draw += systemData.pickCounts[keys[i]].draw * weights[keys[i]];
+									sumPickCount.away += systemData.pickCounts[keys[i]].away * weights[keys[i]];
+								}
+
+								var predictionSystemPick = '';
+
+								if (sumPickCount.home > sumPickCount.away) {
+									if (sumPickCount.home > sumPickCount.draw) {
+										predictionSystemPick = 'home';
+									} else if (sumPickCount.home == sumPickCount.draw) {
+										predictionSystemPick = 'homeORdraw';
+									} else {
+										predictionSystemPick = 'draw';
+									}
+								} else if (sumPickCount.home < sumPickCount.away) {
+									if (sumPickCount.away > sumPickCount.draw) {
+										predictionSystemPick = 'away';
+									} else if (sumPickCount.away == sumPickCount.draw) {
+										predictionSystemPick = 'awayORdraw';
+									} else {
+										predictionSystemPick = 'draw';
+									}
+								} else {
+									if (sumPickCount.home > sumPickCount.draw) {
+										predictionSystemPick = 'homeORaway';
+									} else {
+										predictionSystemPick = 'draw';
+									}
+								}
+
+								var sumPickWeight = sumPickCount.home + sumPickCount.draw + sumPickCount.away;
+
+								var detailWinRate = {
+									'home':sumPickCount.home / sumPickWeight,
+									'draw':sumPickCount.draw / sumPickWeight,
+									'away':sumPickCount.away / sumPickWeight
+								};
+
+								res.json({
+									'result': true,
+									'pick': predictionSystemPick,
+									'detail': detailWinRate
+								});
+							} else {
+								res.json({
+									'result': false
+								});
+							}
+						});
+					});
+			// 	} else {
+			// 		user.returnPoint({
+			// 			'email': myEmail,
+			// 			'point': costPoint,
+			// 			'pointType': pointType,
+			// 			'type': 'system',
+			// 			'matchId': matchId
+			// 		}, function(returnResult) {
+			// 			res.json({
+			// 				'result': false
+			// 			});
+			// 		});
+			// 	}
+			// });
+	// 	} else {
+	// 		res.json({
+	// 			'result': false
+	// 		});
+	// 	}
+	// });
+});
+
 router.get('/prediction/getProceedingPredict', function(req, res) {
 	var searchId = req.query.search_id;
 

@@ -76,7 +76,16 @@
                         </div>
                     </div>
                     <div id="goToPredictionSystem" class="tab-pane fade">
-                        <h3>준비중입니다.</h3>
+                        <div class="predictionSystemWrapper">
+                            준비중입니다.
+                            <div class="predictedSystemCover" style="display: none;">
+                                <button class="btn btn-primary" id="viewPredictionSystem">예측시스템 조회 (<img src="/image/coin.png"></img>500)</button>
+                                <button class="btn btn-primary systemChoicePointTypeBtn free" pointType="free" style="display: none;">무료포인트 사용<br>보유 : <span class="systemCurrentPoint free">-</span></button>
+                                <button class="btn btn-primary systemChoicePointTypeBtn currency" pointType="currency" style="display: none;">충전포인트 사용<br>보유 : <span class="systemCurrentPoint currency">-</span></button><br>
+                            </div>
+                            <div class="predictedSystemContents">
+                            </div>
+                        </div>
                     </div>
                     <div id="goToOtherPredict" class="tab-pane fade">
                         <div class="predictionDataWrapper">
@@ -98,10 +107,8 @@
                                     </div>
 
                                     <div id="viewBtnDiv">
-                                        <button class="btn btn-primary" id="viewThisUsersPredict">이 사용자의 예측 조회 (<img src="/image/coin.png"></img><span class="viewCostPoint">-</span>)</button>
-                                        <button class="btn btn-primary choicePointTypeBtn free" pointType="free" style="display: none;">무료포인트 사용<br>보유 : <span class="currentPoint free">-</span></button>
-                                        <button class="btn btn-primary choicePointTypeBtn currency" pointType="currency" style="display: none;">충전포인트 사용<br>보유 : <span class="currentPoint currency">-</span></button><br>
-                                        <span id="viewPredictionDesc">* 해당 경기에 대해 <span class="predictedUserInfo_nick">-</span> 님이 예측한 결과를 조회합니다.<br>* 포인트 <span class="viewCostPoint">-</span>점이 차감됩니다.</span>
+                                        <button class="btn btn-primary" id="viewThisUsersPredict">이 사용자의 예측 조회 (<img src="/image/coin.png"></img><span class="viewCostPoint">-</span>)</button><br>
+                                        <span id="viewPredictionDesc">* 해당 경기에 대해 <span class="predictedUserInfo_nick">-</span> 님이 예측한 결과를 조회합니다.<br>* 충전 포인트 <span class="viewCostPoint">-</span>점이 차감됩니다.</span>
                                     </div>
 
                                     <div id="isShownDiv">
