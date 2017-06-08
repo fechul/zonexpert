@@ -703,7 +703,7 @@ router.post('/prediction/system', function(req, res) {
 								res.json({
 									'result': true,
 									'pick': systemData.pick,
-									'detail': systemData.detailWinRate,
+									'detail': systemData.detail,
 									'lack': systemData.lack
 								});
 							} else {
