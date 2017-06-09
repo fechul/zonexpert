@@ -153,11 +153,5 @@ var MYPAGE = {
 
 			$('.' + dataType + '_table_section').show();
 		});
-	},
-
-	setPointLog: function() {
-		var pointLog = this.pointLog;
-
-
 	}
 };
