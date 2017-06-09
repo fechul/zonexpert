@@ -271,21 +271,29 @@ var PREDICTION_SHORTCUT = {
 				winner = '';
 				pick = data[i].pick;
 
-				if (data[i].result.goalsHomeTeam > data[i].result.goalsAwayTeam) {
-					winner = 'home';
-					$('.prediction_shortcut_list.result tr').last().find('td[value="home"]').addClass('game_result');
-				} else if (data[i].result.goalsHomeTeam < data[i].result.goalsAwayTeam) {
-					winner = 'away';
-					$('.prediction_shortcut_list.result tr').last().find('td[value="away"]').addClass('game_result');
+				if(!data[i].result) {
+					winner = 'all';
 				} else {
-					winner = 'draw';
-					$('.prediction_shortcut_list.result tr').last().find('td[value="draw"]').addClass('game_result');
+					if (data[i].result.goalsHomeTeam > data[i].result.goalsAwayTeam) {
+						winner = 'home';
+						$('.prediction_shortcut_list.result tr').last().find('td[value="home"]').addClass('game_result');
+					} else if (data[i].result.goalsHomeTeam < data[i].result.goalsAwayTeam) {
+						winner = 'away';
+						$('.prediction_shortcut_list.result tr').last().find('td[value="away"]').addClass('game_result');
+					} else {
+						winner = 'draw';
+						$('.prediction_shortcut_list.result tr').last().find('td[value="draw"]').addClass('game_result');
+					}
 				}
 
-				if (winner == pick) {
-					$('.prediction_shortcut_list.result tr').last().prev().find('td[value="' + data[i].pick + '"]').addClass('pick_hit');
+				if(winner == 'all') {
+						$('.prediction_shortcut_list.result tr').last().prev().find('td[value="' + data[i].pick + '"]').addClass('pick_hit');
 				} else {
-					$('.prediction_shortcut_list.result tr').last().prev().find('td[value="' + data[i].pick + '"]').addClass('pick_fail');
+					if (winner == pick) {
+						$('.prediction_shortcut_list.result tr').last().prev().find('td[value="' + data[i].pick + '"]').addClass('pick_hit');
+					} else {
+						$('.prediction_shortcut_list.result tr').last().prev().find('td[value="' + data[i].pick + '"]').addClass('pick_fail');
+					}
 				}
             }
 		});
