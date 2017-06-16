@@ -172,34 +172,50 @@ var rating = {
                                     'record': user.record
                                 }
                             }).exec(function(_err) {
-                                db.prediction.find({
-                                    'userEmail': user.email,
-                                    'result': {
-                                        '$ne': 'wait'
-                                    }
-                                }).exec(function(_findPredictionErr, _predictions) {
-                                    var game_cnt_rank = _predictions.length;
-                                    var predict_rate_rank = 0;
+                                var game_cnt_rank = user.total.hit + user.total.fail;
+                                var predict_rate_rank = 0;
+                                predict_rate_rank = user.total.hit / game_cnt_rank;
 
-                                    for (var j = 0; j < _predictions.length; j++) {
-                                        if (_predictions[j].result == 'true')
-                                        predict_rate_rank++;
-                                    }
-
-                                    predict_rate_rank = predict_rate_rank / game_cnt_rank;
-
-                                    if(user.readyGameCnt <= 0) {
-                                        redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
-                                            redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
-                                                redis_client.zadd('predict_rate_rank', predict_rate_rank, user.email, function(__zerr, __reply) {
-                                                    _async_cb();
-                                                });
+                                if(user.readyGameCnt <= 0) {
+                                    redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
+                                        redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
+                                            redis_client.zadd('predict_rate_rank', predict_rate_rank, user.email, function(__zerr, __reply) {
+                                                _async_cb();
                                             });
                                         });
-                                    } else {
-                                        _async_cb();
-                                    }
-                        		});
+                                    });
+                                } else {
+                                    _async_cb();
+                                }
+
+                          //       db.prediction.find({
+                          //           'userEmail': user.email,
+                          //           'result': {
+                          //               '$ne': 'wait'
+                          //           }
+                          //       }).exec(function(_findPredictionErr, _predictions) {
+                          //           var game_cnt_rank = _predictions.length;
+                          //           var predict_rate_rank = 0;
+
+                          //           for (var j = 0; j < _predictions.length; j++) {
+                          //               if (_predictions[j].result == 'true')
+                          //               predict_rate_rank++;
+                          //           }
+
+                          //           predict_rate_rank = predict_rate_rank / game_cnt_rank;
+
+                          //           if(user.readyGameCnt <= 0) {
+                          //               redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
+                          //                   redis_client.zadd('game_cnt_rank', game_cnt_rank, user.email, function(_zerr, _reply) {
+                          //                       redis_client.zadd('predict_rate_rank', predict_rate_rank, user.email, function(__zerr, __reply) {
+                          //                           _async_cb();
+                          //                       });
+                          //                   });
+                          //               });
+                          //           } else {
+                          //               _async_cb();
+                          //           }
+                        		// });
                             });
                         });
                     }, function() {
