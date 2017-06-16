@@ -172,9 +172,9 @@ var rating = {
                                     'record': user.record
                                 }
                             }).exec(function(_err) {
-                                var game_cnt_rank = user.total.hit + user.total.fail;
+                                var game_cnt_rank = user.record.total.hit + user.record.total.fail;
                                 var predict_rate_rank = 0;
-                                predict_rate_rank = user.total.hit / game_cnt_rank;
+                                predict_rate_rank = user.record.total.hit / game_cnt_rank;
 
                                 if(user.readyGameCnt <= 0) {
                                     redis_client.zadd('rating_rank', user.afterRating, user.email, function(zerr, reply) {
