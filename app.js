@@ -9,7 +9,7 @@ var http = require('http');
 var async = require('async');
 var fs = require('fs');
 var moment = require('moment');
-
+ 
 var set_configs = function() {
     var configs_read = fs.readFileSync('./configs.json', 'utf8');
     configs_read = JSON.parse(configs_read);
