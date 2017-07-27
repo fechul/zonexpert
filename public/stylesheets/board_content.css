@@ -766,12 +766,8 @@ body {
 	text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
-<<<<<<< HEAD
-    width: 300px;
-=======
     width: 450px;
->>>>>>> 710be59949dc69565757d22ae4a5d253201b621e
-    margin-bottom: -5px;
+    margin-bottom: -4px;
 }
 
 /*
