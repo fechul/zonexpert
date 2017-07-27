@@ -48,56 +48,17 @@ var BOARD = {
 		});
 
 		$(document).on('click', '#board_table tr:not(:first-child)', function() {
-			if($(this).hasClass('board_content')) {
-				return false;
-			}
-			if($(this).next('.board_content').css('display') == 'none') {
-				$(this).css('border-bottom', 'none');
-				$(this).next('.board_content').show();
-			} else {
-				$(this).css('border-bottom', '1px solid #999');
-				$(this).next('.board_content').hide();
-			}
-		});
+			var boardNo = $(this).attr('boardNo');
 
-		$(document).on('click', '#board_table .board_options > button', function() {
-			var button = this;
-			var boardNo = $(button).parents('.board_content').prev('tr').attr('boardNo');
-
-			if($(button).hasClass('update')) {
-				location.href = "/board/write?no=" + boardNo;
-			} else if($(button).hasClass('delete')) {
-				$.post('/board/del', {
-					'boardNo': boardNo
-				}, function(result) {
-					if(result) {
-						location.reload();
-					} else {
-						console.log(result);
-					}
-				});
-			} else if($(button).hasClass('like')) {
-				if(!self.isLogin) {
-					notice.show('alert', '좋아요 버튼은 로그인 후 누르실 수 있습니다.');
-					return false;
+			$.get('/board/get', {
+				'boardNo': boardNo
+			}, function(result) {
+				if(result) {
+					location.href = "/board/read?no=" + boardNo;
+				} else {
+					notice.show('alert', '삭제된 게시글입니다.');
 				}
-				$.post('/board/like', {
-					'boardNo': boardNo
-				}, function(result) {
-					if(result) {
-						var current_like = parseInt($(button).parents('.board_content').prev('tr').find('.current_like').html());
-						if(result == 'like') {
-							$(button).addClass('my_like');
-							$(button).parents('.board_content').prev('tr').find('.current_like').html(current_like + 1);
-						} else {
-							$(button).removeClass('my_like');
-							$(button).parents('.board_content').prev('tr').find('.current_like').html(current_like - 1);
-						}
-					} else{
-						console.log(result);
-					}
-				});
-			}
+			});
 		});
 
         $('.board_search_menu .board_search_input').keydown(function(e) {
@@ -115,7 +76,7 @@ var BOARD = {
 			} else if(index ==2){
 				type += 'writer';
 			}
-			console.log('type' , type);
+
             self.set_board({
                 'value': value,
                 'type': type || 'title'
@@ -209,7 +170,7 @@ var BOARD = {
 			query = {};
 		}
 
-		$.get('/board/get', query, function(board_data) {
+		$.get('/board/getList', query, function(board_data) {
 			if(!board_data || board_data.length == 0) {
 				board_data = [];
 			}
@@ -218,18 +179,14 @@ var BOARD = {
                 board_html += '<tr boardNo=' + board_data[i].boardNo + '>';
                 board_html += '<td>' + board_data[i].boardNo + '</td>';
                 board_html += '<td>' + ((board_data[i].readyGameCnt && board_data[i].readyGameCnt > 0) ? '<div class="rank_table_tier badge_ready"></div>' : get_tier_img(board_data[i].myTotalRate)) + board_data[i].nickname + '</td>';
-                board_html += '<td><nobr>' + board_data[i].title + '<nobr></td>';
+                board_html += '<td><nobr>' + board_data[i].title + '<nobr> <span class="commentsLength">[' + board_data[i].commentsCnt + ']</span></td>';
                 board_html += '<td class="current_like">' + board_data[i].like + '</td>';
                 board_html += '<td>' + make_date(board_data[i].date) + '</td>';
                 board_html += '</tr>';
 
                 board_html += '<tr class="board_content"><td colspan="5">';
                 board_html += '<div class="board_options">';
-                if (self.user_email === board_data[i].writer) {
-                    board_html += '<button type="button" class="update">수정</button><button type="button" class="delete">삭제</button>';
-                }
-                board_html += '<button type="button" class="like ' + (board_data[i].i_like ? 'my_like' : '') + '"><i class="fa fa-thumbs-up"></i></button></div>';
-                board_html += board_data[i].content + '</td></tr>';
+                board_html += '</td></tr>';
             }
 
             $('#board_table tr:not(:first-child)').remove()

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>존문가닷컴-게시글 <%=boardNo%></title>
+        <!-- <link rel='stylesheet' href='/stylesheets/common.css' /> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <link rel='stylesheet' href='/stylesheets/board_content.css' />
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
+        <link rel='stylesheet' href='/summernote/summernote.css' />
+    </head>
+
+    <body <%- mobileSafaribodyBackgroundCss %>>
+		<%- include header.html %>
+
+		<section class="main_section" style="text-align:inherit;">
+			<br>
+
+			<div class="board_wrapper">
+				<div class="board_section container_box" style="padding:20px;">
+					<div class="boardMainContainer">
+						<div class="read_board_title">
+							<span class="boardNum"><%= boardNo %></span><div id="boardReadTitle"><nobr><%= board_title %></nobr></div>
+							<div class="writeDate"><%= writeDate %></div>
+						</div>
+						<div class="read_board_writer">
+							<div class="writerBadge badge_<%= writerBadge %>"></div><div class="writerNick"><nobr><%= writer %></nobr></div>
+							<button class="btn btn-default btn-xs" id="copySrc" data-clipboard-action="copy" data-clipboard-target="#boardSrc">링크 복사</button>
+							<a href="<%= __url %>/board/read?no=<%= boardNo %>" id="boardSrc"><%= __url %>/board/read?no=<%= boardNo %></a>
+						</div>
+						<div class="read_board_content"><%- board_content %></div>
+						<div class="read_board_tools">
+							<button class="btn btn-default btn-xs" id="update" style="<%= toolDisplay %>">수정</button>
+							<button class="btn btn-default btn-xs" id="delete" style="<%= toolDisplay %>">삭제</button>
+							<button class="btn btn-default btn-xs <%= iLike %>" id="like">좋아요 <i class="fa fa-thumbs-up"></i></button>
+						</div>
+						<div class="read_board_comments">
+							<ul class="commentsContainer">
+								<li class="commentsEach">
+									<div class="commentDiv">
+										<textarea class="form-control" id="writeCommentsInput"></textarea>
+										<button class="btn btn-default" id="writeComment">등록</button>
+									</div>
+								</li>
+								<div class="commentsContentContainer"></div>
+							</ul>
+						</div>
+						<div class="board_btns">
+							<button type="button" class="btn btn-default cancel" onclick="location.href='/board'">돌아가기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<%- prediction_shortcut %>
+        <%- feedback %>
+    </body>
+
+    <div id="notice">
+		<div id="notice-icon"></div><div id="notice-content"></div>
+	</div>
+
+	<script src="/jquery/jquery.js"></script>
+	<script src="/bootstrap/bootstrap.min.js"></script>
+	<script src="https://use.fontawesome.com/dd32f28b6e.js"></script>
+	<script src="/modules/board_read.js"></script>
+	<script src="/modules/prediction_shortcut.js"></script>
+	<script src="/notice/notice.js"></script>
+	<script src="/clipboard/clipboard.min.js"></script>
+	<script>
+		var boardNo = <%- boardNo %>;
+
+		var notice = NOTICE;
+
+		BOARD_READ.init({
+			'boardNo': boardNo,
+			'attendancePointUpdated': <%- attendancePointUpdated %>
+		});
+		PREDICTION_SHORTCUT.init();
+	</script>
+
+</html>
