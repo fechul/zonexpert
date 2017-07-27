@@ -139,6 +139,14 @@ var boardSchema = new Schema({
     'content': String,
     'like': Number
 });
+
+var commentSchema = new Schema({
+    'boardNo': Number,
+    'commentNo': Number,
+    'writer' : String,
+    'date' : Date,
+    'content': String
+});
 //
 // var ratingSchema = new Schema({
 //     'comingUpMatch': [{
@@ -159,6 +167,7 @@ var league = mongoose.model('league' , leagueSchema);
 var match = mongoose.model('match', matchSchema);
 var team = mongoose.model('team' , teamSchema);
 var board = mongoose.model('board', boardSchema);
+var comment = mongoose.model('comment', commentSchema);
 var prediction = mongoose.model('prediction', predictionSchema);
 var feedback = mongoose.model('feedback', feedbackSchema);
 
@@ -168,6 +177,7 @@ module.exports = {
   'match' : match,
   'team' : team,
   'board': board,
+  'comment': comment,
   'prediction': prediction,
   'feedback': feedback
 };

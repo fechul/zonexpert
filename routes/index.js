@@ -177,14 +177,23 @@ router.post('/accounts/change', function(req, res) {
 	});
 });
 
-router.get('/board/get', function(req, res) {
+router.get('/board/check', function(req, res) {
+	var boardNo = req.query.boardNo;
+
+	board.check({
+		'boardNo': boardNo
+	}, function(result) {
+		res.json(result);
+    });
+});
+
+router.get('/board/getList', function(req, res) {
 	var value = req.query.value || '';
 	var type = req.query.type || '';
 
-	board.get({
+	board.getList({
 		'value': value,
-		'type': type,
-		'myEmail': req.session.email || null
+		'type': type
 	}, function(data) {
 		user.countAllUsers('onlyRanked', function(userCount) {
 			async.mapSeries(data, function(board, async_cb) {
@@ -200,7 +209,7 @@ router.get('/board/get', function(req, res) {
 				res.json(data);
 			});
 		});
-    });
+	});
 });
 
 router.post('/board/write', function(req, res) {
@@ -213,7 +222,7 @@ router.post('/board/write', function(req, res) {
 	});
 });
 
-router.post('/board/update', function(req, res) {
+router.post('/board/update', need_login, function(req, res) {
 	board.update({
 		title: req.body.title,
 		content: req.body.content,
@@ -224,7 +233,7 @@ router.post('/board/update', function(req, res) {
 	});
 });
 
-router.post('/board/del', function(req, res) {
+router.post('/board/del', need_login, function(req, res) {
 	board.del({
 		'boardNo': req.body.boardNo,
 		'user_email': req.session.email
@@ -233,10 +242,28 @@ router.post('/board/del', function(req, res) {
 	});
 });
 
-router.post('/board/like', function(req, res) {
+router.post('/board/like', need_login, function(req, res) {
 	board.like({
 		'boardNo': req.body.boardNo,
 		'user_email': req.session.email
+	}, function(result) {
+		res.json(result);
+	});
+});
+
+router.get('/board/getComments', function(req, res) {
+	board.getComments({
+		'boardNo': req.query.boardNo
+	}, function(comments) {
+		res.json(comments);
+	});
+});
+
+router.post('/comment/write', need_login, function(req, res) {
+	board.comment({
+		boardNo: req.body.boardNo,
+		content: req.body.content,
+		writer: req.session.email
 	}, function(result) {
 		res.json(result);
 	});

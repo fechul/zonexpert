@@ -22,6 +22,7 @@ body {
 .board_wrapper {
 	max-width: 1200px;
 	margin: 0 auto;
+	display: table;
 }
 
 .main_section .board_section {
@@ -508,6 +509,267 @@ body {
 	border: 1px solid #999;
 }
 
+.read_board_title {
+	border-bottom: 1px solid #ccc;
+	padding: 15px;
+	font-weight: bold;
+}
+
+.read_board_writer {
+	padding: 10px;
+}
+
+.read_board_content {
+	padding: 10px;
+	margin-bottom: 20px;
+	/*max-height: 400px;*/
+	overflow: auto;
+}
+
+.boardMainContainer {
+	background-color: #fff;
+	padding: 15px;
+}
+
+.boardNum {
+	border: 2px solid #333;
+    border-radius: 10px;
+    width: 25px;
+    display: inline-block;
+    height: 25px;
+    margin-right: 15px;
+    padding: 0px 6px;
+    font-weight: bold;
+}
+
+.badge_ready {
+	background: url(/image/badge_ready.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_bronze {
+	background: url(/image/badge_bronze.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_silver {
+	background: url(/image/badge_silver.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_gold {
+	background: url(/image/badge_gold.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_platinum {
+	background: url(/image/badge_platinum.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.badge_diamond {
+	background: url(/image/badge_diamond.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.writerBadge {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.writerNick {
+	font-weight: bold;
+	text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.writeDate {
+	float: right;
+	color: #999;
+	font-size: 12px;
+	margin-top: 8px;
+}
+
+#boardSrc {
+	float: right;
+	font-size: 12px;
+	color: #999;
+	cursor: pointer;
+	margin-right: 5px;
+}
+
+#copySrc {
+	float: right;
+	font-size: 10px;
+	margin-top: -2px;
+}
+
+.boardSrc:hover {
+	color: #999;
+}
+
+.read_board_comments {
+	background-color: #eee;
+	padding: 10px 10px 0px 10px;
+	margin-bottom: 20px;
+}
+
+.commentsContainer {
+	padding: 0px;
+}
+
+.commentsEach {
+	list-style: none;
+	min-height: 50px;
+	padding: 10px;
+	border-bottom: 1px solid #ccc;
+	font-size: 12px;
+}
+
+.commentsEach:first-child,
+.commentsEach:last-child {
+	border-bottom: none;
+}
+
+.commentsEach.noComments {
+	text-align: center;
+	font-weight: bold;
+}
+
+.commentDiv {
+	display: flex;
+	margin-bottom: 10px;
+}
+
+#writeCommentsInput {
+	height: 60px;
+	display: inline-block;
+	margin-right: 15px;
+	resize: none;
+}
+
+#writeComment {
+	display: inline-block;
+	height: 60px;
+	width: 70px;
+}
+
+.commentUserInfo {
+	/*margin-bottom: 10px;*/
+}
+
+.commentWriterTier {
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	background-color: #fff;
+	margin-bottom: -4px;
+	margin-right: 4px;
+}
+
+.commentWriter {
+	display: inline-block;
+	font-weight: bold;
+	text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.commentContent {
+	padding: 15px 20px;
+	word-break: break-all;
+}
+
+.commentWriteDate {
+	float: right;
+	color: #999;
+	font-size: 12px;
+}
+
+.commentLabel {
+	margin: 10px 25px 5px 25px;
+    border-bottom: 1px dashed #ccc;
+    font-weight: bold;
+    font-size: 13px;
+    padding-bottom: 5px;
+}
+
+.read_board_tools {
+	padding: 10px;
+}
+
+#like.my_like {
+	color: #359dda;
+}
+
+#notice {
+	position: fixed;
+	top: 80px;
+	/*right: -230px;*/
+	right: 10px;
+	padding: 10px;
+	border: 1px solid #999;
+	display: none;
+	width: 180px;
+	height: 60px;
+	overflow: auto;
+	border-radius: 10px;
+	background-color: #fff;
+	cursor: pointer;
+	/*margin: 10px 10px 0px 0px;*/
+	box-sizing: initial !important;
+}
+
+#notice-icon {
+	float: left;
+	width: 20px;
+	height: 100%;
+	font-size: 20px;
+}
+
+#notice-icon.alert {
+	color: #c14040;
+	padding: 0px !important;
+	margin-bottom: 0px !important;
+	border: 0px !important;
+	border-radius: 0px !important;
+}
+
+#notice-icon.success {
+	color: #3d9e20;
+}
+
+#notice-content {
+	padding: 0px 5px;
+	color: #333;
+	float: left;
+	width: 150px;
+	font-size: 13px;
+	height: 100%;
+	overflow: auto;
+}
+
+#boardReadTitle {
+	text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    width: 300px;
+    margin-bottom: -5px;
+}
 
 /*
 	Media Query
@@ -546,15 +808,37 @@ body {
 	}
 
 	.board_wrapper {
-		margin: 0 65px;
+		margin: 0 30px;
+		display: block;
 	}
 
 	.main_section .board_section {
 		width: 100%;
+		padding: 15px !important;
 	}
 
 	.container_box {
 		margin: 30px 0px;
+	}
+
+	.writeDate {
+		font-size: 10px;
+	}
+
+	#boardReadTitle {
+		width: 225px;
+	}
+
+	#boardSrc {
+		font-size: 10px;
+	}
+
+	.writerNick {
+		width: 125px;
+	}
+
+	.commentWriter {
+		width: 200px;
 	}
 }
 
@@ -607,11 +891,13 @@ body {
 	}
 
 	.board_wrapper {
-		margin: 0 20px;
+		margin: 0 10px;
+		display: block;
 	}
 
 	.main_section .board_section {
 		width: 100%;
+		padding: 5px !important;
 	}
 
 	.container_box {
@@ -621,5 +907,97 @@ body {
 	.bottom_fixed_container {
 		width: 92%;
 		z-index: 10000;
+	}
+
+	.writeDate {
+		font-size: 10px;
+	}
+
+	#boardReadTitle {
+		font-size: 11px;
+		width: 200px;
+	}
+
+	#boardSrc {
+		font-size: 10px;
+	}
+
+	.writerNick {
+		width: 125px;
+	}
+
+	.read_board_title {
+		padding: 5px !important;
+		display: inline-block;
+	}
+
+	.read_board_content {
+		font-size: 11px;
+	}
+
+	.writerBadge {
+		width: 15px;
+		height: 15px;
+	}
+
+	.writerNick {
+		font-size: 11px;
+		width: 150px;
+
+	}
+
+	#boardSrc {
+		display: none;
+	}
+
+	.read_board_tools > button {
+		font-size: 10px;
+	}
+
+	.read_board_comments {
+		padding: 5px !important;
+	}
+
+	.commentsEach {
+		padding: 5px;
+	}
+
+	.board_btns > button {
+		font-size: 11px;
+	}
+
+	#writeCommentsInput {
+		height: 40px;
+		font-size: 11px;
+		margin-right: 5px;
+	}
+
+	#writeComment {
+		height: 40px;
+		width: 40px;
+		font-size: 12px;
+		padding: 6px 8px;
+	}
+
+	.commentLabel {
+		font-size: 11px;
+	}
+
+	.commentWriteDate {
+		font-size: 10px;
+	}
+
+	.commentWriter {
+		font-size: 11px;
+		width: 115px;
+	}
+
+	.commentContent {
+		padding: 10px 15px;
+		font-size: 11px;
+	}
+
+	.note-toolbar button {
+		font-size: 11px;
 	}
 }

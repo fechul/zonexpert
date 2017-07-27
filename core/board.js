@@ -1,58 +1,34 @@
 var async = require('async');
+var user = require('./user.js');
 
 exports.get = function(params, callback) {
 	var myEmail = params.myEmail;
+	var boardNo = params.boardNo;
 
-	var _query = {};
-    var _get = function(query){
-        db.board.find(query).sort({boardNo: -1}).lean().exec(function(err, data) {
-            data = JSON.stringify(data);
-            data = JSON.parse(data);
-            if(data && data.length) {
-            	if(myEmail) {
-            		db.user.find({
-	            		'email': myEmail
-	            	}, {
-	            		'like_board': 1,
-	            		'readyGameCnt': 1
-	            	}).limit(1).exec(function(myDataErr, myData) {
-	            		if(myData && myData.length) {
-	            			myData = myData[0];
-	            		}
-	            		async.map(data, function(board, async_cb){
-		                    db.user.find({
-		                        'email': board.writer
-		                    }, {
-		                        'nickname': 1,
-		                        'readyGameCnt': 1
-		                    }).limit(1).exec(function(_err, userdata) {
-		                        if(_err) {
-		                            console.log("board get list err: ", _err);
-		                        } else {
-		                            if(userdata && userdata.length) {
-		                                userdata = userdata[0];
-		                            }
-		                            board.nickname = userdata.nickname;
-		                            board.readyGameCnt = userdata.readyGameCnt;
-		                           
-		                            if(myData) {
-		                                if(myData.like_board.indexOf(board.boardNo) > -1) {
-		                                    board.i_like = true;
-		                                } else {
-		                                    board.i_like = false;
-		                                }
-		                            }
-		                        }
-		                        async_cb();
-		                    });
-		                }, function(async_err) {
-		                    callback(data);
-		                });
-	            	});
-            	} else {
-            		async.map(data, function(board, async_cb){
-	                    db.user.find({
-	                        'email': board.writer
+	db.board.find({
+		'boardNo': boardNo
+	}).limit(1).lean().exec(function(err, boardData) {
+		if(boardData && boardData.length) {
+			boardData = boardData[0];
+
+			if(myEmail) {
+        		db.user.find({
+            		'email': myEmail
+            	}, {
+            		'like_board': 1,
+            		'readyGameCnt': 1
+            	}).limit(1).exec(function(myDataErr, myData) {
+            		if(myData && myData.length) {
+            			myData = myData[0];
+            		}
+
+            		db.comment.find({
+        				'boardNo': boardNo
+        			}).sort({commentNo:1}).lean().exec(function(_err, _data) {
+        				boardData.comments = _data;
+
+        				db.user.find({
+	                        'email': boardData.writer
 	                    }, {
 	                        'nickname': 1,
 	                        'readyGameCnt': 1
@@ -63,22 +39,92 @@ exports.get = function(params, callback) {
 	                            if(userdata && userdata.length) {
 	                                userdata = userdata[0];
 	                            }
-	                            board.nickname = userdata.nickname;
-	                            board.i_like = false;
-	                            board.readyGameCnt = userdata.readyGameCnt;
-	                            async_cb();
+	                            boardData.nickname = userdata.nickname;
+	                            boardData.readyGameCnt = userdata.readyGameCnt;
+	                           
+	                            if(myData) {
+	                                if(myData.like_board.indexOf(boardNo) > -1) {
+	                                    boardData.i_like = true;
+	                                } else {
+	                                    boardData.i_like = false;
+	                                }
+	                            }
 	                        }
+	                        callback(boardData);
 	                    });
-	                }, function(async_err) {
-	                    callback(data);
-	                });
-            	}
-            } else {
-                callback(null);
-            }
-        });
-    };
+        			});
+            	});
+        	} else {
+        		db.comment.find({
+    				'boardNo': boardNo
+    			}).sort({commentNo:1}).lean().exec(function(_err, _data) {
+    				boardData.comments = _data;
+    				db.user.find({
+                        'email': boardData.writer
+                    }, {
+                        'nickname': 1,
+                        'readyGameCnt': 1
+                    }).limit(1).exec(function(_err, userdata) {
+                        if(_err) {
+                            console.log("board get list err: ", _err);
+                        } else {
+                            if(userdata && userdata.length) {
+                                userdata = userdata[0];
+                            }
+                            boardData.nickname = userdata.nickname;
+                            boardData.i_like = false;
+                            boardData.readyGameCnt = userdata.readyGameCnt;
+                        }
+                        callback(boardData);
+                    });
+    			});
+        	}
+		} else {
+			callback(null);
+		}
+	});
+};
 
+exports.getList = function(params, callback) {
+	var _get = function(query) {
+		db.board.find(query, {
+			'boardNo': 1,
+		    'writer' : 1,
+		    'date' : 1,
+		    'title': 1,
+		    'like': 1
+		}).sort({boardNo: -1}).lean().exec(function(err, data) {
+			async.map(data, function(board, async_cb) {
+				db.user.find({
+                    'email': board.writer
+                }, {
+                    'nickname': 1,
+                    'readyGameCnt': 1
+                }).limit(1).exec(function(_err, userdata) {
+                    if(_err) {
+                        console.log("board getList err: ", _err);
+                    } else {
+                        if(userdata && userdata.length) {
+                            userdata = userdata[0];
+                        }
+                        board.nickname = userdata.nickname;
+                        board.readyGameCnt = userdata.readyGameCnt;
+
+                        db.comment.count({
+                        	'boardNo': board.boardNo
+                        }, function(__err, length) {
+                        	board.commentsCnt = length;
+                        	async_cb();
+                        });
+                    }
+                });
+			}, function(async_err) {
+				callback(data);
+			});
+		});
+	};
+
+	var _query = {};
 	if (params.value && params.type) {
 		if (params.type == 'title') {
             _query[params.type] = {$regex : ".*" + params.value + ".*"};
@@ -101,8 +147,6 @@ exports.get = function(params, callback) {
 	} else{
 		_get(_query);
 	}
-
-
 };
 
 exports.write = function(data, callback) {
@@ -288,6 +332,117 @@ exports.get_content = function(boardNo, callback) {
 			callback(data);
 		} else {
 			callback(null);
+		}
+	});
+};
+
+exports.comment = function(options, callback) {
+	var boardNo = options.boardNo;
+	var content = options.content;
+	var writer = options.writer;
+	var commentNo = 1;
+
+	if(!content || !content.length) {
+		callback({
+			result: false,
+			code: 11
+		});
+	} else {
+		db.comment.find({
+			'boardNo': boardNo
+		}).sort({'commentNo': -1}).limit(1).exec(function(err, data) {
+			if(data && data.length) {
+				commentNo = data[0].commentNo + 1;
+			}
+
+			var new_comment = new db.comment({
+				'boardNo': boardNo,
+				'content': content,
+				'writer': writer,
+				'date': new Date(),
+				'commentNo': commentNo
+			});
+
+			new_comment.save(function(_err) {
+				if(err) {
+					console.log("comment write db save err: ", _err);
+					callback({
+						result: false,
+						code: 1
+					});
+				} else {
+					callback({
+						result: true
+					});
+				}
+			});
+		});
+	}
+};
+
+exports.check = function(options, callback) {
+	var boardNo = options.boardNo;
+
+	db.board.find({
+		'boardNo': boardNo
+	}).limit(1).lean().exec(function(err, data) {
+		if(data && data.length) {
+			callback(true);
+		} else {
+			callback(false);
+		}
+	});
+};
+
+exports.getComments = function(options, callback) {
+	var boardNo = options.boardNo;
+
+	db.comment.find({
+		'boardNo': boardNo
+	}).sort({commentNo: -1}).exec(function(err, comments) {
+		if(comments && comments.length) {
+			comments = JSON.stringify(comments);
+			comments = JSON.parse(comments);
+			async.mapSeries(comments, function(comment, async_cb) {
+				db.user.find({
+					'email': comment.writer
+				}, {
+					'nickname': 1,
+					'readyGameCnt': 1
+				}).limit(1).lean().exec(function(userErr, userData) {
+					comment.writerNick = userData[0].nickname;
+					var key = 'rating_rank';
+					user.countAllUsers('onlyRanked', function(userCount) {
+						redis_client.zrevrank(key, comment.writer, function(err, rankData) {
+							if(!err) {
+								var myTotalRate = (((rankData+1) / userCount)*100).toFixed(2);
+								comment.writerTier = '';
+
+								if(userData[0].readyGameCnt && userData[0].readyGameCnt > 0) {
+									comment.writerTier = 'badge_ready';
+								} else {
+									if(myTotalRate <= 3) {
+										comment.writerTier = 'badge_diamond';
+									} else if(3 < myTotalRate && myTotalRate <= 10) {
+										comment.writerTier = 'badge_platinum';
+									} else if(10 < myTotalRate && myTotalRate <= 30) {
+										comment.writerTier = 'badge_gold';
+									} else if(30 < myTotalRate && myTotalRate <= 70) {
+										comment.writerTier = 'badge_silver';
+									} else if(70 < myTotalRate) {
+										comment.writerTier = 'badge_bronze';
+									}
+								}
+							}
+							async_cb();
+						});
+					});
+				});
+			}, function(async_err) {
+				callback(comments);
+			});
+		} else {
+			callback(comments);
 		}
 	});
 };
