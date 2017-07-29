@@ -35,7 +35,7 @@ var PAGING = {
 		
 		var btnClass = 1;
 		for(var i = start; i <= end; i++) {
-			var pageText = parseInt((pageNo-targetIdx)+i, 10);
+			var pageText = parseInt((pageNo-targetIdx)+btnClass, 10);
 
 			if(pageText > totalPage) {
 				break;

@@ -233,7 +233,7 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 		json.mydata_display = 'display:none;';
 	}
 
-	var limit = 50;
+	var limit = 1;
 	var skip = (req.query.pageNo ? (Math.floor(req.query.pageNo/limit))*limit :  0);
 
 	var key = 'rating_rank';

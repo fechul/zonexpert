@@ -816,24 +816,28 @@ table > tbody > tr:not(:last-child) {
 	display: inline-block;
 	border: 1px solid #ccc;
 	margin-right: 10px;
+	font-size: 10px;
 }
 
 #paging_nextPage {
 	display: inline-block;	
 	border: 1px solid #ccc;
 	margin-left: 10px;
+	font-size: 10px;
 }
 
 #paging_firstPage {
 	display: inline-block;
 	border: 1px solid #ccc;
 	margin-right: 5px;
+	font-size: 10px;
 }
 
 #paging_lastPage {
 	display: inline-block;
 	border: 1px solid #ccc;
 	margin-left: 5px;	
+	font-size: 10px;
 }
 
 button.paging_number {
@@ -906,6 +910,17 @@ button.paging_number.btn-primary:hover {
 	    margin: -32px 0px 0px 0px;
 	    font-size: 13px;
 	}
+
+	#paging_prevPage,
+	#paging_nextPage,
+	#paging_firstPage,
+	#paging_lastPage {
+		padding: 3px 6px !important;
+	}
+
+	button.paging_number {
+		font-size: 10px;
+	}
 }
 
 @media all and (max-device-width: 540px) {
@@ -974,5 +989,30 @@ button.paging_number.btn-primary:hover {
 	    line-height: 19px;
 	    margin: -32px 0px 0px 0px;
 	    font-size: 13px;
+	}
+
+	#paging_prevPage {
+		padding: 3px 6px;
+		margin-right: 7px;
+	}
+
+	#paging_nextPage {
+		padding: 3px 6px;
+		margin-left: 7px;
+	}
+
+	#paging_firstPage {
+		padding: 3px 6px;
+		margin-right: 4px;
+	}
+
+	#paging_lastPage {
+		padding: 3px 6px;
+		margin-left: 4px;
+	}
+
+	button.paging_number {
+		font-size: 10px;
+		padding: 4px 8px;
 	}
 }
