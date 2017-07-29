@@ -826,7 +826,7 @@ router.all('/test/schedule_initialize', function(req, res) {
 	});
 });
 
-router.get('/getMyData', function(req, res) {
+router.get('/getMyData', need_login, function(req, res) {
 	var email = req.session.email;
 	var mydata_obj = {};
 
