@@ -2,8 +2,15 @@ var RANK = {
 	init: function(initData) {
 		this.init_events();
 		this.scrollToTarget();
+		this.totalPage = parseInt(initData.totalPage, 10);
+		this.pageNo = parseInt(initData.pageNo, 10);
 
 		notice.init();
+		paging.init({
+			'target': $('#rank_table'),
+			'totalPage': initData.totalPage,
+			'pageNo': initData.pageNo
+		});
 
 		if(initData.attendancePointUpdated) {
 			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
@@ -11,6 +18,8 @@ var RANK = {
 	},
 
 	init_events: function() {
+		var self = this;
+
 		$('#header .tools .signup').click(function() {
 			location.href = "/signup";
 		});
@@ -64,6 +73,28 @@ var RANK = {
 		$('#rank_table').on('click', 'tr:not(:nth-child(1))', function() {
 			var $this = $(this);
 			location.href = '/search?id=' + $this.find('td.table_label_nickname').html()
+		});
+
+		//paging
+		$(document).on('click', '#paging_firstPage', function() {
+			location.href = '/rank?pageNo=1';
+		});
+
+		$(document).on('click', '#paging_lastPage', function() {
+			location.href = '/rank?pageNo=' + (self.totalPage);
+		});
+
+		$(document).on('click', '#paging_prevPage', function() {
+			location.href = '/rank?pageNo=' + (self.pageNo-1);
+		});
+
+		$(document).on('click', '#paging_nextPage', function() {
+			location.href = '/rank?pageNo=' + (self.pageNo+1);
+		});
+
+		$(document).on('click', '.paging_number', function() {
+			var value = $(this).attr('value');
+			location.href = '/rank?pageNo=' + value;
 		});
 	},
 

@@ -807,6 +807,47 @@ table > tbody > tr:not(:last-child) {
 }
 
 
+/* paging */
+#paging_numbers {
+	margin-top: 20px;
+}
+
+#paging_prevPage {
+	display: inline-block;
+	border: 1px solid #ccc;
+	margin-right: 10px;
+}
+
+#paging_nextPage {
+	display: inline-block;	
+	border: 1px solid #ccc;
+	margin-left: 10px;
+}
+
+#paging_firstPage {
+	display: inline-block;
+	border: 1px solid #ccc;
+	margin-right: 5px;
+}
+
+#paging_lastPage {
+	display: inline-block;
+	border: 1px solid #ccc;
+	margin-left: 5px;	
+}
+
+button.paging_number {
+	border: 1px solid #ccc;
+}
+
+button.paging_number.btn-primary,
+button.paging_number.btn-primary:hover {
+	cursor: default;
+	background-color: #337ab7 !important;
+	border-color: #2e6da4 !important;
+	pointer-events: none;
+}
+
 /*
 	Media Query
 */

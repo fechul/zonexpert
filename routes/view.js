@@ -215,7 +215,9 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 		headerHideMenu: '',
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
-		mobileSafaribodyBackgroundCss: ''
+		mobileSafaribodyBackgroundCss: '',
+		pageNo: req.query.pageNo || 1,
+		totalPage: 1
 	};
 
 	if (req.is_mobile_safari) {
@@ -231,13 +233,15 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 		json.mydata_display = 'display:none;';
 	}
 
+	var limit = 100;
+	var skip = (req.query.pageNo ? (Math.floor(req.query.pageNo/limit))*limit :  0);
+
 	var key = 'rating_rank';
 	// var key = 'game_cnt_rank';
 	// var key = 'predict_rate_rank';
 
 	var get_rank_range = function(start, search_target) {
-    	var start = start;
-    	var end = start + 99;
+    	var end = start + (limit-1);
 
     	start -= 1;
 		end -= 1;
@@ -262,6 +266,7 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 	            res.render(path, json);
 	        } else {
             	user.countAllUsers('onlyRanked', function(userCount) {
+            		json.totalPage = Math.ceil((userCount/limit));
             		var redisUserCnt = userCount;
 	            	user.get_rank_data(data, function(userdata) {
 	            		var rank_table_html = '';
@@ -287,7 +292,7 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
 							return tier_img;
 						};
 
-						var rank = 1;
+						var rank = start+1;
 						var type = 'total';
 						if(req.query.type) {
 							type = req.query.type;
@@ -345,9 +350,10 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
     			redis_client.zrevrank(key, email, function(search_err, search_data) {
     				if(search_data || search_data == 0) {
 	    				var target_rank = search_data + 1;
-						var start_range = Math.floor(target_rank/100) * 100;
-						start_range += 1;
-						get_rank_range(start_range, target_rank);
+						var pageNo = Math.ceil(target_rank/limit);
+						json.pageNo = pageNo;
+						var startIdx = (pageNo*limit)-(limit-1);
+						get_rank_range(startIdx, target_rank);
     				} else {
     					json.rank_html = '<tr><td colspan="7">검색 결과가 없습니다.</td></tr>';
     					res.render(path, json);
@@ -359,7 +365,8 @@ router.get('/rank', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, fu
     		}
     	});
 	} else {
-		get_rank_range(1, null);
+		var startIdx = (req.query.pageNo*limit)-(limit-1) || 1;
+		get_rank_range(startIdx, null);
 	}
 });
 

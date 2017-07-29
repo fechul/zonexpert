@@ -4,7 +4,7 @@
         <title>존문가닷컴-랭킹</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel='stylesheet' href='/stylesheets/common.css' />
-        <link rel='stylesheet' href='/stylesheets/rank	.css' />
+        <link rel='stylesheet' href='/stylesheets/rank.css' />
         <link rel='stylesheet' href='/bootstrap/bootstrap.css' />
     </head>
 
@@ -56,10 +56,15 @@
 	<script src="modules/rank.js"></script>
 	<script src="modules/prediction_shortcut.js"></script>
 	<script src="notice/notice.js"></script>
+	<script src="modules/paging.js"></script>
 	<script>
 		var notice = NOTICE;
+		var paging = PAGING;
+		
 		RANK.init({
-			'attendancePointUpdated': <%- attendancePointUpdated %>
+			'attendancePointUpdated': <%- attendancePointUpdated %>,
+			'totalPage': <%- totalPage %>,
+			'pageNo': <%- pageNo %>
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>
