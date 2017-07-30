@@ -506,34 +506,49 @@ exports.getChartRates = function(params, callback) {
     var nextRating = params.search_rating;
     var rateList = [];
 
-    async.mapSeries(dateList, function(list, async_cb) {
-        var targetStartDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 00:00:00');
-        var targetFinDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 23:59:59');
-        db.prediction.find({
-            $and: [
-                {
-                    'ratingCalculatedTime': {
-                        $gte: targetStartDate
+    db.user.find({
+        'nickname': nick
+    }, {
+        'email': 1
+    }).limit(1).exec(function(userErr, userData) {
+        if(userData && userData.length) {
+            userData = userData[0];
+            
+            async.mapSeries(dateList, function(list, async_cb) {
+            var targetStartDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 00:00:00');
+            var targetFinDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 23:59:59');
+            db.prediction.find({
+                $and: [
+                    {
+                        'userEmail': userData.email;
+                    },
+                    {
+                        'ratingCalculatedTime': {
+                            $gte: targetStartDate
+                        }
+                    },
+                    {
+                        'ratingCalculatedTime': {
+                            $lte: targetFinDate
+                        }
                     }
-                },
-                {
-                    'ratingCalculatedTime': {
-                        $lte: targetFinDate
-                    }
+                ]
+            }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
+                if(data && data.length) {
+                    data = data[0];
+                    rateList.push(data.afterRating);
+                    nextRating = data.afterRating;
+                } else {
+                    rateList.push(nextRating);
                 }
-            ]
-        }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
-            if(data && data.length) {
-                data = data[0];
-                rateList.push(data.afterRating);
-                nextRating = data.afterRating;
-            } else {
-                rateList.push(nextRating);
-            }
-            async_cb();
+                async_cb();
+            });
+        }, function(async_err) {
+            callback(rateList);
         });
-    }, function(async_err) {
-        callback(rateList);
+        } else {
+            callback(false);
+        }
     });
 };
 
