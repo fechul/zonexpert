@@ -191,12 +191,17 @@ router.get('/board/getList', function(req, res) {
 	var value = req.query.value || '';
 	var type = req.query.type || '';
 
+	var _limit = req.query._limit || 20;
+	var pageNo = req.query.pageNo || 1;
+
 	board.getList({
 		'value': value,
-		'type': type
+		'type': type,
+		'_limit': _limit,
+		'pageNo': pageNo
 	}, function(data) {
 		user.countAllUsers('onlyRanked', function(userCount) {
-			async.mapSeries(data, function(board, async_cb) {
+			async.mapSeries(data.list, function(board, async_cb) {
 				redis_client.zrevrank('rating_rank', board.writer, function(err, rank) {
 					if(rank || rank == 0) {
 	    				rank += 1;

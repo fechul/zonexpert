@@ -86,6 +86,11 @@ exports.get = function(params, callback) {
 };
 
 exports.getList = function(params, callback) {
+	var _limit = parseInt(params._limit, 10);
+	var pageNo = parseInt(params.pageNo, 10);
+	var _skip = (pageNo-1)*_limit;
+	var total;
+
 	var _get = function(query) {
 		db.board.find(query, {
 			'boardNo': 1,
@@ -93,7 +98,7 @@ exports.getList = function(params, callback) {
 		    'date' : 1,
 		    'title': 1,
 		    'like': 1
-		}).sort({boardNo: -1}).lean().exec(function(err, data) {
+		}).sort({boardNo: -1}).skip(_skip).limit(_limit).lean().exec(function(err, data) {
 			async.map(data, function(board, async_cb) {
 				db.user.find({
                     'email': board.writer
@@ -119,8 +124,18 @@ exports.getList = function(params, callback) {
                     }
                 });
 			}, function(async_err) {
-				callback(data);
+				callback({
+					'list': data,
+					'total': total
+				});
 			});
+		});
+	};
+
+	var getLength = function(query, callback) {
+		db.board.count(query, function(err, length) {
+			total = length;
+			callback();
 		});
 	};
 
@@ -128,7 +143,9 @@ exports.getList = function(params, callback) {
 	if (params.value && params.type) {
 		if (params.type == 'title') {
             _query[params.type] = {$regex : ".*" + params.value + ".*"};
-            _get(_query);
+            getLength(_query, function() {
+            	_get(_query);
+            });
 		} else {
             db.user.find({
                 'nickname': params.value
@@ -137,7 +154,9 @@ exports.getList = function(params, callback) {
             }).limit(1).exec(function(err , data){
 				if(data && data.length){
 					_query[params.type] = data[0].email;
-					_get(_query);
+					getLength(_query, function() {
+		            	_get(_query);
+		            });
 				} else{
 					callback(null);
 				}
@@ -145,7 +164,9 @@ exports.getList = function(params, callback) {
 
 		}
 	} else{
-		_get(_query);
+		getLength(_query, function() {
+        	_get(_query);
+        });
 	}
 };
 

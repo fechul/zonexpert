@@ -384,7 +384,8 @@ router.get('/board', readPredictionShortcutHTML, readFeedbackHTML, checkPoint, f
 		attendancePointUpdated: req.attendancePointUpdated,
 		myCurrentPoint: req.point,
 		isLogin: false,
-		mobileSafaribodyBackgroundCss: ''
+		mobileSafaribodyBackgroundCss: '',
+		pageNo: req.query.pageNo || 1
 	};
 
 	if (req.is_mobile_safari) {

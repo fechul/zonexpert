@@ -62,12 +62,15 @@
 	<script src="modules/board.js"></script>
 	<script src="modules/prediction_shortcut.js"></script>
 	<script src="notice/notice.js"></script>
+	<script src="modules/paging.js"></script>
 	<script>
 		var notice = NOTICE;
+		var paging = PAGING;
 		BOARD.init({
 			'user_email': '<%= user_email %>',
 			'attendancePointUpdated': <%- attendancePointUpdated %>,
-			'isLogin': <%- isLogin %>
+			'isLogin': <%- isLogin %>,
+			'pageNo': <%- pageNo %>
 		});
 		PREDICTION_SHORTCUT.init();
 	</script>

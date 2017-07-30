@@ -2,6 +2,8 @@ var BOARD = {
 	init: function(initData) {
 		this.user_email = initData.user_email;
 		this.isLogin = initData.isLogin;
+		this.totalPage;
+		this.pageNo = parseInt(initData.pageNo, 10);
 
 		notice.init();
 
@@ -94,6 +96,28 @@ var BOARD = {
 
 			location.href = "/search?id=" + id;
 		});
+
+		//paging
+		$(document).on('click', '#paging_firstPage', function() {
+			location.href = '/board?pageNo=1';
+		});
+
+		$(document).on('click', '#paging_lastPage', function() {
+			location.href = '/board?pageNo=' + (self.totalPage);
+		});
+
+		$(document).on('click', '#paging_prevPage', function() {
+			location.href = '/board?pageNo=' + (self.pageNo-1);
+		});
+
+		$(document).on('click', '#paging_nextPage', function() {
+			location.href = '/board?pageNo=' + (self.pageNo+1);
+		});
+
+		$(document).on('click', '.paging_number', function() {
+			var value = $(this).attr('value');
+			location.href = '/board?pageNo=' + value;
+		});
 	},
 
 	set_board: function(query) {
@@ -170,7 +194,11 @@ var BOARD = {
 			query = {};
 		}
 
-		$.get('/board/getList', query, function(board_data) {
+		query._limit = 20;
+		query.pageNo = self.pageNo;
+		$.get('/board/getList', query, function(data) {
+			self.totalPage = Math.ceil(data.total/query._limit);
+			var board_data = data.list;
 			if(!board_data || board_data.length == 0) {
 				board_data = [];
 			}
@@ -191,6 +219,12 @@ var BOARD = {
 
             $('#board_table tr:not(:first-child)').remove()
 			$('#board_table').append(board_html);
+
+			paging.init({
+				'target': $('#board_table'),
+				'totalPage': self.totalPage,
+				'pageNo': query.pageNo || 1
+			});
 		});
 	}
 };
