@@ -487,6 +487,12 @@ router.get('/prediction/getMatchesRecord', function(req, res) {
 	});
 });
 
+router.get('/prediction/getChartRates', function(req, res) {
+	prediction.getChartRates(req.query, function(data) {
+		res.json(data);
+	});
+});
+
 router.get('/prediction/getUserList', function(req, res) {
 	var matchId = req.query.matchId;
 	var email = req.session.email;

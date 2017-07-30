@@ -179,77 +179,130 @@ var SEARCH = {
 			var datelist = [];
 			var ratelist = [];
 
-			if(recentMatches && recentMatches.length) {
-				beforeRating = null;
-				for(var d = labels.length-1; d >= 0 ; d--) {
-					datelist[d] = (labels[d].month + '/' + labels[d].day);
-					var found = false;
-					var lastRatingOnTheDay = null;
-					var lastRatingDay = null;
-
-					for(var r = 0; r < recentMatches.length; r++) {
-						var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
-						if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
-							if(!lastRatingOnTheDay) {
-								lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
-								lastRatingDay = recentMatches[r].ratingCalculatedTime;
-								ratelist[d] = lastRatingOnTheDay;
-								beforeRating = recentMatches[r].beforeRating;
-								found = true;
-							} else {
-								if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
-									lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
-									lastRatingDay = recentMatches[r].ratingCalculatedTime;
-									ratelist[d] = lastRatingOnTheDay;
-									beforeRating = recentMatches[r].beforeRating;
-									found = true;
-								}
-							}
-						}
-					}
-
-					if(!found && d == labels.length-1) {
-						ratelist[d] = self.search_rating;
-					} else if(!found) {
-						ratelist[d] = parseInt(beforeRating) || self.search_rating;
-					}
-				}
-			} else {
-				for(var d = labels.length-1; d >= 0 ; d--) {
-					ratelist.push(self.search_rating);
-				}
+			var queryLabels = [];
+			for(var q = 0; q < labels.length; q++) {
+				queryLabels.push(labels[labels.length-1-q]);
 			}
+			$.get('/prediction/getChartRates', {
+				'date': queryLabels,
+				'search_id': self.search_id,
+				'search_rating': self.search_rating
+			}, function(chartRates) {
+				if(chartRates && chartRates.length) {
+					for(var y = 0; y < chartRates.length; y++) {
+						datelist.push(labels[y].month + '/' + labels[y].day);
+						ratelist.push(chartRates[chartRates.length-1-y]);
+					}
+				} else {
+					for(var n = 0; n < labels.length; n++) {
+						datelist.push(labels[n].month + '/' + labels[n].day);
+						ratelist.push(self.search_rating);
+					}
+				}
 
-			var data = {
-			    labels: datelist,
-			    datasets: [
-			        {
-			            label: "레이팅",
-			            fill: false,
-			            lineTension: 0.0,
-			            borderColor: "rgba(75,192,192,1)",
-			            pointBackgroundColor: "#fff",
-			            data: ratelist,
-			            spanGaps: false
+				var data = {
+				    labels: datelist,
+				    datasets: [
+				        {
+				            label: "레이팅",
+				            fill: false,
+				            lineTension: 0.0,
+				            borderColor: "rgba(75,192,192,1)",
+				            pointBackgroundColor: "#fff",
+				            data: ratelist,
+				            spanGaps: false
+				        }
+				    ]
+				};
+
+				var options = {
+			        scales: {
+			            yAxes: [{
+			                ticks: {
+			                    beginAtZero: false
+			                }
+			            }]
 			        }
-			    ]
-			};
+			    };
 
-			var options = {
-		        scales: {
-		            yAxes: [{
-		                ticks: {
-		                    beginAtZero: false
-		                }
-		            }]
-		        }
-		    };
-
-			var myChart = new Chart(ctx, {
-			    type: 'line',
-			    data: data,
-			    options: options
+				var myChart = new Chart(ctx, {
+				    type: 'line',
+				    data: data,
+				    options: options
+				});
 			});
+
+			// if(recentMatches && recentMatches.length) {
+			// 	beforeRating = null;
+			// 	for(var d = labels.length-1; d >= 0 ; d--) {
+			// 		datelist[d] = (labels[d].month + '/' + labels[d].day);
+			// 		var found = false;
+			// 		var lastRatingOnTheDay = null;
+			// 		var lastRatingDay = null;
+
+			// 		for(var r = 0; r < recentMatches.length; r++) {
+			// 			var matchDate = new Date(recentMatches[r].ratingCalculatedTime);
+			// 			if((matchDate.getMonth()+1) == labels[d].month && matchDate.getDate() == labels[d].day) {
+			// 				if(!lastRatingOnTheDay) {
+			// 					lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+			// 					lastRatingDay = recentMatches[r].ratingCalculatedTime;
+			// 					ratelist[d] = lastRatingOnTheDay;
+			// 					beforeRating = recentMatches[r].beforeRating;
+			// 					found = true;
+			// 				} else {
+			// 					if(recentMatches[r].ratingCalculatedTime > lastRatingDay) {
+			// 						lastRatingOnTheDay = parseInt(recentMatches[r].afterRating, 10);
+			// 						lastRatingDay = recentMatches[r].ratingCalculatedTime;
+			// 						ratelist[d] = lastRatingOnTheDay;
+			// 						beforeRating = recentMatches[r].beforeRating;
+			// 						found = true;
+			// 					}
+			// 				}
+			// 			}
+			// 		}
+
+			// 		if(!found && d == labels.length-1) {
+			// 			ratelist[d] = self.search_rating;
+			// 		} else if(!found) {
+			// 			ratelist[d] = parseInt(beforeRating) || self.search_rating;
+			// 		}
+			// 	}
+			// } else {
+			// 	for(var d = labels.length-1; d >= 0 ; d--) {
+			// 		ratelist.push(self.search_rating);
+			// 	}
+			// }
+
+			// var data = {
+			//     labels: datelist,
+			//     datasets: [
+			//         {
+			//             label: "레이팅",
+			//             fill: false,
+			//             lineTension: 0.0,
+			//             borderColor: "rgba(75,192,192,1)",
+			//             pointBackgroundColor: "#fff",
+			//             data: ratelist,
+			//             spanGaps: false
+			//         }
+			//     ]
+			// };
+
+			// var options = {
+		 //        scales: {
+		 //            yAxes: [{
+		 //                ticks: {
+		 //                    beginAtZero: false
+		 //                }
+		 //            }]
+		 //        }
+		 //    };
+
+			// var myChart = new Chart(ctx, {
+			//     type: 'line',
+			//     data: data,
+			//     options: options
+			// });
 		} else {
 			$('#myChart').hide();
 			$('.noChart').show();
@@ -576,6 +629,7 @@ var SEARCH = {
 
 	getDateList: function() {
 		var now = new Date();
+		var year = now.getFullYear();
 		var month = now.getMonth() + 1;
 		var date = now.getDate();
 
@@ -585,6 +639,7 @@ var SEARCH = {
 			var start = date-9;
 			for(var i = start; i < date+1; i++) {
 				datelist.push({
+					year: year,
 					month: month,
 					day: i
 				});
@@ -596,16 +651,34 @@ var SEARCH = {
 				month--;
 			}
 
-			if([1,3,5,7,8,10,12].indexOf(month) > -1) {
+			if(month == 12) {
 				var start = (31 - (10-date) + 1);
 				for(var i = start; i < 32; i++) {
 					datelist.push({
+						year: year,
 						month: month,
 						day: i
 					});
 				}
 				for(var i = 1; i < date+1; i++) {
 					datelist.push({
+						year: year+1,
+						month: 1,
+						day: i
+					});
+				}
+			} else if([1,3,5,7,8,10].indexOf(month) > -1) {
+				var start = (31 - (10-date) + 1);
+				for(var i = start; i < 32; i++) {
+					datelist.push({
+						year: year,
+						month: month,
+						day: i
+					});
+				}
+				for(var i = 1; i < date+1; i++) {
+					datelist.push({
+						year: year,
 						month: month+1,
 						day: i
 					});
@@ -614,26 +687,42 @@ var SEARCH = {
 				var start = (30 - (10-date) + 1);
 				for(var i = start; i < 31; i++) {
 					datelist.push({
+						year: year,
 						month: month,
 						day: i
 					});
 				}
 				for(var i = 1; i < date+1; i++) {
 					datelist.push({
+						year: year,
 						month: month+1,
 						day: i
 					});
 				}
 			} else {
-				var start = (28 - (10-date) + 1);
-				for(var i = start; i < 29; i++) {
+				var febDate = 28;
+				if(year % 4 == 0) {
+					febDate = 29;
+					if(year % 100 == 0) {
+						febDate = 28;
+					}
+
+					if(year % 400 == 0) {
+						febDate = 29;
+					}
+				}
+
+				var start = (febDate - (10-date) + 1);
+				for(var i = start; i < (febDate+1); i++) {
 					datelist.push({
+						year: year,
 						month: month,
 						day: i
 					});
 				}
 				for(var i = 1; i < date+1; i++) {
 					datelist.push({
+						year: year,
 						month: month+1,
 						day: i
 					});
