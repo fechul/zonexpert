@@ -60,6 +60,9 @@ var PAGING = {
 
 		pagingHtml += '</div>';
 
+		if($('#paging_numbers').length) {
+			$('#paging_numbers').remove();
+		}
 		target.after(pagingHtml);
 	}
 };
