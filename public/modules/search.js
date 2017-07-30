@@ -183,6 +183,7 @@ var SEARCH = {
 				'date': labels,
 				'search_id': self.search_id
 			}, function(chartRates) {
+				console.log(chartRates)
 				if(chartRates && chartRates.length) {
 					ratelist = chartRates;
 				} else {

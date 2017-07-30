@@ -545,7 +545,6 @@ exports.getChartRates = function(params, callback) {
                     ]
                 }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
                     if(data && data.length) {
-                        console.log("111: ", targetStartDate, targetFinDate, data);
                         data = data[0];
                         data.afterRating = parseInt(data.afterRating, 10);
                         rateList.push(data.afterRating);
@@ -561,7 +560,6 @@ exports.getChartRates = function(params, callback) {
                                 $lt: targetStartDate
                             }
                         }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(_err, _data) {
-                            console.log("222: ", targetStartDate, targetFinDate, _data);
                             if(_data && _data.length) {
                                 _data = _data[0];
                                 _data.afterRating = parseInt(_data.afterRating, 10);
