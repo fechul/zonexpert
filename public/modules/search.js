@@ -177,13 +177,15 @@ var SEARCH = {
 
 			var labels = this.getDateList();
 			var datelist = [];
+			for(var d = 0; d < labels.length; d++) {
+				datelist[d] = (labels[d].month + '/' + labels[d].day);
+			}
 			var ratelist = [];
 
 			$.get('/prediction/getChartRates', {
 				'date': labels,
 				'search_id': self.search_id
 			}, function(chartRates) {
-				console.log(chartRates)
 				if(chartRates && chartRates.length) {
 					ratelist = chartRates;
 				} else {
