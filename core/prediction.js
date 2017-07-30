@@ -503,13 +503,13 @@ exports.getMatchesRecord = function(data, callback) {
 exports.getChartRates = function(params, callback) {
     var nick = params.search_id;
     var dateList = params.date;
-    var nextRating = params.search_rating;
     var rateList = [];
 
     db.user.find({
         'nickname': nick
     }, {
-        'email': 1
+        'email': 1,
+        'rating': 1
     }).limit(1).exec(function(userErr, userData) {
         if(userData && userData.length) {
             userData = userData[0];
@@ -520,7 +520,11 @@ exports.getChartRates = function(params, callback) {
             db.prediction.find({
                 $and: [
                     {
-                        'userEmail': userData.email
+                        'userEmail': userData.email,
+                        'confirmed': true,
+                        'result': {
+                            $in: ['true', 'false']
+                        }
                     },
                     {
                         'ratingCalculatedTime': {
@@ -538,11 +542,34 @@ exports.getChartRates = function(params, callback) {
                     data = data[0];
                     data.afterRating = parseInt(data.afterRating, 10);
                     rateList.push(data.afterRating);
-                    nextRating = data.afterRating;
+                    async_cb();
                 } else {
-                    rateList.push(nextRating);
+                    db.prediction.find({
+                        $and: [
+                            {
+                                'userEmail': userData.email,
+                                'confirmed': true,
+                                'result': {
+                                    $in: ['true', 'false']
+                                }
+                            },
+                            {
+                                'ratingCalculatedTime': {
+                                    $lte: targetStartDate
+                                }
+                            }
+                        ]
+                    }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(_err, _data) {
+                        if(_data && _data.length) {
+                            _data = _data[0];
+                            _data.afterRating = parseInt(_data.afterRating, 10);
+                            rateList.push(_data.afterRating);
+                        } else {
+                            rateList.push(1500);
+                        }
+                        async_cb();
+                    });
                 }
-                async_cb();
             });
         }, function(async_err) {
             callback(rateList);

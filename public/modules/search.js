@@ -179,23 +179,14 @@ var SEARCH = {
 			var datelist = [];
 			var ratelist = [];
 
-			var queryLabels = [];
-			for(var q = 0; q < labels.length; q++) {
-				queryLabels.push(labels[labels.length-1-q]);
-			}
 			$.get('/prediction/getChartRates', {
-				'date': queryLabels,
-				'search_id': self.search_id,
-				'search_rating': self.search_rating
+				'date': labels,
+				'search_id': self.search_id
 			}, function(chartRates) {
 				if(chartRates && chartRates.length) {
-					for(var y = 0; y < chartRates.length; y++) {
-						datelist.push(labels[y].month + '/' + labels[y].day);
-						ratelist.push(chartRates[chartRates.length-1-y]);
-					}
+					ratelist = chartRates;
 				} else {
 					for(var n = 0; n < labels.length; n++) {
-						datelist.push(labels[n].month + '/' + labels[n].day);
 						ratelist.push(self.search_rating);
 					}
 				}
