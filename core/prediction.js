@@ -513,14 +513,14 @@ exports.getChartRates = function(params, callback) {
     }).limit(1).exec(function(userErr, userData) {
         if(userData && userData.length) {
             userData = userData[0];
-            
+
             async.mapSeries(dateList, function(list, async_cb) {
             var targetStartDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 00:00:00');
             var targetFinDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 23:59:59');
             db.prediction.find({
                 $and: [
                     {
-                        'userEmail': userData.email;
+                        'userEmail': userData.email
                     },
                     {
                         'ratingCalculatedTime': {
