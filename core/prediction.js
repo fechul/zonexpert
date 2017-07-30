@@ -536,6 +536,7 @@ exports.getChartRates = function(params, callback) {
             }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
                 if(data && data.length) {
                     data = data[0];
+                    data.afterRating = parseInt(data.afterRating, 10);
                     rateList.push(data.afterRating);
                     nextRating = data.afterRating;
                 } else {
