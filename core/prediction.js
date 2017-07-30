@@ -515,65 +515,71 @@ exports.getChartRates = function(params, callback) {
             userData = userData[0];
 
             async.mapSeries(dateList, function(list, async_cb) {
-            var targetStartDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 00:00:00');
-            var targetFinDate = new Date(list.year + '-' + list.month + '-' + list.day + ' 23:59:59');
-            db.prediction.find({
-                $and: [
-                    {
-                        'userEmail': userData.email,
-                        'confirmed': true,
-                        'result': {
-                            $in: ['true', 'false']
-                        }
-                    },
-                    {
-                        'ratingCalculatedTime': {
-                            $gte: targetStartDate
-                        }
-                    },
-                    {
-                        'ratingCalculatedTime': {
-                            $lte: targetFinDate
-                        }
-                    }
-                ]
-            }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
-                if(data && data.length) {
-                    data = data[0];
-                    data.afterRating = parseInt(data.afterRating, 10);
-                    rateList.push(data.afterRating);
-                    async_cb();
-                } else {
-                    db.prediction.find({
-                        $and: [
-                            {
-                                'userEmail': userData.email,
-                                'confirmed': true,
-                                'result': {
-                                    $in: ['true', 'false']
-                                }
-                            },
-                            {
-                                'ratingCalculatedTime': {
-                                    $lte: targetStartDate
-                                }
+                var date = null;
+                date = new Date(list.year + '-' + list.month + '-' + list.day + ' 00:00:00');
+                var startTime = date.getTime() + (1000*60*60*9);
+                var targetStartDate = new Date(startTime);
+                date = new Date(list.year + '-' + list.month + '-' + list.day + ' 23:59:59');
+                var FinTime = date.getTime() + (1000*60*60*9);
+                var targetFinDate = new Date(FinTime);
+                
+                db.prediction.find({
+                    $and: [
+                        {
+                            'userEmail': userData.email,
+                            'confirmed': true,
+                            'result': {
+                                $in: ['true', 'false']
                             }
-                        ]
-                    }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(_err, _data) {
-                        if(_data && _data.length) {
-                            _data = _data[0];
-                            _data.afterRating = parseInt(_data.afterRating, 10);
-                            rateList.push(_data.afterRating);
-                        } else {
-                            rateList.push(1500);
+                        },
+                        {
+                            'ratingCalculatedTime': {
+                                $gte: targetStartDate
+                            }
+                        },
+                        {
+                            'ratingCalculatedTime': {
+                                $lte: targetFinDate
+                            }
                         }
+                    ]
+                }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(err, data) {
+                    if(data && data.length) {
+                        data = data[0];
+                        data.afterRating = parseInt(data.afterRating, 10);
+                        rateList.push(data.afterRating);
                         async_cb();
-                    });
-                }
+                    } else {
+                        db.prediction.find({
+                            $and: [
+                                {
+                                    'userEmail': userData.email,
+                                    'confirmed': true,
+                                    'result': {
+                                        $in: ['true', 'false']
+                                    }
+                                },
+                                {
+                                    'ratingCalculatedTime': {
+                                        $lt: targetStartDate
+                                    }
+                                }
+                            ]
+                        }).sort({'ratingCalculatedTime': -1}).limit(1).lean().exec(function(_err, _data) {
+                            if(_data && _data.length) {
+                                _data = _data[0];
+                                _data.afterRating = parseInt(_data.afterRating, 10);
+                                rateList.push(_data.afterRating);
+                            } else {
+                                rateList.push(1500);
+                            }
+                            async_cb();
+                        });
+                    }
+                });
+            }, function(async_err) {
+                callback(rateList);
             });
-        }, function(async_err) {
-            callback(rateList);
-        });
         } else {
             callback(false);
         }
