@@ -13,6 +13,9 @@ var PAGING = {
 		var start = (idx*btnNum) + 1;
 		var end = start + (btnNum-1);
 		var targetIdx = pageNo%btnNum;
+		if(pageNo % btnNum == 0) {
+			targetIdx = btnNum;
+		}
 
 		var prevDone = false;
 		var nextDone = false;
