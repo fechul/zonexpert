@@ -45,9 +45,7 @@ exports.login = function(data, callback) {
 };
 
 exports.signup = function(data, callback) {
-    console.log("@: ", data)
     this.validate(data, function(validation) {
-        console.log("2: ", validation)
         if (validation.result) {
             var signup_auth_token = randomstring.generate(30);
             var new_user = new db.user({
@@ -377,6 +375,14 @@ exports.getPoint = function(email, callback) {
     });
 };
 
+exports.getPointLog = function(email, callback) {
+    db.point.find({
+        'userEmail': email
+    }).sort({'time': -1}).exec(function(err, data) {
+        callback(data);
+    });
+};
+
 exports.checkPoint = function(email, callback) {
     db.user.find({
         'email': email
@@ -396,12 +402,13 @@ exports.checkPoint = function(email, callback) {
 
                 if(!userData.todayAttendancePoint) {
                     var atPoint = 100;
-                    var atPointLog = {
+                    var atPointLog = new db.point({
+                        'userEmail': email,
                         'amount': atPoint,
                         'pointType': 'free',
                         'classification': 'attendance',
                         'time': new Date()
-                    };
+                    });
 
                     db.user.update({
                         'email': email
@@ -411,15 +418,21 @@ exports.checkPoint = function(email, callback) {
                         },
                         $inc: {
                             'freePoint': atPoint
-                        },
-                        $addToSet: {
-                            'pointLog': atPointLog
                         }
                     }, function(err) {
-                        callback({
-                            attendancePointUpdated: err ? false : true,
-                            point: err ? userData.point + userData.freePoint : userData.point + userData.freePoint + atPoint
-                        });
+                        if(err) {
+                            callback({
+                                attendancePointUpdated: false,
+                                point: userData.point + userData.freePoint
+                            });
+                        } else {
+                            atPointLog.save(function(pointErr) {
+                                callback({
+                                    attendancePointUpdated: true,
+                                    point: userData.point + userData.freePoint + atPoint
+                                });
+                            });
+                        }
                     });
                 } else {
                     callback({
@@ -476,6 +489,7 @@ exports.usePoint = function(options, callback) {
                 }
 
                 var pointLog = {
+                    'userEmail': email,
                     'amount': point,
                     'pointType': (pointType == 'free' ? 'free' : 'currency'),
                     'classification': (type == 'view' || type == 'system' ? 'use' : type),
@@ -493,18 +507,19 @@ exports.usePoint = function(options, callback) {
                     }
                 }
 
+                var newPointLog = new db.point(pointLog);
+
                 db.user.update({
                     'email': email
                 }, {
-                    $set: setQuery,
-                    $addToSet: {
-                        'pointLog': pointLog
-                    }
+                    $set: setQuery
                 }, function(updateErr) {
                     if(updateErr) {
                         callback(false);
                     } else {
-                        callback(true);
+                        newPointLog.save(function(pointErr) {
+                            callback(true);
+                        });
                     }
                 });
             } else {
@@ -534,6 +549,7 @@ exports.earnPoint = function(options, callback) {
             var updatedPoint = userData.point + point;
 
             var pointLog = {
+                'userEmail': email,
                 'amount': point,
                 'pointType': 'currency',
                 'classification': (type == 'view' || type == 'system' ? 'use' : type),
@@ -551,20 +567,21 @@ exports.earnPoint = function(options, callback) {
                 }
             }
 
+            var newPointLog = db.point(newPointLog);
+
             db.user.update({
                 'email': email
             }, {
                 $set: {
                     'point': updatedPoint
-                },
-                $addToSet: {
-                    'pointLog': pointLog
                 }
             }, function(updateErr) {
                 if(updateErr) {
                     callback(false);
                 } else {
-                    callback(true);
+                    newPointLog.save(function(pointErr) {
+                        callback(true);
+                    });
                 }
             });
         } else {
@@ -583,68 +600,99 @@ exports.returnPoint = function(options, callback) {
 
     var classification = (type == 'view' || type == 'system' ? 'use' : type);
 
-    db.user.find({
-        'email': email
-    }, {
-        'freePoint': 1,
-        'point': 1,
-        'pointLog': 1
-    }).limit(1).exec(function(err, userData) {
-        if(userData && userData.length) {
-            userData = userData[0];
-
-            var index = -1;
-            var s_matchId = true;
-            var s_target = true;
-            async.forEachOf(userData.pointLog, function(log, idx, async_cb) {
-                var s_point = (log.amount == point);
-                var s_classification = (log.classification == classification);
-                if(matchId) {
-                    s_matchId = (log.matchId == matchId);
-                }
-                if(target) {
-                    s_target = (log.target == target);
-                }
-
-                if(s_point && s_classification && s_matchId && s_target) {
-                    index = idx;
-                }
-                async_cb();
-            }, function(async_err) {
-                var updatedPoint;
-                var setQuery = {};
-
-                if (pointType == 'free') {
-                    updatedPoint = userData.freePoint + point;
-                    setQuery.freePoint = updatedPoint;
-                    setQuery.point = userData.point;
-                } else {
-                    updatedPoint = userData.point + point;
-                    setQuery.freePoint = userData.freePoint;
-                    setQuery.point = updatedPoint;
-                }
-
-
-                var updatedPointLog = userData.pointLog.splice(index, 1);
-
-                setQuery.pointLog = updatedPointLog;
-
-                db.user.update({
-                    'email': email
-                }, {
-                    $set: setQuery
-                }, function(updateErr) {
-                    if(updateErr) {
-                        callback(false);
-                    } else {
-                        callback(true);
-                    }
-                });
-            });
+    db.point.remove({
+        'userEmail': email,
+        'amount': point,
+        'target': target,
+        'matchId': matchId,
+        'classification': classification
+    }, function(err, remove) {
+        var incQuery = {};
+        if (pointType == 'free') {
+            incQuery.freePoint = point;
         } else {
-            callback(false);
-        }
+            incQuery.point = point;
+        }        
+
+        db.user.update({
+            'email': email
+        }, {
+            $inc: incQuery
+        }, function(_err, inc) {
+            if(_err) {
+                callback(false);
+            } else {
+                callback(true);
+            }
+        });
     });
+
+    // db.user.find({
+    //     'email': email
+    // }, {
+    //     'freePoint': 1,
+    //     'point': 1,
+    //     'pointLog': 1
+    // }).limit(1).exec(function(err, userData) {
+    //     if(userData && userData.length) {
+    //         userData = userData[0];
+
+    //         db.point.find({
+    //             'userEmail': email
+    //         }).sort({time: -1}).exec(function(_err, pointLogs) {
+    //             var index = -1;
+    //             var s_matchId = true;
+    //             var s_target = true;
+    //             async.forEachOf(pointLogs, function(log, idx, async_cb) {
+    //                 var s_point = (log.amount == point);
+    //                 var s_classification = (log.classification == classification);
+    //                 if(matchId) {
+    //                     s_matchId = (log.matchId == matchId);
+    //                 }
+    //                 if(target) {
+    //                     s_target = (log.target == target);
+    //                 }
+
+    //                 if(s_point && s_classification && s_matchId && s_target) {
+    //                     index = idx;
+    //                 }
+    //                 async_cb();
+    //             }, function(async_err) {
+    //                 var updatedPoint;
+    //                 var setQuery = {};
+
+    //                 if (pointType == 'free') {
+    //                     updatedPoint = userData.freePoint + point;
+    //                     setQuery.freePoint = updatedPoint;
+    //                     setQuery.point = userData.point;
+    //                 } else {
+    //                     updatedPoint = userData.point + point;
+    //                     setQuery.freePoint = userData.freePoint;
+    //                     setQuery.point = updatedPoint;
+    //                 }
+
+
+    //                 var updatedPointLog = pointLogs.splice(index, 1);
+
+    //                 setQuery.pointLog = updatedPointLog;
+
+    //                 db.user.update({
+    //                     'email': email
+    //                 }, {
+    //                     $set: setQuery
+    //                 }, function(updateErr) {
+    //                     if(updateErr) {
+    //                         callback(false);
+    //                     } else {
+    //                         callback(true);
+    //                     }
+    //                 });
+    //             });
+    //         });
+    //     } else {
+    //         callback(false);
+    //     }
+    // });
 };
 
 exports.leave = function(options, callback) {
@@ -658,35 +706,39 @@ exports.leave = function(options, callback) {
             db.user.remove({
                 'email': email
             }, function(_err, remove) {
-                if(remove) {
-                    var smtpTransport = nodemailer.createTransport({
-                        'service': 'gmail',
-                        'auth': {
-                            'user': __admin_email,
-                            'pass': __admin_password
-                        }
-                    });
+                db.board.remove({
+                    'writer': email
+                }, function(__err, boardRemove) {
+                    if(remove) {
+                        var smtpTransport = nodemailer.createTransport({
+                            'service': 'gmail',
+                            'auth': {
+                                'user': __admin_email,
+                                'pass': __admin_password
+                            }
+                        });
 
-                    var mailOptions = {
-                        'from': '존문가닷컴 <' + __admin_email + '>',
-                        'to': __admin_email,
-                        'subject': '회원 탈퇴: ' + email,
-                        'html': [
-                            '<div>',
-                                '-----탈퇴 계정-----<br>',
-                                '이메일: ' + email + '<br>',
-                                '탈퇴 사유: ' + leaveReason,
-                            '</div>'
-                        ].join('')
-                    };
+                        var mailOptions = {
+                            'from': '존문가닷컴 <' + __admin_email + '>',
+                            'to': __admin_email,
+                            'subject': '회원 탈퇴: ' + email,
+                            'html': [
+                                '<div>',
+                                    '-----탈퇴 계정-----<br>',
+                                    '이메일: ' + email + '<br>',
+                                    '탈퇴 사유: ' + leaveReason,
+                                '</div>'
+                            ].join('')
+                        };
 
-                    smtpTransport.sendMail(mailOptions, function(__err, res) {
-                        smtpTransport.close();
-                        callback(true);
-                    });
-                } else {
-                    callback(false);
-                }
+                        smtpTransport.sendMail(mailOptions, function(__err, res) {
+                            smtpTransport.close();
+                            callback(true);
+                        });
+                    } else {
+                        callback(false);
+                    }
+                });
             });
         } else {
             callback(false);

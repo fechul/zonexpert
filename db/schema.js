@@ -54,6 +54,17 @@ var userSchema = new Schema({
 //   },
 // }
 
+var pointSchema = new Schema({
+    'userEmail': String,
+    'amount': Number,
+    'pointType': String, // free, currency
+    'classification': String, // charge, use, earn, attendance
+    'useClassification': String, // use - system, view
+    'matchId': String, // for use, earn
+    'target': String, // target email for use(view), earn
+    'time': Date
+});
+
 
 // league
 // 프리미어리그 426   FA컵 429   분데스리가 430   포칼컵 432
@@ -163,6 +174,7 @@ var feedbackSchema = new Schema({
 });
 
 var user = mongoose.model('user', userSchema);
+var point = mongoose.model('point', pointSchema);
 var league = mongoose.model('league' , leagueSchema);
 var match = mongoose.model('match', matchSchema);
 var team = mongoose.model('team' , teamSchema);
@@ -173,6 +185,7 @@ var feedback = mongoose.model('feedback', feedbackSchema);
 
 module.exports = {
   'user' : user,
+  'point': point,
   'league': league,
   'match' : match,
   'team' : team,

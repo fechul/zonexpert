@@ -967,76 +967,80 @@ router.get('/my_page', need_login, readPredictionShortcutHTML, readFeedbackHTML,
 			json.signupDate = year + '년 ' + month + '월 ' + day + '일';
 			json.mainSport = getSportsName(userData.main_sport);
 			json.mainLeague = getLeagueName(userData.main_league);
-		}
 
-		if(userData.pointLog && userData.pointLog.length) {
-			async.mapSeries(userData.pointLog, function(log, async_cb) {
-				var time = log.time;
-				var year = time.getFullYear();
-				var month = (time.getMonth() < 10 ? '0' + (time.getMonth()+1) : (time.getMonth()+1));
-				var day = (time.getDate() < 10 ? '0' + time.getDate() : time.getDate());
+			user.getPointLog(req.session.email, function(pointLogs) {
+				if(pointLogs && pointLogs.length) {
+					async.mapSeries(pointLogs, function(log, async_cb) {
+						var time = log.time;
+						var year = time.getFullYear();
+						var month = (time.getMonth() < 10 ? '0' + (time.getMonth()+1) : (time.getMonth()+1));
+						var day = (time.getDate() < 10 ? '0' + time.getDate() : time.getDate());
 
-				if(log.classification == 'charge' || log.classification == 'attendance') {
-					json.chargeHtml += '<tr>';
-					json.chargeHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
-					json.chargeHtml += '<td>' + (log.pointType == 'free' ? '무료' : '충전') + (log.classification == 'attendance' ? '(출석 포인트)' : '') + '</td>';
-					json.chargeHtml += '<td><span style="color:#2d9e27;">+' + log.amount + '</span></td>';
-					json.chargeHtml += '</tr>';
-					async_cb();
-				} else if(log.classification == 'use') {
-					getNickname(log.target, function(targetNick) {
-						if (targetNick == null) {
-							targetNick = '-';
-						}
-						schedule.getTeamsInfo({
-							'matchId': log.matchId
-						}, function(teamsInfo) {
-							json.useHtml += '<tr>';
-							json.useHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
-							json.useHtml += '<td>' + (log.useClassification == 'view' ? '사용자 조회' : '예측시스템 조회') + '</td>';
-							json.useHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
-							json.useHtml += '<td>' + targetNick || '-' + '</td>';
-							json.useHtml += '<td><span style="color:#e60b0b;">-' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
-							json.useHtml += '</tr>';
-							json.useCnt++;
-							json.useAmount += log.amount;
+						if(log.classification == 'charge' || log.classification == 'attendance') {
+							json.chargeHtml += '<tr>';
+							json.chargeHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+							json.chargeHtml += '<td>' + (log.pointType == 'free' ? '무료' : '충전') + (log.classification == 'attendance' ? '(출석 포인트)' : '') + '</td>';
+							json.chargeHtml += '<td><span style="color:#2d9e27;">+' + log.amount + '</span></td>';
+							json.chargeHtml += '</tr>';
 							async_cb();
-						});
-					});
-				} else if(log.classification == 'earn') {
-					getNickname(log.target, function(targetNick) {
-						if (targetNick == null) {
-							targetNick = '-';
-						}
-						schedule.getTeamsInfo({
-							'matchId': log.matchId
-						}, function(teamsInfo) {
-							json.earnHtml += '<tr>';
-							json.earnHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
-							json.earnHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
-							json.earnHtml += '<td>' + targetNick + '</td>';
-							json.earnHtml += '<td><span style="color:#2d9e27;">+' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
-							json.earnHtml += '</tr>';
-							json.earnCnt++;
-							json.earnAmount += log.amount;
+						} else if(log.classification == 'use') {
+							getNickname(log.target, function(targetNick) {
+								if (targetNick == null) {
+									targetNick = '-';
+								}
+								schedule.getTeamsInfo({
+									'matchId': log.matchId
+								}, function(teamsInfo) {
+									json.useHtml += '<tr>';
+									json.useHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+									json.useHtml += '<td>' + (log.useClassification == 'view' ? '사용자 조회' : '예측시스템 조회') + '</td>';
+									json.useHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
+									json.useHtml += '<td>' + targetNick || '-' + '</td>';
+									json.useHtml += '<td><span style="color:#e60b0b;">-' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
+									json.useHtml += '</tr>';
+									json.useCnt++;
+									json.useAmount += log.amount;
+									async_cb();
+								});
+							});
+						} else if(log.classification == 'earn') {
+							getNickname(log.target, function(targetNick) {
+								if (targetNick == null) {
+									targetNick = '-';
+								}
+								schedule.getTeamsInfo({
+									'matchId': log.matchId
+								}, function(teamsInfo) {
+									json.earnHtml += '<tr>';
+									json.earnHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+									json.earnHtml += '<td class="listMatch"><img src="' + teamsInfo.homeTeamImg + '"></img>' + teamsInfo.homeTeamName + ' <span class="versus">vs</span> <img src="' + teamsInfo.awayTeamImg + '"></img>' + teamsInfo.awayTeamName + '</td>';
+									json.earnHtml += '<td>' + targetNick + '</td>';
+									json.earnHtml += '<td><span style="color:#2d9e27;">+' + log.amount + '</span><br>' + (log.pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
+									json.earnHtml += '</tr>';
+									json.earnCnt++;
+									json.earnAmount += log.amount;
+									async_cb();
+								});
+							});
+						} else {
 							async_cb();
-						});
+						}
+
+					}, function(async_err) {
+						if(json.useHtml.length) {
+							json.useShow = 'display:none;';
+						}
+						if(json.earnHtml.length) {
+							json.earnShow = 'display:none;';
+						}
+						if(json.chargeHtml.length) {
+							json.chargeShow = 'display:none;';
+						}
+						res.render(path, json);
 					});
 				} else {
-					async_cb();
+					res.render(path, json);
 				}
-
-			}, function(async_err) {
-				if(json.useHtml.length) {
-					json.useShow = 'display:none;';
-				}
-				if(json.earnHtml.length) {
-					json.earnShow = 'display:none;';
-				}
-				if(json.chargeHtml.length) {
-					json.chargeShow = 'display:none;';
-				}
-				res.render(path, json);
 			});
 		} else {
 			res.render(path, json);
