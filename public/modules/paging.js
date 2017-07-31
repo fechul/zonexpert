@@ -7,6 +7,9 @@ var PAGING = {
 		var btnNum = 5;
 
 		var idx = Math.floor(pageNo/btnNum);
+		if(pageNo % btnNum == 0) {
+			idx--;
+		}
 		var start = (idx*btnNum) + 1;
 		var end = start + (btnNum-1);
 		var targetIdx = pageNo%btnNum;
