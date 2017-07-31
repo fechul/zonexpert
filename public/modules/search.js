@@ -197,6 +197,7 @@ var SEARCH = {
 
 					list_html += '</div>';
 				}
+				$('.recordsDiv').empty();
 				$('.recordsDiv').append(list_html);
 				paging.init({
 					'target': $('.recordsDiv'),
