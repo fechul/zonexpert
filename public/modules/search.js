@@ -206,6 +206,11 @@ var SEARCH = {
 				});
 			}
 		});
+	},
+
+	setChart: function() {
+		var self = this;
+		var isReady = this.isReady;
 
 		if(!isReady) {
 			$('.noChart').hide();
