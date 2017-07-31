@@ -26,6 +26,7 @@ var SEARCH = {
 		this.init_events();
 		this.getMatchesStatistics('sport', function() {
 			self.setStatisticsField('sport');
+			self.setChart();
 			self.setRecordField();
 		});
 		this.setProceedingPredict();
