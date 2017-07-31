@@ -479,9 +479,13 @@ router.get('/prediction/getMatchesStatistics', function(req, res) {
 
 router.get('/prediction/getMatchesRecord', function(req, res) {
 	var nick = req.query.search_id;
+	var _limit = req.query._limit || 5;
+	var recordPage = req.query.recordPage || 1; 
 
 	prediction.getMatchesRecord({
-		'nick': nick
+		'nick': nick,
+		'_limit': _limit,
+		'recordPage': recordPage
 	}, function(data) {
 		res.json(data);
 	});

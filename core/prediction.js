@@ -406,6 +406,9 @@ exports.getMatchesStatistics = function(data, callback) {
 
 exports.getMatchesRecord = function(data, callback) {
     var nick = data.nick;
+    var _limit = parseInt(data._limit, 10);
+    var recordPage = parseInt(data.recordPage, 10);
+    var _skip = _limit*(recordPage-1);
 
     var matchDataArray = [];
 
@@ -426,72 +429,83 @@ exports.getMatchesRecord = function(data, callback) {
 
                 var email = userData.email;
 
-                db.prediction.find({
+                db.prediction.count({
                     'userEmail': email,
                     'confirmed': true,
                     'result': {
                         $in: ['true', 'false']
                     }
-                }).exec(function(predictErr, predictData) {
-                    if(predictErr) {
-                        callback(null);
-                    } else {
-                        if(predictData && predictData.length) {
-                            async.each(predictData, function(predict, async_cb) {
-                                db.match.find({
-                                    'id': predict.matchId
-                                }).limit(1).exec(function(matchErr, matchData) {
-                                    if(matchData && matchData.length) {
-                                        matchData = matchData[0];
+                }, function(countErr, totalRecordLength) {
+                    db.prediction.find({
+                        'userEmail': email,
+                        'confirmed': true,
+                        'result': {
+                            $in: ['true', 'false']
+                        }
+                    }).sort({ratingCalculatedTime: -1}).skip(_skip).limit(_limit).exec(function(predictErr, predictData) {
+                        if(predictErr) {
+                            callback(null);
+                        } else {
+                            if(predictData && predictData.length) {
+                                async.mapSeries(predictData, function(predict, async_cb) {
+                                    db.match.find({
+                                        'id': predict.matchId
+                                    }).limit(1).exec(function(matchErr, matchData) {
+                                        if(matchData && matchData.length) {
+                                            matchData = matchData[0];
 
-                                        if(matchData.status == 'FINISHED' && matchData.result) {
-                                            db.team.find({
-                                                'id': matchData.homeTeamId,
-                                                'leagueId': matchData.leagueId
-                                            }, {
-                                                'crestUrl': 1
-                                            }).limit(1).exec(function(homeErr, homeTeam) {
+                                            if(matchData.status == 'FINISHED' && matchData.result) {
                                                 db.team.find({
-                                                    'id': matchData.awayTeamId,
+                                                    'id': matchData.homeTeamId,
                                                     'leagueId': matchData.leagueId
                                                 }, {
                                                     'crestUrl': 1
-                                                }).limit(1).exec(function(awayErr, awayTeam) {
-                                                    matchDataArray.push({
-                                                        'homeTeamName': matchData.homeTeamName || '-',
-                                                        'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
-                                                        'homeTeamGoals': matchData.result.goalsHomeTeam || 0,
-                                                        'awayTeamName': matchData.awayTeamName || '-',
-                                                        'awayTeamImg': (awayTeam && awayTeam.length ? awayTeam[0].crestUrl : ''),
-                                                        'awayTeamGoals': matchData.result.goalsAwayTeam || 0,
-                                                        'afterRating': predict.afterRating,
-                                                        'beforeRating': predict.beforeRating,
-                                                        'myPredict': predict.result,
-                                                        'date': predict.ratingCalculatedTime || predict.confirmedTime,
-                                                        'ratingCalculatedTime': predict.ratingCalculatedTime
-                                                    });
+                                                }).limit(1).exec(function(homeErr, homeTeam) {
+                                                    db.team.find({
+                                                        'id': matchData.awayTeamId,
+                                                        'leagueId': matchData.leagueId
+                                                    }, {
+                                                        'crestUrl': 1
+                                                    }).limit(1).exec(function(awayErr, awayTeam) {
+                                                        matchDataArray.push({
+                                                            'homeTeamName': matchData.homeTeamName || '-',
+                                                            'homeTeamImg': (homeTeam && homeTeam.length ? homeTeam[0].crestUrl : ''),
+                                                            'homeTeamGoals': matchData.result.goalsHomeTeam || 0,
+                                                            'awayTeamName': matchData.awayTeamName || '-',
+                                                            'awayTeamImg': (awayTeam && awayTeam.length ? awayTeam[0].crestUrl : ''),
+                                                            'awayTeamGoals': matchData.result.goalsAwayTeam || 0,
+                                                            'afterRating': predict.afterRating,
+                                                            'beforeRating': predict.beforeRating,
+                                                            'myPredict': predict.result,
+                                                            'date': predict.ratingCalculatedTime || predict.confirmedTime,
+                                                            'ratingCalculatedTime': predict.ratingCalculatedTime
+                                                        });
 
-                                                    async_cb();
+                                                        async_cb();
+                                                    });
                                                 });
-                                            });
+                                            } else {
+                                                async_cb();
+                                            }
                                         } else {
                                             async_cb();
                                         }
+                                    });
+                                }, function(async_err) {
+                                    if(async_err) {
+                                        callback(null);
                                     } else {
-                                        async_cb();
+                                        callback({
+                                            totalRecordLength: totalRecordLength,
+                                            matchDataArray: matchDataArray
+                                        });
                                     }
                                 });
-                            }, function(async_err) {
-                                if(async_err) {
-                                    callback(null);
-                                } else {
-                                    callback(matchDataArray);
-                                }
-                            });
-                        } else {
-                            callback(null);
+                            } else {
+                                callback(null);
+                            }
                         }
-                    }
+                    });
                 });
             } else {
                 callback(null);

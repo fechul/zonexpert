@@ -11,7 +11,9 @@ var SEARCH = {
 		this.targetStatistics_club = [];
 
 		this.recentRates = [];
-		this.recentMatches = [];
+		// this.recentMatches = [];
+		this.totalRecordPage = 1;
+		this.recordPageNo = 1;
 
 		$('.my_recent_predict_wrapper').hide();
 
@@ -24,9 +26,7 @@ var SEARCH = {
 		this.init_events();
 		this.getMatchesStatistics('sport', function() {
 			self.setStatisticsField('sport');
-			self.getMatchesRecord(function() {
-				self.setRecordField();
-			});
+			self.setRecordField();
 		});
 		this.setProceedingPredict();
 	},
@@ -119,56 +119,92 @@ var SEARCH = {
 
 			location.href = '/match/' + matchId + '?viewTargetNick=' + id;
 		});
+
+		// paging
+		//paging
+		$(document).on('click', '#paging_firstPage', function() {
+			self.recordPageNo = 1;
+			self.setRecordField();
+		});
+
+		$(document).on('click', '#paging_lastPage', function() {
+			self.recordPageNo = self.totalRecordPage;
+			self.setRecordField();
+		});
+
+		$(document).on('click', '#paging_prevPage', function() {
+			self.recordPageNo--;
+			self.setRecordField();
+		});
+
+		$(document).on('click', '#paging_nextPage', function() {
+			self.recordPageNo++;
+			self.setRecordField();
+		});
+
+		$(document).on('click', '.paging_number', function() {
+			var value = $(this).attr('value');
+			self.recordPageNo = value;
+			self.setRecordField();
+		});
 	},
 
 	//chart
 	setRecordField: function() {
 		var self = this;
-
-		var recentMatches = this.recentMatches;
 		var isReady = this.isReady;
-		var list_html = '';
 
-		if(recentMatches && recentMatches.length) {
-			for(var i = 0; i < recentMatches.length; i++) {
+		this.getMatchesRecord(function(recordData) {
+			var list_html = '';
+			var recentMatches = recordData.matchDataArray || [];
+			self.totalRecordPage = recordData.totalRecordPage || 1;
 
-				var afterRating = parseInt(recentMatches[i].afterRating, 10);
-				var beforeRating = parseInt(recentMatches[i].beforeRating, 10);
-				var ratingChange = parseInt(afterRating - beforeRating, 10);
-				var ratingChangeType = 'failed';
-				if(ratingChange > 0) {
-					ratingChange = '+' + ratingChange;
-					ratingChangeType = 'success';
+			if(recentMatches && recentMatches.length) {
+				for(var i = 0; i < recentMatches.length; i++) {
+
+					var afterRating = parseInt(recentMatches[i].afterRating, 10);
+					var beforeRating = parseInt(recentMatches[i].beforeRating, 10);
+					var ratingChange = parseInt(afterRating - beforeRating, 10);
+					var ratingChangeType = 'failed';
+					if(ratingChange > 0) {
+						ratingChange = '+' + ratingChange;
+						ratingChangeType = 'success';
+					}
+
+					list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
+
+					var date = new Date(recentMatches[i].ratingCalculatedTime);
+					var year = date.getFullYear()%100;
+					var month = (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1));
+					var day = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+
+					list_html += '<div class="recent_predict_data_row_date">' + year + '/' + month + '/' + day + '</div>';
+					list_html += '<div class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</div>';
+					list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
+					list_html += '<div class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</div>';
+					list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
+					list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
+
+					if(!isReady) {
+						list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(<span class="' + ratingChangeType + '">' + ratingChange + '</span>)</div>';
+					}
+
+					if(recentMatches[i].myPredict == 'true') {
+						list_html += '<div class="recent_predict_data_row_result_msg success">적중</div>';
+					} else {
+						list_html += '<div class="recent_predict_data_row_result_msg failed">실패</div>';
+					}
+
+					list_html += '</div>';
 				}
-
-				list_html += '<div class="recent_predict_data_row ' + (ratingChangeType == 'failed' ? 'borderFailed' : 'borderSuccess') + '">';
-
-				var date = new Date(recentMatches[i].ratingCalculatedTime);
-				var year = date.getFullYear()%100;
-				var month = (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1));
-				var day = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
-
-				list_html += '<div class="recent_predict_data_row_date">' + year + '/' + month + '/' + day + '</div>';
-				list_html += '<div class="recent_predict_data_row_homename">' + recentMatches[i].homeTeamName + '</div>';
-				list_html += '<img src="' + recentMatches[i].homeTeamImg + '"></img>';
-				list_html += '<div class="recent_predict_data_row_goals">' + recentMatches[i].homeTeamGoals + ' : ' + recentMatches[i].awayTeamGoals + '</div>';
-				list_html += '<img src="' + recentMatches[i].awayTeamImg + '"></img>';
-				list_html += '<div class="recent_predict_data_row_awayname">' + recentMatches[i].awayTeamName + '</div>';
-
-				if(!isReady) {
-					list_html += '<div class="recent_predict_data_row_rating">' + afterRating + '(<span class="' + ratingChangeType + '">' + ratingChange + '</span>)</div>';
-				}
-
-				if(recentMatches[i].myPredict == 'true') {
-					list_html += '<div class="recent_predict_data_row_result_msg success">적중</div>';
-				} else {
-					list_html += '<div class="recent_predict_data_row_result_msg failed">실패</div>';
-				}
-
-				list_html += '</div>';
+				$('.recordsDiv').append(list_html);
+				paging.init({
+					'target': $('.recordsDiv'),
+					'totalPage': self.totalRecordPage,
+					'pageNo': self.recordPageNo || 1
+				});
 			}
-			$('.my_recent_predict_section').append(list_html);
-		}
+		});
 
 		if(!isReady) {
 			$('.noChart').hide();
@@ -571,18 +607,27 @@ var SEARCH = {
 	getMatchesRecord: function(callback) {
 		var self = this;
 
+		var _limit = 5;
 		$.get('/prediction/getMatchesRecord', {
-			'search_id': self.search_id
+			'search_id': self.search_id,
+			'_limit': _limit,
+			'recordPage': self.recordPageNo
 		}, function(recordData) {
-			if(recordData && recordData.length) {
-				$('.no_record_field').hide();
-				recordData.sort(function(a, b) {
-					return (a.ratingCalculatedTime > b.ratingCalculatedTime) ? -1 : ((b.ratingCalculatedTime > a.ratingCalculatedTime) ? 1 : 0);
+			if(recordData) {
+				if(recordData.matchDataArray && recordData.matchDataArray.length) {
+					$('.no_record_field').hide();
+				}
+				recordData.totalRecordPage = Math.ceil(recordData.totalRecordLength/_limit);
+				callback(recordData);
+				// recordData.sort(function(a, b) {
+				// 	return (a.ratingCalculatedTime > b.ratingCalculatedTime) ? -1 : ((b.ratingCalculatedTime > a.ratingCalculatedTime) ? 1 : 0);
+				// });
+			} else {
+				callback({
+					totalRecordPage: 1,
+					matchDataArray: []
 				});
 			}
-
-			self.recentMatches = recordData;
-			callback();
 		});
 	},
 

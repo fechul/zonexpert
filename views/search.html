@@ -111,6 +111,9 @@
 			<div class="my_recent_predict_wrapper" style="<%= search_show %>">
 				<div class="my_recent_predict_section container_box">
 					<div class="no_record_field">통계 결과가 없습니다.</div>
+					<div class="recordsDiv">
+						
+					</div>
 				</div>
 			</div>
 
@@ -130,8 +133,10 @@
 	<script src="modules/search.js"></script>
 	<script src="modules/prediction_shortcut.js"></script>
 	<script src="notice/notice.js"></script>
+	<script src="modules/paging.js"></script>
 	<script>
 		var notice = NOTICE;
+		var paging = PAGING;
 		SEARCH.init({
 			'search_id': '<%= searchdata_user_id %>',
 			'search_rating': '<%= searchdata_rating %>',
