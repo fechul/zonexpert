@@ -454,7 +454,7 @@ exports.getMatchesRecord = function(data, callback) {
                                         if(matchData && matchData.length) {
                                             matchData = matchData[0];
 
-                                            if(matchData.status == 'FINISHED' && matchData.result) {
+                                            if((matchData.status == 'FINISHED' && matchData.result) || (matchData.status == 'POSTPONED_RAIN' || matchData.status == 'POSTPONED')) {
                                                 db.team.find({
                                                     'id': matchData.homeTeamId,
                                                     'leagueId': matchData.leagueId
@@ -476,7 +476,7 @@ exports.getMatchesRecord = function(data, callback) {
                                                             'awayTeamGoals': matchData.result.goalsAwayTeam || 0,
                                                             'afterRating': predict.afterRating,
                                                             'beforeRating': predict.beforeRating,
-                                                            'myPredict': predict.result,
+                                                            'myPredict': (matchData.status == 'POSTPONED_RAIN' || matchData.status == 'POSTPONED') ? 'true' : predict.result,
                                                             'date': predict.ratingCalculatedTime || predict.confirmedTime,
                                                             'ratingCalculatedTime': predict.ratingCalculatedTime
                                                         });
