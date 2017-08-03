@@ -159,24 +159,24 @@ var MYPAGE = {
 
 		//paging
 		$(document).on('click', '#paging_firstPage', function() {
-			setLogs(self.currentShowCon, 1);
+			self.setLogs(self.currentShowCon, 1);
 		});
 
 		$(document).on('click', '#paging_lastPage', function() {
-			setLogs(self.currentShowCon, self.totalPage);
+			self.setLogs(self.currentShowCon, self.totalPage);
 		});
 
 		$(document).on('click', '#paging_prevPage', function() {
-			setLogs(self.currentShowCon, self.currentPage-1);
+			self.setLogs(self.currentShowCon, self.currentPage-1);
 		});
 
 		$(document).on('click', '#paging_nextPage', function() {
-			setLogs(self.currentShowCon, self.currentPage+1);
+			self.setLogs(self.currentShowCon, self.currentPage+1);
 		});
 
 		$(document).on('click', '.paging_number', function() {
 			var value = $(this).attr('value');
-			setLogs(self.currentShowCon, value);
+			self.setLogs(self.currentShowCon, value);
 		});
 	},
 
