@@ -179,7 +179,7 @@
 
 					<div class="use_table_section">
 						<h4 style="margin-top:35px; margin-bottom:15px;">구매내역</h4>
-						<table id="use_table">
+						<table class="containerTable" value="use" id="use_table">
 							<tr>
 								<td>날짜</td>
 								<td>종류</td>
@@ -187,52 +187,49 @@
 								<td>판매자</td>
 								<td>포인트</td>
 							</tr>
-							<tr style="<%= useShow %>">
+							<tr class="noDataRow">
 								<td colspan="5">사용 내역이 없습니다.</td>
 							</tr>
-							<%- useHtml %>
 						</table>
 					</div>
 
 					<div class="earn_table_section">
 						<h4 style="margin-top:35px; margin-bottom:15px;">판매내역</h4>
-						<table id="earn_table">
+						<table class="containerTable" value="earn" id="earn_table">
 							<tr>
 								<td>날짜</td>
 								<td>경기</td>
 								<td>구매자</td>
 								<td>포인트</td>
 							</tr>
-							<tr style="<%= earnShow %>">
+							<tr class="noDataRow">
 								<td colspan="4">판매 내역이 없습니다.</td>
 							</tr>
-							<%- earnHtml %>
 						</table>
 					</div>
 
 					<div class="charge_table_section">
 						<h4 style="margin-top:35px; margin-bottom:15px;">충전내역</h4>
-						<table id="charge_table">
+						<table class="containerTable" value="charge" id="charge_table">
 							<tr>
 								<td>날짜</td>
 								<td>포인트 종류</td>
 								<td>포인트</td>
 							</tr>
-							<tr style="<%= chargeShow %>">
+							<tr class="noDataRow">
 								<td colspan="3">충전 내역이 없습니다.</td>
 							</tr>
-							<%- chargeHtml %>
 						</table>
 					</div>
 
 					<div class="withdraw_table_section">
 						<h4 style="margin-top:35px; margin-bottom:15px;">출금내역</h4>
-						<table id="withdraw_table">
+						<table class="containerTable" value="withdraw" id="withdraw_table">
 							<tr>
 								<td>날짜</td>
 								<td>포인트</td>
 							</tr>
-							<tr>
+							<tr class="noDataRow">
 								<td colspan="2">출금 내역이 없습니다.</td>
 							</tr>
 						</table>
@@ -254,8 +251,10 @@
     <script src="modules/my_page.js"></script>
     <script src="modules/prediction_shortcut.js"></script>
     <script src="notice/notice.js"></script>
+    <script src="modules/paging.js"></script>
     <script>
         var notice = NOTICE;
+        var paging = PAGING;
         MYPAGE.init({
             'attendancePointUpdated': <%- attendancePointUpdated %>,
             'myNickName': '<%= myNickName %>'

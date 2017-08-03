@@ -4,6 +4,10 @@ var MYPAGE = {
 		this.init_events();
 		this.myNickName = initData.myNickName;
 
+		this.currentShowCon = '';
+		this.currentPage = 1;
+		this.totalpage = 1;
+
 		if(initData.attendancePointUpdated) {
 			notice.show('success', '100점의 출석 포인트가 적립되었습니다.');
 		}
@@ -144,14 +148,121 @@ var MYPAGE = {
 		});
 
 		$('.article_btn').click(function() {
-			var dataType = $(this).attr('data-type');
+			var dataType = $(this).attr('data-type');	// withdraw, charge, earn, use
 
+			if(self.currentShowCon == dataType) {
+				return false;
+			}
+
+			self.setLogs(dataType, 1);
+		});
+
+		//paging
+		$(document).on('click', '#paging_firstPage', function() {
+			setLogs(self.currentShowCon, 1);
+		});
+
+		$(document).on('click', '#paging_lastPage', function() {
+			setLogs(self.currentShowCon, self.totalPage);
+		});
+
+		$(document).on('click', '#paging_prevPage', function() {
+			setLogs(self.currentShowCon, self.currentPage-1);
+		});
+
+		$(document).on('click', '#paging_nextPage', function() {
+			setLogs(self.currentShowCon, self.currentPage+1);
+		});
+
+		$(document).on('click', '.paging_number', function() {
+			var value = $(this).attr('value');
+			setLogs(self.currentShowCon, value);
+		});
+	},
+
+	setLogs: function(type, pageNo) {
+		var self = this;
+
+		$.get('/user/pointLog', {
+			'type': type,
+			'pageNo': pageNo
+		}, function(data) {
 			$('.use_table_section').hide();
 			$('.earn_table_section').hide();
 			$('.charge_table_section').hide();
 			$('.withdraw_table_section').hide();
 
-			$('.' + dataType + '_table_section').show();
+			$('.' + type + '_table_section').show();
+
+			$('#' + type + '_table tr').each(function(idx) {
+				if(idx > 1) {
+					$(this).remove();
+				}
+			});
+
+			if(data && data.logs && data.logs.length) {
+				var totalLength = data.length;
+				var tableHtml = '';
+
+				for(var i = 0; i < data.logs.length; i++) {
+					var time = new Date(data.logs[i].time);
+					var year = time.getFullYear();
+					var month = (time.getMonth() < 10 ? '0' + (time.getMonth()+1) : (time.getMonth()+1));
+					var day = (time.getDate() < 10 ? '0' + time.getDate() : time.getDate());
+					if(type == 'charge') {
+						tableHtml += '<tr>';
+						tableHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+						tableHtml += '<td>' + (data.logs[i].pointType == 'free' ? '무료' : '충전') + (data.logs[i].classification == 'attendance' ? '(출석 포인트)' : '') + '</td>';
+						tableHtml += '<td><span style="color:#2d9e27;">+' + data.logs[i].amount + '</span></td>';
+						tableHtml += '</tr>';
+					} else if(type == 'use') {
+						tableHtml += '<tr>';
+						tableHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+						tableHtml += '<td>' + (data.logs[i].useClassification == 'view' ? '사용자 조회' : '예측시스템 조회') + '</td>';
+						tableHtml += '<td class="listMatch"><img src="' + data.logs[i].homeTeamImg + '"></img>' + data.logs[i].homeTeamName + ' <span class="versus">vs</span> <img src="' + data.logs[i].awayTeamImg + '"></img>' + data.logs[i].awayTeamName + '</td>';
+						tableHtml += '<td>' + data.logs[i].targetNick || '-' + '</td>';
+						tableHtml += '<td><span style="color:#e60b0b;">-' + data.logs[i].amount + '</span><br>' + (data.logs[i].pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
+						tableHtml += '</tr>';
+					} else if(type == 'earn') {
+						tableHtml += '<tr>';
+						tableHtml += '<td>' + year + '/' + month + '/' + day + '</td>';
+						tableHtml += '<td class="listMatch"><img src="' + data.logs[i].homeTeamImg + '"></img>' + data.logs[i].homeTeamName + ' <span class="versus">vs</span> <img src="' + data.logs[i].awayTeamImg + '"></img>' + data.logs[i].awayTeamName + '</td>';
+						tableHtml += '<td>' + data.logs[i].targetNick + '</td>';
+						tableHtml += '<td><span style="color:#2d9e27;">+' + data.logs[i].amount + '</span><br>' + (data.logs[i].pointType == 'free' ? '(무료포인트)' : '(충전포인트)') + '</td>';
+						tableHtml += '</tr>';
+					}
+				}
+
+				// $('.' + type + '_table_section .containerTable').empty();
+				$('.' + type + '_table_section .containerTable').append(tableHtml);
+			} else {
+				$('.' + type + '_table_section .noDataRow').show();
+			}
+
+			self.currentShowCon = type;
+			self.currentPage = pageNo;
+			self.totalPage = data.totalPage;
+
+			// type - use, earn, charge, withdraw
+			var target;
+			if(type == 'use') {
+				target = $('#use_table');
+			} else if(type == 'earn') {
+				target = $('#earn_table');
+			} else if(type == 'charge') {
+				target = $('#charge_table');
+			} else {
+				return false;
+			}
+
+			if(!self.totalPage || self.totalPage == 0) {
+				return false;
+			}
+			paging.init({
+				'target': target,
+				'totalPage': self.totalPage,
+				'pageNo': pageNo || 1
+			});
 		});
 	}
 };

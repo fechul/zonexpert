@@ -375,12 +375,40 @@ exports.getPoint = function(email, callback) {
     });
 };
 
-exports.getPointLog = function(email, callback) {
-    db.point.find({
+exports.getPointLog = function(options, callback) {
+    var email = options.email;
+    var type = options.type;
+    var pageNo = options.pageNo;
+
+    var _limit = 5;
+    var _skip = _limit*(pageNo-1);
+
+    var query = {
         'userEmail': email
-    }).sort({'time': -1}).exec(function(err, data) {
-        callback(data);
-    });
+    };
+
+    if(type != 'use' && type != 'earn' && type != 'charge') {
+        callback(false);
+    } else {
+        if(type == 'use') {
+            query.classification = 'use';
+        } else if(type == 'earn') {
+            query.classification = 'earn';
+        } else if(type == 'charge') {
+            query.classification = {
+                $in: ['charge', 'attendance']
+            };
+        }
+
+        db.point.count(query, function(countErr, length) {
+            db.point.find(query).sort({'time': -1}).skip(_skip).limit(5).exec(function(err, logs) {
+                callback({
+                    logs: logs,
+                    totalPage: Math.ceil(length/5)
+                });
+            });
+        });
+    }
 };
 
 exports.checkPoint = function(email, callback) {
@@ -626,73 +654,6 @@ exports.returnPoint = function(options, callback) {
             }
         });
     });
-
-    // db.user.find({
-    //     'email': email
-    // }, {
-    //     'freePoint': 1,
-    //     'point': 1,
-    //     'pointLog': 1
-    // }).limit(1).exec(function(err, userData) {
-    //     if(userData && userData.length) {
-    //         userData = userData[0];
-
-    //         db.point.find({
-    //             'userEmail': email
-    //         }).sort({time: -1}).exec(function(_err, pointLogs) {
-    //             var index = -1;
-    //             var s_matchId = true;
-    //             var s_target = true;
-    //             async.forEachOf(pointLogs, function(log, idx, async_cb) {
-    //                 var s_point = (log.amount == point);
-    //                 var s_classification = (log.classification == classification);
-    //                 if(matchId) {
-    //                     s_matchId = (log.matchId == matchId);
-    //                 }
-    //                 if(target) {
-    //                     s_target = (log.target == target);
-    //                 }
-
-    //                 if(s_point && s_classification && s_matchId && s_target) {
-    //                     index = idx;
-    //                 }
-    //                 async_cb();
-    //             }, function(async_err) {
-    //                 var updatedPoint;
-    //                 var setQuery = {};
-
-    //                 if (pointType == 'free') {
-    //                     updatedPoint = userData.freePoint + point;
-    //                     setQuery.freePoint = updatedPoint;
-    //                     setQuery.point = userData.point;
-    //                 } else {
-    //                     updatedPoint = userData.point + point;
-    //                     setQuery.freePoint = userData.freePoint;
-    //                     setQuery.point = updatedPoint;
-    //                 }
-
-
-    //                 var updatedPointLog = pointLogs.splice(index, 1);
-
-    //                 setQuery.pointLog = updatedPointLog;
-
-    //                 db.user.update({
-    //                     'email': email
-    //                 }, {
-    //                     $set: setQuery
-    //                 }, function(updateErr) {
-    //                     if(updateErr) {
-    //                         callback(false);
-    //                     } else {
-    //                         callback(true);
-    //                     }
-    //                 });
-    //             });
-    //         });
-    //     } else {
-    //         callback(false);
-    //     }
-    // });
 };
 
 exports.leave = function(options, callback) {
@@ -868,6 +829,84 @@ exports.getPredictSystemData = function(params, callback) {
         } else {
             callback({
                 'result': false
+            });
+        }
+    });
+};
+
+exports.getPointTypeData = function(email, callback) {
+    var useCnt = 0;
+    var earnCnt = 0;
+    var useAmount = 0;
+    var earnAmount = 0;
+
+    async.parallel([
+        //use
+        function(_callback){
+            db.point.aggregate([
+                { 
+                    $match: {
+                        'userEmail': email,
+                        'classification': 'use'
+                    } 
+                },
+                { 
+                    $group: { 
+                        _id: null,
+                        totalCnt: {
+                            $sum: 1
+                        },
+                        totalAmount: {
+                            $sum: "$amount" 
+                        } 
+                    } 
+                }
+            ], function(err, data) {
+                if(data && data.length) {
+                    useCnt = data[0].totalCnt;
+                    useAmount = data[0].totalAmount;
+                }
+                _callback(null);
+            });
+        },
+        //earn
+        function(_callback){
+            db.point.aggregate([
+                { 
+                    $match: {
+                        'userEmail': email,
+                        'classification': 'earn'
+                    } 
+                },
+                { 
+                    $group: { 
+                        _id: null,
+                        totalCnt: {
+                            $sum: 1
+                        },
+                        totalAmount: {
+                            $sum: "$amount" 
+                        }
+                    } 
+                }
+            ], function(err, data) {
+                if(data && data.length) {
+                    earnCnt = data[0].totalCnt;
+                    earnAmount = data[0].totalAmount;
+                }
+                _callback(null);
+            });
+        }
+    ], function(err, results){
+        if(err) {
+            console.log("err: ", err);
+            callback(null);
+        } else {
+            callback({
+                useCnt: useCnt,
+                earnCnt: earnCnt,
+                useAmount: useAmount,
+                earnAmount: earnAmount
             });
         }
     });

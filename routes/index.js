@@ -1089,4 +1089,37 @@ router.get('/user/point', need_login, function(req, res) {
 	});
 });
 
+router.get('/user/pointLog', need_login, function(req, res) {
+	user.getPointLog({
+		'type': req.query.type,
+		'pageNo': req.query.pageNo,
+		'email': req.session.email
+	}, function(data) {
+		if(req.query.type == 'use' || req.query.type == 'earn') {
+			if(data && data.logs && data.logs.length) {
+				data.logs = JSON.stringify(data.logs);
+				data.logs = JSON.parse(data.logs);
+			}
+			async.mapSeries(data.logs, function(log, async_cb) {
+				user.get_nickname(log.target, function(targetNick) {
+					log.targetNick = targetNick;
+					schedule.getTeamsInfo({
+						'matchId': log.matchId
+					}, function(teamsInfo) {
+						log.homeTeamImg = teamsInfo.homeTeamImg;
+						log.awayTeamImg = teamsInfo.awayTeamImg;
+						log.homeTeamName = teamsInfo.homeTeamName;
+						log.awayTeamName = teamsInfo.homeTeamName;
+						async_cb();
+					});
+				});
+			}, function(async_err) {
+				res.json(data);
+			});
+		} else {
+			res.json(data);
+		}
+	});
+});
+
 module.exports = router;
