@@ -240,8 +240,8 @@ var MYPAGE = {
 			}
 
 			self.currentShowCon = type;
-			self.currentPage = pageNo;
-			self.totalPage = data.totalPage;
+			self.currentPage = parseInt(pageNo, 10);
+			self.totalPage = parseInt(data.totalPage, 10);
 
 			// type - use, earn, charge, withdraw
 			var target;
